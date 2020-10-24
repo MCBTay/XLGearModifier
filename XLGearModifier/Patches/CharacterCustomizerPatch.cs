@@ -16,7 +16,11 @@ namespace XLGearModifier.Patches
 				if (!Main.Enabled || !Settings.Instance.AllowMultipleGearItemsPerSlot) return true;
 
 				var index = GearSelectionController.Instance.listView.currentIndexPath;
-				if (index[1] != (int)GearCategory.Hair && index[1] != (int)GearCategory.Headwear) return true;
+				var numCategories = Enum.GetValues(typeof(GearCategory)).Length;
+				var isHairOrHeadwear = index[1] < numCategories && (index[1] == (int)GearCategory.Hair || index[1] == (int)GearCategory.Headwear);
+				var isCustomHairOrHeadwear = index[1] >= numCategories && (index[1] - numCategories == (int)GearCategory.Hair || index[1] - numCategories == (int)GearCategory.Headwear);
+
+				if (!isHairOrHeadwear && !isCustomHairOrHeadwear) return true;
 
 				Traverse traverse = Traverse.Create(__instance);
 				ClothingGearObjet shoes = traverse.Method("LoadClothingAsync", gear).GetValue<ClothingGearObjet>();
@@ -46,7 +50,11 @@ namespace XLGearModifier.Patches
 				if (!Main.Enabled || !Settings.Instance.AllowMultipleGearItemsPerSlot) return true;
 
 				var index = GearSelectionController.Instance.listView.currentIndexPath;
-				if (index[1] != (int)GearCategory.Hair && index[1] != (int)GearCategory.Headwear) return true;
+				var numCategories = Enum.GetValues(typeof(GearCategory)).Length;
+				var isHairOrHeadwear = index[1] < numCategories && (index[1] == (int)GearCategory.Hair || index[1] == (int)GearCategory.Headwear);
+				var isCustomHairOrHeadwear = index[1] >= numCategories && (index[1] - numCategories == (int)GearCategory.Hair || index[1] - numCategories == (int)GearCategory.Headwear);
+
+				if (!isHairOrHeadwear && !isCustomHairOrHeadwear) return true;
 
 				var traverse = Traverse.Create(__instance);
 
