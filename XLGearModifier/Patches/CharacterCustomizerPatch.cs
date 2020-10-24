@@ -13,6 +13,9 @@ namespace XLGearModifier.Patches
 			{
 				if (!Main.Enabled || !Settings.Instance.AllowMultipleGearItemsPerSlot) return true;
 
+				var index = GearSelectionController.Instance.listView.currentIndexPath;
+				if (index[1] != (int)GearCategory.Hair && index[1] != (int)GearCategory.Headwear) return true;
+
 				Traverse traverse = Traverse.Create(__instance);
 				ClothingGearObjet shoes = traverse.Method("LoadClothingAsync", gear).GetValue<ClothingGearObjet>();
 				if (shoes == null)
