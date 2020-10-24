@@ -89,7 +89,7 @@ mkdir $(TargetDir)XLGearModifier
 copy /Y "$(TargetDir)XLGearModifier.dll" "$(TargetDir)XLGearModifier\XLGearModifier.dll"
 copy /Y "$(TargetDir)Info.json" "$(TargetDir)XLGearModifier\Info.json"
 
-powershell Compress-Archive -Path '$(TargetDir)XLGearModifier' -DestinationPath '$(TargetDir)XLGearModifier-1-0-0.zip' -Force
+powershell Compress-Archive -Path '$(TargetDir)XLGearModifier' -DestinationPath '$(TargetDir)XLGearModifier-1-0-1.zip' -Force
 )</PostBuildEvent>
   </PropertyGroup>
 </Project>
