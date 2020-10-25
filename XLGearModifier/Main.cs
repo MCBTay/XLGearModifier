@@ -2,6 +2,7 @@
 using System.Reflection;
 using UnityEngine;
 using UnityModManagerNet;
+using Object = UnityEngine.Object;
 
 namespace XLGearModifier
 {
@@ -40,6 +41,8 @@ namespace XLGearModifier
 				UserInterfaceGameObject = new GameObject();
 				UserInterfaceGameObject.AddComponent<UserInterface>();
 				Object.DontDestroyOnLoad(UserInterfaceGameObject);
+
+				PlayerController.Instance.characterCustomizer.LoadLastPlayer();
 			}
 			else
 			{
