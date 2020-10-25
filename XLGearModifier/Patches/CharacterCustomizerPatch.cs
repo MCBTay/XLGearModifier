@@ -15,14 +15,17 @@ namespace XLGearModifier.Patches
 			{
 				if (!Main.Enabled || !Settings.Instance.AllowMultipleGearItemsPerSlot) return true;
 
-				IndexPath index = GearSelectionController.Instance.listView.currentIndexPath;
-				if (index.depth > 0)
+				if (GearSelectionController.Instance != null)
 				{
-					var numCategories = Enum.GetValues(typeof(GearCategory)).Length;
-					var isHairOrHeadwear = index[1] < numCategories && (index[1] == (int)GearCategory.Hair || index[1] == (int)GearCategory.Headwear);
-					var isCustomHairOrHeadwear = index[1] >= numCategories && (index[1] - numCategories == (int)GearCategory.Hair || index[1] - numCategories == (int)GearCategory.Headwear);
+					IndexPath index = GearSelectionController.Instance.listView.currentIndexPath;
+					if (index.depth > 0)
+					{
+						var numCategories = Enum.GetValues(typeof(GearCategory)).Length;
+						var isHairOrHeadwear = index[1] < numCategories && (index[1] == (int)GearCategory.Hair || index[1] == (int)GearCategory.Headwear);
+						var isCustomHairOrHeadwear = index[1] >= numCategories && (index[1] - numCategories == (int)GearCategory.Hair || index[1] - numCategories == (int)GearCategory.Headwear);
 
-					if (!isHairOrHeadwear && !isCustomHairOrHeadwear) return true;
+						if (!isHairOrHeadwear && !isCustomHairOrHeadwear) return true;
+					}
 				}
 
 				Traverse traverse = Traverse.Create(__instance);
@@ -52,12 +55,18 @@ namespace XLGearModifier.Patches
 			{
 				if (!Main.Enabled || !Settings.Instance.AllowMultipleGearItemsPerSlot) return true;
 
-				var index = GearSelectionController.Instance.listView.currentIndexPath;
-				var numCategories = Enum.GetValues(typeof(GearCategory)).Length;
-				var isHairOrHeadwear = index[1] < numCategories && (index[1] == (int)GearCategory.Hair || index[1] == (int)GearCategory.Headwear);
-				var isCustomHairOrHeadwear = index[1] >= numCategories && (index[1] - numCategories == (int)GearCategory.Hair || index[1] - numCategories == (int)GearCategory.Headwear);
+				if (GearSelectionController.Instance != null)
+				{
+					IndexPath index = GearSelectionController.Instance.listView.currentIndexPath;
+					if (index.depth > 0)
+					{
+						var numCategories = Enum.GetValues(typeof(GearCategory)).Length;
+						var isHairOrHeadwear = index[1] < numCategories && (index[1] == (int) GearCategory.Hair || index[1] == (int) GearCategory.Headwear);
+						var isCustomHairOrHeadwear = index[1] >= numCategories && (index[1] - numCategories == (int) GearCategory.Hair || index[1] - numCategories == (int) GearCategory.Headwear);
 
-				if (!isHairOrHeadwear && !isCustomHairOrHeadwear) return true;
+						if (!isHairOrHeadwear && !isCustomHairOrHeadwear) return true;
+					}
+				}
 
 				var traverse = Traverse.Create(__instance);
 
@@ -100,15 +109,6 @@ namespace XLGearModifier.Patches
 				}
 
 				return false;
-			}
-		}
-
-		[HarmonyPatch(typeof(CharacterCustomizer), nameof(CharacterCustomizer.LoadCustomizations), new[] {typeof(CustomizedPlayerDataV2)})]
-		static class LoadCustomizationsPatch
-		{
-			static bool Prefix(CharacterCustomizer __instance, CustomizedPlayerDataV2 data)
-			{
-				return true;
 			}
 		}
 	}
