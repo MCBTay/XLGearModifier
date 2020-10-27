@@ -13,4 +13,30 @@
 		Trucks = 8,
 		Wheels = 9
 	}
+
+	public enum HairStyles
+	{
+		MHairAfroShort,
+		MHairAfroLong,
+		MHairCounterpart,
+		MHairCurlyLong,
+		MHairCurlyShort,
+		MHairDreads,
+		MHairPompadour,
+		MHairSidepart,
+		MHairSpikt,
+		MHairWavy,
+		FHairBraidedPonytail,
+		FHairShortPonytail,
+		FHairStraightBun,
+	}
+
+	public enum HeadwearTypes
+	{
+		MHat5Panel,
+		MHatBeanieCuffed,
+		MHatDad,
+		MHatSnapback,
+		FHatDad
+	}
 }
