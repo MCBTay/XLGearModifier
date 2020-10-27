@@ -43,6 +43,8 @@ namespace XLGearModifier
 				Object.DontDestroyOnLoad(UserInterfaceGameObject);
 
 				PlayerController.Instance.characterCustomizer.LoadLastPlayer();
+
+				AssetBundleHelper.LoadGearBundle();
 			}
 			else
 			{
