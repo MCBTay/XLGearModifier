@@ -53,6 +53,8 @@ namespace XLGearModifier
 			{
 				Settings.Instance.AllowMultipleGearItemsPerSlot = !Settings.Instance.AllowMultipleGearItemsPerSlot;
 				Settings.Instance.Save();
+
+				PlayerController.Instance.characterCustomizer.LoadLastPlayer();
 			}
 			
 			GUILayout.EndHorizontal();
