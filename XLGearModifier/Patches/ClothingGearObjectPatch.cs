@@ -12,36 +12,23 @@ namespace XLGearModifier.Patches
 			{
 				if (!Main.Enabled || !Settings.Instance.AllowMultipleGearItemsPerSlot) return true;
 
-				if (GearSelectionController.Instance != null)
+				if (other is ClothingGearObjet cgo)
 				{
-					IndexPath index = GearSelectionController.Instance.listView.currentIndexPath;
-					if (index.depth > 0)
+					if (__instance.template.category == ClothingGearCategory.Hat && cgo.template.category == ClothingGearCategory.Hat)
 					{
-						var numCategories = Enum.GetValues(typeof(GearCategory)).Length;
-						var isHairOrHeadwear = index[1] < numCategories && (index[1] == (int)GearCategory.Hair || index[1] == (int)GearCategory.Headwear);
-						var isCustomHairOrHeadwear = index[1] >= numCategories && (index[1] - numCategories == (int)GearCategory.Hair || index[1] - numCategories == (int)GearCategory.Headwear);
-
-						if (!isHairOrHeadwear && !isCustomHairOrHeadwear) return true;
-
-						if (other is ClothingGearObjet cgo)
+						if (__instance.IsHair() && cgo.IsHeadwear())
 						{
-							if (__instance.template.category == ClothingGearCategory.Hat && cgo.template.category == ClothingGearCategory.Hat)
-							{
-								if (__instance.IsHair() && cgo.IsHeadwear())
-								{
-									__result = false;
-									return false;
-								}
-
-								if (__instance.IsHeadwear() && cgo.IsHair())
-								{
-									__result = false;
-									return false;
-								}
-
-								return true;
-							}
+							__result = false;
+							return false;
 						}
+
+						if (__instance.IsHeadwear() && cgo.IsHair())
+						{
+							__result = false;
+							return false;
+						}
+
+						return true;
 					}
 				}
 
