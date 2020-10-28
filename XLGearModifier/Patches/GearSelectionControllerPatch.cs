@@ -1,5 +1,6 @@
 ﻿using HarmonyLib;
 using System.Linq;
+using XLGearModifier.Unity;
 
 namespace XLGearModifier.Patches
 {
