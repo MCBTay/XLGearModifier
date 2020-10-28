@@ -1,4 +1,5 @@
-﻿using HarmonyLib;
+﻿using System;
+using HarmonyLib;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -65,7 +66,7 @@ namespace XLGearModifier
 			var gear = Traverse.Create(GearDatabase.Instance).Field("gearListSource").GetValue<GearInfo[][][]>();
 			var officialMaleHair = gear[0][1];
 
-			var charGearInfo = officialMaleHair.Where(x => x.type == type).Cast<CharacterGearInfo>().FirstOrDefault();
+			var charGearInfo = officialMaleHair.Where(x => x.type.Equals(type, StringComparison.InvariantCultureIgnoreCase)).Cast<CharacterGearInfo>().FirstOrDefault();
 			if (charGearInfo != null)
 			{
 				var clothingGearObj = new ClothingGearObjet(charGearInfo, PlayerController.Instance.characterCustomizer);
