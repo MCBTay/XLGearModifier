@@ -68,7 +68,6 @@
   <ItemGroup>
     <Compile Include="AssetBundleHelper.cs" />
     <Compile Include="CustomGear.cs" />
-    <Compile Include="Enumerations.cs" />
     <Compile Include="GearManager.cs" />
     <Compile Include="Main.cs" />
     <Compile Include="Patches\GearObjectPatch.cs" />
@@ -86,19 +85,27 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\XLGearModifier.Unity\XLGearModifier.Unity.csproj">
+      <Project>{e888e5e2-4729-480a-8e25-056e6e16cbc1}</Project>
+      <Name>XLGearModifier.Unity</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>if "$(ConfigurationName)"=="Debug" ( 
 del /Q /F "F:\Steam\steamapps\common\Skater XL\Mods\XLGearModifier\"
 copy /Y "$(TargetDir)XLGearModifier.dll" "F:\Steam\steamapps\common\Skater XL\Mods\XLGearModifier\XLGearModifier.dll"
 copy /Y "$(TargetDir)XLGearModifier.pdb" "F:\Steam\steamapps\common\Skater XL\Mods\XLGearModifier\XLGearModifier.pdb"
+copy /Y "$(TargetDir)XLGearModifier.Unity.dll" "F:\Steam\steamapps\common\Skater XL\Mods\XLGearModifier\XLGearModifier.Unity.dll"
+copy /Y "$(TargetDir)XLGearModifier.Unity.pdb" "F:\Steam\steamapps\common\Skater XL\Mods\XLGearModifier\XLGearModifier.Unity.pdb"
 copy /Y "$(TargetDir)Info.json" "F:\Steam\steamapps\common\Skater XL\Mods\XLGearModifier\Info.json"
 )
 
 if "$(ConfigurationName)"=="Release" (
 mkdir $(TargetDir)XLGearModifier
 copy /Y "$(TargetDir)XLGearModifier.dll" "$(TargetDir)XLGearModifier\XLGearModifier.dll"
+copy /Y "$(TargetDir)XLGearModifier.Unity.dll" "$(TargetDir)XLGearModifier\XLGearModifier.Unity.dll"
 copy /Y "$(TargetDir)Info.json" "$(TargetDir)XLGearModifier\Info.json"
 
 powershell Compress-Archive -Path '$(TargetDir)XLGearModifier' -DestinationPath '$(TargetDir)XLGearModifier-1-0-3.zip' -Force
