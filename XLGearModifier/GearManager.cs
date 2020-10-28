@@ -23,7 +23,7 @@ namespace XLGearModifier
 
 		public void LoadAssets(AssetBundle bundle)
 		{
-			LoadAsset(bundle, "Assets/Meshes/Hair/Long-Hair-Beanie--Hair--000sideways.fbx", GearCategory.Hair, HairStyles.MHairCounterpart.ToString());
+			LoadAsset(bundle, "Assets/Meshes/Hair/Long-Hair-Beanie--Hair.fbx", GearCategory.Hair, HairStyles.MHairCounterpart.ToString());
 		}
 
 		private void LoadAsset(AssetBundle bundle, string path, GearCategory category, string type)
