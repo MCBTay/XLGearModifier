@@ -14,5 +14,11 @@ namespace XLGearModifier.Unity
 
 		[HideIfEnumValue("Category", HideIf.NotEqual, (int) GearCategory.Shoes)]
 		public ShoeTypes BaseShoeType;
-    }
+
+		[HideIfEnumValue("Category", HideIf.NotEqual, (int) GearCategory.Top)]
+		public TopTypes BaseTopType;
+
+		[HideIfEnumValue("Category", HideIf.NotEqual, (int)GearCategory.Bottom)]
+		public BottomTypes BaseBottomType;
+	}
 }

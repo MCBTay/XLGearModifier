@@ -78,4 +78,24 @@
 		FShoesNewBalance913,
 		FShoesVansKyleWalker2
 	}
+
+	public enum TopTypes
+	{
+		MHoodie,
+		MShirt,
+		MShirtLong,
+		MShirtButtonLong,
+		MSweater,
+		FShirt,
+	}
+
+	public enum BottomTypes
+	{
+		MPants,
+		MPantsDenim,
+		MPantsSweat,
+		MShortsDenim,
+		MShortsKhaki,
+		FPantsDenim,
+	}
 }
