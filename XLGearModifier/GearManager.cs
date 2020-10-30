@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
+using XLGearModifier.Unity;
 
 namespace XLGearModifier
 {
@@ -23,13 +25,57 @@ namespace XLGearModifier
 
 		public void LoadAssets(AssetBundle bundle)
 		{
-			LoadAsset(bundle, "Assets/Meshes/Hair/Long-Hair-Beanie--Hair.fbx", GearCategory.Hair, HairStyles.MHairCounterpart.ToString());
+			var assets = bundle.LoadAllAssets<GameObject>();
+
+			if (assets != null && assets.Any())
+			{
+				foreach (var asset in assets)
+				{
+					InitializeAsset(asset);
+				}
+			}
 		}
 
-		private void LoadAsset(AssetBundle bundle, string path, GearCategory category, string type)
+		private void InitializeAsset(GameObject gameObject)
 		{
-			var prefab = bundle.LoadAsset<GameObject>(path);
-			CustomGear[category].Add(new CustomGear(category, type, prefab));
+			var metadata = gameObject.GetComponent<XLGearModifierMetadata>();
+			if (metadata == null) return;
+
+			CustomGear[metadata.Category].Add(new CustomGear(metadata.Category, GetBaseType(metadata), gameObject));
+		}
+
+		private string GetBaseType(XLGearModifierMetadata metadata)
+		{
+			var result = string.Empty;
+
+			switch (metadata.Category)
+			{
+				case GearCategory.SkinTone:
+					break;
+				case GearCategory.Hair:
+					result = metadata.BaseHairStyle.ToString();
+					break;
+				case GearCategory.Headwear:
+					result = metadata.BaseHeadwearType.ToString();
+					break;
+				case GearCategory.Top:
+					break;
+				case GearCategory.Bottom:
+					break;
+				case GearCategory.Shoes:
+					result = metadata.BaseShoeType.ToString();
+					break;
+				case GearCategory.Deck:
+					break;
+				case GearCategory.Griptape:
+					break;
+				case GearCategory.Trucks:
+					break;
+				case GearCategory.Wheels:
+					break;
+			}
+
+			return result;
 		}
 	}
 }
