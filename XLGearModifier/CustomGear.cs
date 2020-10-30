@@ -1,5 +1,5 @@
-﻿using System;
-using HarmonyLib;
+﻿using HarmonyLib;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -20,7 +20,7 @@ namespace XLGearModifier
 			Category = category;
 			Type = type;
 			Prefab = prefab;
-			GearInfo = new CharacterGearInfo(prefab.name, type, true, new TextureChange[0], new string[0]);
+			GearInfo = new CharacterGearInfo(prefab.name, type, true, GetDefaultTextureChanges(), new string[0]);
 
 			AddGearPrefabController();
 			AddMaterialController();
@@ -34,9 +34,9 @@ namespace XLGearModifier
 
 		private async Task AddMaterialController()
 		{
-			var origMaterialController = await GetDefaultGearMaterialController(Type);
+			var origMaterialController = await GetDefaultGearMaterialController();
 
-			if (origMaterialController != null)
+ 			if (origMaterialController != null)
 			{
 				var newMaterialController = Prefab.AddComponent<MaterialController>();
 
@@ -62,20 +62,47 @@ namespace XLGearModifier
 			}
 		}
 
-		private async Task<MaterialController> GetDefaultGearMaterialController(string type)
+		private async Task<MaterialController> GetDefaultGearMaterialController()
 		{
-			var gear = Traverse.Create(GearDatabase.Instance).Field("gearListSource").GetValue<GearInfo[][][]>();
-			var officialMaleHair = gear[0][1];
+			var baseObject = await GetBaseObject();
 
-			var charGearInfo = officialMaleHair.Where(x => x.type.Equals(type, StringComparison.InvariantCultureIgnoreCase)).Cast<CharacterGearInfo>().FirstOrDefault();
-			if (charGearInfo != null)
+			if (baseObject != null)
 			{
-				var clothingGearObj = new ClothingGearObjet(charGearInfo, PlayerController.Instance.characterCustomizer);
-				var defaultGearPrefab = await Traverse.Create(clothingGearObj).Method("LoadPrefab", clothingGearObj.template.path).GetValue<Task<GameObject>>();
-				return defaultGearPrefab.GetComponentInChildren<MaterialController>();
+				return baseObject.GetComponentInChildren<MaterialController>();
 			}
 
 			return null;
+		}
+
+		private TextureChange[] GetDefaultTextureChanges()
+		{
+			var info = GetBaseGearInfo();
+			if (info != null)
+			{
+				return info.textureChanges;
+			}
+
+			return null;
+		}
+
+		private async Task<GameObject> GetBaseObject()
+		{
+			var info = GetBaseGearInfo();
+			if (info != null)
+			{
+				var tempGearObj = new ClothingGearObjet(info, PlayerController.Instance.characterCustomizer);
+				return await Traverse.Create(tempGearObj).Method("LoadPrefab", tempGearObj.template.path).GetValue<Task<GameObject>>();
+			}
+
+			return null;
+		}
+
+		private CharacterGearInfo GetBaseGearInfo()
+		{
+			var gear = Traverse.Create(GearDatabase.Instance).Field("gearListSource").GetValue<GearInfo[][][]>();
+
+			var officialGear = gear[0][(int)Category];
+			return officialGear.Where(x => x.type.Equals(Type, StringComparison.InvariantCultureIgnoreCase)).Cast<CharacterGearInfo>().First();
 		}
 	}
 }
