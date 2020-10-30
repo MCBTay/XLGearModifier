@@ -39,4 +39,43 @@
 		MHatSnapback,
 		FHatDad
 	}
+
+	public enum ShoeTypes
+	{
+		MShoes,
+		MShoesDCHyde,
+		MShoesDCHyde2,
+		MShoesDCKalisVulc,
+		MShoesEmericaLacedRomero,
+		MShoesEmericaSpankyG6,
+		MShoesEmericaWinoG6,
+		MShoesESAccelSlim,
+		MShoesESAccelSlimPlus,
+		MShoesESSilo,
+		MShoesEtniesCallicut,
+		MShoesEtniesFader,
+		MShoesEtniesMarana,
+		MShoesLakaiCambridge,
+		MShoesLakaiNewport,
+		MShoesLakaSheffield,
+		MShoesNewBalance255,
+		MShoesNewBalance288S,
+		MShoesNewBalance913,
+		MShoesNewBalanceFoy306,
+		MShoesVansKyleWalker2,
+		FShoes,
+		FShoesDCHyde,
+		FShoesDCKalisVulc,
+		FShoesEmericaLacedRomero,
+		FShoesEmericaWinoG6,
+		FShoesESAccelSlim,
+		FShoesESAccelSlimPlus,
+		FShoesEtniesCallicut,
+		FShoesEtniesMarana,
+		FShoesLakaiNewport,
+		FShoesLakaiSheffield,
+		FShoesNewBalance306,
+		FShoesNewBalance913,
+		FShoesVansKyleWalker2
+	}
 }
