@@ -46,36 +46,21 @@ namespace XLGearModifier
 
 		private string GetBaseType(XLGearModifierMetadata metadata)
 		{
-			var result = string.Empty;
-
 			switch (metadata.Category)
 			{
-				case GearCategory.SkinTone:
-					break;
-				case GearCategory.Hair:
-					result = metadata.BaseHairStyle.ToString();
-					break;
-				case GearCategory.Headwear:
-					result = metadata.BaseHeadwearType.ToString();
-					break;
-				case GearCategory.Top:
-					break;
-				case GearCategory.Bottom:
-					break;
-				case GearCategory.Shoes:
-					result = metadata.BaseShoeType.ToString();
-					break;
-				case GearCategory.Deck:
-					break;
-				case GearCategory.Griptape:
-					break;
-				case GearCategory.Trucks:
-					break;
-				case GearCategory.Wheels:
-					break;
+				case GearCategory.SkinTone: break;
+				case GearCategory.Hair:     return metadata.BaseHairStyle.ToString();
+				case GearCategory.Headwear: return metadata.BaseHeadwearType.ToString();
+				case GearCategory.Top:      return metadata.BaseTopType.ToString();
+				case GearCategory.Bottom:   return metadata.BaseBottomType.ToString();
+				case GearCategory.Shoes:    return metadata.BaseShoeType.ToString();
+				case GearCategory.Deck:     break;
+				case GearCategory.Griptape: break;
+				case GearCategory.Trucks:   break;
+				case GearCategory.Wheels:   break;
 			}
 
-			return result;
+			return string.Empty;
 		}
 	}
 }
