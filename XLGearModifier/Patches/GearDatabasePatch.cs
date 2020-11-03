@@ -1,52 +1,32 @@
 ﻿using HarmonyLib;
-using System.Collections.Generic;
+using System.Linq;
+using XLGearModifier.Unity;
 
 namespace XLGearModifier.Patches
 {
 	public class GearDatabasePatch
 	{
-		[HarmonyPatch(typeof(GearDatabase), nameof(GearDatabase.GetGearListAtIndex), new[] { typeof(IndexPath), typeof(bool) }, new[] { ArgumentType.Normal, ArgumentType.Out })]
-		public static class GetGearListAtIndexPatch
+		[HarmonyPatch(typeof(GearDatabase), nameof(GearDatabase.FetchCustomGear))]
+		public static class FetchCustomGearPatch
 		{
-			static void Postfix(GearDatabase __instance, IndexPath index, ref GearInfo[] __result)
+			static void Postfix(GearDatabase __instance, ref GearInfo[][][] ___customGearListSource)
 			{
-				var gear = Traverse.Create(__instance).Field("gearListSource").GetValue<GearInfo[][][]>();
-
-				if (index[1] < gear[index[0]].Length) return;
-
-				var customGear = Traverse.Create(__instance).Field("customGearListSource").GetValue<GearInfo[][][]>();
-
-				var tempIndex = index[1] - customGear[index[0]].Length;
-
-				if (tempIndex != (int) GearCategory.Hair) return;
-
-
-				List<GearInfo> customHair = new List<GearInfo>();
-				foreach (var hair in GearManager.Instance.CustomGear[GearCategory.Hair])
-				{
-					customHair.Add(hair.GearInfo);
-				}
-
-				__result.AddRangeToArray(customHair.ToArray());
+				AddCustomGear(GearCategory.Hair, ref ___customGearListSource);
+				AddCustomGear(GearCategory.Headwear, ref ___customGearListSource);
+				AddCustomGear(GearCategory.Shoes, ref ___customGearListSource);
+				AddCustomGear(GearCategory.Top, ref ___customGearListSource);
+				AddCustomGear(GearCategory.Bottom, ref ___customGearListSource);
 			}
-		}
 
-		[HarmonyPatch(typeof(GearDatabase), nameof(GearDatabase.GetGearAtIndex), new[] { typeof(IndexPath), typeof(bool) }, new[] { ArgumentType.Normal, ArgumentType.Out })]
-		public static class GetGearAtIndexPatch
-		{
-			static void Postfix(GearDatabase __instance, IndexPath index, ref GearInfo __result)
+			static void AddCustomGear(GearCategory category, ref GearInfo[][][] ___customGearListSource)
 			{
-				if (index.depth < 3) return;
-				if (index[1] < 10) return;
-
-				var tempIndex = index[1] - 10;
-
-				if (tempIndex != (int) GearCategory.Hair) return;
-
-				foreach (var hair in GearManager.Instance.CustomGear[GearCategory.Hair])
+				var list = ___customGearListSource[0][(int)category].ToList();
+				foreach (var gear in GearManager.Instance.CustomGear[category])
 				{
-					__result = hair.GearInfo;
+					if (!list.Contains(gear.GearInfo))
+						list.Add(gear.GearInfo);
 				}
+				___customGearListSource[0][(int)category] = list.ToArray();
 			}
 		}
 	}
