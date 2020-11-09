@@ -75,6 +75,7 @@
     <Compile Include="Patches\GearPrefabControllerPatch.cs" />
     <Compile Include="Patches\GearSelectionControllerPatch.cs" />
     <Compile Include="Patches\ClothingGearObjectPatch.cs" />
+    <Compile Include="Patches\MaterialControllerPatch.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="UserInterface.cs" />
@@ -108,7 +109,7 @@ copy /Y "$(TargetDir)XLGearModifier.dll" "$(TargetDir)XLGearModifier\XLGearModif
 copy /Y "$(TargetDir)XLGearModifier.Unity.dll" "$(TargetDir)XLGearModifier\XLGearModifier.Unity.dll"
 copy /Y "$(TargetDir)Info.json" "$(TargetDir)XLGearModifier\Info.json"
 
-powershell Compress-Archive -Path '$(TargetDir)XLGearModifier' -DestinationPath '$(TargetDir)XLGearModifier-1-0-4.zip' -Force
+powershell Compress-Archive -Path '$(TargetDir)XLGearModifier' -DestinationPath '$(TargetDir)XLGearModifier-1-0-5.zip' -Force
 )</PostBuildEvent>
   </PropertyGroup>
 </Project>
