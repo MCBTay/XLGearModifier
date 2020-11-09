@@ -31,12 +31,12 @@ namespace XLGearModifier
 			{
 				foreach (var asset in assets)
 				{
-					InitializeAsset(asset);
+					AddPrefab(asset);
 				}
 			}
 		}
 
-		private void InitializeAsset(GameObject gameObject)
+		public void AddPrefab(GameObject gameObject)
 		{
 			var metadata = gameObject.GetComponent<XLGearModifierMetadata>();
 			if (metadata == null) return;
