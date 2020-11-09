@@ -15,15 +15,24 @@ namespace XLGearModifier
 		public GearCategory Category;
 		public string Type;
 
-		public CustomGear(GearCategory category, string type, GameObject prefab)
+		public CustomGear(XLGearModifierMetadata metadata, GameObject prefab)
 		{
-			Category = category;
-			Type = type;
+			Category = metadata.Category;
+			Type = GetBaseType(metadata);
 			Prefab = prefab;
-			GearInfo = new CharacterGearInfo(prefab.name, type, true, GetDefaultTextureChanges(), new string[0]);
+
+			GearInfo = new CharacterGearInfo(Prefab.name, Type, true, GetDefaultTextureChanges(), new string[0]);
 
 			AddGearPrefabController();
-			AddMaterialController();
+
+			if (Category == GearCategory.Shoes)
+			{
+				AddShoeMaterialControllers();
+			}
+			else
+			{
+				AddMaterialController();
+			}
 		}
 
 		private void AddGearPrefabController()
@@ -32,34 +41,52 @@ namespace XLGearModifier
 			gearPrefabController.PreparePrefab();
 		}
 
+		private async Task AddShoeMaterialControllers()
+		{
+			var origMaterialController = await GetDefaultGearMaterialController();
+
+			if (origMaterialController != null)
+			{
+				foreach (Transform child in Prefab.transform)
+				{
+					CreateNewMaterialController(origMaterialController, child.gameObject);
+				}
+			}
+		}
+
 		private async Task AddMaterialController()
 		{
 			var origMaterialController = await GetDefaultGearMaterialController();
 
  			if (origMaterialController != null)
 			{
-				var newMaterialController = Prefab.AddComponent<MaterialController>();
-
-				newMaterialController.PropertyNameSubstitutions = origMaterialController.PropertyNameSubstitutions;
-
-				newMaterialController.targets = new List<MaterialController.TargetMaterialConfig>();
-				foreach (var target in origMaterialController.targets)
-				{
-					var config = new MaterialController.TargetMaterialConfig
-					{
-						renderer = Prefab.GetComponentInChildren<SkinnedMeshRenderer>(),
-						materialIndex = target.materialIndex,
-						sharedMaterial = target.sharedMaterial
-					};
-					config.renderer.sharedMaterials = target.renderer.sharedMaterials;
-
-					newMaterialController.targets.Add(config);
-				}
-
-				newMaterialController.alphaMasks = origMaterialController.alphaMasks;
-				newMaterialController.materialID = origMaterialController.materialID;
-				Traverse.Create(newMaterialController).Field("_originalMaterial").SetValue(Traverse.Create(origMaterialController).Field("originalMaterial").GetValue<Material>());
+				CreateNewMaterialController(origMaterialController, Prefab);
 			}
+		}
+
+		private void CreateNewMaterialController(MaterialController origMaterialController, GameObject prefab)
+		{
+			var newMaterialController = prefab.AddComponent<MaterialController>();
+
+			newMaterialController.PropertyNameSubstitutions = origMaterialController.PropertyNameSubstitutions;
+
+			newMaterialController.targets = new List<MaterialController.TargetMaterialConfig>();
+			foreach (var target in origMaterialController.targets)
+			{
+				var config = new MaterialController.TargetMaterialConfig
+				{
+					renderer = prefab.GetComponentInChildren<SkinnedMeshRenderer>(),
+					materialIndex = target.materialIndex,
+					sharedMaterial = target.sharedMaterial
+				};
+				config.renderer.sharedMaterials = target.renderer.sharedMaterials;
+
+				newMaterialController.targets.Add(config);
+			}
+
+			newMaterialController.alphaMasks = origMaterialController.alphaMasks;
+			newMaterialController.materialID = origMaterialController.materialID;
+			Traverse.Create(newMaterialController).Field("_originalMaterial").SetValue(Traverse.Create(origMaterialController).Field("originalMaterial").GetValue<Material>());
 		}
 
 		private async Task<MaterialController> GetDefaultGearMaterialController()
@@ -103,6 +130,25 @@ namespace XLGearModifier
 
 			var officialGear = gear[0][(int)Category];
 			return officialGear.Where(x => x.type.Equals(Type, StringComparison.InvariantCultureIgnoreCase)).Cast<CharacterGearInfo>().First();
+		}
+
+		private string GetBaseType(XLGearModifierMetadata metadata)
+		{
+			switch (metadata.Category)
+			{
+				case GearCategory.SkinTone: break;
+				case GearCategory.Hair: return metadata.BaseHairStyle.ToString();
+				case GearCategory.Headwear: return metadata.BaseHeadwearType.ToString();
+				case GearCategory.Top: return metadata.BaseTopType.ToString();
+				case GearCategory.Bottom: return metadata.BaseBottomType.ToString();
+				case GearCategory.Shoes: return metadata.BaseShoeType.ToString();
+				case GearCategory.Deck: break;
+				case GearCategory.Griptape: break;
+				case GearCategory.Trucks: break;
+				case GearCategory.Wheels: break;
+			}
+
+			return string.Empty;
 		}
 	}
 }
