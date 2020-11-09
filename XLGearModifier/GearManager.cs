@@ -41,26 +41,7 @@ namespace XLGearModifier
 			var metadata = gameObject.GetComponent<XLGearModifierMetadata>();
 			if (metadata == null) return;
 
-			CustomGear[metadata.Category].Add(new CustomGear(metadata.Category, GetBaseType(metadata), gameObject));
-		}
-
-		private string GetBaseType(XLGearModifierMetadata metadata)
-		{
-			switch (metadata.Category)
-			{
-				case GearCategory.SkinTone: break;
-				case GearCategory.Hair:     return metadata.BaseHairStyle.ToString();
-				case GearCategory.Headwear: return metadata.BaseHeadwearType.ToString();
-				case GearCategory.Top:      return metadata.BaseTopType.ToString();
-				case GearCategory.Bottom:   return metadata.BaseBottomType.ToString();
-				case GearCategory.Shoes:    return metadata.BaseShoeType.ToString();
-				case GearCategory.Deck:     break;
-				case GearCategory.Griptape: break;
-				case GearCategory.Trucks:   break;
-				case GearCategory.Wheels:   break;
-			}
-
-			return string.Empty;
+			CustomGear[metadata.Category].Add(new CustomGear(metadata, gameObject));
 		}
 	}
 }
