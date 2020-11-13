@@ -3,12 +3,12 @@
 namespace XLGearModifier.Unity
 {
 	public class XLGearModifierMetadata : MonoBehaviour
-    {
+	{
+		public string DisplayName;
 	    public GearCategory Category;
-
 	    public bool BaseOnDefaultGear;
 
-		[HideIf(nameof(BaseOnDefaultGear), false)]
+	    [HideIf(nameof(BaseOnDefaultGear), false)]
 		[HideIfEnumValue(nameof(Category), HideIf.NotEqual, (int)GearCategory.Hair)]
 	    public HairStyles BaseHairStyle;
 
@@ -27,5 +27,7 @@ namespace XLGearModifier.Unity
 		[HideIf(nameof(BaseOnDefaultGear), false)]
 		[HideIfEnumValue(nameof(Category), HideIf.NotEqual, (int)GearCategory.Bottom)]
 		public BottomTypes BaseBottomType;
+
+		public Texture2D BodyAlphaMask;
 	}
 }
