@@ -6,19 +6,26 @@ namespace XLGearModifier.Unity
     {
 	    public GearCategory Category;
 
-		[HideIfEnumValue("Category", HideIf.NotEqual, (int)GearCategory.Hair)]
+	    public bool BaseOnDefaultGear;
+
+		[HideIf(nameof(BaseOnDefaultGear), false)]
+		[HideIfEnumValue(nameof(Category), HideIf.NotEqual, (int)GearCategory.Hair)]
 	    public HairStyles BaseHairStyle;
 
-	    [HideIfEnumValue("Category", HideIf.NotEqual, (int)GearCategory.Headwear)]
+	    [HideIf(nameof(BaseOnDefaultGear), false)]
+		[HideIfEnumValue(nameof(Category), HideIf.NotEqual, (int)GearCategory.Headwear)]
 		public HeadwearTypes BaseHeadwearType;
 
-		[HideIfEnumValue("Category", HideIf.NotEqual, (int) GearCategory.Shoes)]
+		[HideIf(nameof(BaseOnDefaultGear), false)]
+		[HideIfEnumValue(nameof(Category), HideIf.NotEqual, (int) GearCategory.Shoes)]
 		public ShoeTypes BaseShoeType;
 
-		[HideIfEnumValue("Category", HideIf.NotEqual, (int) GearCategory.Top)]
+		[HideIf(nameof(BaseOnDefaultGear), false)]
+		[HideIfEnumValue(nameof(Category), HideIf.NotEqual, (int) GearCategory.Top)]
 		public TopTypes BaseTopType;
 
-		[HideIfEnumValue("Category", HideIf.NotEqual, (int)GearCategory.Bottom)]
+		[HideIf(nameof(BaseOnDefaultGear), false)]
+		[HideIfEnumValue(nameof(Category), HideIf.NotEqual, (int)GearCategory.Bottom)]
 		public BottomTypes BaseBottomType;
 	}
 }
