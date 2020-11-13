@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using XLGearModifier.Unity;
@@ -11,16 +10,11 @@ namespace XLGearModifier
 		private static GearManager __instance;
 		public static GearManager Instance => __instance ?? (__instance = new GearManager());
 
-		public Dictionary<GearCategory, List<CustomGear>> CustomGear;
+		public List<CustomGear> CustomGear;
 
 		public GearManager()
 		{
-			CustomGear = new Dictionary<GearCategory, List<CustomGear>>();
-
-			foreach (GearCategory category in Enum.GetValues(typeof(GearCategory)))
-			{
-				CustomGear.Add(category, new List<CustomGear>());
-			}
+			CustomGear = new List<CustomGear>();
 		}
 
 		public void LoadAssets(AssetBundle bundle)
@@ -41,7 +35,7 @@ namespace XLGearModifier
 			var metadata = gameObject.GetComponent<XLGearModifierMetadata>();
 			if (metadata == null) return;
 
-			CustomGear[metadata.Category].Add(new CustomGear(metadata, gameObject));
+			CustomGear.Add(new CustomGear(metadata, gameObject));
 		}
 	}
 }

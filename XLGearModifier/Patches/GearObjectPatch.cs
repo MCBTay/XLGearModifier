@@ -1,5 +1,6 @@
 ﻿using HarmonyLib;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using UnityEngine;
 
@@ -21,18 +22,7 @@ namespace XLGearModifier.Patches
 
 			private static CustomGear FindGear(string name)
 			{
-				foreach (var kvp in GearManager.Instance.CustomGear)
-				{
-					foreach (var customGear in kvp.Value)
-					{
-						if (customGear.GearInfo.name.Equals(name, StringComparison.InvariantCultureIgnoreCase))
-						{
-							return customGear;
-						}
-					}
-				}
-
-				return null;
+				return GearManager.Instance.CustomGear.FirstOrDefault(customGear => customGear.GearInfo.name.Equals(name, StringComparison.InvariantCultureIgnoreCase));
 			}
 		}
 	}
