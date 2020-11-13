@@ -21,7 +21,7 @@ namespace XLGearModifier
 			Type = GetBaseType(metadata);
 			Prefab = prefab;
 
-			GearInfo = new CharacterGearInfo(Prefab.name, Type, true, GetDefaultTextureChanges(), new string[0]);
+			GearInfo = new CharacterGearInfo(string.IsNullOrEmpty(metadata.DisplayName) ? Prefab.name : metadata.DisplayName, Type, true, GetDefaultTextureChanges(), new string[0]);
 
 			AddGearPrefabController();
 
