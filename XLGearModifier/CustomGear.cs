@@ -5,10 +5,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using UnityEngine;
 using XLGearModifier.Unity;
+using XLMenuMod.Utilities;
 
 namespace XLGearModifier
 {
-	public class CustomGear
+	public class CustomGear : CustomInfo
 	{
 		public GameObject Prefab;
 		public CharacterGearInfo GearInfo;
