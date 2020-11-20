@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Reflection;
+using TMPro;
 using UnityEngine;
 
 namespace XLGearModifier
@@ -12,10 +11,14 @@ namespace XLGearModifier
 	{
 		public static string AssetPacksPath;
 
+		public static TMP_SpriteAsset GearModifierUISpriteSheet;
+
 		public static void LoadGearBundle()
 		{
 			AssetBundle bundle = AssetBundle.LoadFromMemory(ExtractResource("XLGearModifier.Assets.customgear"));
 			GearManager.Instance.LoadAssets(bundle);
+
+			GearModifierUISpriteSheet = bundle.LoadAsset<TMP_SpriteAsset>("GearModifierUISpriteSheet");
 		}
 
 		public static IEnumerator LoadUserBundles()
@@ -53,16 +56,7 @@ namespace XLGearModifier
 			var bundle = abCreateRequest?.assetBundle;
 			if (bundle == null) yield break;
 
-			var assetLoadRequest = bundle.LoadAllAssetsAsync<GameObject>();
-			yield return assetLoadRequest;
-
-			var assets = assetLoadRequest.allAssets;
-			if (assets == null || !assets.Any()) yield break;
-
-			foreach (GameObject asset in assets)
-			{
-				GearManager.Instance.AddPrefab(asset);
-			}
+			GearManager.Instance.LoadAssets(bundle);
 
 			bundle.Unload(false);
 		}
