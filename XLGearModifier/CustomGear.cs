@@ -24,21 +24,29 @@ namespace XLGearModifier
 
 			GearInfo = new CharacterGearInfo(string.IsNullOrEmpty(metadata.DisplayName) ? Prefab.name : metadata.DisplayName, Type, true, GetDefaultTextureChanges(), new string[0]);
 
-			AddGearPrefabController();
-
 			if (Category == GearCategory.Shoes)
 			{
+				AddGearPrefabControllers();
 				AddShoeMaterialControllers();
 			}
 			else
 			{
+				AddGearPrefabController(Prefab);
 				AddMaterialController();
 			}
 		}
 
-		private void AddGearPrefabController()
+		private void AddGearPrefabControllers()
 		{
-			var gearPrefabController = Prefab.AddComponent<GearPrefabController>();
+			foreach (Transform child in Prefab.transform)
+			{
+				AddGearPrefabController(child.gameObject);
+			}
+		}
+
+		private void AddGearPrefabController(GameObject gameObject)
+		{
+			var gearPrefabController = gameObject.AddComponent<GearPrefabController>();
 			gearPrefabController.PreparePrefab();
 		}
 
