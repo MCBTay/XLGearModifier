@@ -56,6 +56,8 @@ namespace XLGearModifier
 				var test = new CustomCharacterGearInfo(customGear.GearInfo.name, customGear.GearInfo.type, false, customGear.GearInfo.textureChanges, customGear.GearInfo.tags);
 				test.Info.Parent = parent;
 				sourceList.Add(test.Info);
+
+				GearDatabase.Instance.clothingGear.Add(test);
 			}
 		}
 
