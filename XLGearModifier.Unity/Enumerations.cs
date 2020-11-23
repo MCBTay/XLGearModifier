@@ -1,5 +1,13 @@
 ﻿namespace XLGearModifier.Unity
 {
+	public enum GearModifierTab
+	{
+		CustomMeshes = 20,
+		ProGear = 21,
+		FemaleGear = 22,
+		MaleGear = 23,
+	}
+
 	public enum GearCategory
 	{
 		SkinTone = 0,
