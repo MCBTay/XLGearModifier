@@ -8,6 +8,16 @@
 		MaleGear = 23,
 	}
 
+	public enum Character
+	{
+		MaleStandard = 0,
+		FemaleStandard = 1,
+		EvanSmith = 2,
+		TomAsta = 3,
+		BrandonWestgate = 4,
+		TiagoLemos = 5
+	}
+
 	public enum GearCategory
 	{
 		SkinTone = 0,
