@@ -104,7 +104,6 @@
     <None Include="Info.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\XLGearModifier.Unity\XLGearModifier.Unity.csproj">
