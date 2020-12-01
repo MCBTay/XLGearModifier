@@ -8,6 +8,7 @@ using XLGearModifier.Unity;
 using XLMenuMod.Utilities;
 using XLMenuMod.Utilities.Gear;
 using XLMenuMod.Utilities.Interfaces;
+using XLMenuMod.Utilities.UserInterface;
 
 namespace XLGearModifier.Patches
 {
@@ -82,7 +83,7 @@ namespace XLGearModifier.Patches
 				else if (index.depth >= 3)
 				{
 					itemView.Label.spriteAsset = AssetBundleHelper.GearModifierUISpriteSheet;
-					itemView.SetText(GearManager.Instance.CurrentFolder.GetName().Replace("\\", "<sprite=0> "));
+					itemView.SetText(GearManager.Instance.CurrentFolder.GetName().Replace("\\", $"<sprite name=\"{GearManager.Instance.CurrentFolder.GetName().Replace("\\", string.Empty)}\"> "));
 				}
 			}
 		}
@@ -115,11 +116,21 @@ namespace XLGearModifier.Patches
 
 				if (gearAtIndex.name.StartsWith("\\"))
 				{
-					var newText = "<space=18px><sprite=0 tint=1>";
+					string newText = string.Empty;
+					if (index.depth == 3)
+					{
+						newText = $"<space=18px><size=110%><sprite name=\"{gearAtIndex.name.Replace("\\", string.Empty)}\" tint=1><size=100%>";
+					}
+					else if (index.depth == 4)
+					{
+						//need a way to get the type here.
+						newText = $"<space=18px><size=110%><sprite name=\"{gearAtIndex.type.Replace("\\", string.Empty)}\" tint=1><size=100%>";
+					}
 					itemView.SetText(gearAtIndex.name.Replace("\\", newText), true);
 				}
 				else if (gearAtIndex.name.Equals("..\\"))
 				{
+					itemView.Label.spriteAsset = SpriteHelper.MenuIcons;
 					itemView.SetText(gearAtIndex.name.Replace("..\\", "<space=18px><sprite=9 tint=1>Go Back"), true);
 				}
 				else
