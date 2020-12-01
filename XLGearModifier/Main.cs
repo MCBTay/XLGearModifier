@@ -2,6 +2,7 @@
 using System.Reflection;
 using UnityEngine;
 using UnityModManagerNet;
+using XLMenuMod.Utilities.UserInterface;
 using Object = UnityEngine.Object;
 
 namespace XLGearModifier
@@ -42,6 +43,7 @@ namespace XLGearModifier
 				UserInterfaceGameObject.AddComponent<UserInterface>();
 				Object.DontDestroyOnLoad(UserInterfaceGameObject);
 
+				UserInterfaceHelper.Instance.LoadAssets();
 				AssetBundleHelper.LoadGearBundle();
 				PlayerController.Instance.StartCoroutine(AssetBundleHelper.LoadUserBundles());
 
