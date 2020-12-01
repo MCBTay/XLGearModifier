@@ -32,6 +32,51 @@
 		Wheels = 9
 	}
 
+	public enum EvanSmithGearCategory
+	{
+		Top = 0,
+		Bottom = 1,
+		Shoes = 2,
+		Deck = 3,
+		Griptape = 4,
+		Trucks = 5,
+		Wheels = 6
+	}
+
+	public enum TomAstaGearCategory
+	{
+		Headwear = 0,
+		Top = 1,
+		Bottom = 2,
+		Shoes = 3,
+		Deck = 4,
+		Griptape = 5,
+		Trucks = 6,
+		Wheels = 7
+	}
+
+	public enum BrandonWestgateGearCategory
+	{
+		Top = 0,
+		Bottom = 1,
+		Shoes = 2,
+		Deck = 3,
+		Griptape = 4,
+		Trucks = 5,
+		Wheels = 6
+	}
+
+	public enum TiagoLemosGearCategory
+	{
+		Top = 0,
+		Bottom = 1,
+		Shoes = 2,
+		Deck = 3,
+		Griptape = 4,
+		Trucks = 5,
+		Wheels = 6
+	}
+
 	public enum HairStyles
 	{
 		MHairAfroShort,

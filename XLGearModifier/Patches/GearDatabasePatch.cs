@@ -1,6 +1,7 @@
 ﻿using HarmonyLib;
 using System.Collections.Generic;
 using System.Linq;
+using XLGearModifier.Unity;
 using XLMenuMod.Utilities;
 using XLMenuMod.Utilities.Gear;
 using XLMenuMod.Utilities.Interfaces;
@@ -17,13 +18,29 @@ namespace XLGearModifier.Patches
 				if (index.depth < 2) return;
 
 				List<ICustomInfo> sourceList = null;
-				if (index[1] == 20)
+
+				switch (index[1])
 				{
-					sourceList = GearManager.Instance.CurrentFolder.HasChildren() ? GearManager.Instance.CurrentFolder.Children : GearManager.Instance.NestedItems;
+					case (int)GearModifierTab.CustomMeshes:
+						sourceList = GearManager.Instance.CustomMeshes;
+						break;
+					case (int) GearModifierTab.ProGear:
+						sourceList = GearManager.Instance.ProGear;
+						break;
+					case (int) GearModifierTab.FemaleGear:
+						sourceList = GearManager.Instance.FemaleGear;
+						break;
+					case (int) GearModifierTab.MaleGear:
+						sourceList = GearManager.Instance.MaleGear;
+						break;
 				}
 
 				if (sourceList == null) return;
-				__result = sourceList.Select(x => x.GetParentObject() as GearInfo).ToArray();
+
+				var list = GearManager.Instance.CurrentFolder.HasChildren() ? GearManager.Instance.CurrentFolder.Children : sourceList;
+
+				if (list == null) return;
+				__result = list.Select(x => x.GetParentObject() as GearInfo).ToArray();
 			}
 		}
 
@@ -32,31 +49,74 @@ namespace XLGearModifier.Patches
 		{
 			static void Postfix(IndexPath index, ref GearInfo __result)
 			{
-				if (index.depth >= 3 && index[1] == 20)
+				if (index.depth < 3) return;
+				if (index[1] != (int)GearModifierTab.CustomMeshes &&
+				    index[1] != (int)GearModifierTab.ProGear &&
+				    index[1] != (int)GearModifierTab.FemaleGear &&
+				    index[1] != (int)GearModifierTab.MaleGear) return;
+
+				List<ICustomInfo> sourceList = null;
+
+				switch (index[1])
 				{
-					if (index.depth == 3)
+					case (int)GearModifierTab.CustomMeshes:
+						sourceList = GearManager.Instance.CustomMeshes;
+						break;
+					case (int)GearModifierTab.ProGear:
+						sourceList = GearManager.Instance.ProGear;
+						break;
+					case (int)GearModifierTab.FemaleGear:
+						sourceList = GearManager.Instance.FemaleGear;
+						break;
+					case (int)GearModifierTab.MaleGear:
+						sourceList = GearManager.Instance.MaleGear;
+						break;
+				}
+
+				if (sourceList == null) return;
+
+				if (index.depth == 3)
+				{
+					switch (sourceList.ElementAt(index.LastIndex).GetParentObject())
 					{
-						switch (GearManager.Instance.NestedItems.ElementAt(index.LastIndex).GetParentObject())
-						{
-							case CustomGearFolderInfo customGearFolderInfo:
-								__result = customGearFolderInfo;
-								break;
-						}
-					}
-					// mesh per type, you've already selected a type so current folder should be valid
-					else if (index.depth >= 4)
-					{
-						switch (GearManager.Instance.CurrentFolder.Children.ElementAt(index.LastIndex).GetParentObject())
-						{
-							case CustomCharacterGearInfo customCharacterGearInfo:
-								__result = customCharacterGearInfo;
-								break;
-	   						case CustomGearFolderInfo customGearFolderInfo:
-								__result = customGearFolderInfo;
-								break;
-						}
+						case CustomGearFolderInfo customGearFolderInfo:
+							__result = customGearFolderInfo;
+							break;
 					}
 				}
+				// mesh per type, you've already selected a type so current folder should be valid
+				else if (index.depth >= 4)
+				{
+					switch (GearManager.Instance.CurrentFolder.Children.ElementAt(index.LastIndex).GetParentObject())
+					{
+						case CustomCharacterGearInfo customCharacterGearInfo:
+							__result = customCharacterGearInfo;
+							break;
+	   					case CustomGearFolderInfo customGearFolderInfo:
+							__result = customGearFolderInfo;
+							break;
+					}
+				}
+			}
+		}
+
+		[HarmonyPatch(typeof(GearDatabase), nameof(GearDatabase.FetchCustomGear))]
+		public static class FetchCustomGearPatch
+		{
+			static void Prefix(GearDatabase __instance)
+			{
+				foreach (var skater in __instance.skaters)
+				{
+					foreach (var filter in skater.GearFilters)
+					{
+						filter.allowCustomGear = true;
+					}
+				}
+			}
+
+			static void Postfix(GearDatabase __instance)
+			{
+				GearManager.Instance.LoadGameGear();
 			}
 		}
 	}
