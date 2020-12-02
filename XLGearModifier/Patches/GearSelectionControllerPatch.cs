@@ -120,12 +120,12 @@ namespace XLGearModifier.Patches
 					string newText = string.Empty;
 					if (index.depth == 3)
 					{
-						newText = $"<space=18px><size=110%><sprite name=\"{gearAtIndex.name.Replace("\\", string.Empty)}\" tint=1><size=100%>";
+						newText = $"<space=18px><sprite name=\"{gearAtIndex.name.Replace("\\", string.Empty)}\" tint=1>";
 					}
 					else if (index.depth == 4)
 					{
 						//need a way to get the type here.
-						newText = $"<space=18px><size=110%><sprite name=\"{gearAtIndex.type.Replace("\\", string.Empty)}\" tint=1><size=100%>";
+						newText = $"<space=18px><sprite name=\"Headwear\" tint=1>";
 					}
 					itemView.SetText(gearAtIndex.name.Replace("\\", newText), true);
 				}

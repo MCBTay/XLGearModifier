@@ -95,6 +95,9 @@ namespace XLGearModifier.Patches
 	   					case CustomGearFolderInfo customGearFolderInfo:
 							__result = customGearFolderInfo;
 							break;
+						case CustomGear customGear:
+							__result = customGear.GearInfo;
+							break;
 					}
 				}
 			}
@@ -117,6 +120,7 @@ namespace XLGearModifier.Patches
 			static void Postfix(GearDatabase __instance)
 			{
 				GearManager.Instance.LoadGameGear();
+				GearManager.Instance.LoadAssetCustomTextures();
 			}
 		}
 	}
