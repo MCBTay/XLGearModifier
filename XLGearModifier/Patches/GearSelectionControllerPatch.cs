@@ -282,14 +282,22 @@ namespace XLGearModifier.Patches
 			static void Postfix(GearSelectionController __instance, IndexPath index)
 			{
 				if (index.depth < 3) return;
-				if (index[1] != (int)GearModifierTab.CustomMeshes) return;
+				if (index[1] != (int)GearModifierTab.CustomMeshes &&
+				    index[1] != (int)GearModifierTab.ProGear &&
+				    index[1] != (int)GearModifierTab.FemaleGear &&
+				    index[1] != (int)GearModifierTab.MaleGear) return;
 
-				GearInfo gear = GearDatabase.Instance.GetGearAtIndex(index);
+				GearInfo gearAtIndex1 = GearDatabase.Instance.GetGearAtIndex(index);
+				if (gearAtIndex1 == null) return;
 
-				var match = GearManager.Instance.CustomMeshes.FirstOrDefault(x => x.Name == gear.name);
-				if (match == null) return;
-
-
+				List<GearInfo> toBeCachedGear = new List<GearInfo>();
+				for (int steps = -__instance.preloadedItemsPerSide; steps <= __instance.preloadedItemsPerSide; ++steps)
+				{
+					GearInfo gearAtIndex2 = GearDatabase.Instance.GetGearAtIndex(index.Horizontal(steps));
+					if (gearAtIndex2 != (GearInfo)null)
+						toBeCachedGear.Add(gearAtIndex2);
+				}
+				__instance.previewCustomizer.PreviewItem(gearAtIndex1, toBeCachedGear);
 			}
 		}
 
