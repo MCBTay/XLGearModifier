@@ -6,13 +6,15 @@ using System.Threading.Tasks;
 using UnityEngine;
 using XLGearModifier.Unity;
 using XLMenuMod.Utilities;
+using XLMenuMod.Utilities.Gear;
 
 namespace XLGearModifier
 {
 	public class CustomGear : CustomInfo
 	{
+		public XLGearModifierMetadata Metadata;
 		public GameObject Prefab;
-		public CharacterGearInfo GearInfo;
+		public CustomCharacterGearInfo GearInfo;
 		public GearCategory Category;
 		public string Type;
 		public string Sprite;
@@ -20,6 +22,7 @@ namespace XLGearModifier
 
 		public CustomGear(XLGearModifierMetadata metadata, GameObject prefab)
 		{
+			Metadata = metadata;
 			Category = metadata.Category;
 			Type = GetBaseType(metadata);
 			Prefab = prefab;
@@ -30,7 +33,7 @@ namespace XLGearModifier
 			}
 			IsLayerable = metadata.IsLayerable;
 
-			GearInfo = new CharacterGearInfo(string.IsNullOrEmpty(metadata.DisplayName) ? Prefab.name : metadata.DisplayName, Type, true, GetDefaultTextureChanges(), new string[0]);
+			GearInfo = new CustomCharacterGearInfo(string.IsNullOrEmpty(metadata.DisplayName) ? Prefab.name : metadata.DisplayName, Type, false, GetDefaultTextureChanges(), new string[0]);
 
 			if (Category == GearCategory.Shoes)
 			{
@@ -42,6 +45,11 @@ namespace XLGearModifier
 				AddGearPrefabController(Prefab);
 				AddMaterialController();
 			}
+		}
+
+		public CustomGear(CustomGear gearToClone, CustomCharacterGearInfo gearInfo) : this(gearToClone.Metadata, gearToClone.Prefab)
+		{
+			GearInfo = gearInfo;
 		}
 
 		private void AddGearPrefabControllers()
