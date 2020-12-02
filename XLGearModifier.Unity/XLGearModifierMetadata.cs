@@ -5,8 +5,10 @@ namespace XLGearModifier.Unity
 	public class XLGearModifierMetadata : MonoBehaviour
 	{
 		public string DisplayName;
+		public SpriteCategory Sprite;
 	    public GearCategory Category;
 	    public bool BaseOnDefaultGear;
+	    public bool IsLayerable;
 
 	    [HideIf(nameof(BaseOnDefaultGear), false)]
 		[HideIfEnumValue(nameof(Category), HideIf.NotEqual, (int)GearCategory.Hair)]
