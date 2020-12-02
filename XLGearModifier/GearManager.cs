@@ -1,10 +1,10 @@
-﻿using System;
+﻿using HarmonyLib;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using HarmonyLib;
+using TMPro;
 using UnityEngine;
 using XLGearModifier.Unity;
-using XLMenuMod;
 using XLMenuMod.Utilities;
 using XLMenuMod.Utilities.Gear;
 using XLMenuMod.Utilities.Interfaces;
@@ -39,6 +39,7 @@ namespace XLGearModifier
 			MaleGear = new List<ICustomInfo>();
 		}
 
+		#region In Game Gear
 		public void LoadGameGear()
 		{
 			gearListSource = Traverse.Create(GearDatabase.Instance).Field("gearListSource").GetValue<GearInfo[][][]>();
@@ -127,6 +128,18 @@ namespace XLGearModifier
 			}
 		}
 
+		public void AddItem(CharacterGearInfo currentGear, List<ICustomInfo> destList, ref CustomFolderInfo parent)
+		{
+			var existing = destList.FirstOrDefault(x => x.Name == currentGear.name);
+			if (existing == null)
+			{
+				var customInfo = new CustomCharacterGearInfo(currentGear.name, currentGear.type, currentGear.isCustom, currentGear.textureChanges, currentGear.tags);
+				customInfo.Info.Parent = parent;
+				destList.Add(customInfo.Info);
+			}
+		}
+		#endregion
+
 		public void LoadAssets(AssetBundle bundle)
 		{
 			var assets = bundle.LoadAllAssets<GameObject>();
@@ -137,73 +150,68 @@ namespace XLGearModifier
 			{
 				var metadata = asset.GetComponent<XLGearModifierMetadata>();
 				if (metadata == null) continue;
-				
-				CustomFolderInfo parent = null;
-				AddFolder<CustomGearFolderInfo>(metadata.Category.ToString(), string.Empty, CustomMeshes, ref parent);
-				AddFolder<CustomGearFolderInfo>(string.IsNullOrEmpty(metadata.DisplayName) ? asset.name : metadata.DisplayName, string.Empty, parent.Children, ref parent);
 
 				var newGear = new CustomGear(metadata, asset);
 				CustomGear.Add(newGear);
-				AddItem(newGear, parent.Children, metadata.BaseOnDefaultGear, ref parent);
-			}
-		}
 
-		public void AddItem(CharacterGearInfo currentGear, List<ICustomInfo> sourceList, ref CustomFolderInfo parent)
-		{
-			var existing = sourceList.FirstOrDefault(x => x.Name == currentGear.name);
-			if (existing == null)
-			{
-				var customInfo = new CustomCharacterGearInfo(currentGear.name, currentGear.type, currentGear.isCustom, currentGear.textureChanges, currentGear.tags);
-				customInfo.Info.Parent = parent;
-				sourceList.Add(customInfo.Info);
-			}
-		}
+				CustomFolderInfo parent = null;
 
-		public void AddItem(CustomGear customGear, List<ICustomInfo> sourceList, bool basedOnDefaultGear, ref CustomFolderInfo parent)
-		{
-			var existing = sourceList.FirstOrDefault(x => x.GetName() == customGear.Name);
-			if (existing == null)
-			{
+				AddFolder<CustomGearFolderInfo>(metadata.Category.ToString(), string.Empty, CustomMeshes, ref parent);
+				AddFolder<CustomGearFolderInfo>(string.IsNullOrEmpty(metadata.DisplayName) ? asset.name : metadata.DisplayName, string.Empty, parent.Children, ref parent);
+
 				var officialTextures = Traverse.Create(GearDatabase.Instance).Field("gearListSource").GetValue<GearInfo[][][]>();
+				AddItem(newGear, officialTextures, parent.Children, metadata.BaseOnDefaultGear, ref parent);
+			}
+		}
+
+		public void LoadAssetCustomTextures()
+		{
+			foreach (var customGear in CustomGear)
+			{
+				CustomFolderInfo parent = null;
+
+				AddFolder<CustomGearFolderInfo>(customGear.Metadata.Category.ToString(), string.Empty, CustomMeshes, ref parent);
+				AddFolder<CustomGearFolderInfo>(string.IsNullOrEmpty(customGear.Metadata.DisplayName) ? customGear.Prefab.name : customGear.Metadata.DisplayName, string.Empty, parent.Children, ref parent);
+
 				var customTextures = Traverse.Create(GearDatabase.Instance).Field("customGearListSource").GetValue<GearInfo[][][]>();
+				AddItem(customGear, customTextures, parent.Children, customGear.Metadata.BaseOnDefaultGear, ref parent);
+			}
+		}
+
+		public void AddItem(CustomGear customGear, GearInfo[][][] sourceList, List<ICustomInfo> destList, bool basedOnDefaultGear, ref CustomFolderInfo parent)
+		{
+			var existing = destList.FirstOrDefault(x => x.GetName() == customGear.Name);
+			if (existing == null)
+			{
+				if (sourceList == null) return;
+
 
 				if (basedOnDefaultGear)
 				{
-					var categoryTextures = officialTextures[0][(int)customGear.Category];
+					int skaterIndex = customGear.GetSkaterIndex();
+					int categoryIndex = customGear.GetCategoryIndex(skaterIndex);
+
+					var categoryTextures = sourceList[skaterIndex][categoryIndex];
 					
-					var baseTextures = categoryTextures.Where(x => x.type == customGear.Type.ToLower()).Select(x => x as CharacterGearInfo);
+					var baseTextures = categoryTextures.Where(x => x.type == customGear.Type.ToLower()).Select(x => x as CharacterGearInfo).ToList();
 					foreach (var baseTexture in baseTextures)
 					{
-						var test = new CustomCharacterGearInfo(baseTexture.name, customGear.GearInfo.type, false, baseTexture.textureChanges, customGear.GearInfo.tags);
-						test.Info.Parent = parent;
-						sourceList.Add(test.Info);
+						var gearInfo = new CustomCharacterGearInfo(baseTexture.name, customGear.GearInfo.type, false, baseTexture.textureChanges, customGear.GearInfo.tags);
+						gearInfo.Info.Parent = parent;
+						gearInfo.Info.ParentObject = new CustomGear(customGear, gearInfo);
+						destList.Add(gearInfo.Info);
 
-						GearDatabase.Instance.clothingGear.Add(test);
-					}
-
-					if (customTextures != null)
-					{
-						categoryTextures = customTextures[0][(int) customGear.Category];
-						baseTextures = categoryTextures.Where(x => x.type == customGear.Type.ToLower())
-							.Select(x => x as CharacterGearInfo);
-						foreach (var baseTexture in baseTextures)
-						{
-							var test = new CustomCharacterGearInfo(baseTexture.name, customGear.GearInfo.type, true,
-								baseTexture.textureChanges, customGear.GearInfo.tags);
-							test.Info.Parent = parent;
-							sourceList.Add(test.Info);
-
-							GearDatabase.Instance.clothingGear.Add(test);
-						}
+						GearDatabase.Instance.clothingGear.Add(gearInfo);
 					}
 				}
 				else
 				{
-					var test = new CustomCharacterGearInfo(customGear.GearInfo.name, customGear.GearInfo.type, false, customGear.GearInfo.textureChanges, customGear.GearInfo.tags);
-					test.Info.Parent = parent;
-					sourceList.Add(test.Info);
+					var gearInfo = new CustomCharacterGearInfo(customGear.GearInfo.name, customGear.GearInfo.type, false, customGear.GearInfo.textureChanges, customGear.GearInfo.tags);
+					gearInfo.Info.Parent = parent;
+					gearInfo.Info.ParentObject = new CustomGear(customGear, gearInfo);
+					destList.Add(gearInfo.Info);
 
-					GearDatabase.Instance.clothingGear.Add(test);
+					GearDatabase.Instance.clothingGear.Add(gearInfo);
 				}
 			}
 		}
