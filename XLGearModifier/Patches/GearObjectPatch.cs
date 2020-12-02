@@ -1,8 +1,7 @@
 ﻿using HarmonyLib;
-using System;
-using System.Linq;
 using System.Threading.Tasks;
 using UnityEngine;
+using XLMenuMod.Utilities.Gear;
 
 namespace XLGearModifier.Patches
 {
@@ -13,16 +12,11 @@ namespace XLGearModifier.Patches
 		{
 			static void Postfix(GearObject __instance, string path, ref Task<GameObject> __result)
 			{
-				var match = FindGear(__instance.gearInfo.name);
-				if (match != null)
+				var gearInfo = __instance.gearInfo as CustomCharacterGearInfo;
+				if (gearInfo?.Info?.GetParentObject() is CustomGear parentObject)
 				{
-					__result = Task.FromResult(match.Prefab);
+					__result = Task.FromResult(parentObject.Prefab);
 				}
-			}
-
-			private static CustomGear FindGear(string name)
-			{
-				return GearManager.Instance.CustomGear.FirstOrDefault(customGear => customGear.GearInfo.name.Equals(name, StringComparison.InvariantCultureIgnoreCase));
 			}
 		}
 	}
