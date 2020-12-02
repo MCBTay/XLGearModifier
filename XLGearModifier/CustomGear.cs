@@ -15,12 +15,20 @@ namespace XLGearModifier
 		public CharacterGearInfo GearInfo;
 		public GearCategory Category;
 		public string Type;
+		public string Sprite;
+		public bool IsLayerable;
 
 		public CustomGear(XLGearModifierMetadata metadata, GameObject prefab)
 		{
 			Category = metadata.Category;
 			Type = GetBaseType(metadata);
 			Prefab = prefab;
+			Sprite = metadata.Sprite.ToString();
+			if (metadata.IsLayerable)
+			{
+				Sprite += "_Layerable";
+			}
+			IsLayerable = metadata.IsLayerable;
 
 			GearInfo = new CharacterGearInfo(string.IsNullOrEmpty(metadata.DisplayName) ? Prefab.name : metadata.DisplayName, Type, true, GetDefaultTextureChanges(), new string[0]);
 
@@ -137,8 +145,68 @@ namespace XLGearModifier
 		{
 			var gear = Traverse.Create(GearDatabase.Instance).Field("gearListSource").GetValue<GearInfo[][][]>();
 
-			var officialGear = gear[0][(int)Category];
+			var skaterIndex = GetSkaterIndex();
+			GearInfo[] officialGear = gear[skaterIndex][GetCategoryIndex(skaterIndex)];
 			return officialGear.Where(x => x.type.Equals(Type, StringComparison.InvariantCultureIgnoreCase)).Cast<CharacterGearInfo>().First();
+		}
+
+		public int GetSkaterIndex()
+		{
+			var skaterIndex = 0;
+
+			if (Type.StartsWith("m", StringComparison.InvariantCultureIgnoreCase))
+			{
+				skaterIndex = 0;
+			}
+			else if (Type.StartsWith("f", StringComparison.InvariantCultureIgnoreCase))
+			{
+				skaterIndex = 1;
+			}
+			else if (Type.StartsWith("es", StringComparison.InvariantCultureIgnoreCase))
+			{
+				skaterIndex = 2;
+			}
+			else if (Type.StartsWith("ta", StringComparison.InvariantCultureIgnoreCase))
+			{
+				skaterIndex = 3;
+			}
+			else if (Type.StartsWith("bw", StringComparison.InvariantCultureIgnoreCase))
+			{
+				skaterIndex = 4;
+			}
+			else if (Type.StartsWith("tl", StringComparison.InvariantCultureIgnoreCase))
+			{
+				skaterIndex = 5;
+			}
+
+			return skaterIndex;
+		}
+
+		public int GetCategoryIndex(int skaterIndex)
+		{
+			var categoryIndex = (int)Category;
+
+			switch (skaterIndex)
+			{
+				case (int)Character.EvanSmith:
+					Enum.TryParse(Category.ToString(), out EvanSmithGearCategory esCategory);
+					categoryIndex = (int)esCategory;
+					break;
+				case (int)Character.TomAsta:
+					Enum.TryParse(Category.ToString(), out TomAstaGearCategory taCategory);
+					categoryIndex = (int)taCategory;
+					break;
+				case (int)Character.BrandonWestgate:
+					Enum.TryParse(Category.ToString(), out BrandonWestgateGearCategory bwCategory);
+					categoryIndex = (int)bwCategory;
+					break;
+				case (int)Character.TiagoLemos:
+					Enum.TryParse(Category.ToString(), out TiagoLemosGearCategory tlCategory);
+					categoryIndex = (int)tlCategory;
+					break;
+			}
+
+			return categoryIndex;
 		}
 
 		private string GetBaseType(XLGearModifierMetadata metadata)
