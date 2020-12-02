@@ -83,7 +83,18 @@ namespace XLGearModifier.Patches
 				else if (index.depth >= 3)
 				{
 					itemView.Label.spriteAsset = AssetBundleHelper.GearModifierUISpriteSheet;
-					itemView.SetText(GearManager.Instance.CurrentFolder.GetName().Replace("\\", $"<sprite name=\"{GearManager.Instance.CurrentFolder.GetName().Replace("\\", string.Empty)}\"> "));
+					//itemView.SetText(GearManager.Instance.CurrentFolder.GetName().Replace("\\", $"<sprite name=\"{GearManager.Instance.CurrentFolder.GetName().Replace("\\", string.Empty)}\"> "));
+					string newText = string.Empty;
+					if (index.depth == 3)
+					{
+						newText = $"<space=18px><sprite name=\"{GearManager.Instance.CurrentFolder.GetName().Replace("\\", string.Empty)}\" tint=1>";
+					}
+					else if (index.depth == 4)
+					{
+						//need a way to get the type here.
+						newText = $"<space=18px><sprite name=\"Headwear\" tint=1>";
+					}
+					itemView.SetText(GearManager.Instance.CurrentFolder.GetName().Replace("\\", newText), true);
 				}
 			}
 		}
