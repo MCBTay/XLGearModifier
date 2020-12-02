@@ -107,6 +107,7 @@ namespace XLGearModifier.Patches
 				{
 					itemView.SetText("NOT FOUND", false);
 					Traverse.Create(GearSelectionController.Instance).Method("SetIsEquippedIndicators", itemView, false).GetValue();
+					return;
 				}
 
 				if (AssetBundleHelper.GearModifierUISpriteSheet != null)
@@ -241,7 +242,7 @@ namespace XLGearModifier.Patches
 
 				if (index.depth >= 3)
 				{
-					if (__instance.previewCustomizer.HasEquipped((ICharacterCustomizationItem) gear))
+					if (__instance.previewCustomizer.HasEquipped(gear))
 						return false;
 					try
 					{
