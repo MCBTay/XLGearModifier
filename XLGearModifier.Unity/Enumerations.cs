@@ -100,7 +100,8 @@
 		MHatBeanieCuffed,
 		MHatDad,
 		MHatSnapback,
-		FHatDad
+		FHatDad,
+		TABonnet,
 	}
 
 	public enum ShoeTypes
@@ -139,7 +140,11 @@
 		FShoesLakaiSheffield,
 		FShoesNewBalance306,
 		FShoesNewBalance913,
-		FShoesVansKyleWalker2
+		FShoesVansKyleWalker2,
+		ESShoes,
+		TAShoes,
+		BWShoes,
+		TLShoes,
 	}
 
 	public enum TopTypes
@@ -150,6 +155,10 @@
 		MShirtButtonLong,
 		MSweater,
 		FShirt,
+		ESShirt,
+		TAShirt,
+		BWHoodie,
+		TLSweater,
 	}
 
 	public enum BottomTypes
@@ -160,5 +169,21 @@
 		MShortsDenim,
 		MShortsKhaki,
 		FPantsDenim,
+		ESPants,
+		TAPants,
+		BWPants,
+		TLPants,
+	}
+
+	public enum SpriteCategory
+	{
+		Headwear,
+		Top,
+		Shoes,
+		Bottom,
+		Socks,
+		Wildcard,
+		FacialHair,
+		Hair
 	}
 }
