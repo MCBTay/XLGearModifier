@@ -18,6 +18,8 @@ namespace XLGearModifier
 			AssetBundle bundle = AssetBundle.LoadFromMemory(ExtractResource("XLGearModifier.Assets.customgear"));
 			GearManager.Instance.LoadAssets(bundle);
 
+			PlayerController.Instance.characterCustomizer.LoadLastPlayer();
+
 			GearModifierUISpriteSheet = bundle.LoadAsset<TMP_SpriteAsset>("GearModifierUISpriteSheet");
 		}
 
