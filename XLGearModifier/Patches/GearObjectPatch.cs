@@ -1,7 +1,7 @@
 ﻿using HarmonyLib;
+using System.Linq;
 using System.Threading.Tasks;
 using UnityEngine;
-using XLMenuMod.Utilities.Gear;
 
 namespace XLGearModifier.Patches
 {
@@ -10,13 +10,15 @@ namespace XLGearModifier.Patches
 		[HarmonyPatch(typeof(GearObject), "LoadPrefab")]
 		public static class LoadPrefabPatch
 		{
-			static void Postfix(GearObject __instance, string path, ref Task<GameObject> __result)
+			static bool Prefix(GearObject __instance, string path, ref Task<GameObject> __result)
 			{
-				var gearInfo = __instance.gearInfo as CustomCharacterGearInfo;
-				if (gearInfo?.Info?.GetParentObject() is CustomGear parentObject)
-				{
-					__result = Task.FromResult(parentObject.Prefab);
-				}
+				if (!path.StartsWith("XLGearModifier")) return true;
+
+				var customGear = GearManager.Instance.CustomGear.FirstOrDefault(x => x.GearInfo.type == __instance.gearInfo.type);
+				if (customGear == null) return true;
+
+				__result = Task.FromResult(customGear.Prefab);
+				return false;
 			}
 		}
 	}
