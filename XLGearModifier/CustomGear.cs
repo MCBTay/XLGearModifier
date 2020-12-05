@@ -24,7 +24,7 @@ namespace XLGearModifier
 		{
 			Metadata = metadata;
 			Category = metadata.Category;
-			Type = GetBaseType(metadata);
+			Type = string.IsNullOrEmpty(metadata.Prefix) ? GetBaseType() : metadata.Prefix;
 			Prefab = prefab;
 			Sprite = metadata.Sprite.ToString();
 			if (metadata.IsLayerable)
@@ -74,43 +74,74 @@ namespace XLGearModifier
 			{
 				foreach (Transform child in Prefab.transform)
 				{
-					CreateNewMaterialController(origMaterialController, child.gameObject);
+					CreateNewMaterialController(child.gameObject, origMaterialController);
 				}
 			}
 		}
 
 		private async Task AddMaterialController()
 		{
-			var origMaterialController = await GetDefaultGearMaterialController();
-
- 			if (origMaterialController != null)
+			if (Metadata.BaseOnDefaultGear)
 			{
-				CreateNewMaterialController(origMaterialController, Prefab);
+				var origMaterialController = await GetDefaultGearMaterialController();
+
+				if (origMaterialController != null)
+				{
+					CreateNewMaterialController(Prefab, origMaterialController);
+				}
+			}
+			else
+			{
+				CreateNewMaterialController(Prefab);
 			}
 		}
 
-		private void CreateNewMaterialController(MaterialController origMaterialController, GameObject prefab)
+		private void CreateNewMaterialController(GameObject prefab, MaterialController origMaterialController = null)
 		{
 			var newMaterialController = prefab.AddComponent<MaterialController>();
 
-			newMaterialController.PropertyNameSubstitutions = origMaterialController.PropertyNameSubstitutions;
-
-			newMaterialController.targets = new List<MaterialController.TargetMaterialConfig>();
-			foreach (var target in origMaterialController.targets)
+			if (origMaterialController != null)
 			{
-				var config = new MaterialController.TargetMaterialConfig
+				newMaterialController.PropertyNameSubstitutions = origMaterialController.PropertyNameSubstitutions;
+				newMaterialController.targets = new List<MaterialController.TargetMaterialConfig>();
+				foreach (var target in origMaterialController.targets)
+				{
+					var config = new MaterialController.TargetMaterialConfig
+					{
+						renderer = prefab.GetComponentInChildren<SkinnedMeshRenderer>(),
+						materialIndex = target.materialIndex,
+						sharedMaterial = target.sharedMaterial
+					};
+					config.renderer.sharedMaterials = target.renderer.sharedMaterials;
+
+					newMaterialController.targets.Add(config);
+				}
+
+				newMaterialController.alphaMasks = origMaterialController.alphaMasks;
+				newMaterialController.materialID = origMaterialController.materialID;
+			}
+			else
+			{
+				newMaterialController.targets = new List<MaterialController.TargetMaterialConfig>();
+
+				var mat = Metadata.Material;
+				mat.shader = Shader.Find("MasterShaderCloth_v2");
+				mat.SetTexture("_texture2D_color", Metadata.TextureColor);
+				mat.SetTexture("_texture2D_normal", Metadata.TextureNormalMap);
+				mat.SetTexture("_texture2D_maskPBR", Metadata.TextureMaskPBR);
+				mat.SetFloat("_scalar_minspecular", Metadata.MinSpecular);
+				mat.SetFloat("_scalar_maxspecular", Metadata.MaxSpecular);
+				mat.SetFloat("_scalar_minrg", Metadata.MinRoughness);
+				mat.SetFloat("_scalar_maxrg", Metadata.MaxRoughness);
+
+				newMaterialController.targets.Add(new MaterialController.TargetMaterialConfig
 				{
 					renderer = prefab.GetComponentInChildren<SkinnedMeshRenderer>(),
-					materialIndex = target.materialIndex,
-					sharedMaterial = target.sharedMaterial
-				};
-				config.renderer.sharedMaterials = target.renderer.sharedMaterials;
-
-				newMaterialController.targets.Add(config);
+					materialIndex = 0,
+					sharedMaterial = mat,
+				});
 			}
 
-			newMaterialController.alphaMasks = origMaterialController.alphaMasks;
-			newMaterialController.materialID = origMaterialController.materialID;
 			Traverse.Create(newMaterialController).Field("_originalMaterial").SetValue(Traverse.Create(origMaterialController).Field("originalMaterial").GetValue<Material>());
 		}
 
@@ -155,12 +186,14 @@ namespace XLGearModifier
 
 			var skaterIndex = GetSkaterIndex();
 			GearInfo[] officialGear = gear[skaterIndex][GetCategoryIndex(skaterIndex)];
-			return officialGear.Where(x => x.type.Equals(Type, StringComparison.InvariantCultureIgnoreCase)).Cast<CharacterGearInfo>().First();
+			return officialGear.Where(x => x.type.Equals(GetBaseType(), StringComparison.InvariantCultureIgnoreCase)).Cast<CharacterGearInfo>().FirstOrDefault();
 		}
 
 		public int GetSkaterIndex()
 		{
 			var skaterIndex = 0;
+
+			if (string.IsNullOrEmpty(Type)) return 0;
 
 			if (Type.StartsWith("m", StringComparison.InvariantCultureIgnoreCase))
 			{
@@ -217,16 +250,16 @@ namespace XLGearModifier
 			return categoryIndex;
 		}
 
-		private string GetBaseType(XLGearModifierMetadata metadata)
+		public string GetBaseType()
 		{
-			switch (metadata.Category)
+			switch (Metadata.Category)
 			{
 				case GearCategory.SkinTone: break;
-				case GearCategory.Hair: return metadata.BaseHairStyle.ToString();
-				case GearCategory.Headwear: return metadata.BaseHeadwearType.ToString();
-				case GearCategory.Top: return metadata.BaseTopType.ToString();
-				case GearCategory.Bottom: return metadata.BaseBottomType.ToString();
-				case GearCategory.Shoes: return metadata.BaseShoeType.ToString();
+				case GearCategory.Hair: return Metadata.BaseHairStyle.ToString();
+				case GearCategory.Headwear: return Metadata.BaseHeadwearType.ToString();
+				case GearCategory.Top: return Metadata.BaseTopType.ToString();
+				case GearCategory.Bottom: return Metadata.BaseBottomType.ToString();
+				case GearCategory.Shoes: return Metadata.BaseShoeType.ToString();
 				case GearCategory.Deck: break;
 				case GearCategory.Griptape: break;
 				case GearCategory.Trucks: break;
