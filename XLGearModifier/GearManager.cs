@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using TMPro;
 using UnityEngine;
 using XLGearModifier.Unity;
 using XLMenuMod.Utilities;
@@ -84,6 +83,7 @@ namespace XLGearModifier
 			for (int gearCategory = 0; gearCategory < gearCategories.Length; gearCategory++)
 			{
 				var currentGearCategory = gearCategories[gearCategory];
+				if (currentGearCategory.Length <= 0) continue;
 
 				switch (character)
 				{
@@ -95,8 +95,6 @@ namespace XLGearModifier
 					case Character.TiagoLemos when (gearCategory < (int)TiagoLemosGearCategory.Top || gearCategory > (int)TiagoLemosGearCategory.Shoes):
 						continue;
 				}
-
-				if (currentGearCategory.Length <= 0) continue;
 
 				switch (character)
 				{
@@ -146,10 +144,13 @@ namespace XLGearModifier
 
 			if (assets == null || !assets.Any()) return;
 
+			var officialTextures = Traverse.Create(GearDatabase.Instance).Field("gearListSource").GetValue<GearInfo[][][]>();
+
 			foreach (var asset in assets)
 			{
 				var metadata = asset.GetComponent<XLGearModifierMetadata>();
 				if (metadata == null) continue;
+				if (string.IsNullOrEmpty(metadata.Prefix)) continue;
 
 				var newGear = new CustomGear(metadata, asset);
 				CustomGear.Add(newGear);
@@ -159,8 +160,55 @@ namespace XLGearModifier
 				AddFolder<CustomGearFolderInfo>(metadata.Category.ToString(), string.Empty, CustomMeshes, ref parent);
 				AddFolder<CustomGearFolderInfo>(string.IsNullOrEmpty(metadata.DisplayName) ? asset.name : metadata.DisplayName, string.Empty, parent.Children, ref parent);
 
-				var officialTextures = Traverse.Create(GearDatabase.Instance).Field("gearListSource").GetValue<GearInfo[][][]>();
-				AddItem(newGear, officialTextures, parent.Children, metadata.BaseOnDefaultGear, ref parent);
+				var typeFilter = GearDatabase.Instance.skaters[newGear.GetSkaterIndex()].GearFilters[newGear.GetCategoryIndex(newGear.GetSkaterIndex())];
+				if (!typeFilter.includedTypes.Contains(metadata.Prefix))
+				{
+					Array.Resize(ref typeFilter.includedTypes, typeFilter.includedTypes.Length + 1);
+					typeFilter.includedTypes[typeFilter.includedTypes.Length - 1] = metadata.Prefix;
+				}
+
+				if (!GearDatabase.Instance.CharGearTemplateForID.ContainsKey(metadata.Prefix.ToLower()))
+				{
+					var newGearTemplate = new CharacterGearTemplate
+					{
+						alphaMasks = new List<GearAlphaMaskConfig>(),
+						category = MapCategory(metadata.Category),
+						id = metadata.Prefix.ToLower(),
+						path = "XLGearModifier"
+					};
+
+					if (metadata.BaseOnDefaultGear)
+					{
+						var baseGearTemplate = GearDatabase.Instance.CharGearTemplateForID.FirstOrDefault(x => x.Key == newGear.GetBaseType().ToLower()).Value;
+						if (baseGearTemplate != null)
+						{
+							//TODO: Come back to this once alpha masks are implemented
+							newGearTemplate.alphaMasks = baseGearTemplate.alphaMasks;
+							newGearTemplate.category = baseGearTemplate.category;
+						}
+					}
+
+					GearDatabase.Instance.CharGearTemplateForID.Add(metadata.Prefix.ToLower(), newGearTemplate);
+				}
+
+				if (metadata.BaseOnDefaultGear)
+				{
+					AddItem(newGear, officialTextures, parent.Children, ref parent);
+				}
+			}
+		}
+
+		public ClothingGearCategory MapCategory(GearCategory category)
+		{
+			switch (category)
+			{
+				case GearCategory.Hair: return ClothingGearCategory.Hat;
+				case GearCategory.Headwear: return ClothingGearCategory.Hat;
+				case GearCategory.Shoes: return ClothingGearCategory.Shoes;
+				case GearCategory.Bottom: return ClothingGearCategory.Pants;
+				default:
+				case GearCategory.Top: 
+					return ClothingGearCategory.Shirt;
 			}
 		}
 
@@ -174,45 +222,38 @@ namespace XLGearModifier
 				AddFolder<CustomGearFolderInfo>(string.IsNullOrEmpty(customGear.Metadata.DisplayName) ? customGear.Prefab.name : customGear.Metadata.DisplayName, string.Empty, parent.Children, ref parent);
 
 				var customTextures = Traverse.Create(GearDatabase.Instance).Field("customGearListSource").GetValue<GearInfo[][][]>();
-				AddItem(customGear, customTextures, parent.Children, customGear.Metadata.BaseOnDefaultGear, ref parent);
+				AddItem(customGear, customTextures, parent.Children, ref parent, true);
 			}
 		}
 
-		public void AddItem(CustomGear customGear, GearInfo[][][] sourceList, List<ICustomInfo> destList, bool basedOnDefaultGear, ref CustomFolderInfo parent)
+		public void AddItem(CustomGear customGear, GearInfo[][][] sourceList, List<ICustomInfo> destList, ref CustomFolderInfo parent, bool isCustom = false)
 		{
-			var existing = destList.FirstOrDefault(x => x.GetName() == customGear.Name);
-			if (existing == null)
+			if (sourceList == null) return;
+
+			int skaterIndex = customGear.GetSkaterIndex();
+			int categoryIndex = customGear.GetCategoryIndex(skaterIndex);
+
+			var categoryTextures = sourceList[skaterIndex][categoryIndex];
+			
+			var baseTextures = categoryTextures.Where(x => x.type == customGear.Type.ToLower()).Select(x => x as CharacterGearInfo).ToList();
+
+			if (customGear.Metadata.BaseOnDefaultGear)
 			{
-				if (sourceList == null) return;
+				var baseTypes = categoryTextures.Where(x => x.type == customGear.GetBaseType().ToLower()).Select(x => x as CharacterGearInfo).ToList();
+				baseTextures = baseTextures.Concat(baseTypes).ToList();
+			}
 
+			foreach (var baseTexture in baseTextures)
+			{
+				var child = destList.FirstOrDefault(x => x.GetName().Equals(baseTexture.name, StringComparison.InvariantCultureIgnoreCase));
+				if (child != null) return;
 
-				if (basedOnDefaultGear)
-				{
-					int skaterIndex = customGear.GetSkaterIndex();
-					int categoryIndex = customGear.GetCategoryIndex(skaterIndex);
+				var gearInfo = new CustomCharacterGearInfo(baseTexture.name, customGear.GearInfo.type, isCustom, baseTexture.textureChanges, customGear.GearInfo.tags);
+				gearInfo.Info.Parent = parent;
+				gearInfo.Info.ParentObject = new CustomGear(customGear, gearInfo);
+				destList.Add(gearInfo.Info);
 
-					var categoryTextures = sourceList[skaterIndex][categoryIndex];
-					
-					var baseTextures = categoryTextures.Where(x => x.type == customGear.Type.ToLower()).Select(x => x as CharacterGearInfo).ToList();
-					foreach (var baseTexture in baseTextures)
-					{
-						var gearInfo = new CustomCharacterGearInfo(baseTexture.name, customGear.GearInfo.type, false, baseTexture.textureChanges, customGear.GearInfo.tags);
-						gearInfo.Info.Parent = parent;
-						gearInfo.Info.ParentObject = new CustomGear(customGear, gearInfo);
-						destList.Add(gearInfo.Info);
-
-						GearDatabase.Instance.clothingGear.Add(gearInfo);
-					}
-				}
-				else
-				{
-					var gearInfo = new CustomCharacterGearInfo(customGear.GearInfo.name, customGear.GearInfo.type, false, customGear.GearInfo.textureChanges, customGear.GearInfo.tags);
-					gearInfo.Info.Parent = parent;
-					gearInfo.Info.ParentObject = new CustomGear(customGear, gearInfo);
-					destList.Add(gearInfo.Info);
-
-					GearDatabase.Instance.clothingGear.Add(gearInfo);
-				}
+				GearDatabase.Instance.clothingGear.Add(gearInfo);
 			}
 		}
 
