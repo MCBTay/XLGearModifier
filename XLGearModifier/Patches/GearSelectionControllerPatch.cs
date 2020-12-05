@@ -309,7 +309,19 @@ namespace XLGearModifier.Patches
 					if (gearAtIndex2 != (GearInfo)null)
 						toBeCachedGear.Add(gearAtIndex2);
 				}
-				__instance.previewCustomizer.PreviewItem(gearAtIndex1, toBeCachedGear);
+
+				if (index.depth == 4 && gearAtIndex1 is CustomGearFolderInfo gearFolder)
+				{
+					var child = gearFolder.FolderInfo.Children.ElementAt(1);
+					if (child != null && child.GetParentObject() is CustomGear customGear)
+					{
+						__instance.previewCustomizer.PreviewItem(customGear.GearInfo, toBeCachedGear);
+					}
+				}
+				else
+				{
+					__instance.previewCustomizer.PreviewItem(gearAtIndex1, toBeCachedGear);
+				}
 			}
 		}
 

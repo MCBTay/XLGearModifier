@@ -21,7 +21,7 @@ namespace XLGearModifier.Patches
 
 				switch (index[1])
 				{
-					case (int)GearModifierTab.CustomMeshes:
+					case (int) GearModifierTab.CustomMeshes:
 						sourceList = GearManager.Instance.CustomMeshes;
 						break;
 					case (int) GearModifierTab.ProGear:
