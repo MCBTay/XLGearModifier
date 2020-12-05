@@ -55,9 +55,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AlphaMaskTextureInfo.cs" />
     <Compile Include="Editor\HideIfAttributeDrawer.cs" />
     <Compile Include="Editor\Utilities.cs" />
     <Compile Include="Enumerations.cs" />
+    <Compile Include="GearAlphaMaskConfig.cs" />
     <Compile Include="HideIfAttribute.cs" />
     <Compile Include="XLGearModifierMetadata.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

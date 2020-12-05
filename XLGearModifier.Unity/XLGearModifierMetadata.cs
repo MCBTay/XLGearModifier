@@ -17,13 +17,17 @@ namespace XLGearModifier.Unity
 		[Tooltip("This is the 'prefix' or 'type' associated with the mesh. This will be used in order for the mod to know which mesh to load but also to know which textures to load.  Arguably more important for meshes that are not based on default gear.  Examples from the base game would be MHatDad or FHatDad.")]
 	    public string Prefix;
 
+		#region Texturing
 		[Header("Texturing")]
 		public bool BaseOnDefaultGear;
 
 		[HideIf(nameof(BaseOnDefaultGear), true)]
 		public Material Material;
 
+		#region MasterShaderCloth_v2 Properties, hidden when BaseOnDefaultGear is true
+		[HideIf(nameof(BaseOnDefaultGear), true)]
 		[Header("MasterShaderCloth_v2 Properties")]
+
 		[HideIf(nameof(BaseOnDefaultGear), true)]
 		public Texture2D TextureColor;
 
@@ -34,9 +38,6 @@ namespace XLGearModifier.Unity
 		public Texture2D TextureMaskPBR;
 
 		[HideIf(nameof(BaseOnDefaultGear), true)]
-		public Texture2D TextureAlphaCut;
-
-		[HideIf(nameof(BaseOnDefaultGear), true)]
 		public float MinRoughness = 0;
 		[HideIf(nameof(BaseOnDefaultGear), true)]
 		public float MaxRoughness = 1;
@@ -45,6 +46,7 @@ namespace XLGearModifier.Unity
 		public float MinSpecular = 0;
 		[HideIf(nameof(BaseOnDefaultGear), true)]
 		public float MaxSpecular = 1;
+		#endregion
 
 		#region Base Styles
 		[HideIf(nameof(BaseOnDefaultGear), false)]
@@ -66,6 +68,14 @@ namespace XLGearModifier.Unity
 		[HideIf(nameof(BaseOnDefaultGear), false)]
 		[HideIfEnumValue(nameof(Category), HideIf.NotEqual, (int)GearCategory.Bottom)]
 		public BottomTypes BaseBottomType;
+		#endregion
+
+		#region Alpha Masks
+		[Header("Alpha Masks")]
+		public List<GearAlphaMaskConfig> AlphaMasks;
+
+		public List<AlphaMaskTextureInfo> AlphaMaskTextures;
+		#endregion
 		#endregion
 	}
 }
