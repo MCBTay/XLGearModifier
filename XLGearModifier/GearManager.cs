@@ -65,6 +65,9 @@ namespace XLGearModifier
 			LoadCharacterGear(Character.TomAsta, ProGear);
 			LoadCharacterGear(Character.TiagoLemos, ProGear);
 			LoadCharacterGear(Character.BrandonWestgate, ProGear);
+
+			// We have to re-sort the list because TomAsta has a hat, which causes Headwear to show up at the bottom of the pro gear list.
+			ProGear = ProGear.OrderBy(x => Enum.Parse(typeof(GearCategory), x.GetName().Replace("\\", string.Empty))).ToList();
 		}
 
 		private void LoadCharacterGear(Character character, List<ICustomInfo> destList)
@@ -198,6 +201,8 @@ namespace XLGearModifier
 					AddItem(newGear, officialTextures, parent.Children, ref parent);
 				}
 			}
+
+			CustomMeshes = CustomMeshes.OrderBy(x => Enum.Parse(typeof(GearCategory), x.GetName().Replace("\\", string.Empty))).ToList();
 		}
 
 		private void AddOrUpdateTemplateAlphaMasks(XLGearModifierMetadata metadata, CharacterGearTemplate template)
