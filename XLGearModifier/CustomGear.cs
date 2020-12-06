@@ -142,7 +142,34 @@ namespace XLGearModifier
 				});
 			}
 
+			UpdateMaterialControllerAlphaMasks(newMaterialController);
+			
 			Traverse.Create(newMaterialController).Field("_originalMaterial").SetValue(Traverse.Create(origMaterialController).Field("originalMaterial").GetValue<Material>());
+		}
+
+		private void UpdateMaterialControllerAlphaMasks(MaterialController materialController)
+		{
+			if (Metadata.AlphaMaskTextures == null || !Metadata.AlphaMaskTextures.Any()) return;
+			
+			foreach (var mask in Metadata.AlphaMaskTextures)
+			{
+				var existing = materialController.alphaMasks.FirstOrDefault(x => (int)x.type == (int)mask.type);
+				if (existing == null)
+				{
+					var newAlphaMask = new AlphaMaskTextureInfo
+					{
+						type = (AlphaMaskLocation)(int)mask.type,
+						texture = mask.texture,
+					};
+
+					Array.Resize(ref materialController.alphaMasks, materialController.alphaMasks.Length + 1);
+					materialController.alphaMasks[materialController.alphaMasks.Length - 1] = newAlphaMask;
+				}
+				else
+				{
+					existing.texture = mask.texture;
+				}
+			}
 		}
 
 		private async Task<MaterialController> GetDefaultGearMaterialController()
