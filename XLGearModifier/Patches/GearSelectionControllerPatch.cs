@@ -92,8 +92,19 @@ namespace XLGearModifier.Patches
 					}
 					else if (index.depth == 4)
 					{
+						// since this is just a folder representing the mesh, we can get the configured sprite type out of of one of the actual items, which is a child
+						// of this folder.  get the 2nd child because the first will always be the "Go Back" folder.
+						var child = GearManager.Instance.CurrentFolder.Children.ElementAt(1);
+						if (child != null)
+						{
+							if (child.GetParentObject() is CustomGear customGear)
+							{
+								newText = $"<space=18px><sprite name=\"{customGear.Sprite}\" tint=1>";
+							}
+						}
+
 						//need a way to get the type here.
-						newText = $"<space=18px><sprite name=\"Headwear\" tint=1>";
+						//newText = $"<space=18px><sprite name=\"Headwear\" tint=1>";
 					}
 					itemView.SetText(GearManager.Instance.CurrentFolder.GetName().Replace("\\", newText), true);
 				}
