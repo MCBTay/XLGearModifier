@@ -102,9 +102,6 @@ namespace XLGearModifier.Patches
 								newText = $"<space=18px><sprite name=\"{customGear.Sprite}\" tint=1>";
 							}
 						}
-
-						//need a way to get the type here.
-						//newText = $"<space=18px><sprite name=\"Headwear\" tint=1>";
 					}
 					itemView.SetText(GearManager.Instance.CurrentFolder.GetName().Replace("\\", newText), true);
 				}
