@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using UnityEngine.EventSystems;
+using UnityModManagerNet;
 using XLGearModifier.Unity;
 using XLMenuMod.Utilities;
 using XLMenuMod.Utilities.Gear;
@@ -265,16 +266,24 @@ namespace XLGearModifier.Patches
 
 				if (index.depth >= 3)
 				{
-					if (__instance.previewCustomizer.HasEquipped(gear))
-						return false;
 					try
 					{
-						__instance.previewCustomizer.EquipGear(gear);
+						if (__instance.previewCustomizer.HasEquipped(gear))
+						{
+							Traverse.Create(__instance.previewCustomizer).Method("RemoveGear", gear).GetValue();
+						}
+						else
+						{
+							__instance.previewCustomizer.EquipGear(gear);
+						}
+
 						__instance.previewCustomizer.OnlyShowEquippedGear();
 						Traverse.Create(__instance).Field<bool>("didChangeGear").Value = true;
+
 					}
 					catch (Exception ex)
 					{
+						UnityModManager.Logger.Log("XLGearModifier: " + ex);
 					}
 
 					__instance.Save();
@@ -306,7 +315,7 @@ namespace XLGearModifier.Patches
 				for (int steps = -__instance.preloadedItemsPerSide; steps <= __instance.preloadedItemsPerSide; ++steps)
 				{
 					GearInfo gearAtIndex2 = GearDatabase.Instance.GetGearAtIndex(index.Horizontal(steps));
-					if (gearAtIndex2 != (GearInfo)null)
+					if (gearAtIndex2 != null)
 						toBeCachedGear.Add(gearAtIndex2);
 				}
 
