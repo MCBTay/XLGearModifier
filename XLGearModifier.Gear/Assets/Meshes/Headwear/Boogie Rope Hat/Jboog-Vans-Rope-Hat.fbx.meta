@@ -1,9 +1,14 @@
 fileFormatVersion: 2
-guid: 6bd26047e6e70894aac6e3a1ea097b85
+guid: 5526cd73199f4634f8fbbcfff2c0ddc5
 ModelImporter:
   serializedVersion: 19301
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: boogie_vans_hat_Model_8.001
+    second: {fileID: 2100000, guid: 80f407365c7856f4f8d5bbbd5f168eb7, type: 2}
   materials:
     materialImportMode: 1
     materialName: 0
