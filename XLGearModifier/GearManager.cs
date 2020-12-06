@@ -188,12 +188,38 @@ namespace XLGearModifier
 						}
 					}
 
+					AddOrUpdateTemplateAlphaMasks(metadata, newGearTemplate);
+					
 					GearDatabase.Instance.CharGearTemplateForID.Add(metadata.Prefix.ToLower(), newGearTemplate);
 				}
 
 				if (metadata.BaseOnDefaultGear)
 				{
 					AddItem(newGear, officialTextures, parent.Children, ref parent);
+				}
+			}
+		}
+
+		private void AddOrUpdateTemplateAlphaMasks(XLGearModifierMetadata metadata, CharacterGearTemplate template)
+		{
+			if (metadata.AlphaMasks == null || !metadata.AlphaMasks.Any()) return;
+
+			foreach (var mask in metadata.AlphaMasks)
+			{
+				var existing = template.alphaMasks.FirstOrDefault(x => (int)x.MaskLocation == (int)mask.MaskLocation);
+				if (existing == null)
+				{
+					var alphaMaskConfig = new GearAlphaMaskConfig
+					{
+						MaskLocation = (AlphaMaskLocation)(int)mask.MaskLocation,
+						Threshold = mask.Threshold,
+					};
+
+					template.alphaMasks.Add(alphaMaskConfig);
+				}
+				else
+				{
+					existing.Threshold = mask.Threshold;
 				}
 			}
 		}
