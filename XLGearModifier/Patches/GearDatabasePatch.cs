@@ -77,6 +77,8 @@ namespace XLGearModifier.Patches
 
 				if (index.depth == 3)
 				{
+					if (index.LastIndex < 0) return;
+
 					switch (sourceList.ElementAt(index.LastIndex).GetParentObject())
 					{
 						case CustomGearFolderInfo customGearFolderInfo:
