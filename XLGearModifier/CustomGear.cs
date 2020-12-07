@@ -66,9 +66,9 @@ namespace XLGearModifier
 			gearPrefabController.PreparePrefab();
 		}
 
-		private async Task AddShoeMaterialControllers()
+		private void AddShoeMaterialControllers()
 		{
-			var origMaterialController = await GetDefaultGearMaterialController();
+			var origMaterialController = GetDefaultGearMaterialController();
 
 			if (origMaterialController != null)
 			{
@@ -79,11 +79,11 @@ namespace XLGearModifier
 			}
 		}
 
-		private async Task AddMaterialController()
+		private void AddMaterialController()
 		{
 			if (Metadata.BaseOnDefaultGear)
 			{
-				var origMaterialController = await GetDefaultGearMaterialController();
+				var origMaterialController = GetDefaultGearMaterialController();
 
 				if (origMaterialController != null)
 				{
@@ -99,31 +99,27 @@ namespace XLGearModifier
 		private void CreateNewMaterialController(GameObject prefab, MaterialController origMaterialController = null)
 		{
 			var newMaterialController = prefab.AddComponent<MaterialController>();
+			newMaterialController.targets = new List<MaterialController.TargetMaterialConfig>();
 
 			if (origMaterialController != null)
 			{
 				newMaterialController.PropertyNameSubstitutions = origMaterialController.PropertyNameSubstitutions;
-				newMaterialController.targets = new List<MaterialController.TargetMaterialConfig>();
-				foreach (var target in origMaterialController.targets)
-				{
-					var config = new MaterialController.TargetMaterialConfig
-					{
-						renderer = prefab.GetComponentInChildren<SkinnedMeshRenderer>(),
-						materialIndex = target.materialIndex,
-						sharedMaterial = target.sharedMaterial
-					};
-					config.renderer.sharedMaterials = target.renderer.sharedMaterials;
-
-					newMaterialController.targets.Add(config);
-				}
-
 				newMaterialController.alphaMasks = origMaterialController.alphaMasks;
 				newMaterialController.materialID = origMaterialController.materialID;
+
+				var meshRenderer = prefab.GetComponentInChildren<SkinnedMeshRenderer>();
+				foreach (var target in origMaterialController.targets)
+				{
+					newMaterialController.targets.Add(new MaterialController.TargetMaterialConfig
+					{
+						renderer = meshRenderer,
+						materialIndex = target.materialIndex,
+						sharedMaterial = target.renderer.material
+					});
+				}
 			}
 			else
 			{
-				newMaterialController.targets = new List<MaterialController.TargetMaterialConfig>();
-
 				var mat = Metadata.Material;
 				mat.shader = Shader.Find("MasterShaderCloth_v2");
 				mat.SetTexture("_texture2D_color", Metadata.TextureColor);
@@ -172,16 +168,10 @@ namespace XLGearModifier
 			}
 		}
 
-		private async Task<MaterialController> GetDefaultGearMaterialController()
+		private MaterialController GetDefaultGearMaterialController()
 		{
-			var baseObject = await GetBaseObject();
-
-			if (baseObject != null)
-			{
-				return baseObject.GetComponentInChildren<MaterialController>();
-			}
-
-			return null;
+			var baseObject = GetBaseObject();
+			return baseObject != null ? baseObject.GetComponentInChildren<MaterialController>() : null;
 		}
 
 		private TextureChange[] GetDefaultTextureChanges()
@@ -195,16 +185,24 @@ namespace XLGearModifier
 			return null;
 		}
 
-		private async Task<GameObject> GetBaseObject()
+		private GameObject GetBaseObject()
 		{
 			var info = GetBaseGearInfo();
-			if (info != null)
+			if (info == null) return null;
+
+			var skaterName = ((Character) GetSkaterIndex()).ToString().ToLower().Replace("standard", "generic");
+			string path = $"charactercustomization/prefabs/{skaterName}/clothings/{info.type}";
+			var prefab = Resources.Load<GameObject>(path);
+
+			// if we didn't find it in clothings, try hair
+			if (prefab == null)
 			{
-				var tempGearObj = new ClothingGearObjet(info, PlayerController.Instance.characterCustomizer);
-				return await Traverse.Create(tempGearObj).Method("LoadPrefab", tempGearObj.template.path).GetValue<Task<GameObject>>();
+				path = $"charactercustomization/prefabs/{skaterName}/hair/{info.type}";
+				prefab = Resources.Load<GameObject>(path);
 			}
 
-			return null;
+			return prefab;
+
 		}
 
 		private CharacterGearInfo GetBaseGearInfo()
