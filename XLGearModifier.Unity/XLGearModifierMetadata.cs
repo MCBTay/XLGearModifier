@@ -48,16 +48,14 @@ namespace XLGearModifier.Unity
 		public BottomTypes BaseBottomType;
 		#endregion
 
-		[HideIf(nameof(BaseOnDefaultGear), true)]
-		public Material Material;
-
 		#region MasterShaderCloth_v2 Properties, hidden when BaseOnDefaultGear is true
 		[Header("Shader Properties")]
-
 		[HideIf(nameof(BaseOnDefaultGear), true)]
+		[Tooltip("This is the default normal map the shader will use unless the user supplies an override in the Gear folder.  If left blank, an empty normal map will be used.")]
 		public Texture2D TextureNormalMap;
 
 		[HideIf(nameof(BaseOnDefaultGear), true)]
+		[Tooltip("This is the default mask map the shader will use unless the user supplies an override in the Gear folder.  If left blank, an empty mask map will be used.")]
 		public Texture2D TextureMaskPBR;
 
 		[HideIf(nameof(BaseOnDefaultGear), true)]

@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using UnityEngine;
 using XLGearModifier.Unity;
@@ -120,9 +121,14 @@ namespace XLGearModifier
 			}
 			else
 			{
-				var mat = Metadata.Material;
+				Material mat;
+				var renderer = prefab.GetComponentInChildren<Renderer>(true);
+				if (renderer == null) return;
+				mat = renderer.material;
+
 				mat.shader = Shader.Find("MasterShaderCloth_v2");
-				mat.SetTexture("_texture2D_color", Metadata.TextureColor);
+				// TODO: Use default textures here if these are null
+				//mat.SetTexture("_texture2D_color", Metadata.TextureColor.FirstOrDefault());
 				mat.SetTexture("_texture2D_normal", Metadata.TextureNormalMap);
 				mat.SetTexture("_texture2D_maskPBR", Metadata.TextureMaskPBR);
 				mat.SetFloat("_scalar_minspecular", Metadata.MinSpecular);
