@@ -52,10 +52,7 @@ namespace XLGearModifier.Unity
 		public Material Material;
 
 		#region MasterShaderCloth_v2 Properties, hidden when BaseOnDefaultGear is true
-		[Header("Shader Properties"), HideIf(nameof(BaseOnDefaultGear), true)]
-
-		[HideIf(nameof(BaseOnDefaultGear), true)]
-		public Texture2D TextureColor;
+		[Header("Shader Properties")]
 
 		[HideIf(nameof(BaseOnDefaultGear), true)]
 		public Texture2D TextureNormalMap;
