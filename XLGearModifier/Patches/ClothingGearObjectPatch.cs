@@ -16,43 +16,34 @@ namespace XLGearModifier.Patches
 				if (other is ClothingGearObjet cgo)
 				{
 					if (__instance.template.category == ClothingGearCategory.Hat &&
-					    cgo.template.category == ClothingGearCategory.Hat)
+						cgo.template.category == ClothingGearCategory.Hat)
 					{
-						if ((__instance.IsHair() && cgo.IsHeadwear()) || (__instance.IsHeadwear() && cgo.IsHair()))
-						{
-							__result = false;
-							return false;
-						}
+						if ((!__instance.IsHair() || !cgo.IsHeadwear()) && (!__instance.IsHeadwear() || !cgo.IsHair()))
+							return true;
 
-						return true;
+						__result = false;
+						return false;
+
 					}
 					else if ((__instance.template.category == ClothingGearCategory.LongSleeve && cgo.template.category == ClothingGearCategory.Shirt) ||
-					         (__instance.template.category == ClothingGearCategory.Shirt && cgo.template.category == ClothingGearCategory.LongSleeve))
+							 (__instance.template.category == ClothingGearCategory.Shirt && cgo.template.category == ClothingGearCategory.LongSleeve))
 					{
 						var currentObj = __instance.gearInfo as CustomCharacterGearInfo;
-						if (currentObj != null)
-						{
-							var customGear = currentObj.Info.GetParentObject() as CustomGear;
-							if (customGear != null)
-							{
-								__result = !customGear.IsLayerable;
-								return false;
-							}
-						}
+						if (currentObj == null) return true;
+						if (!(currentObj.Info.GetParentObject() is CustomGear customGear)) return true;
+
+						__result = !customGear.IsLayerable;
+						return false;
 					}
 					else if ((__instance.template.category == ClothingGearCategory.Hoodie && cgo.template.category == ClothingGearCategory.Shirt) ||
-					         (__instance.template.category == ClothingGearCategory.Shirt && cgo.template.category == ClothingGearCategory.Hoodie))
+							 (__instance.template.category == ClothingGearCategory.Shirt && cgo.template.category == ClothingGearCategory.Hoodie))
 					{
 						var test = __instance.gearInfo as CustomCharacterGearInfo;
-						if (test != null)
-						{
-							var customGear = test.Info.GetParentObject() as CustomGear;
-							if (customGear != null)
-							{
-								__result = !customGear.IsLayerable;
-								return false; 
-							}
-						}
+						if (test == null) return true;
+						if (!(test.Info.GetParentObject() is CustomGear customGear)) return true;
+
+						__result = !customGear.IsLayerable;
+						return false;
 					}
 				}
 
