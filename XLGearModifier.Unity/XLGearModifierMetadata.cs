@@ -21,12 +21,38 @@ namespace XLGearModifier.Unity
 		[Header("Texturing")]
 		public bool BaseOnDefaultGear;
 
+		#region Base Styles
+		[HideIf(nameof(BaseOnDefaultGear), false)]
+		[HideIfEnumValue(nameof(Category), HideIf.NotEqual, (int)GearCategory.Hair)]
+		[Tooltip("This is the list of base hair styles in the game.")]
+		public HairStyles BaseHairStyle;
+
+		[HideIf(nameof(BaseOnDefaultGear), false)]
+		[HideIfEnumValue(nameof(Category), HideIf.NotEqual, (int)GearCategory.Headwear)]
+		[Tooltip("This is the list of base headwear styles in the game.")]
+		public HeadwearTypes BaseHeadwearType;
+
+		[HideIf(nameof(BaseOnDefaultGear), false)]
+		[HideIfEnumValue(nameof(Category), HideIf.NotEqual, (int)GearCategory.Shoes)]
+		[Tooltip("This is the list of base shoes in the game.")]
+		public ShoeTypes BaseShoeType;
+
+		[HideIf(nameof(BaseOnDefaultGear), false)]
+		[HideIfEnumValue(nameof(Category), HideIf.NotEqual, (int)GearCategory.Top)]
+		[Tooltip("This is the list of base top styles in the game.")]
+		public TopTypes BaseTopType;
+
+		[HideIf(nameof(BaseOnDefaultGear), false)]
+		[HideIfEnumValue(nameof(Category), HideIf.NotEqual, (int)GearCategory.Bottom)]
+		[Tooltip("This is the list of base bottom styles in the game.")]
+		public BottomTypes BaseBottomType;
+		#endregion
+
 		[HideIf(nameof(BaseOnDefaultGear), true)]
 		public Material Material;
 
 		#region MasterShaderCloth_v2 Properties, hidden when BaseOnDefaultGear is true
-		[HideIf(nameof(BaseOnDefaultGear), true)]
-		[Header("MasterShaderCloth_v2 Properties")]
+		[Header("Shader Properties"), HideIf(nameof(BaseOnDefaultGear), true)]
 
 		[HideIf(nameof(BaseOnDefaultGear), true)]
 		public Texture2D TextureColor;
@@ -48,32 +74,10 @@ namespace XLGearModifier.Unity
 		public float MaxSpecular = 1;
 		#endregion
 
-		#region Base Styles
-		[HideIf(nameof(BaseOnDefaultGear), false)]
-		[HideIfEnumValue(nameof(Category), HideIf.NotEqual, (int)GearCategory.Hair)]
-		public HairStyles BaseHairStyle;
-
-		[HideIf(nameof(BaseOnDefaultGear), false)]
-		[HideIfEnumValue(nameof(Category), HideIf.NotEqual, (int)GearCategory.Headwear)]
-		public HeadwearTypes BaseHeadwearType;
-
-		[HideIf(nameof(BaseOnDefaultGear), false)]
-		[HideIfEnumValue(nameof(Category), HideIf.NotEqual, (int)GearCategory.Shoes)]
-		public ShoeTypes BaseShoeType;
-
-		[HideIf(nameof(BaseOnDefaultGear), false)]
-		[HideIfEnumValue(nameof(Category), HideIf.NotEqual, (int)GearCategory.Top)]
-		public TopTypes BaseTopType;
-
-		[HideIf(nameof(BaseOnDefaultGear), false)]
-		[HideIfEnumValue(nameof(Category), HideIf.NotEqual, (int)GearCategory.Bottom)]
-		public BottomTypes BaseBottomType;
-		#endregion
-
 		#region Alpha Masks
 		[Header("Alpha Masks")]
+		// TODO: For some reason these lists don't work, they come over as null on the mod end.
 		public List<GearAlphaMaskConfig> AlphaMasks;
-
 		public List<AlphaMaskTextureInfo> AlphaMaskTextures;
 		#endregion
 		#endregion
