@@ -10,16 +10,18 @@ namespace XLGearModifier.Patches
 {
 	public class CharacterCustomizerPatch
 	{
-		[HarmonyPatch(typeof(CharacterCustomizer), nameof(CharacterCustomizer.HasEquipped), new[] { typeof(ICharacterCustomizationItem) })]
+		[HarmonyPatch(typeof(CharacterCustomizer), nameof(CharacterCustomizer.HasEquipped), typeof(ICharacterCustomizationItem))]
 		static class HasEquippedPatch
 		{
 			static bool Prefix(ref ICharacterCustomizationItem item)
 			{
-				if (item is ICustomGearInfo customGear)
+				if (item is ICustomGearInfo customGearInfo)
 				{
-					if (customGear.Info is CustomFolderInfo) return false;
-					if (customGear.Info is CustomCharacterGearInfo charGear) item = charGear;
+					if (customGearInfo.Info is CustomFolderInfo) return false;
+					if (customGearInfo.Info is CustomGear customGear) item = customGear.GearInfo;
 				}
+				if (item is CustomCharacterGearInfo customCharGearInfo) item = customCharGearInfo;
+				if (item is CustomGearFolderInfo) return false;
 
 				return true;
 			}
