@@ -190,19 +190,35 @@ namespace XLGearModifier
 			var info = GetBaseGearInfo();
 			if (info == null) return null;
 
-			var skaterName = ((Character) GetSkaterIndex()).ToString().ToLower().Replace("standard", "generic");
-			string path = $"charactercustomization/prefabs/{skaterName}/clothings/{info.type}";
-			var prefab = Resources.Load<GameObject>(path);
+			var skaterIndex = GetSkaterIndex();
+			var categoryIndex = GetCategoryIndex(skaterIndex);
+			
+			var skaterName = ((Character)skaterIndex).ToString().ToLower().Replace("standard", "generic");
+			string path = $"charactercustomization/prefabs/{skaterName}/";
 
-			// if we didn't find it in clothings, try hair
-			if (prefab == null)
+			if (skaterIndex == (int) Character.MaleStandard || skaterIndex == (int) Character.FemaleStandard)
 			{
-				path = $"charactercustomization/prefabs/{skaterName}/hair/{info.type}";
-				prefab = Resources.Load<GameObject>(path);
+				switch (categoryIndex)
+				{
+					case (int)GearCategory.Hair:
+						path += "hair/";
+						break;
+					case (int)GearCategory.Shoes:
+						path += "clothings/shoes/";
+						break;
+					default:
+						path += "clothings/";
+						break;
+				}
+
+				path += info.type;
+			}
+			else
+			{
+				path += $"clothings/{info.type}";
 			}
 
-			return prefab;
-
+			return Resources.Load<GameObject>(path);
 		}
 
 		private CharacterGearInfo GetBaseGearInfo()
