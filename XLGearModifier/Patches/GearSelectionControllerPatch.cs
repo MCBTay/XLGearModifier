@@ -18,7 +18,7 @@ namespace XLGearModifier.Patches
 		[HarmonyPatch(typeof(GearSelectionController), nameof(GearSelectionController.GetNumberOfItems))]
 		public static class GetNumberOfItemsPatch
 		{
-			static void Postfix(ref int __result, IndexPath index)
+			static void Postfix(GearSelectionController __instance, ref int __result, IndexPath index)
 			{
 				if (index[0] < 0) return;
 				
@@ -66,10 +66,7 @@ namespace XLGearModifier.Patches
 			static void Postfix(IndexPath index, MVCListHeaderView itemView)
 			{
 				if (index.depth < 2) return;
-				if (index[1] != (int) GearModifierTab.CustomMeshes &&
-				    index[1] != (int) GearModifierTab.ProGear &&
-				    index[1] != (int) GearModifierTab.FemaleGear &&
-				    index[1] != (int) GearModifierTab.MaleGear) return;
+				if (!IsOnXLGMTab(index[1])) return;
 
 				if (index.depth == 2)
 				{
@@ -114,10 +111,7 @@ namespace XLGearModifier.Patches
 			static void Postfix(GearSelectionController __instance, IndexPath index, ref MVCListItemView itemView)
 			{
 				if (index.depth < 3) return;
-				if (index[1] != (int)GearModifierTab.CustomMeshes &&
-				    index[1] != (int)GearModifierTab.ProGear &&
-				    index[1] != (int)GearModifierTab.FemaleGear &&
-				    index[1] != (int)GearModifierTab.MaleGear) return;
+				if (!IsOnXLGMTab(index[1])) return;
 
 				itemView.Label.richText = true;
 
@@ -185,10 +179,7 @@ namespace XLGearModifier.Patches
 			static bool Prefix(GearSelectionController __instance, IndexPath index)
 			{
 				if (index.depth < 3) return true;
-				if (index[1] != (int) GearModifierTab.CustomMeshes &&
-				    index[1] != (int) GearModifierTab.ProGear &&
-				    index[1] != (int) GearModifierTab.FemaleGear &&
-				    index[1] != (int) GearModifierTab.MaleGear) return true;
+				if (!IsOnXLGMTab(index[1])) return true;
 
 				var gear = GearDatabase.Instance.GetGearAtIndex(index);
 				if (gear is CustomGearFolderInfo selectedFolder)
@@ -311,10 +302,7 @@ namespace XLGearModifier.Patches
 			static void Postfix(GearSelectionController __instance, IndexPath index)
 			{
 				if (index.depth < 3) return;
-				if (index[1] != (int)GearModifierTab.CustomMeshes &&
-				    index[1] != (int)GearModifierTab.ProGear &&
-				    index[1] != (int)GearModifierTab.FemaleGear &&
-				    index[1] != (int)GearModifierTab.MaleGear) return;
+				if (!IsOnXLGMTab(index[1])) return;
 
 				GearInfo gearAtIndex1 = GearDatabase.Instance.GetGearAtIndex(index);
 				if (gearAtIndex1 == null) return;
@@ -348,10 +336,7 @@ namespace XLGearModifier.Patches
 			static bool Prefix(GearSelectionController __instance)
 			{
 				if (__instance.listView.currentIndexPath.depth < 3) return true;
-				if (__instance.listView.currentIndexPath[1] != (int) GearModifierTab.CustomMeshes &&
-					__instance.listView.currentIndexPath[1] != (int)GearModifierTab.ProGear &&
-					__instance.listView.currentIndexPath[1] != (int)GearModifierTab.FemaleGear &&
-					__instance.listView.currentIndexPath[1] != (int)GearModifierTab.MaleGear) return true;
+				if (!IsOnXLGMTab(__instance.listView.currentIndexPath[1])) return true;
 
 				if (GearManager.Instance.CurrentFolder == null) return true;
 				if (!PlayerController.Instance.inputController.player.GetButtonDown("B")) return true;
@@ -367,6 +352,14 @@ namespace XLGearModifier.Patches
 				return false;
 
 			}
+		}
+
+		static bool IsOnXLGMTab(int tabIndex)
+		{
+			return tabIndex == (int) GearModifierTab.CustomMeshes ||
+			       tabIndex == (int) GearModifierTab.ProGear ||
+			       tabIndex == (int) GearModifierTab.FemaleGear ||
+			       tabIndex == (int) GearModifierTab.MaleGear;
 		}
 	}
 }
