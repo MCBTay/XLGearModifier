@@ -91,12 +91,15 @@ namespace XLGearModifier.Patches
 					{
 						// since this is just a folder representing the mesh, we can get the configured sprite type out of of one of the actual items, which is a child
 						// of this folder.  get the 2nd child because the first will always be the "Go Back" folder.
-						var child = GearManager.Instance.CurrentFolder.Children.ElementAt(1);
-						if (child != null)
+						if (GearManager.Instance.CurrentFolder.Children.Count > 1)
 						{
-							if (child.GetParentObject() is CustomGear customGear)
+							var child = GearManager.Instance.CurrentFolder.Children.ElementAt(1);
+							if (child != null)
 							{
-								newText = $"<space=18px><sprite name=\"{customGear.Sprite}\" tint=1>";
+								if (child.GetParentObject() is CustomGear customGear)
+								{
+									newText = $"<space=18px><sprite name=\"{customGear.Sprite}\" tint=1>";
+								}
 							}
 						}
 					}
@@ -143,12 +146,15 @@ namespace XLGearModifier.Patches
 						{
 							// since this is just a folder representing the mesh, we can get the configured sprite type out of of one of the actual items, which is a child
 							// of this folder.  get the 2nd child because the first will always be the "Go Back" folder.
-							var child = customGearFolder.FolderInfo.Children.ElementAt(1);
-							if (child != null)
+							if (customGearFolder.FolderInfo.Children.Count > 1)
 							{
-								if (child.GetParentObject() is CustomGear customGear)
+								var child = customGearFolder.FolderInfo.Children.ElementAt(1);
+								if (child != null)
 								{
-									newText = $"<space=18px><sprite name=\"{customGear.Sprite}\" tint=1>";
+									if (child.GetParentObject() is CustomGear customGear)
+									{
+										newText = $"<space=18px><sprite name=\"{customGear.Sprite}\" tint=1>";
+									}
 								}
 							}
 						}
@@ -317,6 +323,8 @@ namespace XLGearModifier.Patches
 
 				if (index.depth == 4 && gearAtIndex1 is CustomGearFolderInfo gearFolder)
 				{
+					if (gearFolder.FolderInfo.Children.Count <= 1) return;
+
 					var child = gearFolder.FolderInfo.Children.ElementAt(1);
 					if (child != null && child.GetParentObject() is CustomGear customGear)
 					{
