@@ -17,7 +17,8 @@ namespace XLGearModifier.Patches
 				{
 					if (__instance.template.category == ClothingGearCategory.Hat && cgo.template.category == ClothingGearCategory.Hat)
 					{
-						if ((__instance.IsLayerableHair() && cgo.IsLayerableHeadwear()) || (__instance.IsLayerableHeadwear() && cgo.IsLayerableHair()))
+						if ((__instance.IsLayerable<HairStyles>() && cgo.IsLayerable<HeadwearTypes>()) || 
+						    (__instance.IsLayerable<HeadwearTypes>() && cgo.IsLayerable<HairStyles>()))
 						{
 							__result = false;
 							return false;
@@ -51,9 +52,9 @@ namespace XLGearModifier.Patches
 			}
 		}
 
-		static bool IsLayerableHair(this ClothingGearObjet clothingGear)
+		static bool IsLayerable<T>(this ClothingGearObjet clothingGear) where T : Enum
 		{
-			bool isHair = Enum.GetValues(typeof(HairStyles)).Cast<HairStyles>().Any(hairStyle => hairStyle.ToString() == clothingGear.template.id);
+			bool isType = Enum.GetValues(typeof(T)).Cast<T>().Any(style => style.ToString() == clothingGear.template.id);
 			bool isLayerable = false;
 
 			var customGearInfo = clothingGear.gearInfo as CustomCharacterGearInfo;
@@ -61,36 +62,15 @@ namespace XLGearModifier.Patches
 
 			if (customGearInfo.Info.GetParentObject() is CustomGear customGear)
 			{
-				if (!isHair && customGear.Metadata.BaseOnDefaultGear)
+				if (!isType && customGear.Metadata.BaseOnDefaultGear)
 				{
-					isHair = Enum.GetValues(typeof(HairStyles)).Cast<HairStyles>().Any(hairStyle => hairStyle.ToString() == customGear.GetBaseType());
+					isType = Enum.GetValues(typeof(T)).Cast<T>().Any(style => style.ToString() == customGear.GetBaseType());
 				}
 
 				isLayerable = customGear.IsLayerable;
 			}
 
-			return isHair && isLayerable;
-		}
-
-		static bool IsLayerableHeadwear(this ClothingGearObjet clothingGear)
-		{
-			bool isHeadwear = Enum.GetValues(typeof(HeadwearTypes)).Cast<HeadwearTypes>().Any(headwearStyle => headwearStyle.ToString() == clothingGear.template.id);
-			bool isLayerable = false;
-
-			var customGearInfo = clothingGear.gearInfo as CustomCharacterGearInfo;
-			if (customGearInfo == null) return false;
-
-			if (customGearInfo.Info.GetParentObject() is CustomGear customGear)
-			{
-				if (!isHeadwear && customGear.Metadata.BaseOnDefaultGear)
-				{
-					isHeadwear = Enum.GetValues(typeof(HeadwearTypes)).Cast<HeadwearTypes>().Any(headwearStyle => headwearStyle.ToString() == customGear.GetBaseType());
-				}
-
-				isLayerable = customGear.IsLayerable;
-			}
-
-			return isHeadwear && isLayerable;
+			return isType && isLayerable;
 		}
 	}
 }
