@@ -99,26 +99,29 @@ namespace XLGearModifier
 						continue;
 				}
 
+				string folderName = string.Empty;
 				switch (character)
 				{
 					case Character.EvanSmith:
-						AddFolder<CustomGearFolderInfo>(((EvanSmithGearCategory)gearCategory).ToString(), string.Empty, destList, ref parent);
+						folderName = ((EvanSmithGearCategory)gearCategory).ToString();
 						break;
 					case Character.TomAsta:
-						AddFolder<CustomGearFolderInfo>(((TomAstaGearCategory)gearCategory).ToString(), string.Empty, destList, ref parent);
+						folderName = ((TomAstaGearCategory)gearCategory).ToString();
 						break;
 					case Character.BrandonWestgate:
-						AddFolder<CustomGearFolderInfo>(((BrandonWestgateGearCategory)gearCategory).ToString(), string.Empty, destList, ref parent);
+						folderName = ((BrandonWestgateGearCategory)gearCategory).ToString();
 						break;
 					case Character.TiagoLemos:
-						AddFolder<CustomGearFolderInfo>(((TiagoLemosGearCategory)gearCategory).ToString(), string.Empty, destList, ref parent);
+						folderName = ((TiagoLemosGearCategory)gearCategory).ToString();
 						break;
 					case Character.MaleStandard:
 					case Character.FemaleStandard:
 					default:
-						AddFolder<CustomGearFolderInfo>(((GearCategory)gearCategory).ToString(), string.Empty, destList, ref parent);
+						folderName = ((GearCategory)gearCategory).ToString();
 						break;
 				}
+
+				AddFolder<CustomGearFolderInfo>(folderName, string.Empty, destList, ref parent);
 
 				for (int gear = 0; gear < currentGearCategory.Length; gear++)
 				{
