@@ -185,9 +185,17 @@ namespace XLGearModifier.Patches
 			static bool Prefix(GearSelectionController __instance, IndexPath index)
 			{
 				if (index.depth < 3) return true;
-				if (!IsOnXLGMTab(index[1])) return true;
 
 				var gear = GearDatabase.Instance.GetGearAtIndex(index);
+				if (!IsOnXLGMTab(index[1]))
+				{
+					if (!(gear is CustomGearFolderInfo))
+					{
+						EquipUnequipItem(__instance, gear);
+						return false;
+					}
+				}
+
 				if (gear is CustomGearFolderInfo selectedFolder)
 				{
 					selectedFolder.FolderInfo.Children = selectedFolder.FolderInfo.Children;
@@ -272,36 +280,34 @@ namespace XLGearModifier.Patches
 					return false;
 				}
 
-				if (index.depth >= 3)
+				EquipUnequipItem(__instance, gear);
+				return false;
+			}
+
+			private static void EquipUnequipItem(GearSelectionController __instance, GearInfo gear)
+			{
+				try
 				{
-					try
+					if (__instance.previewCustomizer.HasEquipped(gear))
 					{
-						if (__instance.previewCustomizer.HasEquipped(gear))
-						{
-							Traverse.Create(__instance.previewCustomizer).Method("RemoveGear", gear).GetValue();
-						}
-						else
-						{
-							__instance.previewCustomizer.EquipGear(gear);
-						}
-
-						__instance.previewCustomizer.OnlyShowEquippedGear();
-						Traverse.Create(__instance).Field<bool>("didChangeGear").Value = true;
-
+						Traverse.Create(__instance.previewCustomizer).Method("RemoveGear", gear).GetValue();
 					}
-					catch (Exception ex)
+					else
 					{
-						UnityModManager.Logger.Log("XLGearModifier.OnItemSelectedPatch: " + ex);
+						__instance.previewCustomizer.EquipGear(gear);
 					}
 
-					__instance.Save();
-					__instance.listView.UpdateList();
+					__instance.previewCustomizer.OnlyShowEquippedGear();
+					Traverse.Create(__instance).Field<bool>("didChangeGear").Value = true;
 
-					return false;
+				}
+				catch (Exception ex)
+				{
+					UnityModManager.Logger.Log("XLGearModifier.OnItemSelectedPatch: " + ex);
 				}
 
-				GearManager.Instance.CurrentFolder = null;
-				return true;
+				__instance.Save();
+				__instance.listView.UpdateList();
 			}
 		}
 
