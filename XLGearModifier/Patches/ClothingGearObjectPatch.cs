@@ -26,24 +26,16 @@ namespace XLGearModifier.Patches
 
 						return true;
 					}
-					else if ((__instance.template.category == ClothingGearCategory.LongSleeve && cgo.template.category == ClothingGearCategory.Shirt) ||
-					         (__instance.template.category == ClothingGearCategory.Shirt && cgo.template.category == ClothingGearCategory.LongSleeve))
+					else if((__instance.IsLayerable<TopTypes>(ClothingGearCategory.LongSleeve) && cgo.IsLayerable<TopTypes>(ClothingGearCategory.Shirt)) || 
+					        (__instance.IsLayerable<TopTypes>(ClothingGearCategory.Shirt) && cgo.IsLayerable<TopTypes>(ClothingGearCategory.LongSleeve)))
 					{
-						var currentObj = __instance.gearInfo as CustomCharacterGearInfo;
-						if (currentObj == null) return true;
-						if (!(currentObj.Info.GetParentObject() is CustomGear customGear)) return true;
-
-						__result = !customGear.IsLayerable;
+						__result = false;
 						return false;
 					}
-					else if ((__instance.template.category == ClothingGearCategory.Hoodie && cgo.template.category == ClothingGearCategory.Shirt) ||
-							 (__instance.template.category == ClothingGearCategory.Shirt && cgo.template.category == ClothingGearCategory.Hoodie))
+					else if ((__instance.IsLayerable<TopTypes>(ClothingGearCategory.Hoodie) && cgo.IsLayerable<TopTypes>(ClothingGearCategory.Shirt)) ||
+					         (__instance.IsLayerable<TopTypes>(ClothingGearCategory.Shirt) && cgo.IsLayerable<TopTypes>(ClothingGearCategory.Hoodie)))
 					{
-						var test = __instance.gearInfo as CustomCharacterGearInfo;
-						if (test == null) return true;
-						if (!(test.Info.GetParentObject() is CustomGear customGear)) return true;
-
-						__result = !customGear.IsLayerable;
+						__result = false;
 						return false;
 					}
 				}
@@ -52,8 +44,11 @@ namespace XLGearModifier.Patches
 			}
 		}
 
-		static bool IsLayerable<T>(this ClothingGearObjet clothingGear) where T : Enum
+		static bool IsLayerable<T>(this ClothingGearObjet clothingGear, ClothingGearCategory? specificCategory = null) where T : Enum
 		{
+			if (specificCategory == null || clothingGear.template.category != specificCategory.Value)
+				return false;
+
 			bool isType = Enum.GetValues(typeof(T)).Cast<T>().Any(style => style.ToString() == clothingGear.template.id);
 			bool isLayerable = false;
 
