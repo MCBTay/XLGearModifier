@@ -1,4 +1,5 @@
-﻿using HarmonyLib;
+﻿using System.Linq;
+using HarmonyLib;
 using System.Reflection;
 using UnityEngine;
 using UnityModManagerNet;
@@ -15,6 +16,7 @@ namespace XLGearModifier
 		public static bool Enabled { get; private set; }
 		private static Harmony Harmony { get; set; }
 		private static GameObject UserInterfaceGameObject { get; set; }
+		public static bool XLMenuModEnabled { get; private set; }
 
 		static bool Load(UnityModManager.ModEntry modEntry)
 		{
@@ -42,6 +44,12 @@ namespace XLGearModifier
 				UserInterfaceGameObject = new GameObject();
 				UserInterfaceGameObject.AddComponent<UserInterface>();
 				Object.DontDestroyOnLoad(UserInterfaceGameObject);
+
+				var xlMenuMod = UnityModManager.modEntries.FirstOrDefault(x => x.Info.Id == "XLMenuMod");
+				if (xlMenuMod != null)
+				{
+					XLMenuModEnabled = xlMenuMod.Enabled;
+				}
 
 				UserInterfaceHelper.Instance.LoadAssets();
 				AssetBundleHelper.LoadGearBundle();
