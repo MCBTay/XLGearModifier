@@ -2,8 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
-using System.Threading.Tasks;
 using UnityEngine;
 using XLGearModifier.Unity;
 using XLMenuMod.Utilities;
@@ -123,14 +121,14 @@ namespace XLGearModifier
 			{
 				Material mat;
 				var renderer = prefab.GetComponentInChildren<Renderer>(true);
-				if (renderer == null) return;
+				if (renderer?.material == null) return;
 				mat = renderer.material;
 
 				mat.shader = Shader.Find("MasterShaderCloth_v2");
 				// TODO: Use default textures here if these are null
-				//mat.SetTexture("_texture2D_color", Metadata.TextureColor.FirstOrDefault());
-				mat.SetTexture("_texture2D_normal", Metadata.TextureNormalMap);
-				mat.SetTexture("_texture2D_maskPBR", Metadata.TextureMaskPBR);
+				mat.SetTexture("_texture2D_color", AssetBundleHelper.emptyAlbedo);
+				mat.SetTexture("_texture2D_normal", Metadata.TextureNormalMap ?? AssetBundleHelper.emptyNormalMap);
+				mat.SetTexture("_texture2D_maskPBR", Metadata.TextureMaskPBR ?? AssetBundleHelper.emptyMaskPBR);
 				mat.SetFloat("_scalar_minspecular", Metadata.MinSpecular);
 				mat.SetFloat("_scalar_maxspecular", Metadata.MaxSpecular);
 				mat.SetFloat("_scalar_minrg", Metadata.MinRoughness);
