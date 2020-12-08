@@ -6,6 +6,7 @@ using UnityEngine;
 using XLGearModifier.Unity;
 using XLMenuMod.Utilities;
 using XLMenuMod.Utilities.Gear;
+using XLMenuMod.Utilities.Gear.Interfaces;
 
 namespace XLGearModifier
 {
@@ -13,7 +14,7 @@ namespace XLGearModifier
 	{
 		public XLGearModifierMetadata Metadata;
 		public GameObject Prefab;
-		public CustomCharacterGearInfo GearInfo;
+		public GearInfoSingleMaterial GearInfo;
 		public GearCategory Category;
 		public string Type;
 		public string Sprite;
@@ -32,12 +33,23 @@ namespace XLGearModifier
 			}
 			IsLayerable = metadata.IsLayerable;
 
-			GearInfo = new CustomCharacterGearInfo(string.IsNullOrEmpty(metadata.DisplayName) ? Prefab.name : metadata.DisplayName, Type, false, GetDefaultTextureChanges(), new string[0]);
-
+			if (IsBoardGearType())
+			{
+				GearInfo = new CustomBoardGearInfo(string.IsNullOrEmpty(metadata.DisplayName) ? Prefab.name : metadata.DisplayName, Type, false, GetDefaultTextureChanges(), new string[0]);
+			}
+			else
+			{
+				GearInfo = new CustomCharacterGearInfo(string.IsNullOrEmpty(metadata.DisplayName) ? Prefab.name : metadata.DisplayName, Type, false, GetDefaultTextureChanges(), new string[0]);
+			}
+			
 			if (Category == GearCategory.Shoes)
 			{
 				AddGearPrefabControllers();
 				AddShoeMaterialControllers();
+			}
+			else if (Category == GearCategory.Deck)
+			{
+				AddDeckMaterialControllers();
 			}
 			else
 			{
@@ -46,7 +58,7 @@ namespace XLGearModifier
 			}
 		}
 
-		public CustomGear(CustomGear gearToClone, CustomCharacterGearInfo gearInfo) : this(gearToClone.Metadata, gearToClone.Prefab)
+		public CustomGear(CustomGear gearToClone, GearInfoSingleMaterial gearInfo) : this(gearToClone.Metadata, gearToClone.Prefab)
 		{
 			GearInfo = gearInfo;
 		}
@@ -78,6 +90,16 @@ namespace XLGearModifier
 			}
 		}
 
+		private void AddDeckMaterialControllers()
+		{
+			var materialControllers = GetDefaultGearMaterialControllers();
+
+			foreach (var materialController in materialControllers)
+			{
+				CreateNewMaterialController(Prefab, materialController);
+			}
+		}
+
 		private void AddMaterialController()
 		{
 			if (Metadata.BaseOnDefaultGear)
@@ -106,9 +128,11 @@ namespace XLGearModifier
 				newMaterialController.alphaMasks = origMaterialController.alphaMasks;
 				newMaterialController.materialID = origMaterialController.materialID;
 
-				var meshRenderer = prefab.GetComponentInChildren<SkinnedMeshRenderer>();
+				var meshRenderer = prefab.GetComponentInChildren<Renderer>();
 				foreach (var target in origMaterialController.targets)
 				{
+					meshRenderer.sharedMaterials = target.renderer.sharedMaterials;
+
 					newMaterialController.targets.Add(new MaterialController.TargetMaterialConfig
 					{
 						renderer = meshRenderer,
@@ -178,6 +202,12 @@ namespace XLGearModifier
 			return baseObject != null ? baseObject.GetComponentInChildren<MaterialController>() : null;
 		}
 
+		private IEnumerable<MaterialController> GetDefaultGearMaterialControllers()
+		{
+			var baseObject = GetBaseObject();
+			return baseObject != null ? baseObject.GetComponentsInChildren<MaterialController>(): null;
+		}
+
 		private TextureChange[] GetDefaultTextureChanges()
 		{
 			var info = GetBaseGearInfo();
@@ -196,42 +226,52 @@ namespace XLGearModifier
 
 			var skaterIndex = GetSkaterIndex();
 			var categoryIndex = GetCategoryIndex(skaterIndex);
-			
-			var skaterName = ((Character)skaterIndex).ToString().ToLower().Replace("standard", "generic");
-			string path = $"charactercustomization/prefabs/{skaterName}/";
 
-			if (skaterIndex == (int) Character.MaleStandard || skaterIndex == (int) Character.FemaleStandard)
+			string path = string.Empty;
+
+			if (IsBoardGearType())
 			{
-				switch (categoryIndex)
-				{
-					case (int)GearCategory.Hair:
-						path += "hair/";
-						break;
-					case (int)GearCategory.Shoes:
-						path += "clothings/shoes/";
-						break;
-					default:
-						path += "clothings/";
-						break;
-				}
-
-				path += info.type;
+				path = "boardcustomization/prefabs/" + info.type;
 			}
 			else
 			{
-				path += $"clothings/{info.type}";
+				var skaterName = ((Character)skaterIndex).ToString().ToLower().Replace("standard", "generic");
+				path = $"charactercustomization/prefabs/{skaterName}/";
+
+				if (skaterIndex == (int)Character.MaleStandard || skaterIndex == (int)Character.FemaleStandard)
+				{
+					switch (categoryIndex)
+					{
+						case (int)GearCategory.Hair:
+							path += "hair/";
+							break;
+						case (int)GearCategory.Shoes:
+							path += "clothings/shoes/";
+							break;
+						default:
+							path += "clothings/";
+							break;
+					}
+
+					path += info.type;
+				}
+				else
+				{
+					path += $"clothings/{info.type}";
+				}
 			}
+			
 
 			return Resources.Load<GameObject>(path);
 		}
 
-		private CharacterGearInfo GetBaseGearInfo()
+		private GearInfoSingleMaterial GetBaseGearInfo()
 		{
 			var gear = Traverse.Create(GearDatabase.Instance).Field("gearListSource").GetValue<GearInfo[][][]>();
 
 			var skaterIndex = GetSkaterIndex();
 			GearInfo[] officialGear = gear[skaterIndex][GetCategoryIndex(skaterIndex)];
-			return officialGear.Where(x => x.type.Equals(GetBaseType(), StringComparison.InvariantCultureIgnoreCase)).Cast<CharacterGearInfo>().FirstOrDefault();
+			return officialGear.Where(x => x.type.Equals(GetBaseType(), StringComparison.InvariantCultureIgnoreCase)).Cast<GearInfoSingleMaterial>().FirstOrDefault();
 		}
 
 		public int GetSkaterIndex()
@@ -295,6 +335,11 @@ namespace XLGearModifier
 			return categoryIndex;
 		}
 
+		public bool IsBoardGearType()
+		{
+			return Category == GearCategory.Deck || Category == GearCategory.Griptape || Category == GearCategory.Trucks || Category == GearCategory.Wheels;
+		}
+
 		public string GetBaseType()
 		{
 			switch (Metadata.Category)
@@ -305,7 +350,7 @@ namespace XLGearModifier
 				case GearCategory.Top: return Metadata.BaseTopType.ToString();
 				case GearCategory.Bottom: return Metadata.BaseBottomType.ToString();
 				case GearCategory.Shoes: return Metadata.BaseShoeType.ToString();
-				case GearCategory.Deck: break;
+				case GearCategory.Deck: return "Deck";
 				case GearCategory.Griptape: break;
 				case GearCategory.Trucks: break;
 				case GearCategory.Wheels: break;
