@@ -371,7 +371,7 @@ namespace XLGearModifier.Patches
 			}
 		}
 
-		static bool IsOnXLGMTab(int tabIndex)
+		public static bool IsOnXLGMTab(int tabIndex)
 		{
 			return tabIndex == (int) GearModifierTab.CustomMeshes ||
 			       tabIndex == (int) GearModifierTab.ProGear ||

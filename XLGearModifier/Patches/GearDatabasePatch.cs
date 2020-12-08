@@ -16,6 +16,7 @@ namespace XLGearModifier.Patches
 			static void Postfix(GearDatabase __instance, IndexPath index, ref GearInfo[][][] ___gearListSource, ref GearInfo[] __result)
 			{
 				if (index.depth < 2) return;
+				if (!GearSelectionControllerPatch.IsOnXLGMTab(index[1])) return;
 
 				List<ICustomInfo> sourceList = null;
 
@@ -42,10 +43,7 @@ namespace XLGearModifier.Patches
 			static void Postfix(IndexPath index, ref GearInfo __result)
 			{
 				if (index.depth < 3) return;
-				if (index[1] != (int)GearModifierTab.CustomMeshes &&
-				    index[1] != (int)GearModifierTab.ProGear &&
-				    index[1] != (int)GearModifierTab.FemaleGear &&
-				    index[1] != (int)GearModifierTab.MaleGear) return;
+				if (!GearSelectionControllerPatch.IsOnXLGMTab(index[1])) return;
 
 				List<ICustomInfo> sourceList = null;
 
