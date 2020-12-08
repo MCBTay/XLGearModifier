@@ -38,6 +38,11 @@ namespace XLGearModifier.Patches
 						__result = false;
 						return false;
 					}
+					else if (__instance.IsLayerableWildcard() || cgo.IsLayerableWildcard())
+					{
+						__result = false;
+						return false;
+					}
 				}
 
 				return true;
@@ -66,6 +71,22 @@ namespace XLGearModifier.Patches
 			}
 
 			return isType && isLayerable;
+		}
+
+		//TODO: Come back to this when I add an actual category for wildcards.
+		static bool IsLayerableWildcard(this ClothingGearObjet clothingGear)
+		{
+			var customGearInfo = clothingGear.gearInfo as CustomCharacterGearInfo;
+			if (customGearInfo == null) return false;
+
+			bool isLayerable = false;
+
+			if (customGearInfo.Info.GetParentObject() is CustomGear customGear)
+			{
+				isLayerable = customGear.IsLayerable && customGear.Sprite.StartsWith(SpriteCategory.Wildcard.ToString());
+			}
+
+			return isLayerable;
 		}
 	}
 }
