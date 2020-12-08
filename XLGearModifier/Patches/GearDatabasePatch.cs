@@ -21,18 +21,10 @@ namespace XLGearModifier.Patches
 
 				switch (index[1])
 				{
-					case (int) GearModifierTab.CustomMeshes:
-						sourceList = GearManager.Instance.CustomMeshes;
-						break;
-					case (int) GearModifierTab.ProGear:
-						sourceList = GearManager.Instance.ProGear;
-						break;
-					case (int) GearModifierTab.FemaleGear:
-						sourceList = GearManager.Instance.FemaleGear;
-						break;
-					case (int) GearModifierTab.MaleGear:
-						sourceList = GearManager.Instance.MaleGear;
-						break;
+					case (int) GearModifierTab.CustomMeshes: sourceList = GearManager.Instance.CustomMeshes; break;
+					case (int) GearModifierTab.ProGear:      sourceList = GearManager.Instance.ProGear;      break;
+					case (int) GearModifierTab.FemaleGear:   sourceList = GearManager.Instance.FemaleGear;   break;
+					case (int) GearModifierTab.MaleGear:     sourceList = GearManager.Instance.MaleGear;     break;
 				}
 
 				if (sourceList == null) return;
