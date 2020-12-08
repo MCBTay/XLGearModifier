@@ -79,13 +79,23 @@ namespace XLGearModifier
 
 		private void AddShoeMaterialControllers()
 		{
-			var origMaterialController = GetDefaultGearMaterialController();
+			if (Metadata.BaseOnDefaultGear)
+			{
+				var origMaterialController = GetDefaultGearMaterialController();
 
-			if (origMaterialController != null)
+				if (origMaterialController != null)
+				{
+					foreach (Transform child in Prefab.transform)
+					{
+						CreateNewMaterialController(child.gameObject, origMaterialController);
+					}
+				}
+			}
+			else
 			{
 				foreach (Transform child in Prefab.transform)
 				{
-					CreateNewMaterialController(child.gameObject, origMaterialController);
+					CreateNewMaterialController(child.gameObject);
 				}
 			}
 		}
