@@ -128,14 +128,19 @@ namespace XLGearModifier
 				newMaterialController.alphaMasks = origMaterialController.alphaMasks;
 				newMaterialController.materialID = origMaterialController.materialID;
 
-				var meshRenderer = prefab.GetComponentInChildren<Renderer>();
+				var renderers = prefab.GetComponentsInChildren<Renderer>();
+				var renderer = renderers.FirstOrDefault();
+				if (renderers.Length > 1)
+				{
+					renderer = renderers.FirstOrDefault(x => x.name == "Deck Bottom");
+				}
 				foreach (var target in origMaterialController.targets)
 				{
-					meshRenderer.sharedMaterials = target.renderer.sharedMaterials;
+					renderer.sharedMaterials = target.renderer.sharedMaterials;
 
 					newMaterialController.targets.Add(new MaterialController.TargetMaterialConfig
 					{
-						renderer = meshRenderer,
+						renderer = renderer,
 						materialIndex = target.materialIndex,
 						sharedMaterial = target.renderer.material
 					});
@@ -173,27 +178,28 @@ namespace XLGearModifier
 
 		private void UpdateMaterialControllerAlphaMasks(MaterialController materialController)
 		{
-			if (Metadata.AlphaMaskTextures == null || !Metadata.AlphaMaskTextures.Any()) return;
-			
-			foreach (var mask in Metadata.AlphaMaskTextures)
-			{
-				var existing = materialController.alphaMasks.FirstOrDefault(x => (int)x.type == (int)mask.type);
-				if (existing == null)
-				{
-					var newAlphaMask = new AlphaMaskTextureInfo
-					{
-						type = (AlphaMaskLocation)(int)mask.type,
-						texture = mask.texture,
-					};
+			//TODO: Come back to this once we figure out the list serialization.
+			//if (Metadata.AlphaMaskTextures == null || !Metadata.AlphaMaskTextures.Any()) return;
 
-					Array.Resize(ref materialController.alphaMasks, materialController.alphaMasks.Length + 1);
-					materialController.alphaMasks[materialController.alphaMasks.Length - 1] = newAlphaMask;
-				}
-				else
-				{
-					existing.texture = mask.texture;
-				}
-			}
+			//foreach (var mask in Metadata.AlphaMaskTextures)
+			//{
+			//	var existing = materialController.alphaMasks.FirstOrDefault(x => (int)x.type == (int)mask.type);
+			//	if (existing == null)
+			//	{
+			//		var newAlphaMask = new AlphaMaskTextureInfo
+			//		{
+			//			type = (AlphaMaskLocation)(int)mask.type,
+			//			texture = mask.texture,
+			//		};
+
+			//		Array.Resize(ref materialController.alphaMasks, materialController.alphaMasks.Length + 1);
+			//		materialController.alphaMasks[materialController.alphaMasks.Length - 1] = newAlphaMask;
+			//	}
+			//	else
+			//	{
+			//		existing.texture = mask.texture;
+			//	}
+			//}
 		}
 
 		private MaterialController GetDefaultGearMaterialController()
@@ -261,7 +267,6 @@ namespace XLGearModifier
 				}
 			}
 			
-
 			return Resources.Load<GameObject>(path);
 		}
 

@@ -70,10 +70,10 @@ namespace XLGearModifier.Unity
 		#endregion
 
 		#region Alpha Masks
-		[Header("Alpha Masks")]
+		//[Header("Alpha Masks")]
 		// TODO: For some reason these lists don't work, they come over as null on the mod end.
-		public List<GearAlphaMaskConfig> AlphaMasks;
-		public List<AlphaMaskTextureInfo> AlphaMaskTextures;
+		//public List<GearAlphaMaskConfig> AlphaMasks;
+		//public List<AlphaMaskTextureInfo> AlphaMaskTextures;
 		#endregion
 		#endregion
 	}
