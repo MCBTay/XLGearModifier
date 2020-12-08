@@ -275,17 +275,24 @@ namespace XLGearModifier
 
 			var categoryTextures = sourceList[skaterIndex][categoryIndex];
 			
-			var baseTextures = categoryTextures.Where(x => x.type == customGear.Type.ToLower()).Select(x => x as CharacterGearInfo).ToList();
+			var textures = categoryTextures.Where(x => x.type == customGear.Type.ToLower()).Select(x => x as CharacterGearInfo).ToList();
 
 			if (customGear.Metadata.BaseOnDefaultGear)
 			{
 				var baseTypes = categoryTextures.Where(x => x.type == customGear.GetBaseType().ToLower()).Select(x => x as CharacterGearInfo).ToList();
-				baseTextures = baseTextures.Concat(baseTypes).ToList();
+				textures = textures.Concat(baseTypes).ToList();
 			}
 
-			foreach (var baseTexture in baseTextures)
+			foreach (var texture in textures)
 			{
-				AddToList(customGear, baseTexture, destList, ref parent, isCustom);
+				AddToList(customGear, texture, destList, ref parent, isCustom);
+			}
+
+			if (textures.Any() && isCustom && !customGear.Metadata.BaseOnDefaultGear)
+			{
+				var defaultTexture = destList.FirstOrDefault(x => x.GetName() == customGear.Metadata.Prefix);
+				if (defaultTexture != null)
+					destList.Remove(defaultTexture);
 			}
 		}
 
