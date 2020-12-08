@@ -88,6 +88,9 @@ namespace XLGearModifier.Patches
 						case CustomCharacterGearInfo customCharacterGearInfo:
 							__result = customCharacterGearInfo;
 							break;
+						case CustomBoardGearInfo customBoardGearInfo:
+							__result = customBoardGearInfo;
+							break;
 						case CustomGearFolderInfo customGearFolderInfo:
 							__result = customGearFolderInfo;
 							break;

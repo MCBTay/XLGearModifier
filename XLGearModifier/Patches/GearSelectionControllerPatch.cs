@@ -244,6 +244,9 @@ namespace XLGearModifier.Patches
 									case GearCategory.Shoes:
 										__instance.SetCameraView(GearRoomCameraView.Shoes);
 										break;
+									case GearCategory.Deck:
+										__instance.SetCameraView(GearRoomCameraView.Deck);
+										break;
 									default:
 										__instance.SetCameraView(GearRoomCameraView.FullSkater);
 										break;
@@ -288,7 +291,7 @@ namespace XLGearModifier.Patches
 					}
 					catch (Exception ex)
 					{
-						UnityModManager.Logger.Log("XLGearModifier: " + ex);
+						UnityModManager.Logger.Log("XLGearModifier.OnItemSelectedPatch: " + ex);
 					}
 
 					__instance.Save();

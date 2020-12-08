@@ -170,32 +170,15 @@ namespace XLGearModifier
 					typeFilter.includedTypes[typeFilter.includedTypes.Length - 1] = metadata.Prefix;
 				}
 
-				if (!GearDatabase.Instance.CharGearTemplateForID.ContainsKey(metadata.Prefix.ToLower()))
+				if (newGear.IsBoardGearType())
 				{
-					var newGearTemplate = new CharacterGearTemplate
-					{
-						alphaMasks = new List<GearAlphaMaskConfig>(),
-						category = MapCategory(metadata.Category),
-						id = metadata.Prefix.ToLower(),
-						path = "XLGearModifier"
-					};
-
-					if (metadata.BaseOnDefaultGear)
-					{
-						var baseGearTemplate = GearDatabase.Instance.CharGearTemplateForID.FirstOrDefault(x => x.Key == newGear.GetBaseType().ToLower()).Value;
-						if (baseGearTemplate != null)
-						{
-							//TODO: Come back to this once alpha masks are implemented
-							newGearTemplate.alphaMasks = baseGearTemplate.alphaMasks;
-							newGearTemplate.category = baseGearTemplate.category;
-						}
-					}
-
-					AddOrUpdateTemplateAlphaMasks(metadata, newGearTemplate);
-					
-					GearDatabase.Instance.CharGearTemplateForID.Add(metadata.Prefix.ToLower(), newGearTemplate);
+					AddBoardGearTemplate(newGear, metadata);
 				}
-
+				else
+				{
+					AddCharacterGearTemplate(newGear, metadata);
+				}
+				
 				if (metadata.BaseOnDefaultGear)
 				{
 					AddItem(newGear, officialTextures, parent.Children, ref parent);
@@ -207,6 +190,59 @@ namespace XLGearModifier
 			}
 
 			CustomMeshes = CustomMeshes.OrderBy(x => Enum.Parse(typeof(GearCategory), x.GetName().Replace("\\", string.Empty))).ToList();
+		}
+
+		private void AddBoardGearTemplate(CustomGear customGear, XLGearModifierMetadata metadata)
+		{
+			if (metadata.Category == GearCategory.Deck &&
+			    !GearDatabase.Instance.DeckTemplateForID.ContainsKey(metadata.Prefix.ToLower()))
+			{
+				var newGearTemplate = new DeckTemplate
+				{
+					id = string.Empty,
+					path = "XLGearModifier"
+				};
+
+				if (metadata.BaseOnDefaultGear)
+				{
+					var baseGearTemplate = GearDatabase.Instance.DeckTemplateForID.FirstOrDefault(x => x.Key == customGear.GetBaseType().ToLower()).Value;
+					if (baseGearTemplate != null)
+					{
+						newGearTemplate.id = baseGearTemplate.id;
+					}
+				}
+
+				GearDatabase.Instance.DeckTemplateForID.Add(metadata.Prefix.ToLower(), newGearTemplate);
+			}
+		}
+
+		private void AddCharacterGearTemplate(CustomGear customGear, XLGearModifierMetadata metadata)
+		{
+			if (!GearDatabase.Instance.CharGearTemplateForID.ContainsKey(metadata.Prefix.ToLower()))
+			{
+				var newGearTemplate = new CharacterGearTemplate
+				{
+					alphaMasks = new List<GearAlphaMaskConfig>(),
+					category = MapCategory(metadata.Category),
+					id = metadata.Prefix.ToLower(),
+					path = "XLGearModifier"
+				};
+
+				if (metadata.BaseOnDefaultGear)
+				{
+					var baseGearTemplate = GearDatabase.Instance.CharGearTemplateForID.FirstOrDefault(x => x.Key == customGear.GetBaseType().ToLower()).Value;
+					if (baseGearTemplate != null)
+					{
+						//TODO: Come back to this once alpha masks are implemented
+						newGearTemplate.alphaMasks = baseGearTemplate.alphaMasks;
+						newGearTemplate.category = baseGearTemplate.category;
+					}
+				}
+
+				AddOrUpdateTemplateAlphaMasks(metadata, newGearTemplate);
+
+				GearDatabase.Instance.CharGearTemplateForID.Add(metadata.Prefix.ToLower(), newGearTemplate);
+			}
 		}
 
 		private void AddOrUpdateTemplateAlphaMasks(XLGearModifierMetadata metadata, CharacterGearTemplate template)
@@ -275,12 +311,20 @@ namespace XLGearModifier
 
 			var categoryTextures = sourceList[skaterIndex][categoryIndex];
 			
-			var textures = categoryTextures.Where(x => x.type == customGear.Type.ToLower()).Select(x => x as CharacterGearInfo).ToList();
+			var textures = categoryTextures.Where(x => x.type == customGear.Type.ToLower()).Select(x => x as GearInfoSingleMaterial).ToList();
 
 			if (customGear.Metadata.BaseOnDefaultGear)
 			{
-				var baseTypes = categoryTextures.Where(x => x.type == customGear.GetBaseType().ToLower()).Select(x => x as CharacterGearInfo).ToList();
-				textures = textures.Concat(baseTypes).ToList();
+				if (customGear.IsBoardGearType())
+				{
+					var baseTypes = categoryTextures.Where(x => x.type == customGear.GetBaseType().ToLower()).Select(x => x as BoardGearInfo).ToList();
+					textures = textures.Concat(baseTypes).ToList();
+				}
+				else
+				{
+					var baseTypes = categoryTextures.Where(x => x.type == customGear.GetBaseType().ToLower()).Select(x => x as CharacterGearInfo).ToList();
+					textures = textures.Concat(baseTypes).ToList();
+				}
 			}
 
 			foreach (var texture in textures)
@@ -296,17 +340,29 @@ namespace XLGearModifier
 			}
 		}
 
-		private void AddToList(CustomGear customGear, CharacterGearInfo baseTexture, List<ICustomInfo> destList, ref CustomFolderInfo parent, bool isCustom)
+		private void AddToList(CustomGear customGear, GearInfoSingleMaterial baseTexture, List<ICustomInfo> destList, ref CustomFolderInfo parent, bool isCustom)
 		{
 			var child = destList.FirstOrDefault(x => x.GetName().Equals(baseTexture.name, StringComparison.InvariantCultureIgnoreCase));
 			if (child != null) return;
 
-			var gearInfo = new CustomCharacterGearInfo(baseTexture.name, customGear.GearInfo.type, isCustom, baseTexture.textureChanges, customGear.GearInfo.tags);
-			gearInfo.Info.Parent = parent;
-			gearInfo.Info.ParentObject = new CustomGear(customGear, gearInfo);
-			destList.Add(gearInfo.Info);
+			if (customGear.IsBoardGearType())
+			{
+				CustomBoardGearInfo gearInfo = new CustomBoardGearInfo(baseTexture.name, customGear.GearInfo.type, isCustom, baseTexture.textureChanges, customGear.GearInfo.tags);
+				gearInfo.Info.Parent = parent;
+				gearInfo.Info.ParentObject = new CustomGear(customGear, gearInfo);
+				destList.Add(gearInfo.Info);
 
-			GearDatabase.Instance.clothingGear.Add(gearInfo);
+				GearDatabase.Instance.boardGear.Add(gearInfo);
+			}
+			else
+			{
+				CustomCharacterGearInfo gearInfo = new CustomCharacterGearInfo(baseTexture.name, customGear.GearInfo.type, isCustom, baseTexture.textureChanges, customGear.GearInfo.tags);
+				gearInfo.Info.Parent = parent;
+				gearInfo.Info.ParentObject = new CustomGear(customGear, gearInfo);
+				destList.Add(gearInfo.Info);
+
+				GearDatabase.Instance.clothingGear.Add(gearInfo);
+			}
 		}
 
 		public void AddFolder<T>(string folder, string path, List<ICustomInfo> sourceList, ref CustomFolderInfo parent) where T : ICustomFolderInfo
