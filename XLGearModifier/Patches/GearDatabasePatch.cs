@@ -69,7 +69,7 @@ namespace XLGearModifier.Patches
 
 				if (index.depth == 3)
 				{
-					if (index.LastIndex < 0) return;
+					if (index.LastIndex < 0 || index.LastIndex > sourceList.Count - 1) return;
 
 					switch (sourceList.ElementAt(index.LastIndex).GetParentObject())
 					{
@@ -81,12 +81,14 @@ namespace XLGearModifier.Patches
 				// mesh per type, you've already selected a type so current folder should be valid
 				else if (index.depth >= 4)
 				{
+					if (index.LastIndex < 0 || index.LastIndex > GearManager.Instance.CurrentFolder.Children.Count - 1) return;
+
 					switch (GearManager.Instance.CurrentFolder.Children.ElementAt(index.LastIndex).GetParentObject())
 					{
 						case CustomCharacterGearInfo customCharacterGearInfo:
 							__result = customCharacterGearInfo;
 							break;
-	   					case CustomGearFolderInfo customGearFolderInfo:
+						case CustomGearFolderInfo customGearFolderInfo:
 							__result = customGearFolderInfo;
 							break;
 						case CustomGear customGear:
