@@ -12,11 +12,18 @@ namespace XLGearModifier
 		public static string AssetPacksPath;
 
 		public static TMP_SpriteAsset GearModifierUISpriteSheet;
+		private static Texture2D emptyAlbedo;
+		private static Texture2D emptyMaskPBR;
+		private static Texture2D emptyNormalMap;
 
 		public static void LoadGearBundle()
 		{
 			AssetBundle bundle = AssetBundle.LoadFromMemory(ExtractResource("XLGearModifier.Assets.customgear"));
 			GearManager.Instance.LoadAssets(bundle);
+
+			emptyAlbedo = bundle.LoadAsset<Texture2D>("Empty_Albedo.png");
+			emptyMaskPBR = bundle.LoadAsset<Texture2D>("Empty_Maskpbr_Map.png");
+			emptyNormalMap = bundle.LoadAsset<Texture2D>("Empty_Normal_Map.png");
 
 			PlayerController.Instance.characterCustomizer.LoadLastPlayer();
 
