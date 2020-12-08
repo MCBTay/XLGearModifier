@@ -12,9 +12,9 @@ namespace XLGearModifier
 		public static string AssetPacksPath;
 
 		public static TMP_SpriteAsset GearModifierUISpriteSheet;
-		private static Texture2D emptyAlbedo;
-		private static Texture2D emptyMaskPBR;
-		private static Texture2D emptyNormalMap;
+		public static Texture2D emptyAlbedo;
+		public static Texture2D emptyMaskPBR;
+		public static Texture2D emptyNormalMap;
 
 		public static void LoadGearBundle()
 		{
