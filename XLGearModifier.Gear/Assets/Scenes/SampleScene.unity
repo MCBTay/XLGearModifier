@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0, g: 0, b: 0, a: 1}
+  m_IndirectSpecularColor: {r: 131.16855, g: 162.52502, b: 215.10977, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1513,3 +1513,72 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2d2b73e8a08fe784eb180c885d931729, type: 3}
+--- !u!1001 &8274133742202078753
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 1248400948851452190, guid: eda220b9fa047fc49b4a6f9fd3dda8b7,
+        type: 3}
+      propertyPath: m_Name
+      value: Nike Blazer Demo
+      objectReference: {fileID: 0}
+    - target: {fileID: 3688610507929569521, guid: eda220b9fa047fc49b4a6f9fd3dda8b7,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -0.29439938
+      objectReference: {fileID: 0}
+    - target: {fileID: 3688610507929569521, guid: eda220b9fa047fc49b4a6f9fd3dda8b7,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1.1095498
+      objectReference: {fileID: 0}
+    - target: {fileID: 3688610507929569521, guid: eda220b9fa047fc49b4a6f9fd3dda8b7,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -0.23573029
+      objectReference: {fileID: 0}
+    - target: {fileID: 3688610507929569521, guid: eda220b9fa047fc49b4a6f9fd3dda8b7,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3688610507929569521, guid: eda220b9fa047fc49b4a6f9fd3dda8b7,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3688610507929569521, guid: eda220b9fa047fc49b4a6f9fd3dda8b7,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3688610507929569521, guid: eda220b9fa047fc49b4a6f9fd3dda8b7,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3688610507929569521, guid: eda220b9fa047fc49b4a6f9fd3dda8b7,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 14
+      objectReference: {fileID: 0}
+    - target: {fileID: 3688610507929569521, guid: eda220b9fa047fc49b4a6f9fd3dda8b7,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3688610507929569521, guid: eda220b9fa047fc49b4a6f9fd3dda8b7,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3688610507929569521, guid: eda220b9fa047fc49b4a6f9fd3dda8b7,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: eda220b9fa047fc49b4a6f9fd3dda8b7, type: 3}
