@@ -95,6 +95,7 @@
     <Compile Include="Patches\GearSelectionControllerPatch.cs" />
     <Compile Include="Patches\ClothingGearObjectPatch.cs" />
     <Compile Include="Patches\MVCListViewPatch.cs" />
+    <Compile Include="Patches\TextureMangingClassPatch.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="UserInterface.cs" />
@@ -130,7 +131,7 @@ copy /Y "$(TargetDir)XLGearModifier.dll" "$(TargetDir)XLGearModifier\XLGearModif
 copy /Y "$(TargetDir)XLGearModifier.Unity.dll" "$(TargetDir)XLGearModifier\XLGearModifier.Unity.dll"
 copy /Y "$(TargetDir)XLMenuMod.Utilities.dll" "$(TargetDir)XLGearModifier\XLMenuMod.Utilities.dll"
 copy /Y "$(TargetDir)Info.json" "$(TargetDir)XLGearModifier\Info.json"
-copy /Y "$(TargetDir)XLGearModifier.Unity.dll" "$(TargetDir)XLGearModifier.Unity-1-2-0.dll
+copy /Y "$(TargetDir)XLGearModifier.Unity.dll" "$(TargetDir)XLGearModifier.Unity.1.2.0.dll"
 
 powershell Compress-Archive -Path '$(TargetDir)XLGearModifier' -DestinationPath '$(TargetDir)XLGearModifier-1-2-0.zip' -Force
 )</PostBuildEvent>

@@ -200,6 +200,10 @@ namespace XLGearModifier
 				{
 					AddItem(newGear, officialTextures, parent.Children, ref parent);
 				}
+				else
+				{
+					AddItem(newGear, null, parent.Children, ref parent);
+				}
 			}
 
 			CustomMeshes = CustomMeshes.OrderBy(x => Enum.Parse(typeof(GearCategory), x.GetName().Replace("\\", string.Empty))).ToList();
@@ -259,7 +263,12 @@ namespace XLGearModifier
 
 		public void AddItem(CustomGear customGear, GearInfo[][][] sourceList, List<ICustomInfo> destList, ref CustomFolderInfo parent, bool isCustom = false)
 		{
-			if (sourceList == null) return;
+			if (sourceList == null)
+			{
+				var characterGearInfo = new CustomCharacterGearInfo(customGear.Metadata.Prefix, customGear.Metadata.Prefix, false, new[] { new TextureChange("albedo", "XLGearModifier/Empty_Albedo.png") }, new string[] {});
+				AddToList(customGear, characterGearInfo, destList, ref parent, isCustom);
+				return;
+			}
 
 			int skaterIndex = customGear.GetSkaterIndex();
 			int categoryIndex = customGear.GetCategoryIndex(skaterIndex);
@@ -276,16 +285,21 @@ namespace XLGearModifier
 
 			foreach (var baseTexture in baseTextures)
 			{
-				var child = destList.FirstOrDefault(x => x.GetName().Equals(baseTexture.name, StringComparison.InvariantCultureIgnoreCase));
-				if (child != null) return;
-
-				var gearInfo = new CustomCharacterGearInfo(baseTexture.name, customGear.GearInfo.type, isCustom, baseTexture.textureChanges, customGear.GearInfo.tags);
-				gearInfo.Info.Parent = parent;
-				gearInfo.Info.ParentObject = new CustomGear(customGear, gearInfo);
-				destList.Add(gearInfo.Info);
-
-				GearDatabase.Instance.clothingGear.Add(gearInfo);
+				AddToList(customGear, baseTexture, destList, ref parent, isCustom);
 			}
+		}
+
+		private void AddToList(CustomGear customGear, CharacterGearInfo baseTexture, List<ICustomInfo> destList, ref CustomFolderInfo parent, bool isCustom)
+		{
+			var child = destList.FirstOrDefault(x => x.GetName().Equals(baseTexture.name, StringComparison.InvariantCultureIgnoreCase));
+			if (child != null) return;
+
+			var gearInfo = new CustomCharacterGearInfo(baseTexture.name, customGear.GearInfo.type, isCustom, baseTexture.textureChanges, customGear.GearInfo.tags);
+			gearInfo.Info.Parent = parent;
+			gearInfo.Info.ParentObject = new CustomGear(customGear, gearInfo);
+			destList.Add(gearInfo.Info);
+
+			GearDatabase.Instance.clothingGear.Add(gearInfo);
 		}
 
 		public void AddFolder<T>(string folder, string path, List<ICustomInfo> sourceList, ref CustomFolderInfo parent) where T : ICustomFolderInfo
