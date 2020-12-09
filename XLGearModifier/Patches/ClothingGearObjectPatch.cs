@@ -49,11 +49,16 @@ namespace XLGearModifier.Patches
 			}
 		}
 
-		static bool IsLayerable<T>(this ClothingGearObjet clothingGear, ClothingGearCategory? specificCategory = null) where T : Enum
+		static bool IsLayerable<T>(this ClothingGearObjet clothingGear, ClothingGearCategory specificCategory) where T : Enum
 		{
-			if (specificCategory == null || clothingGear.template.category != specificCategory.Value)
+			if (clothingGear.template.category != specificCategory)
 				return false;
 
+			return IsLayerable<T>(clothingGear);
+		}
+
+		static bool IsLayerable<T>(this ClothingGearObjet clothingGear) where T : Enum
+		{
 			bool isType = Enum.GetValues(typeof(T)).Cast<T>().Any(style => style.ToString() == clothingGear.template.id);
 			bool isLayerable = false;
 
