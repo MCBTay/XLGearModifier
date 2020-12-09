@@ -290,6 +290,9 @@ namespace XLGearModifier.Patches
 				{
 					if (__instance.previewCustomizer.HasEquipped(gear))
 					{
+						if (gear is CustomBoardGearInfo || gear is BoardGearInfo) return;
+
+						__instance.previewCustomizer.RemovePreviews();
 						Traverse.Create(__instance.previewCustomizer).Method("RemoveGear", gear).GetValue();
 					}
 					else
