@@ -76,12 +76,14 @@ namespace XLGearModifier.Patches
 							break;
 					}
 				}
-				// mesh per type, you've already selected a type so current folder should be valid
+				// mesh per type, you've already selected a type so current folder should be valid, regardless of whether or not XLMenuMod is installed
 				else if (index.depth >= 4)
 				{
-					if (index.LastIndex < 0 || index.LastIndex > GearManager.Instance.CurrentFolder.Children.Count - 1) return;
+					var children = GearManager.Instance.CurrentFolder.Children;
+					if (index.LastIndex < 0 || index.LastIndex > children.Count - 1) return;
 
-					switch (GearManager.Instance.CurrentFolder.Children.ElementAt(index.LastIndex).GetParentObject())
+					var parentObject = children.ElementAt(index.LastIndex).GetParentObject();
+					switch (parentObject)
 					{
 						case CustomCharacterGearInfo customCharacterGearInfo:
 							__result = customCharacterGearInfo;
