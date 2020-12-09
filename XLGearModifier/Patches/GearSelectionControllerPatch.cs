@@ -290,9 +290,7 @@ namespace XLGearModifier.Patches
 				{
 					if (__instance.previewCustomizer.HasEquipped(gear))
 					{
-						if (gear is CustomBoardGearInfo || gear is BoardGearInfo) return;
-
-						__instance.previewCustomizer.RemovePreviews();
+						if (gear is CustomBoardGearInfo || gear is BoardGearInfo || gear is CustomCharacterBodyInfo || gear is CharacterBodyInfo) return;
 						Traverse.Create(__instance.previewCustomizer).Method("RemoveGear", gear).GetValue();
 					}
 					else
@@ -333,9 +331,18 @@ namespace XLGearModifier.Patches
 						toBeCachedGear.Add(gearAtIndex2);
 				}
 
+				if (index.depth == 3 && gearAtIndex1 is CustomGearFolderInfo)
+				{
+					__instance.previewCustomizer.PreviewItem(null, toBeCachedGear);
+					return;
+				}
 				if (index.depth == 4 && gearAtIndex1 is CustomGearFolderInfo gearFolder)
 				{
-					if (gearFolder.FolderInfo.Children.Count <= 1) return;
+					if (gearFolder.FolderInfo.Children.Count <= 1)
+					{
+						__instance.previewCustomizer.PreviewItem(null, toBeCachedGear);
+						return;
+					}
 
 					var child = gearFolder.FolderInfo.Children.ElementAt(1);
 					if (child != null && child.GetParentObject() is CustomGear customGear)
@@ -345,6 +352,12 @@ namespace XLGearModifier.Patches
 				}
 				else
 				{
+					if (gearAtIndex1 is CustomGearFolderInfo customGearFolder)
+					{
+						__instance.previewCustomizer.PreviewItem(null, toBeCachedGear);
+						return;
+					}
+
 					__instance.previewCustomizer.PreviewItem(gearAtIndex1, toBeCachedGear);
 				}
 			}
