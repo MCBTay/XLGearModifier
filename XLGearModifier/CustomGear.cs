@@ -6,7 +6,6 @@ using UnityEngine;
 using XLGearModifier.Unity;
 using XLMenuMod.Utilities;
 using XLMenuMod.Utilities.Gear;
-using XLMenuMod.Utilities.Gear.Interfaces;
 
 namespace XLGearModifier
 {
@@ -138,12 +137,7 @@ namespace XLGearModifier
 				newMaterialController.alphaMasks = origMaterialController.alphaMasks;
 				newMaterialController.materialID = origMaterialController.materialID;
 
-				var renderers = prefab.GetComponentsInChildren<Renderer>();
-				var renderer = renderers.FirstOrDefault();
-				if (renderers.Length > 1)
-				{
-					renderer = renderers.FirstOrDefault(x => x.name == "Deck Bottom");
-				}
+				var renderer = prefab.GetComponentInChildren<Renderer>();
 				foreach (var target in origMaterialController.targets)
 				{
 					renderer.sharedMaterials = target.renderer.sharedMaterials;
@@ -179,6 +173,23 @@ namespace XLGearModifier
 					materialIndex = 0,
 					sharedMaterial = mat,
 				});
+			}
+
+			if (Metadata.Category == GearCategory.Hair)
+			{
+				if (newMaterialController.PropertyNameSubstitutions == null)
+					newMaterialController.PropertyNameSubstitutions = new Dictionary<string, string>();
+
+				var traverse = Traverse.Create(newMaterialController);
+				var propNameSubs = traverse.Field("m_propertyNameSubstitutions").GetValue<List<PropertyNameSubstitution>>();
+				if (propNameSubs == null)
+				{
+					propNameSubs = new List<PropertyNameSubstitution>();
+				}
+				propNameSubs.Add(new PropertyNameSubstitution { oldName = "_texture2D_color", newName = "_BaseColorMap" });
+				newMaterialController.PropertyNameSubstitutions = propNameSubs.ToDictionary(s => s.oldName, s => s.newName);
+
+				traverse.Field("m_propertyNameSubstitutions").SetValue(propNameSubs);
 			}
 
 			UpdateMaterialControllerAlphaMasks(newMaterialController);
