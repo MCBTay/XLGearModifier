@@ -13,7 +13,7 @@ namespace XLGearModifier
 	{
 		public XLGearModifierMetadata Metadata;
 		public GameObject Prefab;
-		public GearInfoSingleMaterial GearInfo;
+		public GearInfo GearInfo;
 		public GearCategory Category;
 		public string Type;
 		public string Sprite;
@@ -40,8 +40,13 @@ namespace XLGearModifier
 			{
 				GearInfo = new CustomCharacterGearInfo(string.IsNullOrEmpty(metadata.DisplayName) ? Prefab.name : metadata.DisplayName, Type, false, GetDefaultTextureChanges(), new string[0]);
 			}
-			
-			if (Category == GearCategory.Shoes)
+
+			if (metadata.IsBody)
+			{
+				AddGearPrefabController(Prefab);
+				AddBodyMaterialControllers();
+			}
+			else if (Category == GearCategory.Shoes)
 			{
 				AddGearPrefabControllers();
 				AddShoeMaterialControllers();
@@ -76,6 +81,12 @@ namespace XLGearModifier
 			gearPrefabController.PreparePrefab();
 		}
 
+		private void AddBodyMaterialControllers()
+		{
+			CreateNewMaterialController(Prefab, "shaderStandard_wTexAlphaCut_DoubleSide", "head");
+			CreateNewMaterialController(Prefab, "shaderStandard_wTexAlphaCut_DoubleSide", "body");
+		}
+
 		private void AddShoeMaterialControllers()
 		{
 			if (Metadata.BaseOnDefaultGear)
@@ -94,7 +105,7 @@ namespace XLGearModifier
 			{
 				foreach (Transform child in Prefab.transform)
 				{
-					CreateNewMaterialController(child.gameObject);
+					CreateNewMaterialController(child.gameObject, "MasterShaderCloth_v2");
 				}
 			}
 		}
@@ -122,79 +133,93 @@ namespace XLGearModifier
 			}
 			else
 			{
-				CreateNewMaterialController(Prefab);
+				CreateNewMaterialController(Prefab, "MasterShaderCloth_v2");
 			}
 		}
 
-		private void CreateNewMaterialController(GameObject prefab, MaterialController origMaterialController = null)
+		private void CreateNewMaterialController(GameObject prefab, MaterialController origMaterialController)
 		{
 			var newMaterialController = prefab.AddComponent<MaterialController>();
 			newMaterialController.targets = new List<MaterialController.TargetMaterialConfig>();
 
-			if (origMaterialController != null)
+			newMaterialController.PropertyNameSubstitutions = origMaterialController.PropertyNameSubstitutions;
+			newMaterialController.alphaMasks = origMaterialController.alphaMasks;
+			newMaterialController.materialID = origMaterialController.materialID;
+
+			var renderer = prefab.GetComponentInChildren<Renderer>();
+			foreach (var target in origMaterialController.targets)
 			{
-				newMaterialController.PropertyNameSubstitutions = origMaterialController.PropertyNameSubstitutions;
-				newMaterialController.alphaMasks = origMaterialController.alphaMasks;
-				newMaterialController.materialID = origMaterialController.materialID;
-
-				var renderer = prefab.GetComponentInChildren<Renderer>();
-				foreach (var target in origMaterialController.targets)
-				{
-					renderer.sharedMaterials = target.renderer.sharedMaterials;
-
-					newMaterialController.targets.Add(new MaterialController.TargetMaterialConfig
-					{
-						renderer = renderer,
-						materialIndex = target.materialIndex,
-						sharedMaterial = target.renderer.material
-					});
-				}
-			}
-			else
-			{
-				Material mat;
-				var renderer = prefab.GetComponentInChildren<Renderer>(true);
-				if (renderer?.material == null) return;
-				mat = renderer.material;
-
-				mat.shader = Shader.Find("MasterShaderCloth_v2");
-				// TODO: Use default textures here if these are null
-				mat.SetTexture("_texture2D_color", AssetBundleHelper.emptyAlbedo);
-				mat.SetTexture("_texture2D_normal", Metadata.TextureNormalMap ?? AssetBundleHelper.emptyNormalMap);
-				mat.SetTexture("_texture2D_maskPBR", Metadata.TextureMaskPBR ?? AssetBundleHelper.emptyMaskPBR);
-				mat.SetFloat("_scalar_minspecular", Metadata.MinSpecular);
-				mat.SetFloat("_scalar_maxspecular", Metadata.MaxSpecular);
-				mat.SetFloat("_scalar_minrg", Metadata.MinRoughness);
-				mat.SetFloat("_scalar_maxrg", Metadata.MaxRoughness);
+				renderer.sharedMaterials = target.renderer.sharedMaterials;
 
 				newMaterialController.targets.Add(new MaterialController.TargetMaterialConfig
 				{
-					renderer = prefab.GetComponentInChildren<SkinnedMeshRenderer>(),
-					materialIndex = 0,
-					sharedMaterial = mat,
+					renderer = renderer,
+					materialIndex = target.materialIndex,
+					sharedMaterial = target.renderer.material
 				});
 			}
 
+			UpdateMaterialControllerPropertyNameSubstitutions(newMaterialController);
+			UpdateMaterialControllerAlphaMasks(newMaterialController);
+
+			Traverse.Create(newMaterialController).Field("_originalMaterial").SetValue(Traverse.Create(origMaterialController).Field("originalMaterial").GetValue<Material>());
+		}
+
+		private void CreateNewMaterialController(GameObject prefab, string shaderName, string materialId = null)
+		{
+			var newMaterialController = prefab.AddComponent<MaterialController>();
+			newMaterialController.targets = new List<MaterialController.TargetMaterialConfig>();
+
+			if (!string.IsNullOrEmpty(materialId))
+			{
+				newMaterialController.materialID = materialId;
+			}
+
+			Material mat;
+			var renderer = prefab.GetComponentInChildren<Renderer>(true);
+			if (renderer?.material == null) return;
+			mat = renderer.material;
+
+			mat.shader = Shader.Find(shaderName);
+			mat.SetTexture("_texture2D_color", Metadata.TextureColor ?? AssetBundleHelper.emptyAlbedo);
+			mat.SetTexture("_texture2D_normal", Metadata.TextureNormalMap ?? AssetBundleHelper.emptyNormalMap);
+			mat.SetTexture(shaderName == "MasterShaderCloth_v2" ? "_texture2D_maskPBR" : "_texture2D_rgmtao", Metadata.TextureMaskPBR ?? AssetBundleHelper.emptyMaskPBR);
+			mat.SetFloat("_scalar_minspecular", Metadata.MinSpecular);
+			mat.SetFloat("_scalar_maxspecular", Metadata.MaxSpecular);
+			mat.SetFloat("_scalar_minrg", Metadata.MinRoughness);
+			mat.SetFloat("_scalar_maxrg", Metadata.MaxRoughness);
+
+			newMaterialController.targets.Add(new MaterialController.TargetMaterialConfig
+			{
+				renderer = prefab.GetComponentInChildren<SkinnedMeshRenderer>(),
+				materialIndex = 0,
+				sharedMaterial = mat,
+			});
+
+			UpdateMaterialControllerPropertyNameSubstitutions(newMaterialController);
+			UpdateMaterialControllerAlphaMasks(newMaterialController);
+			
+			Traverse.Create(newMaterialController).Field("_originalMaterial").SetValue(Traverse.Create(newMaterialController).Field("originalMaterial").GetValue<Material>());
+		}
+
+		private void UpdateMaterialControllerPropertyNameSubstitutions(MaterialController materialController)
+		{
 			if (Metadata.Category == GearCategory.Hair)
 			{
-				if (newMaterialController.PropertyNameSubstitutions == null)
-					newMaterialController.PropertyNameSubstitutions = new Dictionary<string, string>();
+				if (materialController.PropertyNameSubstitutions == null)
+					materialController.PropertyNameSubstitutions = new Dictionary<string, string>();
 
-				var traverse = Traverse.Create(newMaterialController);
+				var traverse = Traverse.Create(materialController);
 				var propNameSubs = traverse.Field("m_propertyNameSubstitutions").GetValue<List<PropertyNameSubstitution>>();
 				if (propNameSubs == null)
 				{
 					propNameSubs = new List<PropertyNameSubstitution>();
 				}
 				propNameSubs.Add(new PropertyNameSubstitution { oldName = "_texture2D_color", newName = "_BaseColorMap" });
-				newMaterialController.PropertyNameSubstitutions = propNameSubs.ToDictionary(s => s.oldName, s => s.newName);
+				materialController.PropertyNameSubstitutions = propNameSubs.ToDictionary(s => s.oldName, s => s.newName);
 
 				traverse.Field("m_propertyNameSubstitutions").SetValue(propNameSubs);
 			}
-
-			UpdateMaterialControllerAlphaMasks(newMaterialController);
-			
-			Traverse.Create(newMaterialController).Field("_originalMaterial").SetValue(Traverse.Create(origMaterialController).Field("originalMaterial").GetValue<Material>());
 		}
 
 		private void UpdateMaterialControllerAlphaMasks(MaterialController materialController)
