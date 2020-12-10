@@ -329,31 +329,33 @@ namespace XLGearModifier
 		{
 			var skaterIndex = 0;
 
-			if (string.IsNullOrEmpty(Type)) return 0;
+			var type = Metadata.BaseOnDefaultGear ? GetBaseType() : Type;
 
-			if (Type.StartsWith("m", StringComparison.InvariantCultureIgnoreCase))
+			if (string.IsNullOrEmpty(type)) return (int)Character.MaleStandard;
+
+			if (type.StartsWith("m", StringComparison.InvariantCultureIgnoreCase))
 			{
-				skaterIndex = 0;
+				skaterIndex = (int)Character.MaleStandard;
 			}
-			else if (Type.StartsWith("f", StringComparison.InvariantCultureIgnoreCase))
+			else if (type.StartsWith("f", StringComparison.InvariantCultureIgnoreCase))
 			{
-				skaterIndex = 1;
+				skaterIndex = (int)Character.FemaleStandard;
 			}
-			else if (Type.StartsWith("es", StringComparison.InvariantCultureIgnoreCase))
+			else if (type.StartsWith("es", StringComparison.InvariantCultureIgnoreCase))
 			{
-				skaterIndex = 2;
+				skaterIndex = (int)Character.EvanSmith;
 			}
-			else if (Type.StartsWith("ta", StringComparison.InvariantCultureIgnoreCase))
+			else if (type.StartsWith("ta", StringComparison.InvariantCultureIgnoreCase))
 			{
-				skaterIndex = 3;
+				skaterIndex = (int)Character.TomAsta;
 			}
-			else if (Type.StartsWith("bw", StringComparison.InvariantCultureIgnoreCase))
+			else if (type.StartsWith("bw", StringComparison.InvariantCultureIgnoreCase))
 			{
-				skaterIndex = 4;
+				skaterIndex = (int)Character.BrandonWestgate;
 			}
-			else if (Type.StartsWith("tl", StringComparison.InvariantCultureIgnoreCase))
+			else if (type.StartsWith("tl", StringComparison.InvariantCultureIgnoreCase))
 			{
-				skaterIndex = 5;
+				skaterIndex = (int)Character.TiagoLemos;
 			}
 
 			return skaterIndex;
