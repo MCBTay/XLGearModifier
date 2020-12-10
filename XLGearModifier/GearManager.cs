@@ -25,9 +25,6 @@ namespace XLGearModifier
 		public List<ICustomInfo> FemaleGear;
 		public List<ICustomInfo> MaleGear;
 
-		private GearInfo[][][] gearListSource;
-		private GearInfo[][][] customGearListSource;
-
 		public GearManager()
 		{
 			CustomMeshes = new List<ICustomInfo>();
@@ -41,9 +38,6 @@ namespace XLGearModifier
 		#region In Game Gear
 		public void LoadGameGear()
 		{
-			gearListSource = Traverse.Create(GearDatabase.Instance).Field("gearListSource").GetValue<GearInfo[][][]>();
-			customGearListSource = Traverse.Create(GearDatabase.Instance).Field("customGearListSource").GetValue<GearInfo[][][]>();
-
 			LoadMaleGear();
 			LoadFemaleGear();
 			LoadProGear();
@@ -72,16 +66,18 @@ namespace XLGearModifier
 
 		private void LoadCharacterGear(Character character, List<ICustomInfo> destList)
 		{
+			var gearListSource = Traverse.Create(GearDatabase.Instance).Field("gearListSource").GetValue<GearInfo[][][]>();
 			var gearCategories = gearListSource[(int)character];
 			CustomFolderInfo parent = null;
-			AddCharacterGear(character, gearCategories, destList, ref parent);
+			AddCharacterGear(character, gearCategories, destList, ref parent, false);
 
+			var customGearListSource = Traverse.Create(GearDatabase.Instance).Field("customGearListSource").GetValue<GearInfo[][][]>();
 			var customGearCategories = customGearListSource[(int)character];
 			parent = null;
-			AddCharacterGear(character, customGearCategories, destList, ref parent);
+			AddCharacterGear(character, customGearCategories, destList, ref parent, true);
 		}
 
-		private void AddCharacterGear(Character character, GearInfo[][] gearCategories, List<ICustomInfo> destList, ref CustomFolderInfo parent)
+		private void AddCharacterGear(Character character, GearInfo[][] gearCategories, List<ICustomInfo> destList, ref CustomFolderInfo parent, bool isCustom)
 		{
 			for (int gearCategory = 0; gearCategory < gearCategories.Length; gearCategory++)
 			{
@@ -123,13 +119,53 @@ namespace XLGearModifier
 
 				AddFolder<CustomGearFolderInfo>(folderName, string.Empty, destList, ref parent);
 
-				for (int gear = 0; gear < currentGearCategory.Length; gear++)
+				if (Main.XLMenuModEnabled)
 				{
-					var currentGear = currentGearCategory[gear] as CharacterGearInfo;
-					if (currentGear == null) continue;
-					AddItem(currentGear, parent.Children, ref parent);
+					LeverageXLMenuMod(gearCategory, currentGearCategory, ref parent, isCustom);
+				}
+				else
+				{
+					foreach (var gear in currentGearCategory)
+					{
+						var currentGear = gear as CharacterGearInfo;
+						if (currentGear == null) continue;
+
+						AddItem(currentGear, parent.Children, ref parent);
+					}
 				}
 			}
+		}
+
+		public void LeverageXLMenuMod(int gearCategory, GearInfo[] currentGearCategory, ref CustomFolderInfo parent, bool isCustom)
+		{
+			if (isCustom)
+			{
+				CustomGearManager.Instance.LoadNestedItems(currentGearCategory);
+				AddItemsFromXLMenuMod(CustomGearManager.Instance.NestedItems, ref parent);
+			}
+			else
+			{
+				if (gearCategory == (int)GearCategory.Hair)
+				{
+					CustomGearManager.Instance.LoadNestedHairItems(currentGearCategory);
+				}
+				else
+				{
+					CustomGearManager.Instance.LoadNestedOfficialItems(currentGearCategory);
+				}
+
+				AddItemsFromXLMenuMod(CustomGearManager.Instance.NestedOfficialItems, ref parent);
+			}
+		}
+
+		public void AddItemsFromXLMenuMod(List<ICustomInfo> itemsToAdd, ref CustomFolderInfo parent)
+		{
+			foreach (var item in itemsToAdd)
+			{
+				item.Parent = parent;
+			}
+
+			parent.Children.AddRange(itemsToAdd);
 		}
 
 		public void AddItem(CharacterGearInfo currentGear, List<ICustomInfo> destList, ref CustomFolderInfo parent)
@@ -160,6 +196,38 @@ namespace XLGearModifier
 
 				var newGear = new CustomGear(metadata, asset);
 				CustomGear.Add(newGear);
+
+				if (metadata.IsBody)
+				{
+					var skaterInfo = new SkaterInfo
+					{
+						stance = SkaterInfo.Stance.Regular,
+						bodyID = metadata.Prefix,
+						name = string.IsNullOrEmpty(metadata.DisplayName) ? asset.name : metadata.DisplayName,
+						GearFilters = GearDatabase.Instance.skaters.First().GearFilters,
+					};
+
+					AddBodyGearTemplate(newGear, metadata);
+
+					var materialChanges = new List<MaterialChange>()
+					{
+						new MaterialChange("head", new[]
+						{
+							new TextureChange("head", "XLGearModifier")
+						}),
+						new MaterialChange("body", new[]
+						{
+							new TextureChange("body", "XLGearModifier")
+						}),
+					};
+
+					var info = new CharacterBodyInfo(string.IsNullOrEmpty(metadata.DisplayName) ? asset.name : metadata.DisplayName, metadata.Prefix, false, materialChanges, new string[] { });
+
+					GearDatabase.Instance.bodyGear.Add(info);
+					GearDatabase.Instance.skaters.Add(skaterInfo);
+
+					return;
+				}
 
 				CustomFolderInfo parent = null;
 
@@ -195,6 +263,7 @@ namespace XLGearModifier
 			CustomMeshes = CustomMeshes.OrderBy(x => Enum.Parse(typeof(GearCategory), x.GetName().Replace("\\", string.Empty))).ToList();
 		}
 
+		#region Gear Template methods
 		private void AddBoardGearTemplate(CustomGear customGear, XLGearModifierMetadata metadata)
 		{
 			if (metadata.Category == GearCategory.Deck &&
@@ -248,6 +317,22 @@ namespace XLGearModifier
 			}
 		}
 
+		private void AddBodyGearTemplate(CustomGear customGear, XLGearModifierMetadata metadata)
+		{
+			if (!GearDatabase.Instance.CharBodyTemplateForID.ContainsKey(metadata.Prefix.ToLower()))
+			{
+				var newBodyTemplate = new CharacterBodyTemplate()
+				{
+					id = metadata.Prefix.ToLower(),
+					path = "XLGearModifier",
+					leftEyeLocalPosition = new Vector3(1, 0, 0),
+					rightEyeLocalPosition = new Vector3(-1, 0, 0)
+				};
+
+				GearDatabase.Instance.CharBodyTemplateForID.Add(metadata.Prefix.ToLower(), newBodyTemplate);
+			}
+		}
+
 		private void AddOrUpdateTemplateAlphaMasks(XLGearModifierMetadata metadata, CharacterGearTemplate template)
 		{
 			//TODO: Come back to this once we figure out the list serialization.
@@ -286,6 +371,7 @@ namespace XLGearModifier
 					return ClothingGearCategory.Shirt;
 			}
 		}
+		#endregion
 
 		public void LoadAssetCustomTextures()
 		{
