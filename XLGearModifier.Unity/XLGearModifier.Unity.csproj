@@ -55,11 +55,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AlphaMaskTextureInfo.cs" />
+    <Compile Include="ScriptableObjects\XLGMAlphaMaskTextureInfo.cs" />
     <Compile Include="Editor\HideIfAttributeDrawer.cs" />
     <Compile Include="Editor\Utilities.cs" />
     <Compile Include="Enumerations.cs" />
-    <Compile Include="GearAlphaMaskConfig.cs" />
+    <Compile Include="ScriptableObjects\GearAlphaMaskConfig.cs" />
     <Compile Include="HideIfAttribute.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="XLGMBoardGearMetadata.cs" />

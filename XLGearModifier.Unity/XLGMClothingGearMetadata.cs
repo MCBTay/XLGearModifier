@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 using XLGearModifier.Unity.ScriptableObjects;
 
 namespace XLGearModifier.Unity
@@ -46,10 +47,8 @@ namespace XLGearModifier.Unity
 		public XLGMTextureSet TextureSet;
 
 		#region Alpha Masks
-		//[Header("Alpha Masks")]
-		// TODO: For some reason these lists don't work, they come over as null on the mod end.
-		//public List<GearAlphaMaskConfig> AlphaMasks;
-		//public List<AlphaMaskTextureInfo> AlphaMaskTextures;
+		public List<XLGMGearAlphaMaskConfig> BodyAlphaMasks;
+		public List<XLGMAlphaMaskTextureInfo> ClothingAlphaMasks;
 		#endregion
 
 		public override string GetBaseType()
