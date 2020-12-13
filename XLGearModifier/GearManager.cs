@@ -183,195 +183,149 @@ namespace XLGearModifier
 		public void LoadAssets(AssetBundle bundle)
 		{
 			var assets = bundle.LoadAllAssets<GameObject>();
-
 			if (assets == null || !assets.Any()) return;
-
-			var officialTextures = Traverse.Create(GearDatabase.Instance).Field("gearListSource").GetValue<GearInfo[][][]>();
 
 			foreach (var asset in assets)
 			{
-				var metadata = asset.GetComponent<XLGearModifierMetadata>();
+				var metadata = asset.GetComponent<XLGMMetadata>();
 				if (metadata == null) continue;
 				if (string.IsNullOrEmpty(metadata.Prefix)) continue;
 
-				var newGear = new CustomGear(metadata, asset);
-				CustomGear.Add(newGear);
+				var customGear = new CustomGear(metadata, asset);
+				CustomGear.Add(customGear);
 
-				if (metadata.IsBody)
+				switch (metadata)
 				{
-					var skaterInfo = new SkaterInfo
-					{
-						stance = SkaterInfo.Stance.Regular,
-						bodyID = metadata.Prefix,
-						name = string.IsNullOrEmpty(metadata.DisplayName) ? asset.name : metadata.DisplayName,
-						GearFilters = GearDatabase.Instance.skaters.First().GearFilters,
-					};
-
-					AddBodyGearTemplate(newGear, metadata);
-
-					var materialChanges = new List<MaterialChange>()
-					{
-						new MaterialChange("head", new[]
-						{
-							new TextureChange("head", "XLGearModifier")
-						}),
-						new MaterialChange("body", new[]
-						{
-							new TextureChange("body", "XLGearModifier")
-						}),
-					};
-
-					var info = new CharacterBodyInfo(string.IsNullOrEmpty(metadata.DisplayName) ? asset.name : metadata.DisplayName, metadata.Prefix, false, materialChanges, new string[] { });
-
-					GearDatabase.Instance.bodyGear.Add(info);
-					GearDatabase.Instance.skaters.Add(skaterInfo);
-
-					return;
-				}
-
-				CustomFolderInfo parent = null;
-
-				AddFolder<CustomGearFolderInfo>(metadata.Category.ToString(), string.Empty, CustomMeshes, ref parent);
-				AddFolder<CustomGearFolderInfo>(string.IsNullOrEmpty(metadata.DisplayName) ? asset.name : metadata.DisplayName, string.Empty, parent.Children, ref parent);
-
-				var typeFilter = GearDatabase.Instance.skaters[newGear.GetSkaterIndex()].GearFilters[newGear.GetCategoryIndex(newGear.GetSkaterIndex())];
-				if (!typeFilter.includedTypes.Contains(metadata.Prefix))
-				{
-					Array.Resize(ref typeFilter.includedTypes, typeFilter.includedTypes.Length + 1);
-					typeFilter.includedTypes[typeFilter.includedTypes.Length - 1] = metadata.Prefix;
-				}
-
-				if (newGear.IsBoardGearType())
-				{
-					AddBoardGearTemplate(newGear, metadata);
-				}
-				else
-				{
-					AddCharacterGearTemplate(newGear, metadata);
-				}
-				
-				if (metadata.BaseOnDefaultGear)
-				{
-					AddItem(newGear, officialTextures, parent.Children, ref parent);
-				}
-				else
-				{
-					AddItem(newGear, null, parent.Children, ref parent);
+					case XLGMClothingGearMetadata clothingMetadata:
+						AddClothingMesh(clothingMetadata, customGear, asset);
+						break;
+					case XLGMBoardGearMetadata boardMetadata:
+						AddBoardMesh(boardMetadata, customGear, asset);
+						break;
 				}
 			}
 
 			CustomMeshes = CustomMeshes.OrderBy(x => Enum.Parse(typeof(GearCategory), x.GetName().Replace("\\", string.Empty))).ToList();
 		}
 
-		#region Gear Template methods
-		private void AddBoardGearTemplate(CustomGear customGear, XLGearModifierMetadata metadata)
+		private void AddBoardMesh(XLGMBoardGearMetadata metadata, CustomGear customGear, GameObject asset)
 		{
-			if (metadata.Category == GearCategory.Deck &&
-			    !GearDatabase.Instance.DeckTemplateForID.ContainsKey(metadata.Prefix.ToLower()))
+			CustomFolderInfo parent = null;
+
+			AddFolder<CustomGearFolderInfo>(metadata.Category.ToString(), string.Empty, CustomMeshes, ref parent);
+			AddFolder<CustomGearFolderInfo>(string.IsNullOrEmpty(metadata.DisplayName) ? asset.name : metadata.DisplayName, string.Empty, parent.Children, ref parent);
+
+			if (metadata.BaseOnDefaultGear)
 			{
-				var newGearTemplate = new DeckTemplate
-				{
-					id = string.Empty,
-					path = "XLGearModifier"
-				};
-
-				if (metadata.BaseOnDefaultGear)
-				{
-					var baseGearTemplate = GearDatabase.Instance.DeckTemplateForID.FirstOrDefault(x => x.Key == customGear.GetBaseType().ToLower()).Value;
-					if (baseGearTemplate != null)
-					{
-						newGearTemplate.id = baseGearTemplate.id;
-					}
-				}
-
-				GearDatabase.Instance.DeckTemplateForID.Add(metadata.Prefix.ToLower(), newGearTemplate);
+				var officialTextures = Traverse.Create(GearDatabase.Instance).Field("gearListSource").GetValue<GearInfo[][][]>();
+				AddItem(customGear, officialTextures, parent.Children, ref parent);
+			}
+			else
+			{
+				AddItem(customGear, null, parent.Children, ref parent);
 			}
 		}
 
-		private void AddCharacterGearTemplate(CustomGear customGear, XLGearModifierMetadata metadata)
+		private void AddClothingMesh(XLGMClothingGearMetadata metadata, CustomGear customGear, GameObject asset)
 		{
-			if (!GearDatabase.Instance.CharGearTemplateForID.ContainsKey(metadata.Prefix.ToLower()))
+			CustomFolderInfo parent = null;
+
+			AddFolder<CustomGearFolderInfo>(metadata.Category.ToString(), string.Empty, CustomMeshes, ref parent);
+			AddFolder<CustomGearFolderInfo>(string.IsNullOrEmpty(metadata.DisplayName) ? asset.name : metadata.DisplayName, string.Empty, parent.Children, ref parent);
+
+			if (metadata.BaseOnDefaultGear)
 			{
-				var newGearTemplate = new CharacterGearTemplate
-				{
-					alphaMasks = new List<GearAlphaMaskConfig>(),
-					category = MapCategory(metadata.Category),
-					id = metadata.Prefix.ToLower(),
-					path = "XLGearModifier"
-				};
-
-				if (metadata.BaseOnDefaultGear)
-				{
-					var baseGearTemplate = GearDatabase.Instance.CharGearTemplateForID.FirstOrDefault(x => x.Key == customGear.GetBaseType().ToLower()).Value;
-					if (baseGearTemplate != null)
-					{
-						//TODO: Come back to this once alpha masks are implemented
-						newGearTemplate.alphaMasks = baseGearTemplate.alphaMasks;
-						newGearTemplate.category = baseGearTemplate.category;
-					}
-				}
-
-				AddOrUpdateTemplateAlphaMasks(metadata, newGearTemplate);
-
-				GearDatabase.Instance.CharGearTemplateForID.Add(metadata.Prefix.ToLower(), newGearTemplate);
+				var officialTextures = Traverse.Create(GearDatabase.Instance).Field("gearListSource").GetValue<GearInfo[][][]>();
+				AddItem(customGear, officialTextures, parent.Children, ref parent);
+			}
+			else
+			{
+				AddItem(customGear, null, parent.Children, ref parent);
 			}
 		}
 
-		private void AddBodyGearTemplate(CustomGear customGear, XLGearModifierMetadata metadata)
-		{
-			if (!GearDatabase.Instance.CharBodyTemplateForID.ContainsKey(metadata.Prefix.ToLower()))
-			{
-				var newBodyTemplate = new CharacterBodyTemplate()
-				{
-					id = metadata.Prefix.ToLower(),
-					path = "XLGearModifier",
-					leftEyeLocalPosition = new Vector3(1, 0, 0),
-					rightEyeLocalPosition = new Vector3(-1, 0, 0)
-				};
+		//public void LoadAssets(AssetBundle bundle)
+		//{
+		//	var assets = bundle.LoadAllAssets<GameObject>();
 
-				GearDatabase.Instance.CharBodyTemplateForID.Add(metadata.Prefix.ToLower(), newBodyTemplate);
-			}
-		}
+		//	if (assets == null || !assets.Any()) return;
 
-		private void AddOrUpdateTemplateAlphaMasks(XLGearModifierMetadata metadata, CharacterGearTemplate template)
-		{
-			//TODO: Come back to this once we figure out the list serialization.
-			//if (metadata.AlphaMasks == null || !metadata.AlphaMasks.Any()) return;
+		//	var officialTextures = Traverse.Create(GearDatabase.Instance).Field("gearListSource").GetValue<GearInfo[][][]>();
 
-			//foreach (var mask in metadata.AlphaMasks)
-			//{
-			//	var existing = template.alphaMasks.FirstOrDefault(x => (int)x.MaskLocation == (int)mask.MaskLocation);
-			//	if (existing == null)
-			//	{
-			//		var alphaMaskConfig = new GearAlphaMaskConfig
-			//		{
-			//			MaskLocation = (AlphaMaskLocation)(int)mask.MaskLocation,
-			//			Threshold = mask.Threshold,
-			//		};
+		//	foreach (var asset in assets)
+		//	{
+		//		var metadata = asset.GetComponent<XLGearModifierMetadata>();
+		//		if (metadata == null) continue;
+		//		if (string.IsNullOrEmpty(metadata.Prefix)) continue;
 
-			//		template.alphaMasks.Add(alphaMaskConfig);
-			//	}
-			//	else
-			//	{
-			//		existing.Threshold = mask.Threshold;
-			//	}
-			//}
-		}
+		//		var newGear = new CustomGear(metadata, asset);
+		//		CustomGear.Add(newGear);
 
-		public ClothingGearCategory MapCategory(GearCategory category)
-		{
-			switch (category)
-			{
-				case GearCategory.Hair: return ClothingGearCategory.Hat;
-				case GearCategory.Headwear: return ClothingGearCategory.Hat;
-				case GearCategory.Shoes: return ClothingGearCategory.Shoes;
-				case GearCategory.Bottom: return ClothingGearCategory.Pants;
-				default:
-				case GearCategory.Top: 
-					return ClothingGearCategory.Shirt;
-			}
-		}
-		#endregion
+		//		if (metadata.IsBody)
+		//		{
+		//			//var skaterInfo = new SkaterInfo
+		//			//{
+		//			//	stance = SkaterInfo.Stance.Regular,
+		//			//	bodyID = metadata.Prefix,
+		//			//	name = string.IsNullOrEmpty(metadata.DisplayName) ? asset.name : metadata.DisplayName,
+		//			//	GearFilters = GearDatabase.Instance.skaters.First().GearFilters,
+		//			//};
+
+		//			//AddBodyGearTemplate(newGear, metadata);
+
+		//			//var materialChanges = new List<MaterialChange>()
+		//			//{
+		//			//	new MaterialChange("head", new[]
+		//			//	{
+		//			//		new TextureChange("head", "XLGearModifier")
+		//			//	}),
+		//			//	new MaterialChange("body", new[]
+		//			//	{
+		//			//		new TextureChange("body", "XLGearModifier")
+		//			//	}),
+		//			//};
+
+		//			//var info = new CharacterBodyInfo(string.IsNullOrEmpty(metadata.DisplayName) ? asset.name : metadata.DisplayName, metadata.Prefix, false, materialChanges, new string[] { });
+
+		//			//GearDatabase.Instance.bodyGear.Add(info);
+		//			//GearDatabase.Instance.skaters.Add(skaterInfo);
+
+		//			continue;
+		//		}
+
+		//		CustomFolderInfo parent = null;
+
+		//		AddFolder<CustomGearFolderInfo>(metadata.Category.ToString(), string.Empty, CustomMeshes, ref parent);
+		//		AddFolder<CustomGearFolderInfo>(string.IsNullOrEmpty(metadata.DisplayName) ? asset.name : metadata.DisplayName, string.Empty, parent.Children, ref parent);
+
+		//		var typeFilter = GearDatabase.Instance.skaters[newGear.GetSkaterIndex()].GearFilters[newGear.GetCategoryIndex(newGear.GetSkaterIndex())];
+		//		if (!typeFilter.includedTypes.Contains(metadata.Prefix))
+		//		{
+		//			Array.Resize(ref typeFilter.includedTypes, typeFilter.includedTypes.Length + 1);
+		//			typeFilter.includedTypes[typeFilter.includedTypes.Length - 1] = metadata.Prefix;
+		//		}
+
+		//		if (newGear.IsBoardGearType())
+		//		{
+		//			AddBoardGearTemplate(newGear, metadata);
+		//		}
+		//		else
+		//		{
+		//			AddCharacterGearTemplate(newGear, metadata);
+		//		}
+				
+		//		if (metadata.BaseOnDefaultGear)
+		//		{
+		//			AddItem(newGear, officialTextures, parent.Children, ref parent);
+		//		}
+		//		else
+		//		{
+		//			AddItem(newGear, null, parent.Children, ref parent);
+		//		}
+		//	}
+
+		//	CustomMeshes = CustomMeshes.OrderBy(x => Enum.Parse(typeof(GearCategory), x.GetName().Replace("\\", string.Empty))).ToList();
+		//}
 
 		public void LoadAssetCustomTextures()
 		{
@@ -379,7 +333,7 @@ namespace XLGearModifier
 			{
 				CustomFolderInfo parent = null;
 
-				AddFolder<CustomGearFolderInfo>(customGear.Metadata.Category.ToString(), string.Empty, CustomMeshes, ref parent);
+				AddFolder<CustomGearFolderInfo>(customGear.Metadata.GetCategory(), string.Empty, CustomMeshes, ref parent);
 				AddFolder<CustomGearFolderInfo>(string.IsNullOrEmpty(customGear.Metadata.DisplayName) ? customGear.Prefab.name : customGear.Metadata.DisplayName, string.Empty, parent.Children, ref parent);
 
 				var customTextures = Traverse.Create(GearDatabase.Instance).Field("customGearListSource").GetValue<GearInfo[][][]>();
@@ -391,7 +345,7 @@ namespace XLGearModifier
 		{
 			if (sourceList == null)
 			{
-				var characterGearInfo = new CustomCharacterGearInfo(customGear.Metadata.Prefix, customGear.Metadata.Prefix, false, new[] { new TextureChange("albedo", "XLGearModifier/Empty_Albedo.png") }, new string[] {});
+				var characterGearInfo = new CustomCharacterGearInfo(customGear.Metadata.Prefix, customGear.Metadata.Prefix, false, new[] { new TextureChange("albedo", "XLGearModifier\\Empty_Albedo.png") }, new string[] {});
 				AddToList(customGear, characterGearInfo, destList, ref parent, isCustom);
 				return;
 			}
@@ -401,18 +355,21 @@ namespace XLGearModifier
 
 			var categoryTextures = sourceList[skaterIndex][categoryIndex];
 			
-			var textures = categoryTextures.Where(x => x.type == customGear.Type.ToLower()).Select(x => x as GearInfoSingleMaterial).ToList();
+			var textures = categoryTextures
+				.Where(x => x.type == customGear.Metadata.Prefix.ToLower())
+				.Select(x => x as GearInfoSingleMaterial)
+				.ToList();
 
-			if (customGear.Metadata.BaseOnDefaultGear)
+			if (customGear.Metadata.BasedOnDefaultGear())
 			{
-				if (customGear.IsBoardGearType())
+				if (customGear.BoardMetdata != null)
 				{
-					var baseTypes = categoryTextures.Where(x => x.type == customGear.GetBaseType().ToLower()).Select(x => x as BoardGearInfo).ToList();
+					var baseTypes = categoryTextures.Where(x => x.type == customGear.Metadata.GetBaseType().ToLower()).Select(x => x as BoardGearInfo).ToList();
 					textures = textures.Concat(baseTypes).ToList();
 				}
 				else
 				{
-					var baseTypes = categoryTextures.Where(x => x.type == customGear.GetBaseType().ToLower()).Select(x => x as CharacterGearInfo).ToList();
+					var baseTypes = categoryTextures.Where(x => x.type == customGear.Metadata.GetBaseType().ToLower()).Select(x => x as CharacterGearInfo).ToList();
 					textures = textures.Concat(baseTypes).ToList();
 				}
 			}
@@ -422,7 +379,7 @@ namespace XLGearModifier
 				AddToList(customGear, texture, destList, ref parent, isCustom);
 			}
 
-			if (textures.Any() && isCustom && !customGear.Metadata.BaseOnDefaultGear)
+			if (textures.Any() && isCustom && !customGear.Metadata.BasedOnDefaultGear())
 			{
 				var defaultTexture = destList.FirstOrDefault(x => x.GetName() == customGear.Metadata.Prefix);
 				if (defaultTexture != null)
@@ -435,7 +392,7 @@ namespace XLGearModifier
 			var child = destList.FirstOrDefault(x => x.GetName().Equals(baseTexture.name, StringComparison.InvariantCultureIgnoreCase));
 			if (child != null) return;
 
-			if (customGear.IsBoardGearType())
+			if (customGear.BoardMetdata != null)
 			{
 				CustomBoardGearInfo gearInfo = new CustomBoardGearInfo(baseTexture.name, customGear.GearInfo.type, isCustom, baseTexture.textureChanges, customGear.GearInfo.tags);
 				gearInfo.Info.Parent = parent;
