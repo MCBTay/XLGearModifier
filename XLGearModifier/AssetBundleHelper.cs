@@ -19,11 +19,12 @@ namespace XLGearModifier
 		public static void LoadGearBundle()
 		{
 			AssetBundle bundle = AssetBundle.LoadFromMemory(ExtractResource("XLGearModifier.Assets.customgear"));
-			GearManager.Instance.LoadAssets(bundle);
 
 			emptyAlbedo = bundle.LoadAsset<Texture2D>("Empty_Albedo.png");
 			emptyMaskPBR = bundle.LoadAsset<Texture2D>("Empty_Maskpbr_Map.png");
 			emptyNormalMap = bundle.LoadAsset<Texture2D>("Empty_Normal_Map.png");
+
+			GearManager.Instance.LoadAssets(bundle);
 
 			PlayerController.Instance.characterCustomizer.LoadLastPlayer();
 
