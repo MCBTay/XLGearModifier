@@ -47,8 +47,10 @@ namespace XLGearModifier.Unity
 		public XLGMTextureSet TextureSet;
 
 		#region Alpha Masks
-		public List<XLGMGearAlphaMaskConfig> BodyAlphaMasks;
-		public List<XLGMAlphaMaskTextureInfo> ClothingAlphaMasks;
+		[Tooltip("Set the threshold(s) for various alpha masks when this mesh is applied.")]
+		public List<XLGMGearAlphaMaskConfig> AlphaMaskThresholds;
+		[Tooltip("Set the alpha masks on this mesh's material.  The one that makes the most sense here is likely PantsWaist as the other types are meant to apply to the body.")]
+		public List<XLGMAlphaMaskTextureInfo> MaterialAlphaMasks;
 		#endregion
 
 		public override string GetBaseType()

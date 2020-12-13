@@ -263,14 +263,14 @@ namespace XLGearModifier
 
 		private void UpdateMaterialControllerAlphaMasks(MaterialController materialController)
 		{
-			if (ClothingMetadata?.ClothingAlphaMasks == null || !ClothingMetadata.ClothingAlphaMasks.Any()) return;
+			if (ClothingMetadata?.MaterialAlphaMasks == null || !ClothingMetadata.MaterialAlphaMasks.Any()) return;
 
 			if (materialController.alphaMasks == null)
 			{
 				materialController.alphaMasks = new AlphaMaskTextureInfo[] { };
 			}
 
-			foreach (var mask in ClothingMetadata.ClothingAlphaMasks)
+			foreach (var mask in ClothingMetadata.MaterialAlphaMasks)
 			{
 				var existing = materialController.alphaMasks?.FirstOrDefault(x => (int)x.type == (int)mask.type);
 				if (existing == null)
@@ -498,9 +498,9 @@ namespace XLGearModifier
 
 		private static void AddOrUpdateTemplateAlphaMasks(XLGMClothingGearMetadata metadata, CharacterGearTemplate template)
 		{
-			if (metadata.BodyAlphaMasks == null || !metadata.BodyAlphaMasks.Any()) return;
+			if (metadata.AlphaMaskThresholds == null || !metadata.AlphaMaskThresholds.Any()) return;
 
-			foreach (var mask in metadata.BodyAlphaMasks)
+			foreach (var mask in metadata.AlphaMaskThresholds)
 			{
 				var existing = template.alphaMasks.FirstOrDefault(x => (int)x.MaskLocation == (int)mask.MaskLocation);
 				if (existing == null)
