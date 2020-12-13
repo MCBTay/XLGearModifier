@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-namespace XLGearModifier.Unity
+namespace XLGearModifier.Unity.ScriptableObjects
 {
 	[CreateAssetMenu(fileName = "New XLGM Texture Set", menuName = "XLGM Texture Set")]
 	[Serializable]

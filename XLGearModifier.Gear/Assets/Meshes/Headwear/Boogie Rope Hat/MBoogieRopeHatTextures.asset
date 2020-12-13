@@ -9,7 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 1605419396, guid: 9eec293a5ff616644981bc58ed6f591d, type: 3}
+  m_Script: {fileID: 1159482014, guid: 9eec293a5ff616644981bc58ed6f591d, type: 3}
   m_Name: MBoogieRopeHatTextures
   m_EditorClassIdentifier: 
   textureColor: {fileID: 2800000, guid: dd8117be672de644aa4bcfab754274f6, type: 3}
