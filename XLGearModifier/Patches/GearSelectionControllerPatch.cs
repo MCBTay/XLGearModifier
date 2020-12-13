@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Rewired;
 using TMPro;
 using UnityEngine.EventSystems;
 using UnityModManagerNet;
@@ -98,7 +99,7 @@ namespace XLGearModifier.Patches
 							{
 								if (child.GetParentObject() is CustomGear customGear)
 								{
-									newText = $"<space=18px><sprite name=\"{customGear.Sprite}\" tint=1>";
+									newText = $"<space=18px><sprite name=\"{customGear.Metadata.GetSprite()}\" tint=1>";
 								}
 							}
 						}
@@ -153,7 +154,7 @@ namespace XLGearModifier.Patches
 								{
 									if (child.GetParentObject() is CustomGear customGear)
 									{
-										newText = $"<space=18px><sprite name=\"{customGear.Sprite}\" tint=1>";
+										newText = $"<space=18px><sprite name=\"{customGear.Metadata.GetSprite()}\" tint=1>";
 									}
 								}
 							}
@@ -373,6 +374,8 @@ namespace XLGearModifier.Patches
 
 				if (GearManager.Instance.CurrentFolder == null) return true;
 				if (!PlayerController.Instance.inputController.player.GetButtonDown("B")) return true;
+				//var player = Traverse.Create(__instance).Field("player").GetValue<Player>();
+				//if (!player.GetButtonDown("B")) return true;
 
 				UISounds.Instance?.PlayOneShotSelectMajor();
 

@@ -67,12 +67,12 @@ namespace XLGearModifier.Patches
 
 			if (customGearInfo.Info.GetParentObject() is CustomGear customGear)
 			{
-				if (!isType && customGear.Metadata.BaseOnDefaultGear)
+				if (!isType && customGear.Metadata.BasedOnDefaultGear())
 				{
-					isType = Enum.GetValues(typeof(T)).Cast<T>().Any(style => style.ToString() == customGear.GetBaseType());
+					isType = Enum.GetValues(typeof(T)).Cast<T>().Any(style => style.ToString() == customGear.Metadata.GetBaseType());
 				}
 
-				isLayerable = customGear.IsLayerable;
+				isLayerable = customGear.ClothingMetadata.IsLayerable;
 			}
 
 			return isType && isLayerable;
@@ -88,7 +88,7 @@ namespace XLGearModifier.Patches
 
 			if (customGearInfo.Info.GetParentObject() is CustomGear customGear)
 			{
-				isLayerable = customGear.IsLayerable && customGear.Sprite.StartsWith(SpriteCategory.Wildcard.ToString());
+				isLayerable = customGear.ClothingMetadata.IsLayerable && customGear.Metadata.GetSprite().StartsWith(SpriteCategory.Wildcard.ToString());
 			}
 
 			return isLayerable;
