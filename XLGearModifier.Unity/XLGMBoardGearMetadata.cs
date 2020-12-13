@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using XLGearModifier.Unity.ScriptableObjects;
 
 namespace XLGearModifier.Unity
 {
