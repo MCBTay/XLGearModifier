@@ -32,6 +32,23 @@
 		Wheels = 9
 	}
 
+	public enum ClothingGearCategory
+	{
+		Hair = 1,
+		Headwear = 2,
+		Top = 3,
+		Bottom = 4,
+		Shoes = 5
+	}
+
+	public enum BoardGearCategory
+	{
+		Deck = 6,
+		Griptape = 7,
+		Trucks = 8,
+		Wheels = 9
+	}
+
 	public enum EvanSmithGearCategory
 	{
 		Top = 0,
@@ -175,6 +192,14 @@
 		TLPants,
 	}
 
+	public enum TruckTypes
+	{
+		Trucks,
+		TrucksIndependent,
+		TrucksThunder,
+		TrucksVenture,
+	}
+
 	public enum SpriteCategory
 	{
 		Headwear,
@@ -194,5 +219,11 @@
 		Legs = 2,
 		Feet = 3,
 		PantsWaist = 10,
+	}
+
+	public enum SkaterBase
+	{
+		Male = 0,
+		Female = 1,
 	}
 }
