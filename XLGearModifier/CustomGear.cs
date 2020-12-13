@@ -211,7 +211,7 @@ namespace XLGearModifier
 			{
 				newMaterialController.UpdateMaterialControllerPropertyNameSubstitutions();
 			}
-			newMaterialController.UpdateMaterialControllerAlphaMasks();
+			UpdateMaterialControllerAlphaMasks(newMaterialController);
 
 			Traverse.Create(newMaterialController).Field("_originalMaterial").SetValue(Traverse.Create(origMaterialController).Field("originalMaterial").GetValue<Material>());
 		}
@@ -244,7 +244,7 @@ namespace XLGearModifier
 			});
 
 			newMaterialController.UpdateMaterialControllerPropertyNameSubstitutions();
-			newMaterialController.UpdateMaterialControllerAlphaMasks();
+			UpdateMaterialControllerAlphaMasks(newMaterialController);
 
 			Traverse.Create(newMaterialController).Field("_originalMaterial").SetValue(Traverse.Create(newMaterialController).Field("originalMaterial").GetValue<Material>());
 		}
@@ -259,6 +259,36 @@ namespace XLGearModifier
 		{
 			var baseObject = GetBaseObject();
 			return baseObject != null ? baseObject.GetComponentsInChildren<MaterialController>() : null;
+		}
+
+		private void UpdateMaterialControllerAlphaMasks(MaterialController materialController)
+		{
+			if (ClothingMetadata?.ClothingAlphaMasks == null || !ClothingMetadata.ClothingAlphaMasks.Any()) return;
+
+			if (materialController.alphaMasks == null)
+			{
+				materialController.alphaMasks = new AlphaMaskTextureInfo[] { };
+			}
+
+			foreach (var mask in ClothingMetadata.ClothingAlphaMasks)
+			{
+				var existing = materialController.alphaMasks?.FirstOrDefault(x => (int)x.type == (int)mask.type);
+				if (existing == null)
+				{
+					var newAlphaMask = new AlphaMaskTextureInfo
+					{
+						type = (AlphaMaskLocation)(int)mask.type,
+						texture = mask.texture,
+					};
+
+					Array.Resize(ref materialController.alphaMasks, materialController.alphaMasks.Length + 1);
+					materialController.alphaMasks[materialController.alphaMasks.Length - 1] = newAlphaMask;
+				}
+				else
+				{
+					existing.texture = mask.texture;
+				}
+			}
 		}
 		#endregion
 
@@ -442,7 +472,6 @@ namespace XLGearModifier
 				var baseGearTemplate = GearDatabase.Instance.CharGearTemplateForID.FirstOrDefault(x => x.Key == customGear.Metadata.GetBaseType().ToLower()).Value;
 				if (baseGearTemplate != null)
 				{
-					//TODO: Come back to this once alpha masks are implemented
 					newGearTemplate.alphaMasks = baseGearTemplate.alphaMasks;
 					newGearTemplate.category = baseGearTemplate.category;
 				}
@@ -467,29 +496,28 @@ namespace XLGearModifier
 			}
 		}
 
-		private static void AddOrUpdateTemplateAlphaMasks(XLGMMetadata metadata, CharacterGearTemplate template)
+		private static void AddOrUpdateTemplateAlphaMasks(XLGMClothingGearMetadata metadata, CharacterGearTemplate template)
 		{
-			//TODO: Come back to this once we figure out the list serialization.
-			//if (metadata.AlphaMasks == null || !metadata.AlphaMasks.Any()) return;
+			if (metadata.BodyAlphaMasks == null || !metadata.BodyAlphaMasks.Any()) return;
 
-			//foreach (var mask in metadata.AlphaMasks)
-			//{
-			//	var existing = template.alphaMasks.FirstOrDefault(x => (int)x.MaskLocation == (int)mask.MaskLocation);
-			//	if (existing == null)
-			//	{
-			//		var alphaMaskConfig = new GearAlphaMaskConfig
-			//		{
-			//			MaskLocation = (AlphaMaskLocation)(int)mask.MaskLocation,
-			//			Threshold = mask.Threshold,
-			//		};
+			foreach (var mask in metadata.BodyAlphaMasks)
+			{
+				var existing = template.alphaMasks.FirstOrDefault(x => (int)x.MaskLocation == (int)mask.MaskLocation);
+				if (existing == null)
+				{
+					var alphaMaskConfig = new GearAlphaMaskConfig
+					{
+						MaskLocation = (AlphaMaskLocation)(int)mask.MaskLocation,
+						Threshold = mask.Threshold,
+					};
 
-			//		template.alphaMasks.Add(alphaMaskConfig);
-			//	}
-			//	else
-			//	{
-			//		existing.Threshold = mask.Threshold;
-			//	}
-			//}
+					template.alphaMasks.Add(alphaMaskConfig);
+				}
+				else
+				{
+					existing.Threshold = mask.Threshold;
+				}
+			}
 		}
 
 		public static void AddBodyGearTemplate(this CustomGear customGear)
@@ -542,32 +570,6 @@ namespace XLGearModifier
 			materialController.PropertyNameSubstitutions = propNameSubs.ToDictionary(s => s.oldName, s => s.newName);
 
 			traverse.Field("m_propertyNameSubstitutions").SetValue(propNameSubs);
-		}
-
-		public static void UpdateMaterialControllerAlphaMasks(this MaterialController materialController)
-		{
-			//TODO: Come back to this once we figure out the list serialization.
-			//if (Metadata.AlphaMaskTextures == null || !Metadata.AlphaMaskTextures.Any()) return;
-
-			//foreach (var mask in Metadata.AlphaMaskTextures)
-			//{
-			//	var existing = materialController.alphaMasks.FirstOrDefault(x => (int)x.type == (int)mask.type);
-			//	if (existing == null)
-			//	{
-			//		var newAlphaMask = new AlphaMaskTextureInfo
-			//		{
-			//			type = (AlphaMaskLocation)(int)mask.type,
-			//			texture = mask.texture,
-			//		};
-
-			//		Array.Resize(ref materialController.alphaMasks, materialController.alphaMasks.Length + 1);
-			//		materialController.alphaMasks[materialController.alphaMasks.Length - 1] = newAlphaMask;
-			//	}
-			//	else
-			//	{
-			//		existing.texture = mask.texture;
-			//	}
-			//}
 		}
 		#endregion
 	}
