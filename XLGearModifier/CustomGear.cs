@@ -2,7 +2,11 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
+using UnityEngine.ResourceManagement.AsyncOperations;
+using UnityModManagerNet;
 using XLGearModifier.Unity;
 using XLMenuMod.Utilities;
 using XLMenuMod.Utilities.Gear;
@@ -45,7 +49,7 @@ namespace XLGearModifier
 		}
 
 		#region Custom Clothing methods
-		private void InstantiateCustomClothing(XLGMClothingGearMetadata clothingMetadata)
+		private async void InstantiateCustomClothing(XLGMClothingGearMetadata clothingMetadata)
 		{
 			var name = string.IsNullOrEmpty(clothingMetadata.DisplayName) ? Prefab.name : clothingMetadata.DisplayName;
 
@@ -54,12 +58,12 @@ namespace XLGearModifier
 			if (clothingMetadata.Category == Unity.ClothingGearCategory.Shoes)
 			{
 				AddShoePrefabControllers();
-				AddShoeMaterialControllers(clothingMetadata);
+				await AddShoeMaterialControllers(clothingMetadata);
 			}
 			else
 			{
 				Prefab.AddGearPrefabController();
-				AddMaterialController(clothingMetadata);
+				await AddMaterialController(clothingMetadata);
 			}
 
 			this.AddPrefixToGearFilters();
@@ -112,7 +116,7 @@ namespace XLGearModifier
 		}
 		#endregion
 
-		private void InstantiateCustomBoard(XLGMBoardGearMetadata boardMetadata)
+		private async void InstantiateCustomBoard(XLGMBoardGearMetadata boardMetadata)
 		{
 			var name = string.IsNullOrEmpty(boardMetadata.DisplayName) ? Prefab.name : boardMetadata.DisplayName;
 
@@ -120,12 +124,12 @@ namespace XLGearModifier
 
 			if (boardMetadata.Category == Unity.BoardGearCategory.Deck)
 			{
-				AddDeckMaterialControllers();
+				await AddDeckMaterialControllers();
 			}
 			else
 			{
 				Prefab.AddGearPrefabController();
-				AddMaterialController(boardMetadata);
+				await AddMaterialController(boardMetadata);
 			}
 
 			this.AddPrefixToGearFilters();
@@ -133,11 +137,11 @@ namespace XLGearModifier
 		}
 
 		#region TextureSet Controller methods
-		private void AddShoeMaterialControllers(XLGMClothingGearMetadata clothingMetadata)
+		private async Task AddShoeMaterialControllers(XLGMClothingGearMetadata clothingMetadata)
 		{
 			if (clothingMetadata.BaseOnDefaultGear)
 			{
-				var origMaterialController = GetDefaultGearMaterialController();
+				var origMaterialController = await GetDefaultGearMaterialController();
 				if (origMaterialController == null) return;
 
 				foreach (Transform child in Prefab.transform)
@@ -154,9 +158,9 @@ namespace XLGearModifier
 			}
 		}
 
-		private void AddDeckMaterialControllers()
+		private async Task AddDeckMaterialControllers()
 		{
-			var materialControllers = GetDefaultGearMaterialControllers();
+			var materialControllers = await GetDefaultGearMaterialControllers();
 
 			foreach (var materialController in materialControllers)
 			{
@@ -164,7 +168,7 @@ namespace XLGearModifier
 			}
 		}
 
-		private void AddMaterialController(XLGMMetadata metadata)
+		private async Task AddMaterialController(XLGMMetadata metadata)
 		{
 			var clothingMetadata = metadata as XLGMClothingGearMetadata;
 			var boardMetadata = metadata as XLGMBoardGearMetadata;
@@ -172,7 +176,7 @@ namespace XLGearModifier
 			if ((clothingMetadata != null && clothingMetadata.BaseOnDefaultGear) ||
 			    (boardMetadata != null && boardMetadata.BaseOnDefaultGear))
 			{
-				var origMaterialController = GetDefaultGearMaterialController();
+				var origMaterialController = await GetDefaultGearMaterialController();
 				if (origMaterialController != null)
 				{
 					CreateNewMaterialController(Prefab, origMaterialController);
@@ -249,15 +253,15 @@ namespace XLGearModifier
 			Traverse.Create(newMaterialController).Field("_originalMaterial").SetValue(Traverse.Create(newMaterialController).Field("originalMaterial").GetValue<Material>());
 		}
 
-		private MaterialController GetDefaultGearMaterialController()
+		private async Task<MaterialController> GetDefaultGearMaterialController()
 		{
-			var baseObject = GetBaseObject();
+			var baseObject = await GetBaseObject();
 			return baseObject != null ? baseObject.GetComponentInChildren<MaterialController>() : null;
 		}
 
-		private IEnumerable<MaterialController> GetDefaultGearMaterialControllers()
+		private async Task<IEnumerable<MaterialController>> GetDefaultGearMaterialControllers()
 		{
-			var baseObject = GetBaseObject();
+			var baseObject = await GetBaseObject();
 			return baseObject != null ? baseObject.GetComponentsInChildren<MaterialController>() : null;
 		}
 
@@ -303,49 +307,24 @@ namespace XLGearModifier
 			return null;
 		}
 
-		private GameObject GetBaseObject()
+		public async Task<GameObject> GetBaseObject()
 		{
 			var info = GetBaseGearInfo();
 			if (info == null) return null;
 
-			var skaterIndex = GetSkaterIndex();
-			var categoryIndex = GetCategoryIndex(skaterIndex);
-
 			string path = string.Empty;
 
-			if (BoardMetdata != null)
-			{
-				path = "boardcustomization/prefabs/" + info.type;
-			}
-			else
-			{
-				var skaterName = ((Character)skaterIndex).ToString().ToLower().Replace("standard", "generic");
-				path = $"charactercustomization/prefabs/{skaterName}/";
+			path = BoardMetdata != null ? GearDatabase.Instance.DeckTemplateForID[info.type].path : GearDatabase.Instance.CharGearTemplateForID[info.type].path;
 
-				if (skaterIndex == (int)Character.MaleStandard || skaterIndex == (int)Character.FemaleStandard)
-				{
-					switch (categoryIndex)
-					{
-						case (int)GearCategory.Hair:
-							path += "hair/";
-							break;
-						case (int)GearCategory.Shoes:
-							path += "clothings/shoes/";
-							break;
-						default:
-							path += "clothings/";
-							break;
-					}
-
-					path += info.type;
-				}
-				else
-				{
-					path += $"clothings/{info.type}";
-				}
+			AsyncOperationHandle<GameObject> loadOp = Addressables.LoadAssetAsync<GameObject>(path);
+			await new WaitUntil(() => loadOp.IsDone);
+			GameObject result = loadOp.Result;
+			if (result == null)
+			{
+				UnityModManager.Logger.Log("XLGM: No prefab found for template at path '" + path + "'");
 			}
-			
-			return Resources.Load<GameObject>(path);
+
+			return result;
 		}
 
 		private GearInfoSingleMaterial GetBaseGearInfo()
