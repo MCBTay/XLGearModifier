@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
-using UnityModManagerNet;
 using XLGearModifier.Unity;
 using XLMenuMod.Utilities;
 using XLMenuMod.Utilities.Gear;
@@ -17,8 +16,8 @@ namespace XLGearModifier
 	{
 		public XLGMMetadata Metadata;
 		public XLGMClothingGearMetadata ClothingMetadata => Metadata as XLGMClothingGearMetadata;
-		public XLGMBoardGearMetadata BoardMetdata => Metadata as XLGMBoardGearMetadata;
-		public XLGMSkaterMetadata SkaterMetdata => Metadata as XLGMSkaterMetadata;
+		public XLGMBoardGearMetadata BoardMetadata => Metadata as XLGMBoardGearMetadata;
+		public XLGMSkaterMetadata SkaterMetadata => Metadata as XLGMSkaterMetadata;
 
 		public GameObject Prefab;
 		public GearInfo GearInfo;
@@ -27,20 +26,6 @@ namespace XLGearModifier
 		{
 			Metadata = metadata;
 			Prefab = prefab;
-
-			var name = string.IsNullOrEmpty(metadata.DisplayName) ? Prefab.name : metadata.DisplayName;
-			switch (metadata)
-			{
-				case XLGMClothingGearMetadata clothingMetadata:
-					InstantiateCustomClothing(clothingMetadata);
-					break;
-				case XLGMSkaterMetadata skaterMetadata:
-					InstantiateCustomSkater(skaterMetadata);
-					break;
-				case XLGMBoardGearMetadata boardMetadata:
-					InstantiateCustomBoard(boardMetadata);	
-					break;
-			}
 		}
 
 		public CustomGear(CustomGear gearToClone, GearInfoSingleMaterial gearInfo) : this(gearToClone.Metadata, gearToClone.Prefab)
@@ -48,8 +33,24 @@ namespace XLGearModifier
 			GearInfo = gearInfo;
 		}
 
+		public async Task Instantiate()
+		{
+			switch (Metadata)
+			{
+				case XLGMClothingGearMetadata clothingMetadata:
+					await InstantiateCustomClothing(clothingMetadata);
+					break;
+				case XLGMSkaterMetadata skaterMetadata:
+					//InstantiateCustomSkater(skaterMetadata);
+					break;
+				case XLGMBoardGearMetadata boardMetadata:
+					await InstantiateCustomBoard(boardMetadata);
+					break;
+			}
+		}
+
 		#region Custom Clothing methods
-		private async void InstantiateCustomClothing(XLGMClothingGearMetadata clothingMetadata)
+		private async Task InstantiateCustomClothing(XLGMClothingGearMetadata clothingMetadata)
 		{
 			var name = string.IsNullOrEmpty(clothingMetadata.DisplayName) ? Prefab.name : clothingMetadata.DisplayName;
 
@@ -116,7 +117,7 @@ namespace XLGearModifier
 		}
 		#endregion
 
-		private async void InstantiateCustomBoard(XLGMBoardGearMetadata boardMetadata)
+		private async Task InstantiateCustomBoard(XLGMBoardGearMetadata boardMetadata)
 		{
 			var name = string.IsNullOrEmpty(boardMetadata.DisplayName) ? Prefab.name : boardMetadata.DisplayName;
 
@@ -276,6 +277,8 @@ namespace XLGearModifier
 
 			foreach (var mask in ClothingMetadata.MaterialAlphaMasks)
 			{
+				if (mask == null) continue;
+
 				var existing = materialController.alphaMasks?.FirstOrDefault(x => (int)x.type == (int)mask.type);
 				if (existing == null)
 				{
@@ -312,18 +315,14 @@ namespace XLGearModifier
 			var info = GetBaseGearInfo();
 			if (info == null) return null;
 
-			string path = string.Empty;
-
-			path = BoardMetdata != null ? GearDatabase.Instance.DeckTemplateForID[info.type].path : GearDatabase.Instance.CharGearTemplateForID[info.type].path;
-
+			string path = BoardMetadata != null ? GearDatabase.Instance.DeckTemplateForID[info.type].path : GearDatabase.Instance.CharGearTemplateForID[info.type].path;
 			AsyncOperationHandle<GameObject> loadOp = Addressables.LoadAssetAsync<GameObject>(path);
 			await new WaitUntil(() => loadOp.IsDone);
 			GameObject result = loadOp.Result;
 			if (result == null)
 			{
-				UnityModManager.Logger.Log("XLGM: No prefab found for template at path '" + path + "'");
+				Debug.Log("XLGM: No prefab found for template at path '" + path + "'");
 			}
-
 			return result;
 		}
 
@@ -386,10 +385,10 @@ namespace XLGearModifier
 
 		public int GetCategoryIndex(int skaterIndex)
 		{
-			if (ClothingMetadata == null && BoardMetdata == null) return 0;
+			if (ClothingMetadata == null && BoardMetadata == null) return 0;
 
-			var categoryIndex = ClothingMetadata != null ? (int)ClothingMetadata.Category : (int)BoardMetdata.Category;
-			var category = ClothingMetadata != null ? ClothingMetadata.Category.ToString() : BoardMetdata.Category.ToString();
+			var categoryIndex = ClothingMetadata != null ? (int)ClothingMetadata.Category : (int)BoardMetadata.Category;
+			var category = ClothingMetadata != null ? ClothingMetadata.Category.ToString() : BoardMetadata.Category.ToString();
 
 			switch (skaterIndex)
 			{
@@ -481,6 +480,8 @@ namespace XLGearModifier
 
 			foreach (var mask in metadata.AlphaMaskThresholds)
 			{
+				if (mask == null) continue;
+
 				var existing = template.alphaMasks.FirstOrDefault(x => (int)x.MaskLocation == (int)mask.MaskLocation);
 				if (existing == null)
 				{
