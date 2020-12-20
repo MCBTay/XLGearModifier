@@ -2,8 +2,11 @@
 using System.Collections;
 using System.IO;
 using System.Reflection;
+using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
+using UnityModManagerNet;
+using XLMenuMod.Utilities.Gear;
 
 namespace XLGearModifier
 {
@@ -16,19 +19,26 @@ namespace XLGearModifier
 		public static Texture2D emptyMaskPBR;
 		public static Texture2D emptyNormalMap;
 
-		public static void LoadGearBundle()
+		public static async Task LoadGearBundle()
 		{
 			AssetBundle bundle = AssetBundle.LoadFromMemory(ExtractResource("XLGearModifier.Assets.customgear"));
 
 			emptyAlbedo = bundle.LoadAsset<Texture2D>("Empty_Albedo.png");
 			emptyMaskPBR = bundle.LoadAsset<Texture2D>("Empty_Maskpbr_Map.png");
 			emptyNormalMap = bundle.LoadAsset<Texture2D>("Empty_Normal_Map.png");
-
-			GearManager.Instance.LoadAssets(bundle);
-
-			PlayerController.Instance.characterCustomizer.LoadLastPlayer();
-
 			GearModifierUISpriteSheet = bundle.LoadAsset<TMP_SpriteAsset>("GearModifierUISpriteSheet");
+
+			Debug.Log("XLGearModifier: Loading " + bundle.name);
+			try
+			{
+				await GearManager.Instance.LoadAssets(bundle);
+			}
+			catch (Exception ex)
+			{
+				Debug.Log("XLGM: Exception loading " + bundle.name + Environment.NewLine + ex.Message);
+			}
+			Debug.Log("XLGearModifier: Loaded " + GearManager.Instance.CustomGear.Count + " assets");
+			//await PlayerController.Instance.characterCustomizer.LoadLastPlayer();
 		}
 
 		public static IEnumerator LoadUserBundles()
