@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using UnityEngine;
 using XLGearModifier.Unity;
 using XLMenuMod.Utilities;
@@ -72,6 +73,7 @@ namespace XLGearModifier
 			AddCharacterGear(character, gearCategories, destList, ref parent, false);
 
 			var customGearListSource = Traverse.Create(GearDatabase.Instance).Field("customGearListSource").GetValue<GearInfo[][][]>();
+			if (customGearListSource == null) return;
 			var customGearCategories = customGearListSource[(int)character];
 			parent = null;
 			AddCharacterGear(character, customGearCategories, destList, ref parent, true);
@@ -180,7 +182,7 @@ namespace XLGearModifier
 		}
 		#endregion
 
-		public void LoadAssets(AssetBundle bundle)
+		public async Task LoadAssets(AssetBundle bundle)
 		{
 			var assets = bundle.LoadAllAssets<GameObject>();
 			if (assets == null || !assets.Any()) return;
@@ -192,6 +194,7 @@ namespace XLGearModifier
 				if (string.IsNullOrEmpty(metadata.Prefix)) continue;
 
 				var customGear = new CustomGear(metadata, asset);
+				await customGear.Instantiate();
 				CustomGear.Add(customGear);
 
 				switch (metadata)
@@ -279,7 +282,7 @@ namespace XLGearModifier
 
 			if (customGear.Metadata.BasedOnDefaultGear())
 			{
-				if (customGear.BoardMetdata != null)
+				if (customGear.BoardMetadata != null)
 				{
 					var baseTypes = categoryTextures.Where(x => x.type == customGear.Metadata.GetBaseType().ToLower()).Select(x => x as BoardGearInfo).ToList();
 					textures = textures.Concat(baseTypes).ToList();
@@ -309,7 +312,7 @@ namespace XLGearModifier
 			var child = destList.FirstOrDefault(x => x.GetName().Equals(baseTexture.name, StringComparison.InvariantCultureIgnoreCase));
 			if (child != null) return;
 
-			if (customGear.BoardMetdata != null)
+			if (customGear.BoardMetadata != null)
 			{
 				CustomBoardGearInfo gearInfo = new CustomBoardGearInfo(baseTexture.name, customGear.GearInfo.type, isCustom, baseTexture.textureChanges, customGear.GearInfo.tags);
 				gearInfo.Info.Parent = parent;
