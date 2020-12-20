@@ -14,7 +14,7 @@ namespace XLGearModifier.Patches
 			{
 				if (!path.StartsWith("XLGearModifier")) return true;
 
-				var customGear = GearManager.Instance.CustomGear.FirstOrDefault(x => x.GearInfo.type == __instance.gearInfo.type);
+				var customGear = GearManager.Instance.CustomGear.FirstOrDefault(x => x.GearInfo != null && x.GearInfo.type == __instance.gearInfo.type);
 				if (customGear == null) return true;
 
 				__result = Task.FromResult(customGear.Prefab);
