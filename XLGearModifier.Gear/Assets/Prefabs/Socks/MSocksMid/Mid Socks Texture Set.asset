@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 1159482014, guid: 9eec293a5ff616644981bc58ed6f591d, type: 3}
   m_Name: Mid Socks Texture Set
   m_EditorClassIdentifier: 
-  textureColor: {fileID: 2800000, guid: 70d638ff268cd244088fe5b2e6861cdb, type: 3}
-  textureNormalMap: {fileID: 2800000, guid: 4b4f021d523d1d74d8339af95bdaf7c5, type: 3}
+  textureColor: {fileID: 2800000, guid: 1fc7fa3bb3c1e8748bf8cd9b4efb8ac4, type: 3}
+  textureNormalMap: {fileID: 2800000, guid: e3f4505e533d3834f9843603f5bc4065, type: 3}
   textureMaskPBR: {fileID: 0}

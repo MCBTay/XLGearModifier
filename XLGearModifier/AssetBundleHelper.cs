@@ -29,14 +29,7 @@ namespace XLGearModifier
 			GearModifierUISpriteSheet = bundle.LoadAsset<TMP_SpriteAsset>("GearModifierUISpriteSheet");
 
 			Debug.Log("XLGearModifier: Loading " + bundle.name);
-			try
-			{
-				await GearManager.Instance.LoadAssets(bundle);
-			}
-			catch (Exception ex)
-			{
-				Debug.Log("XLGM: Exception loading " + bundle.name + Environment.NewLine + ex.Message);
-			}
+			await GearManager.Instance.LoadAssets(bundle);
 			Debug.Log("XLGearModifier: Loaded " + GearManager.Instance.CustomGear.Count + " assets");
 			//await PlayerController.Instance.characterCustomizer.LoadLastPlayer();
 		}
