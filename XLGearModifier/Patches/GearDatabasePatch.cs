@@ -115,12 +115,6 @@ namespace XLGearModifier.Patches
 					}
 				}
 			}
-
-			static void Postfix(GearDatabase __instance)
-			{
-				GearManager.Instance.LoadGameGear();
-				GearManager.Instance.LoadAssetCustomTextures();
-			}
 		}
 	}
 }
