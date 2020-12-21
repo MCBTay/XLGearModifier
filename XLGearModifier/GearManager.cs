@@ -189,24 +189,31 @@ namespace XLGearModifier
 
 			foreach (var asset in assets)
 			{
-				var metadata = asset.GetComponent<XLGMMetadata>();
-				if (metadata == null) continue;
-				if (string.IsNullOrEmpty(metadata.Prefix)) continue;
-
-				if (metadata is XLGMSkaterMetadata) continue;
-
-				var customGear = new CustomGear(metadata, asset);
-				await customGear.Instantiate();
-				CustomGear.Add(customGear);
-
-				switch (metadata)
+				try
 				{
-					case XLGMClothingGearMetadata clothingMetadata:
-						AddClothingMesh(clothingMetadata, customGear, asset);
-						break;
-					case XLGMBoardGearMetadata boardMetadata:
-						AddBoardMesh(boardMetadata, customGear, asset);
-						break;
+					var metadata = asset.GetComponent<XLGMMetadata>();
+					if (metadata == null) continue;
+					if (string.IsNullOrEmpty(metadata.Prefix)) continue;
+
+					if (metadata is XLGMSkaterMetadata) continue;
+
+					var customGear = new CustomGear(metadata, asset);
+					await customGear.Instantiate();
+					CustomGear.Add(customGear);
+
+					switch (metadata)
+					{
+						case XLGMClothingGearMetadata clothingMetadata:
+							AddClothingMesh(clothingMetadata, customGear, asset);
+							break;
+						case XLGMBoardGearMetadata boardMetadata:
+							AddBoardMesh(boardMetadata, customGear, asset);
+							break;
+					}
+				}
+				catch (Exception ex)
+				{
+					Debug.Log("XLGM: Exception loading " + asset.name + " from " + bundle.name + Environment.NewLine + ex.Message);
 				}
 			}
 
