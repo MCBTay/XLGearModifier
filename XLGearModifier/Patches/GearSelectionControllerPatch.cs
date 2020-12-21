@@ -367,15 +367,23 @@ namespace XLGearModifier.Patches
 		[HarmonyPatch(typeof(GearSelectionController), "Update")]
 		public static class UpdatePatch
 		{
+			public static bool needsXLGMInitialization = true;
+
 			static bool Prefix(GearSelectionController __instance)
 			{
+				if (__instance.initialized && needsXLGMInitialization)
+				{
+					GearManager.Instance.LoadGameGear();
+					GearManager.Instance.LoadAssetCustomTextures();
+
+					needsXLGMInitialization = false;
+				}
+
 				if (__instance.listView.currentIndexPath.depth < 3) return true;
 				if (!IsOnXLGMTab(__instance.listView.currentIndexPath[1])) return true;
 
 				if (GearManager.Instance.CurrentFolder == null) return true;
 				if (!PlayerController.Instance.inputController.player.GetButtonDown("B")) return true;
-				//var player = Traverse.Create(__instance).Field("player").GetValue<Player>();
-				//if (!player.GetButtonDown("B")) return true;
 
 				UISounds.Instance?.PlayOneShotSelectMajor();
 
