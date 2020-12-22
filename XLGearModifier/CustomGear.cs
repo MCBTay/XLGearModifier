@@ -174,8 +174,9 @@ namespace XLGearModifier
 			var clothingMetadata = metadata as XLGMClothingGearMetadata;
 			var boardMetadata = metadata as XLGMBoardGearMetadata;
 
-			if ((clothingMetadata != null && clothingMetadata.BaseOnDefaultGear) ||
-			    (boardMetadata != null && boardMetadata.BaseOnDefaultGear))
+			if (clothingMetadata == null && boardMetadata == null) return;
+
+			if (metadata.BasedOnDefaultGear())
 			{
 				var origMaterialController = await GetDefaultGearMaterialController();
 				if (origMaterialController != null)
@@ -185,7 +186,14 @@ namespace XLGearModifier
 			}
 			else
 			{
-				CreateNewMaterialController(Prefab, "MasterShaderCloth_v2");
+				if (clothingMetadata != null && clothingMetadata.Category == Unity.ClothingGearCategory.Hair)
+				{
+					CreateNewMaterialController(Prefab, "HDRP/Lit");
+				}
+				else
+				{
+					CreateNewMaterialController(Prefab, "MasterShaderCloth_v2");
+				}
 			}
 		}
 
