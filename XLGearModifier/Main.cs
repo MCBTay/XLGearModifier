@@ -47,8 +47,6 @@ namespace XLGearModifier
 				UserInterfaceHelper.Instance.LoadAssets();
 				AssetBundleHelper.LoadGearBundle();
 				PlayerController.Instance.StartCoroutine(AssetBundleHelper.LoadUserBundles());
-
-				PlayerController.Instance.characterCustomizer.LoadLastPlayer();
 			}
 			else
 			{
