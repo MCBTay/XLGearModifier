@@ -67,11 +67,11 @@ namespace XLGearModifier.Patches
 
 			if (customGearInfo.Info.GetParentObject() is CustomGear customGear)
 			{
-				if (!isType && customGear.Metadata.BasedOnDefaultGear())
+				if (!isType)
 				{
-					isType = Enum.GetValues(typeof(T)).Cast<T>().Any(style => style.ToString() == customGear.Metadata.GetBaseType());
+					isType = !customGear.Metadata.BasedOnDefaultGear() || Enum.GetValues(typeof(T)).Cast<T>().Any(style => style.ToString() == customGear.Metadata.GetBaseType());
 				}
-
+				
 				isLayerable = customGear.ClothingMetadata.IsLayerable;
 			}
 
