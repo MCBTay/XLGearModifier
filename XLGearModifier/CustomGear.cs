@@ -231,24 +231,27 @@ namespace XLGearModifier
 				newMaterialController.materialID = materialId;
 			}
 
-			Material mat;
 			var renderer = prefab.GetComponentInChildren<Renderer>(true);
 			if (renderer?.material == null) return;
-			mat = renderer.material;
-
-			mat.shader = Shader.Find(shaderName);
-			mat.SetTexture("_texture2D_color", Metadata.GetMaterialInformation()?.textureColor ?? AssetBundleHelper.emptyAlbedo);
-			mat.SetTexture("_texture2D_normal", Metadata.GetMaterialInformation()?.textureNormalMap ?? AssetBundleHelper.emptyNormalMap);
-			mat.SetTexture(shaderName == "MasterShaderCloth_v2" ? "_texture2D_maskPBR" : "_texture2D_rgmtao", Metadata.GetMaterialInformation()?.textureMaskPBR ?? AssetBundleHelper.emptyMaskPBR);
+			renderer.material.shader = Shader.Find(shaderName);
 
 			newMaterialController.targets.Add(new MaterialController.TargetMaterialConfig
 			{
 				renderer = prefab.GetComponentInChildren<SkinnedMeshRenderer>(),
 				materialIndex = 0,
-				sharedMaterial = mat,
+				sharedMaterial = renderer.material,
 			});
 
-			newMaterialController.UpdateMaterialControllerPropertyNameSubstitutions();
+			var textures = new Dictionary<string, Texture>();
+			textures.Add("_texture2D_color", Metadata.GetMaterialInformation()?.textureColor ?? AssetBundleHelper.emptyAlbedo);
+			textures.Add("_texture2D_normal", Metadata.GetMaterialInformation()?.textureNormalMap ?? AssetBundleHelper.emptyNormalMap);
+			textures.Add(shaderName == "MasterShaderCloth_v2" ? "_texture2D_maskPBR" : "_texture2D_rgmtao", Metadata.GetMaterialInformation()?.textureMaskPBR ?? AssetBundleHelper.emptyMaskPBR);
+
+			newMaterialController.SetTextures(textures);
+
+			if (shaderName != "MasterShaderCloth_v2")
+				newMaterialController.UpdateMaterialControllerPropertyNameSubstitutions();
+
 			UpdateMaterialControllerAlphaMasks(newMaterialController);
 
 			Traverse.Create(newMaterialController).Field("_originalMaterial").SetValue(Traverse.Create(newMaterialController).Field("originalMaterial").GetValue<Material>());
