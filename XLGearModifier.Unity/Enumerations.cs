@@ -6,6 +6,7 @@
 		ProGear = 21,
 		FemaleGear = 22,
 		MaleGear = 23,
+		Eyes = 24,
 	}
 
 	public enum Character
