@@ -26,6 +26,7 @@ namespace XLGearModifier.Patches
 					case (int) GearModifierTab.ProGear:      sourceList = GearManager.Instance.ProGear;      break;
 					case (int) GearModifierTab.FemaleGear:   sourceList = GearManager.Instance.FemaleGear;   break;
 					case (int) GearModifierTab.MaleGear:     sourceList = GearManager.Instance.MaleGear;     break;
+					case (int) GearModifierTab.Eyes:         sourceList = GearManager.Instance.Eyes;         break;
 				}
 
 				if (sourceList == null) return;
@@ -60,6 +61,9 @@ namespace XLGearModifier.Patches
 						break;
 					case (int)GearModifierTab.MaleGear:
 						sourceList = GearManager.Instance.MaleGear;
+						break;
+					case (int)GearModifierTab.Eyes:
+						sourceList = GearManager.Instance.Eyes;
 						break;
 				}
 

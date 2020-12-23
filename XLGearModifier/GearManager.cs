@@ -25,6 +25,7 @@ namespace XLGearModifier
 		public List<ICustomInfo> ProGear;
 		public List<ICustomInfo> FemaleGear;
 		public List<ICustomInfo> MaleGear;
+		public List<ICustomInfo> Eyes;
 
 		public GearManager()
 		{
@@ -34,6 +35,8 @@ namespace XLGearModifier
 			ProGear = new List<ICustomInfo>();
 			FemaleGear = new List<ICustomInfo>();
 			MaleGear = new List<ICustomInfo>();
+
+			Eyes = new List<ICustomInfo>();
 		}
 
 		#region In Game Gear
