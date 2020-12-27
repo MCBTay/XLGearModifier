@@ -7,6 +7,7 @@ using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
 using XLGearModifier.Unity;
+using XLMenuMod;
 using XLMenuMod.Utilities;
 using XLMenuMod.Utilities.Gear;
 
@@ -348,7 +349,7 @@ namespace XLGearModifier
 
 		public int GetSkaterIndex()
 		{
-			var skaterIndex = (int)Character.MaleStandard;
+			var skaterIndex = (int)Skater.MaleStandard;
 
 			var type = Metadata.Prefix;
 
@@ -364,31 +365,31 @@ namespace XLGearModifier
 				type = boardMetadata.GetBaseType();
 			}
 
-			if (string.IsNullOrEmpty(type)) return (int)Character.MaleStandard;
+			if (string.IsNullOrEmpty(type)) return (int)Skater.MaleStandard;
 
 			if (type.StartsWith("m", StringComparison.InvariantCultureIgnoreCase))
 			{
-				skaterIndex = (int)Character.MaleStandard;
+				skaterIndex = (int)Skater.MaleStandard;
 			}
 			else if (type.StartsWith("f", StringComparison.InvariantCultureIgnoreCase))
 			{
-				skaterIndex = (int)Character.FemaleStandard;
+				skaterIndex = (int)Skater.FemaleStandard;
 			}
 			else if (type.StartsWith("es", StringComparison.InvariantCultureIgnoreCase))
 			{
-				skaterIndex = (int)Character.EvanSmith;
+				skaterIndex = (int)Skater.EvanSmith;
 			}
 			else if (type.StartsWith("ta", StringComparison.InvariantCultureIgnoreCase))
 			{
-				skaterIndex = (int)Character.TomAsta;
+				skaterIndex = (int)Skater.TomAsta;
 			}
 			else if (type.StartsWith("bw", StringComparison.InvariantCultureIgnoreCase))
 			{
-				skaterIndex = (int)Character.BrandonWestgate;
+				skaterIndex = (int)Skater.BrandonWestgate;
 			}
 			else if (type.StartsWith("tl", StringComparison.InvariantCultureIgnoreCase))
 			{
-				skaterIndex = (int)Character.TiagoLemos;
+				skaterIndex = (int)Skater.TiagoLemos;
 			}
 
 			return skaterIndex;
@@ -403,19 +404,19 @@ namespace XLGearModifier
 
 			switch (skaterIndex)
 			{
-				case (int)Character.EvanSmith:
+				case (int)Skater.EvanSmith:
 					Enum.TryParse(category, out EvanSmithGearCategory esCategory);
 					categoryIndex = (int)esCategory;
 					break;
-				case (int)Character.TomAsta:
+				case (int)Skater.TomAsta:
 					Enum.TryParse(category, out TomAstaGearCategory taCategory);
 					categoryIndex = (int)taCategory;
 					break;
-				case (int)Character.BrandonWestgate:
+				case (int)Skater.BrandonWestgate:
 					Enum.TryParse(category, out BrandonWestgateGearCategory bwCategory);
 					categoryIndex = (int)bwCategory;
 					break;
-				case (int)Character.TiagoLemos:
+				case (int)Skater.TiagoLemos:
 					Enum.TryParse(category, out TiagoLemosGearCategory tlCategory);
 					categoryIndex = (int)tlCategory;
 					break;

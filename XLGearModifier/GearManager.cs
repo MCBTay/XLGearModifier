@@ -5,10 +5,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using UnityEngine;
 using XLGearModifier.Unity;
+using XLMenuMod;
 using XLMenuMod.Utilities;
 using XLMenuMod.Utilities.Gear;
 using XLMenuMod.Utilities.Interfaces;
-using GearCategory = XLGearModifier.Unity.GearCategory;
 
 namespace XLGearModifier
 {
@@ -49,74 +49,74 @@ namespace XLGearModifier
 
 		private void LoadMaleGear()
 		{
-			LoadCharacterGear(Character.MaleStandard, MaleGear);
+			LoadCharacterGear(Skater.MaleStandard, MaleGear);
 		}
 
 		private void LoadFemaleGear()
 		{
-			LoadCharacterGear(Character.FemaleStandard, FemaleGear);
+			LoadCharacterGear(Skater.FemaleStandard, FemaleGear);
 		}
 
 		private void LoadProGear()
 		{
-			LoadCharacterGear(Character.EvanSmith, ProGear);
-			LoadCharacterGear(Character.TomAsta, ProGear);
-			LoadCharacterGear(Character.TiagoLemos, ProGear);
-			LoadCharacterGear(Character.BrandonWestgate, ProGear);
+			LoadCharacterGear(Skater.EvanSmith, ProGear);
+			LoadCharacterGear(Skater.TomAsta, ProGear);
+			LoadCharacterGear(Skater.TiagoLemos, ProGear);
+			LoadCharacterGear(Skater.BrandonWestgate, ProGear);
 
 			// We have to re-sort the list because TomAsta has a hat, which causes Headwear to show up at the bottom of the pro gear list.
 			ProGear = ProGear.OrderBy(x => Enum.Parse(typeof(GearCategory), x.GetName().Replace("\\", string.Empty))).ToList();
 		}
 
-		private void LoadCharacterGear(Character character, List<ICustomInfo> destList)
+		private void LoadCharacterGear(Skater skater, List<ICustomInfo> destList)
 		{
 			var gearListSource = Traverse.Create(GearDatabase.Instance).Field("gearListSource").GetValue<GearInfo[][][]>();
-			var gearCategories = gearListSource[(int)character];
+			var gearCategories = gearListSource[(int)skater];
 			CustomFolderInfo parent = null;
-			AddCharacterGear(character, gearCategories, destList, ref parent, false);
+			AddCharacterGear(skater, gearCategories, destList, ref parent, false);
 
 			var customGearListSource = Traverse.Create(GearDatabase.Instance).Field("customGearListSource").GetValue<GearInfo[][][]>();
 			if (customGearListSource == null) return;
-			var customGearCategories = customGearListSource[(int)character];
+			var customGearCategories = customGearListSource[(int)skater];
 			parent = null;
-			AddCharacterGear(character, customGearCategories, destList, ref parent, true);
+			AddCharacterGear(skater, customGearCategories, destList, ref parent, true);
 		}
 
-		private void AddCharacterGear(Character character, GearInfo[][] gearCategories, List<ICustomInfo> destList, ref CustomFolderInfo parent, bool isCustom)
+		private void AddCharacterGear(Skater skater, GearInfo[][] gearCategories, List<ICustomInfo> destList, ref CustomFolderInfo parent, bool isCustom)
 		{
 			for (int gearCategory = 0; gearCategory < gearCategories.Length; gearCategory++)
 			{
 				var currentGearCategory = gearCategories[gearCategory];
 				if (currentGearCategory.Length <= 0) continue;
 
-				switch (character)
+				switch (skater)
 				{
-					case Character.MaleStandard when (gearCategory < (int)GearCategory.Hair || gearCategory > (int)GearCategory.Shoes):
-					case Character.FemaleStandard when (gearCategory < (int)GearCategory.Hair || gearCategory > (int)GearCategory.Shoes):
-					case Character.EvanSmith when (gearCategory < (int)EvanSmithGearCategory.Top || gearCategory > (int)EvanSmithGearCategory.Shoes):
-					case Character.TomAsta when (gearCategory < (int)TomAstaGearCategory.Headwear || gearCategory > (int)TomAstaGearCategory.Shoes):
-					case Character.BrandonWestgate when (gearCategory < (int)BrandonWestgateGearCategory.Top || gearCategory > (int)BrandonWestgateGearCategory.Shoes):
-					case Character.TiagoLemos when (gearCategory < (int)TiagoLemosGearCategory.Top || gearCategory > (int)TiagoLemosGearCategory.Shoes):
+					case Skater.MaleStandard when (gearCategory < (int)GearCategory.Hair || gearCategory > (int)GearCategory.Shoes):
+					case Skater.FemaleStandard when (gearCategory < (int)GearCategory.Hair || gearCategory > (int)GearCategory.Shoes):
+					case Skater.EvanSmith when (gearCategory < (int)EvanSmithGearCategory.Top || gearCategory > (int)EvanSmithGearCategory.Shoes):
+					case Skater.TomAsta when (gearCategory < (int)TomAstaGearCategory.Headwear || gearCategory > (int)TomAstaGearCategory.Shoes):
+					case Skater.BrandonWestgate when (gearCategory < (int)BrandonWestgateGearCategory.Top || gearCategory > (int)BrandonWestgateGearCategory.Shoes):
+					case Skater.TiagoLemos when (gearCategory < (int)TiagoLemosGearCategory.Top || gearCategory > (int)TiagoLemosGearCategory.Shoes):
 						continue;
 				}
 
 				string folderName = string.Empty;
-				switch (character)
+				switch (skater)
 				{
-					case Character.EvanSmith:
+					case Skater.EvanSmith:
 						folderName = ((EvanSmithGearCategory)gearCategory).ToString();
 						break;
-					case Character.TomAsta:
+					case Skater.TomAsta:
 						folderName = ((TomAstaGearCategory)gearCategory).ToString();
 						break;
-					case Character.BrandonWestgate:
+					case Skater.BrandonWestgate:
 						folderName = ((BrandonWestgateGearCategory)gearCategory).ToString();
 						break;
-					case Character.TiagoLemos:
+					case Skater.TiagoLemos:
 						folderName = ((TiagoLemosGearCategory)gearCategory).ToString();
 						break;
-					case Character.MaleStandard:
-					case Character.FemaleStandard:
+					case Skater.MaleStandard:
+					case Skater.FemaleStandard:
 					default:
 						folderName = ((GearCategory)gearCategory).ToString();
 						break;
