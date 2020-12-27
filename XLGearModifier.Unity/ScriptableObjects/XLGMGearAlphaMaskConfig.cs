@@ -11,5 +11,7 @@ namespace XLGearModifier.Unity.ScriptableObjects
 		public AlphaMaskLocation MaskLocation;
 		[Range(0.0f, 255f)]
 		public int Threshold;
+
+		public Texture2D AlphaMask;
 	}
 }
