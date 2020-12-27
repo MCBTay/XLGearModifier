@@ -2,11 +2,11 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Rewired;
 using TMPro;
 using UnityEngine.EventSystems;
 using UnityModManagerNet;
 using XLGearModifier.Unity;
+using XLMenuMod;
 using XLMenuMod.Utilities;
 using XLMenuMod.Utilities.Gear;
 using XLMenuMod.Utilities.Interfaces;
@@ -41,10 +41,10 @@ namespace XLGearModifier.Patches
 						sourceList = GearManager.Instance.ProGear;
 						break;
 					case (int)GearModifierTab.FemaleGear:
-						sourceList = index[0] == (int)Character.FemaleStandard ? new List<ICustomInfo>() : GearManager.Instance.FemaleGear;
+						sourceList = index[0] == (int)Skater.FemaleStandard ? new List<ICustomInfo>() : GearManager.Instance.FemaleGear;
 						break;
 					case (int)GearModifierTab.MaleGear:
-						sourceList = index[0] == (int)Character.MaleStandard ? new List<ICustomInfo>() : GearManager.Instance.MaleGear;
+						sourceList = index[0] == (int)Skater.MaleStandard ? new List<ICustomInfo>() : GearManager.Instance.MaleGear;
 						break;
 					case (int)GearModifierTab.Eyes:
 						sourceList = GearManager.Instance.Eyes;
