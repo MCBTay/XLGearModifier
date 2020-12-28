@@ -189,7 +189,7 @@ namespace XLGearModifier
 			{
 				if (clothingMetadata != null && clothingMetadata.Category == Unity.ClothingGearCategory.Hair)
 				{
-					CreateNewMaterialController(Prefab, "HDRP/Lit");
+					CreateNewMaterialController(Prefab);
 				}
 				else
 				{
@@ -230,7 +230,7 @@ namespace XLGearModifier
 			Traverse.Create(newMaterialController).Field("_originalMaterial").SetValue(Traverse.Create(origMaterialController).Field("originalMaterial").GetValue<Material>());
 		}
 
-		private void CreateNewMaterialController(GameObject prefab, string shaderName, string materialId = null)
+		private void CreateNewMaterialController(GameObject prefab, string shaderName = "", string materialId = null)
 		{
 			var newMaterialController = prefab.AddComponent<MaterialController>();
 			newMaterialController.targets = new List<MaterialController.TargetMaterialConfig>();
@@ -240,13 +240,15 @@ namespace XLGearModifier
 				newMaterialController.materialID = materialId;
 			}
 
-			var renderer = prefab.GetComponentInChildren<Renderer>(true);
+			var renderer = prefab.GetComponentInChildren<SkinnedMeshRenderer>(true);
 			if (renderer?.material == null) return;
-			renderer.material.shader = Shader.Find(shaderName);
+
+			if (!string.IsNullOrEmpty(shaderName))
+				renderer.material.shader = Shader.Find(shaderName);
 
 			newMaterialController.targets.Add(new MaterialController.TargetMaterialConfig
 			{
-				renderer = prefab.GetComponentInChildren<SkinnedMeshRenderer>(),
+				renderer = renderer,
 				materialIndex = 0,
 				sharedMaterial = renderer.material,
 			});
@@ -437,6 +439,7 @@ namespace XLGearModifier
 		public static void AddPrefixToGearFilters(this CustomGear customGear)
 		{
 			var typeFilter = GearDatabase.Instance.skaters[customGear.GetSkaterIndex()].GearFilters[customGear.GetCategoryIndex(customGear.GetSkaterIndex())];
+
 			if (!typeFilter.includedTypes.Contains(customGear.Metadata.Prefix))
 			{
 				Array.Resize(ref typeFilter.includedTypes, typeFilter.includedTypes.Length + 1);
