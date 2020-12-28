@@ -3,7 +3,12 @@ guid: eee1d08dea1b0c0489428529d9fe607d
 ModelImporter:
   serializedVersion: 19301
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: M_wavy_AlphaTest
+    second: {fileID: 2100000, guid: 216d0241c2daabe41827d9ff3f965dcc, type: 2}
   materials:
     materialImportMode: 1
     materialName: 0
