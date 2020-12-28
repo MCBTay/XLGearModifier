@@ -3,7 +3,12 @@ guid: 473a0ade81113214786bbe9c926a8f21
 ModelImporter:
   serializedVersion: 19301
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: M_spikt_AlphaTest
+    second: {fileID: 2100000, guid: d6da05726ab5a044e9addff636e4657c, type: 2}
   materials:
     materialImportMode: 1
     materialName: 0
