@@ -16,7 +16,20 @@ namespace XLGearModifier.Patches
 			static void Postfix(GearDatabase __instance, IndexPath index, ref GearInfo[][][] ___gearListSource, ref GearInfo[] __result)
 			{
 				if (index.depth < 2) return;
-				if (!GearSelectionControllerPatch.IsOnXLGMTab(index[1])) return;
+				if (!GearSelectionControllerPatch.IsOnXLGMTab(index[1]))
+				{
+					List<GearInfo> newResult = new List<GearInfo>(__result);
+
+					// check to see if custom meshes are in list, if so, remove
+					var customMeshes = GearManager.Instance.CustomGear;
+					foreach (var mesh in customMeshes)
+					{
+						newResult.RemoveAll(x => x.type == mesh.Metadata.Prefix.ToLower());
+					}
+
+					__result = newResult.ToArray();
+					return;
+				}
 
 				List<ICustomInfo> sourceList = null;
 
