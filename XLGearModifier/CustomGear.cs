@@ -57,7 +57,7 @@ namespace XLGearModifier
 
 			GearInfo = new CustomCharacterGearInfo(name, clothingMetadata.Prefix, false, GetDefaultTextureChanges(), new string[0]);
 
-			if (clothingMetadata.Category == Unity.ClothingGearCategory.Shoes)
+			if (clothingMetadata.Category == Unity.ClothingGearCategory.Shoes || clothingMetadata.Category == Unity.ClothingGearCategory.Socks)
 			{
 				AddShoePrefabControllers();
 				await AddShoeMaterialControllers(clothingMetadata);
@@ -479,10 +479,15 @@ namespace XLGearModifier
 		{
 			switch (category)
 			{
-				case Unity.ClothingGearCategory.Hair: return ClothingGearCategory.Hat;
-				case Unity.ClothingGearCategory.Headwear: return ClothingGearCategory.Hat;
-				case Unity.ClothingGearCategory.Shoes: return ClothingGearCategory.Shoes;
-				case Unity.ClothingGearCategory.Bottom: return ClothingGearCategory.Pants;
+				case Unity.ClothingGearCategory.Hair:
+					return ClothingGearCategory.Hat;
+				case Unity.ClothingGearCategory.Headwear:
+					return ClothingGearCategory.Hat;
+				case Unity.ClothingGearCategory.Shoes:
+				case Unity.ClothingGearCategory.Socks:
+					return ClothingGearCategory.Shoes;
+				case Unity.ClothingGearCategory.Bottom:
+					return ClothingGearCategory.Pants;
 				default:
 				case Unity.ClothingGearCategory.Top:
 					return ClothingGearCategory.Shirt;
