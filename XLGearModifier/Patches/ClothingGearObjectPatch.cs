@@ -88,7 +88,7 @@ namespace XLGearModifier.Patches
 
 			if (customGearInfo.Info.GetParentObject() is CustomGear customGear)
 			{
-				isLayerable = customGear.ClothingMetadata.IsLayerable && customGear.Metadata.GetSprite().StartsWith(SpriteCategory.Wildcard.ToString());
+				isLayerable = customGear.ClothingMetadata.IsLayerable && customGear.Metadata.GetSprite().StartsWith(SpriteCategory.Other.ToString());
 			}
 
 			return isLayerable;

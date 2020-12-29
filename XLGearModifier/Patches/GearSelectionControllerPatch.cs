@@ -245,23 +245,21 @@ namespace XLGearModifier.Patches
 							var match = sourceList.FirstOrDefault(x => x.Name == gear.name);
 							if (match != null)
 							{
-								switch (Enum.Parse(typeof(GearCategory), match.Name.Replace("\\", string.Empty)))
+								switch (Enum.Parse(typeof(Unity.ClothingGearCategory), match.Name.Replace("\\", string.Empty)))
 								{
-									case GearCategory.Hair:
-									case GearCategory.Headwear:
+									case Unity.ClothingGearCategory.Hair:
+									case Unity.ClothingGearCategory.Headwear:
 										__instance.SetCameraView(GearRoomCameraView.Head);
 										break;
-									case GearCategory.Top:
+									case Unity.ClothingGearCategory.Top:
 										__instance.SetCameraView(GearRoomCameraView.Top);
 										break;
-									case GearCategory.Bottom:
+									case Unity.ClothingGearCategory.Bottom:
 										__instance.SetCameraView(GearRoomCameraView.Bottom);
 										break;
-									case GearCategory.Shoes:
+									case Unity.ClothingGearCategory.Shoes:
+									case Unity.ClothingGearCategory.Socks:
 										__instance.SetCameraView(GearRoomCameraView.Shoes);
-										break;
-									case GearCategory.Deck:
-										__instance.SetCameraView(GearRoomCameraView.Deck);
 										break;
 									default:
 										__instance.SetCameraView(GearRoomCameraView.FullSkater);
