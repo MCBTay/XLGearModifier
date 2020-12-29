@@ -15,7 +15,9 @@
 		Headwear = 2,
 		Top = 3,
 		Bottom = 4,
-		Shoes = 5
+		Shoes = 5,
+		Socks = 6,
+		Other = 7
 	}
 
 	public enum BoardGearCategory
@@ -139,7 +141,7 @@
 		Shoes,
 		Bottom,
 		Socks,
-		Wildcard,
+		Other,
 		FacialHair,
 		Hair
 	}
