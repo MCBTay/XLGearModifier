@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 59824125480cbe542a62c108f7f10cd1
+guid: e7edb5801e73cba408619a1cb9f81719
 ModelImporter:
   serializedVersion: 19301
   internalIDToNameTable: []
@@ -7,8 +7,13 @@ ModelImporter:
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
-      name: Default_OBJ.001
-    second: {fileID: 2100000, guid: 04943f7474de2b547aefcc2da18e5682, type: 2}
+      name: 09___Default.001
+    second: {fileID: 2100000, guid: f136d1a94fad01b428040576572244f1, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: DoRag
+    second: {fileID: 2100000, guid: c78984075eefd104195ff8ca3038819c, type: 2}
   materials:
     materialImportMode: 1
     materialName: 0

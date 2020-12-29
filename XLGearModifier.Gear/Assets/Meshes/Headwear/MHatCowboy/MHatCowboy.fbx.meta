@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 59824125480cbe542a62c108f7f10cd1
+guid: eb74e334cdbfc4648a152db82ecd1992
 ModelImporter:
   serializedVersion: 19301
   internalIDToNameTable: []
@@ -7,8 +7,8 @@ ModelImporter:
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
-      name: Default_OBJ.001
-    second: {fileID: 2100000, guid: 04943f7474de2b547aefcc2da18e5682, type: 2}
+      name: CowboyHat
+    second: {fileID: 2100000, guid: 9a97d5976d39d2949bfbc17f770acf4e, type: 2}
   materials:
     materialImportMode: 1
     materialName: 0
