@@ -216,7 +216,7 @@ namespace XLGearModifier
 				}
 				catch (Exception ex)
 				{
-					Debug.Log("XLGM: Exception loading " + asset.name + " from " + bundle.name + Environment.NewLine + ex.Message);
+					Debug.Log("XLGM: Exception loading " + asset.name + " from " + bundle.name + Environment.NewLine + ex.Message + Environment.NewLine + ex.StackTrace);
 				}
 			}
 
