@@ -3,7 +3,17 @@ guid: f4993758c441dc446b3c5478e05ab727
 ModelImporter:
   serializedVersion: 19301
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: 41_HairCap_0.1_0_0.004
+    second: {fileID: 2100000, guid: 599c1583a5b14454581f3966107e9a96, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: 41_HairCards_0.1_16_16.004
+    second: {fileID: 2100000, guid: b1d42fe95caec3e499759a2dc0f0d20e, type: 2}
   materials:
     materialImportMode: 1
     materialName: 0
