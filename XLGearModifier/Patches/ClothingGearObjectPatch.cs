@@ -24,6 +24,12 @@ namespace XLGearModifier.Patches
 							return false;
 						}
 
+						if (__instance.IsLayerableFacialHair() || cgo.IsLayerableFacialHair())
+						{
+							__result = false;
+							return false;
+						}
+
 						return true;
 					}
 					else if((__instance.IsLayerable<TopTypes>(ClothingGearCategory.LongSleeve) && cgo.IsLayerable<TopTypes>(ClothingGearCategory.Shirt)) || 
@@ -88,7 +94,22 @@ namespace XLGearModifier.Patches
 
 			if (customGearInfo.Info.GetParentObject() is CustomGear customGear)
 			{
-				isLayerable = customGear.ClothingMetadata.IsLayerable && customGear.Metadata.GetSprite().StartsWith(SpriteCategory.Other.ToString());
+				isLayerable = customGear.ClothingMetadata.IsLayerable && customGear.Metadata.GetCategory().StartsWith(Unity.ClothingGearCategory.Other.ToString());
+			}
+
+			return isLayerable;
+		}
+
+		static bool IsLayerableFacialHair(this ClothingGearObjet clothingGear)
+		{
+			var customGearInfo = clothingGear.gearInfo as CustomCharacterGearInfo;
+			if (customGearInfo == null) return false;
+
+			bool isLayerable = false;
+
+			if (customGearInfo.Info.GetParentObject() is CustomGear customGear)
+			{
+				isLayerable = customGear.ClothingMetadata.IsLayerable && customGear.Metadata.GetCategory().StartsWith(Unity.ClothingGearCategory.FacialHair.ToString());
 			}
 
 			return isLayerable;
