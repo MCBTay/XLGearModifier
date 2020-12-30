@@ -3,7 +3,17 @@ guid: add31872789a0f34b84d838b19fa6830
 ModelImporter:
   serializedVersion: 19301
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Dreads.002
+    second: {fileID: 2100000, guid: 944e6e47f458acf49b20583a187234c4, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: band.002
+    second: {fileID: 2100000, guid: ca4e402c1b8523f4990e05e0fddd60f1, type: 2}
   materials:
     materialImportMode: 1
     materialName: 0
