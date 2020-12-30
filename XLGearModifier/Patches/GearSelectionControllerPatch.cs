@@ -249,6 +249,7 @@ namespace XLGearModifier.Patches
 								{
 									case Unity.ClothingGearCategory.Hair:
 									case Unity.ClothingGearCategory.Headwear:
+									case Unity.ClothingGearCategory.FacialHair:
 										__instance.SetCameraView(GearRoomCameraView.Head);
 										break;
 									case Unity.ClothingGearCategory.Top:

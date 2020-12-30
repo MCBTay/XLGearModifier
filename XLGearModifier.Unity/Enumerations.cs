@@ -17,7 +17,8 @@
 		Bottom = 4,
 		Shoes = 5,
 		Socks = 6,
-		Other = 7
+		Other = 7,
+		FacialHair = 8
 	}
 
 	public enum BoardGearCategory

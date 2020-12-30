@@ -480,7 +480,7 @@ namespace XLGearModifier
 			switch (category)
 			{
 				case Unity.ClothingGearCategory.Hair:
-					return ClothingGearCategory.Hat;
+				case Unity.ClothingGearCategory.FacialHair:
 				case Unity.ClothingGearCategory.Headwear:
 					return ClothingGearCategory.Hat;
 				case Unity.ClothingGearCategory.Shoes:
