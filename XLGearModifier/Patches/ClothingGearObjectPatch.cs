@@ -24,7 +24,7 @@ namespace XLGearModifier.Patches
 							return false;
 						}
 
-						if (__instance.IsLayerableFacialHair() || cgo.IsLayerableFacialHair())
+						if (__instance.IsLayerable(Unity.ClothingGearCategory.FacialHair) || cgo.IsLayerable(Unity.ClothingGearCategory.FacialHair))
 						{
 							__result = false;
 							return false;
@@ -44,7 +44,7 @@ namespace XLGearModifier.Patches
 						__result = false;
 						return false;
 					}
-					else if (__instance.IsLayerableWildcard() || cgo.IsLayerableWildcard())
+					else if (__instance.IsLayerable(Unity.ClothingGearCategory.Other) || cgo.IsLayerable(Unity.ClothingGearCategory.Other))
 					{
 						__result = false;
 						return false;
@@ -84,8 +84,8 @@ namespace XLGearModifier.Patches
 			return isType && isLayerable;
 		}
 
-		//TODO: Come back to this when I add an actual category for wildcards.
-		static bool IsLayerableWildcard(this ClothingGearObjet clothingGear)
+
+		static bool IsLayerable(this ClothingGearObjet clothingGear, Unity.ClothingGearCategory clothingGearCategory)
 		{
 			var customGearInfo = clothingGear.gearInfo as CustomCharacterGearInfo;
 			if (customGearInfo == null) return false;
@@ -94,22 +94,7 @@ namespace XLGearModifier.Patches
 
 			if (customGearInfo.Info.GetParentObject() is CustomGear customGear)
 			{
-				isLayerable = customGear.ClothingMetadata.IsLayerable && customGear.Metadata.GetCategory().StartsWith(Unity.ClothingGearCategory.Other.ToString());
-			}
-
-			return isLayerable;
-		}
-
-		static bool IsLayerableFacialHair(this ClothingGearObjet clothingGear)
-		{
-			var customGearInfo = clothingGear.gearInfo as CustomCharacterGearInfo;
-			if (customGearInfo == null) return false;
-
-			bool isLayerable = false;
-
-			if (customGearInfo.Info.GetParentObject() is CustomGear customGear)
-			{
-				isLayerable = customGear.ClothingMetadata.IsLayerable && customGear.Metadata.GetCategory().StartsWith(Unity.ClothingGearCategory.FacialHair.ToString());
+				isLayerable = customGear.ClothingMetadata.IsLayerable && customGear.Metadata.GetCategory().StartsWith(clothingGearCategory.ToString());
 			}
 
 			return isLayerable;
