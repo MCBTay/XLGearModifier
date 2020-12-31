@@ -277,21 +277,32 @@ namespace XLGearModifier
 		{
 			if (sourceList == null)
 			{
-				string texturePath = "XLGearModifier\\";
-
 				var defaultTexture = customGear.Metadata?.GetMaterialInformation()?.DefaultTexture;
+				var altTextures = customGear.Metadata?.GetMaterialInformation()?.AlternativeTextures;
 
-				if (defaultTexture?.textureColor != null)
+				if (defaultTexture == null && (altTextures == null || !altTextures.Any()))
 				{
-					texturePath += customGear.Prefab.name + "\\" + defaultTexture.textureName;
+					var characterGearInfo = new CustomCharacterGearInfo(customGear.Metadata.Prefix, customGear.Metadata.Prefix, false, new[] { new TextureChange("albedo", "XLGearModifier\\Empty_Albedo.png") }, new string[] { });
+					AddToList(customGear, characterGearInfo, destList, ref parent, isCustom);
 				}
 				else
 				{
-					texturePath += "Empty_Albedo.png";
+					// Either a default texture or an alternative texture is defined
+					if (defaultTexture.textureColor != null)
+					{
+						var texturePath = $"XLGearModifier\\{customGear.Prefab.name}\\{defaultTexture.textureName}";
+						var characterGearInfo = new CustomCharacterGearInfo(defaultTexture.textureName, customGear.Metadata.Prefix, false, new[] { new TextureChange("albedo", texturePath) }, new string[] { });
+						AddToList(customGear, characterGearInfo, destList, ref parent, isCustom);
+					}
+
+					foreach (var texture in altTextures.Where(x => x.textureColor != null))
+					{
+						var texturePath = $"XLGearModifier\\{customGear.Prefab.name}\\{texture.textureName}";
+						var characterGearInfo = new CustomCharacterGearInfo(texture.textureName, customGear.Metadata.Prefix, false, new[] { new TextureChange("albedo", texturePath) }, new string[] { });
+						AddToList(customGear, characterGearInfo, destList, ref parent, isCustom);
+					}
 				}
 
-				var characterGearInfo = new CustomCharacterGearInfo(customGear.Metadata.Prefix, customGear.Metadata.Prefix, false, new[] { new TextureChange("albedo", texturePath) }, new string[] {});
-				AddToList(customGear, characterGearInfo, destList, ref parent, isCustom);
 				return;
 			}
 
