@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 1159482014, guid: 9eec293a5ff616644981bc58ed6f591d, type: 3}
+  m_Name: MHeadband2 TextureSet
+  m_EditorClassIdentifier: 
+  DefaultTexture: {fileID: 11400000, guid: 98e6eccc629e4f343b4c2a7b5b0bc89b, type: 2}
+  AlternativeTextures:
+  - {fileID: 11400000, guid: a121c17bc4128ba498cad7ddc6a623c0, type: 2}
+  - {fileID: 11400000, guid: fff825734e7cc2041af3916a26df04a6, type: 2}
+  - {fileID: 11400000, guid: 224e91aa27c337b408f6322f435437c5, type: 2}
+  - {fileID: 11400000, guid: d2d280e9b2893a44a8447c00b454c7e3, type: 2}
