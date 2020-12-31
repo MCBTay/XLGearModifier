@@ -277,7 +277,20 @@ namespace XLGearModifier
 		{
 			if (sourceList == null)
 			{
-				var characterGearInfo = new CustomCharacterGearInfo(customGear.Metadata.Prefix, customGear.Metadata.Prefix, false, new[] { new TextureChange("albedo", "XLGearModifier\\Empty_Albedo.png") }, new string[] {});
+				string texturePath = "XLGearModifier\\";
+
+				var defaultTexture = customGear.Metadata?.GetMaterialInformation()?.DefaultTexture;
+
+				if (defaultTexture?.textureColor != null)
+				{
+					texturePath += customGear.Prefab.name + "\\" + defaultTexture.textureName;
+				}
+				else
+				{
+					texturePath += "Empty_Albedo.png";
+				}
+
+				var characterGearInfo = new CustomCharacterGearInfo(customGear.Metadata.Prefix, customGear.Metadata.Prefix, false, new[] { new TextureChange("albedo", texturePath) }, new string[] {});
 				AddToList(customGear, characterGearInfo, destList, ref parent, isCustom);
 				return;
 			}
