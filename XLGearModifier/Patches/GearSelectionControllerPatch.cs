@@ -187,7 +187,7 @@ namespace XLGearModifier.Patches
 		[HarmonyPatch(typeof(GearSelectionController), "ListView_OnItemSelectedEvent")]
 		public static class ListView_OnItemSelectedEventPatch
 		{
-			static bool Prefix(GearSelectionController __instance, IndexPath index)
+			static bool Prefix(GearSelectionController __instance, IndexPath index, CustomizedPlayerDataV2[] ___skaterCustomizations)
 			{
 				if (index.depth < 3) return true;
 
@@ -196,7 +196,7 @@ namespace XLGearModifier.Patches
 				{
 					if (!(gear is CustomGearFolderInfo))
 					{
-						EquipUnequipItem(__instance, gear);
+						EquipUnequipItem(__instance, gear, index, ___skaterCustomizations);
 						return false;
 					}
 				}
@@ -287,11 +287,11 @@ namespace XLGearModifier.Patches
 					return false;
 				}
 
-				EquipUnequipItem(__instance, gear);
+				EquipUnequipItem(__instance, gear, index, ___skaterCustomizations);
 				return false;
 			}
 
-			private static void EquipUnequipItem(GearSelectionController __instance, GearInfo gear)
+			private static void EquipUnequipItem(GearSelectionController __instance, GearInfo gear, IndexPath index, CustomizedPlayerDataV2[] ___skaterCustomizations)
 			{
 				try
 				{
@@ -316,14 +316,21 @@ namespace XLGearModifier.Patches
 
 				__instance.Save();
 				__instance.listView.UpdateList();
+
+				UserInterfaceHelper.Instance.RefreshWhatsEquippedList(___skaterCustomizations, index);
 			}
 		}
 
 		[HarmonyPatch(typeof(GearSelectionController), "ListView_OnItemHighlightedEvent")]
 		public static class ListView_OnItemHighlightedEventPatch
 		{
-			static void Postfix(GearSelectionController __instance, IndexPath index)
+			static void Postfix(GearSelectionController __instance, IndexPath index, CustomizedPlayerDataV2[] ___skaterCustomizations)
 			{
+				if (index.depth == 1)
+				{
+					UserInterfaceHelper.Instance.RefreshWhatsEquippedList(___skaterCustomizations, index);
+				}
+
 				if (index.depth < 3) return;
 				if (!IsOnXLGMTab(index[1])) return;
 
@@ -400,7 +407,6 @@ namespace XLGearModifier.Patches
 				__instance.listView.SetHighlighted(Traverse.Create(__instance.listView).Property<IndexPath>("currentIndexPath").Value, true);
 
 				return false;
-
 			}
 		}
 
