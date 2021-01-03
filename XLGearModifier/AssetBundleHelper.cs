@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
-using UnityModManagerNet;
-using XLMenuMod.Utilities.Gear;
 
 namespace XLGearModifier
 {
@@ -15,6 +15,7 @@ namespace XLGearModifier
 		public static string AssetPacksPath;
 
 		public static TMP_SpriteAsset GearModifierUISpriteSheet;
+		public static List<Sprite> GearModifierUISpriteSheetSprites;
 		public static Texture2D emptyAlbedo;
 		public static Texture2D emptyMaskPBR;
 		public static Texture2D emptyNormalMap;
@@ -27,6 +28,7 @@ namespace XLGearModifier
 			emptyMaskPBR = bundle.LoadAsset<Texture2D>("Empty_Maskpbr_Map.png");
 			emptyNormalMap = bundle.LoadAsset<Texture2D>("Empty_Normal_Map.png");
 			GearModifierUISpriteSheet = bundle.LoadAsset<TMP_SpriteAsset>("GearModifierUISpriteSheet");
+			GearModifierUISpriteSheetSprites = bundle.LoadAllAssets<Sprite>().Where(x => x.name.StartsWith("GearModifierUISpriteSheet")).ToList();
 
 			Debug.Log("XLGearModifier: Loading " + bundle.name);
 			await GearManager.Instance.LoadAssets(bundle);
