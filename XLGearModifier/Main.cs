@@ -44,7 +44,7 @@ namespace XLGearModifier
 					XLMenuModEnabled = xlMenuMod.Enabled;
 				}
 
-				UserInterfaceHelper.Instance.LoadAssets();
+				XLMenuMod.Utilities.UserInterface.UserInterfaceHelper.Instance.LoadAssets();
 				AssetBundleHelper.LoadGearBundle();
 				PlayerController.Instance.StartCoroutine(AssetBundleHelper.LoadUserBundles());
 			}
