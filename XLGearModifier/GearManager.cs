@@ -227,7 +227,7 @@ namespace XLGearModifier
 				}
 			}
 
-			CustomMeshes = CustomMeshes.OrderBy(x => Enum.Parse(typeof(GearCategory), x.GetName().Replace("\\", string.Empty))).ToList();
+			CustomMeshes = CustomMeshes.OrderBy(x => Enum.Parse(typeof(Unity.ClothingGearCategory), x.GetName().Replace("\\", string.Empty))).ToList();
 		}
 
 		private void AddBoardMesh(XLGMBoardGearMetadata metadata, CustomGear customGear, GameObject asset)
