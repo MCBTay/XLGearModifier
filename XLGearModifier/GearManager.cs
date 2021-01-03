@@ -194,6 +194,13 @@ namespace XLGearModifier
 			{
 				try
 				{
+					var whatsEquippedPrefab = asset.GetComponent<XLGMWhatsEquippedUserInterface>();
+					if (whatsEquippedPrefab != null)
+					{
+						UserInterfaceHelper.Instance.WhatsEquippedUserInterfacePrefab = asset;
+						continue;
+					}
+
 					var metadata = asset.GetComponent<XLGMMetadata>();
 					if (metadata == null) continue;
 					if (string.IsNullOrEmpty(metadata.Prefix)) continue;
