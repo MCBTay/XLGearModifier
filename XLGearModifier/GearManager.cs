@@ -205,8 +205,6 @@ namespace XLGearModifier
 					if (metadata == null) continue;
 					if (string.IsNullOrEmpty(metadata.Prefix)) continue;
 
-					if (metadata is XLGMSkaterMetadata) continue;
-
 					var customGear = new CustomGear(metadata, asset);
 					await customGear.Instantiate();
 					CustomGear.Add(customGear);

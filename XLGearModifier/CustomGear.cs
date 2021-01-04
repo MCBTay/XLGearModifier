@@ -42,7 +42,7 @@ namespace XLGearModifier
 					await InstantiateCustomClothing(clothingMetadata);
 					break;
 				case XLGMSkaterMetadata skaterMetadata:
-					//InstantiateCustomSkater(skaterMetadata);
+					InstantiateCustomSkater(skaterMetadata);
 					break;
 				case XLGMBoardGearMetadata boardMetadata:
 					await InstantiateCustomBoard(boardMetadata);
@@ -94,7 +94,7 @@ namespace XLGearModifier
 				stance = SkaterInfo.Stance.Regular,
 				bodyID = skaterMetadata.Prefix,
 				name = name,
-				GearFilters = GearDatabase.Instance.skaters.First().GearFilters,
+				GearFilters = new TypeFilterList(new List<TypeFilter>()),
 			});
 
 			var materialChanges = new List<MaterialChange>()
