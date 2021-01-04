@@ -106,6 +106,7 @@
     <Compile Include="GearManager.cs" />
     <Compile Include="Main.cs" />
     <Compile Include="Patches\CharacterCustomizerPatch.cs" />
+    <Compile Include="Patches\CustomizedPlayerDataV2Patch.cs" />
     <Compile Include="Patches\GearObjectPatch.cs" />
     <Compile Include="Patches\GearDatabasePatch.cs" />
     <Compile Include="Patches\GearPrefabControllerPatch.cs" />
