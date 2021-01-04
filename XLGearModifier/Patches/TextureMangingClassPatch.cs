@@ -1,9 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using HarmonyLib;
 using System.Linq;
-using HarmonyLib;
 using System.Threading.Tasks;
 using UnityEngine;
-using XLGearModifier.Unity.ScriptableObjects;
 
 namespace XLGearModifier.Patches
 {
@@ -16,14 +14,15 @@ namespace XLGearModifier.Patches
 			{
 				if (!texturePath.StartsWith("XLGearModifier")) return true;
 
-				if (texturePath.EndsWith("Empty_Albedo.png"))
+				var split = texturePath.Split('\\');
+
+				if (texturePath.EndsWith("Empty_Albedo.png") || split.Length < 3)
 				{
 					__result = Task.FromResult<Texture>(AssetBundleHelper.emptyAlbedo);
 					return false;
 				}
 				else
 				{
-					var split = texturePath.Split('\\');
 					var prefabName = split[1];
 					var textureName = split[2];
 
