@@ -45,12 +45,16 @@ namespace XLGearModifier.Unity
 		#endregion
 
 		//[HideIf(nameof(BaseOnDefaultGear), true)]
+		[SerializeField]
 		public XLGMTextureSet TextureSet;
 
 		#region Alpha Masks
 		[Tooltip("Set the threshold(s) for various alpha masks when this mesh is applied. It will add it to the gear template if it is not already defined, or override it if it is. Typically used for masking various areas of the body.")]
+		[SerializeField] 
 		public List<XLGMGearAlphaMaskConfig> AlphaMaskThresholds;
+
 		[Tooltip("Set the alpha masks on this mesh's material.  The one that makes the most sense here is likely PantsWaist as the other types are meant to apply to the body.")]
+		[SerializeField]
 		public List<XLGMAlphaMaskTextureInfo> MaterialAlphaMasks;
 		#endregion
 

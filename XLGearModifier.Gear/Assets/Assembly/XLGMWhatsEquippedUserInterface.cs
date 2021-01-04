@@ -37,8 +37,8 @@ namespace XLGearModifier.Unity
 			if (whatsEquipped != null)
 			{
 				whatsEquipped.image.sprite = sprite;
-				whatsEquipped.meshName.SetText(meshName);
-				whatsEquipped.textureName.SetText(textureName);
+				//whatsEquipped.meshName.SetText(meshName);
+				//whatsEquipped.textureName.SetText(textureName);
 			}
 			//if (objectClicked != null)
 			//{
@@ -58,11 +58,11 @@ namespace XLGearModifier.Unity
 		{
 			foreach (Transform child in listContent.transform)
 			{
-				if (child.GetComponent<XLGMWhatsEquippedLineItem>().meshName.text.ToLower() == type.ToLower())
-				{
-					DestroyImmediate(child);
-					break;
-				}
+				//if (child.GetComponent<XLGMWhatsEquippedLineItem>().meshName.text.ToLower() == type.ToLower())
+				//{
+				//	DestroyImmediate(child);
+				//	break;
+				//}
 			}
 		}
 	}
