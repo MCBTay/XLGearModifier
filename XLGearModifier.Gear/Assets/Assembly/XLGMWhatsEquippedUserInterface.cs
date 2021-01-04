@@ -37,8 +37,8 @@ namespace XLGearModifier.Unity
 			if (whatsEquipped != null)
 			{
 				whatsEquipped.image.sprite = sprite;
-				//whatsEquipped.meshName.SetText(meshName);
-				//whatsEquipped.textureName.SetText(textureName);
+				whatsEquipped.meshName.SetText(meshName);
+				whatsEquipped.textureName.SetText(textureName);
 			}
 			//if (objectClicked != null)
 			//{
