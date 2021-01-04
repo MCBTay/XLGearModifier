@@ -92,6 +92,10 @@
     <Reference Include="UnityModManager">
       <HintPath>References\UnityModManager.dll</HintPath>
     </Reference>
+    <Reference Include="XLGearModifier.Unity, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\XLGearModifier.Gear\Library\ScriptAssemblies\XLGearModifier.Unity.dll</HintPath>
+    </Reference>
     <Reference Include="XLMenuMod.Utilities">
       <HintPath>References\XLMenuMod.Utilities.dll</HintPath>
     </Reference>
@@ -119,12 +123,6 @@
     <None Include="Info.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\XLGearModifier.Unity\XLGearModifier.Unity.csproj">
-      <Project>{e888e5e2-4729-480a-8e25-056e6e16cbc1}</Project>
-      <Name>XLGearModifier.Unity</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
