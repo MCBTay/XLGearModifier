@@ -145,7 +145,7 @@ copy /Y "$(TargetDir)XLGearModifier.Unity.dll" "$(TargetDir)XLGearModifier\XLGea
 copy /Y "$(TargetDir)XLMenuMod.Utilities.dll" "$(TargetDir)XLGearModifier\XLMenuMod.Utilities.dll"
 copy /Y "$(TargetDir)Info.json" "$(TargetDir)XLGearModifier\Info.json"
 
-powershell Compress-Archive -Path '$(TargetDir)XLGearModifier' -DestinationPath '$(TargetDir)XLGearModifier-1-3-1.zip' -Force
+powershell Compress-Archive -Path '$(TargetDir)XLGearModifier' -DestinationPath '$(TargetDir)XLGearModifier-1-4-0.zip' -Force
 )</PostBuildEvent>
   </PropertyGroup>
 </Project>
