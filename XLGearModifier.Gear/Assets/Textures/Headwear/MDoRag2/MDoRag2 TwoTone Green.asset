@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1edb71787833b6c41a7fba646d45325c, type: 3}
-  m_Name: MHelmetConstruction Red
+  m_Name: MDoRag2 TwoTone Green
   m_EditorClassIdentifier: 
-  textureName: Red
-  textureColor: {fileID: 2800000, guid: 1e56494645c5ecb4480c1ebdbd8d5249, type: 3}
-  textureNormalMap: {fileID: 2800000, guid: b2cbdfb338c93794aa8a5876118d33d3, type: 3}
+  textureName: TwoTone Green
+  textureColor: {fileID: 2800000, guid: 0158c78f3be3a144ca03c80725d36e2e, type: 3}
+  textureNormalMap: {fileID: 0}
   textureMaskPBR: {fileID: 0}

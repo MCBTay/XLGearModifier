@@ -9,7 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 1159482014, guid: 9eec293a5ff616644981bc58ed6f591d, type: 3}
+  m_Script: {fileID: 11500000, guid: 943143b4b75855b46b74ea5a14558a96, type: 3}
   m_Name: MShoesNewYorker TextureSet
   m_EditorClassIdentifier: 
   DefaultTexture: {fileID: 11400000, guid: 0ff10b025f0af874d8aba0b1f6e1a781, type: 2}

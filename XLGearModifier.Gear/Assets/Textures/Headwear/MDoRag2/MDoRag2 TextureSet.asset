@@ -9,14 +9,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 1159482014, guid: 9eec293a5ff616644981bc58ed6f591d, type: 3}
+  m_Script: {fileID: 11500000, guid: 943143b4b75855b46b74ea5a14558a96, type: 3}
   m_Name: MDoRag2 TextureSet
   m_EditorClassIdentifier: 
   DefaultTexture: {fileID: 11400000, guid: 58b6a45dc8940a44d837e8ef59aa54ae, type: 2}
   AlternativeTextures:
-  - {fileID: 11400000, guid: 12ab236e5c9ada24dad6a93eba790471, type: 2}
-  - {fileID: 11400000, guid: 101ebdd2d2d204a458de5a8f8536261b, type: 2}
-  - {fileID: 11400000, guid: 392933d8337f14d4bab65d82c1ed222f, type: 2}
-  - {fileID: 11400000, guid: 5ca6119c0b9177f459cc184cb2bb7dc8, type: 2}
-  - {fileID: 11400000, guid: 1c1f335cd6fa6d64ea239da2238d7016, type: 2}
-  - {fileID: 11400000, guid: 45c17b22307e2d948b666bb725431ed7, type: 2}
+  - {fileID: 11400000, guid: 7ee31f55166016e459a5c6264b8a71e9, type: 2}
+  - {fileID: 11400000, guid: 4e0140fc5e2c5ed4e9393c9dd8be813e, type: 2}
+  - {fileID: 11400000, guid: 3a761dd547aef7c42afa139494d75573, type: 2}
+  - {fileID: 11400000, guid: e954f84b1cc78fa4b88fbc8a035a12ab, type: 2}
+  - {fileID: 11400000, guid: 8d3862dadf3514740b25324cc5c1e122, type: 2}
+  - {fileID: 11400000, guid: 55b8b0a915af3a7449cc4ab4efa7cf2e, type: 2}

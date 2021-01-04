@@ -9,10 +9,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: -2110499737, guid: 9eec293a5ff616644981bc58ed6f591d, type: 3}
-  m_Name: MDoRag2 Camo TwoTone Green
+  m_Script: {fileID: 11500000, guid: 1edb71787833b6c41a7fba646d45325c, type: 3}
+  m_Name: MDoRag2 TwoTone Yellow
   m_EditorClassIdentifier: 
-  textureName: Camo TwoTone Green
-  textureColor: {fileID: 2800000, guid: 0158c78f3be3a144ca03c80725d36e2e, type: 3}
+  textureName: TwoTone Yellow
+  textureColor: {fileID: 2800000, guid: 9e7881e7973e01c498196d30f128f6ac, type: 3}
   textureNormalMap: {fileID: 0}
   textureMaskPBR: {fileID: 0}
