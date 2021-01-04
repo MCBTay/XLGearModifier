@@ -9,9 +9,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: -626439223, guid: 9eec293a5ff616644981bc58ed6f591d, type: 3}
-  m_Name: MShoesAlphaMaskConfig
+  m_Script: {fileID: 11500000, guid: 1edb71787833b6c41a7fba646d45325c, type: 3}
+  m_Name: MDoRag2 TwoTone Blue
   m_EditorClassIdentifier: 
-  MaskLocation: 3
-  Threshold: 255
-  AlphaMask: {fileID: 0}
+  textureName: TwoTone Blue
+  textureColor: {fileID: 2800000, guid: 66dea03d3aaaa7c478c96bbfba5ac4a9, type: 3}
+  textureNormalMap: {fileID: 0}
+  textureMaskPBR: {fileID: 0}
