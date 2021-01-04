@@ -4,7 +4,6 @@ using System.Linq;
 using System.Reflection;
 using UnityEngine;
 using UnityEditor;
-using XLGearModifier.Unity.Editor;
 
 public abstract class HidingAttributeDrawer : PropertyDrawer
 {

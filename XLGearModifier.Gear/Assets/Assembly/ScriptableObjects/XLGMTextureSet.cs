@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+
 namespace XLGearModifier.Unity.ScriptableObjects
 {
 	[CreateAssetMenu(fileName = "New XLGM Texture Set", menuName = "XLGM Texture Set")]
