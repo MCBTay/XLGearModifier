@@ -7,6 +7,7 @@ using System.Reflection;
 using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
+using XLGearModifier.Unity;
 
 namespace XLGearModifier
 {
@@ -22,6 +23,9 @@ namespace XLGearModifier
 
 		public static async Task LoadGearBundle()
 		{
+			// We're solely making a call here to ensure that the unity assembly is loaded up prior to loading assets.  else we'll get a bunch of errors about things missing.
+			var test = GearModifierTab.CustomMeshes;
+
 			AssetBundle bundle = AssetBundle.LoadFromMemory(ExtractResource("XLGearModifier.Assets.customgear"));
 
 			emptyAlbedo = bundle.LoadAsset<Texture2D>("Empty_Albedo.png");
