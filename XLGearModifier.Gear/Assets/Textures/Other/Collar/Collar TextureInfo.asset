@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1edb71787833b6c41a7fba646d45325c, type: 3}
+  m_Name: Collar TextureInfo
+  m_EditorClassIdentifier: 
+  textureName: Collar
+  textureColor: {fileID: 2800000, guid: 93e31cd4af5966b4e9952bc96d8637ef, type: 3}
+  textureNormalMap: {fileID: 2800000, guid: 5195a11599142a04a8110043176be3ed, type: 3}
+  textureMaskPBR: {fileID: 0}
