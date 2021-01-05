@@ -1,4 +1,5 @@
-﻿using HarmonyLib;
+﻿using System.IO;
+using HarmonyLib;
 using System.Linq;
 using System.Threading.Tasks;
 using UnityEngine;
@@ -14,7 +15,7 @@ namespace XLGearModifier.Patches
 			{
 				if (!texturePath.StartsWith("XLGearModifier")) return true;
 
-				var split = texturePath.Split('\\');
+				var split = texturePath.Split('/');
 
 				if (texturePath.EndsWith("Empty_Albedo.png") || split.Length < 3)
 				{
