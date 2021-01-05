@@ -187,7 +187,8 @@ namespace XLGearModifier
 			}
 			else
 			{
-				if (clothingMetadata != null && clothingMetadata.Category == Unity.ClothingGearCategory.Hair)
+				if (clothingMetadata != null && 
+				    (clothingMetadata.Category == Unity.ClothingGearCategory.Hair || clothingMetadata.Category == Unity.ClothingGearCategory.FacialHair))
 				{
 					CreateNewMaterialController(Prefab);
 				}
@@ -221,7 +222,8 @@ namespace XLGearModifier
 			}
 
 			var clothingMetdata = Metadata as XLGMClothingGearMetadata;
-			if (clothingMetdata != null && clothingMetdata.Category == Unity.ClothingGearCategory.Hair)
+			if (clothingMetdata != null && 
+			    (clothingMetdata.Category == Unity.ClothingGearCategory.Hair || clothingMetdata.Category == Unity.ClothingGearCategory.FacialHair))
 			{
 				newMaterialController.UpdateMaterialControllerPropertyNameSubstitutions();
 			}
