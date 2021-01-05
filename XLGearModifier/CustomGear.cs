@@ -187,15 +187,16 @@ namespace XLGearModifier
 			}
 			else
 			{
-				if (clothingMetadata != null && 
-				    (clothingMetadata.Category == Unity.ClothingGearCategory.Hair || clothingMetadata.Category == Unity.ClothingGearCategory.FacialHair))
-				{
-					CreateNewMaterialController(Prefab);
-				}
-				else
-				{
-					CreateNewMaterialController(Prefab, "MasterShaderCloth_v2");
-				}
+				CreateNewMaterialController(Prefab);
+				//if (clothingMetadata != null && 
+				//    (clothingMetadata.Category == Unity.ClothingGearCategory.Hair || clothingMetadata.Category == Unity.ClothingGearCategory.FacialHair))
+				//{
+				//	CreateNewMaterialController(Prefab);
+				//}
+				//else
+				//{
+				//	CreateNewMaterialController(Prefab, "MasterShaderCloth_v2");
+				//}
 			}
 		}
 
@@ -247,6 +248,10 @@ namespace XLGearModifier
 
 			if (!string.IsNullOrEmpty(shaderName))
 				renderer.material.shader = Shader.Find(shaderName);
+			else
+			{
+				renderer.material.shader = Shader.Find("HDRP/Lit");
+			}
 
 			newMaterialController.targets.Add(new MaterialController.TargetMaterialConfig
 			{
