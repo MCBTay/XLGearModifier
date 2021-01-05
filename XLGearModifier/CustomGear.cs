@@ -250,7 +250,8 @@ namespace XLGearModifier
 				renderer.material.shader = Shader.Find(shaderName);
 			else
 			{
-				renderer.material.shader = Shader.Find("HDRP/Lit");
+				if (renderer.material.shader.name != "HDRP/Lit")
+					renderer.material.shader = Shader.Find("HDRP/Lit");
 			}
 
 			newMaterialController.targets.Add(new MaterialController.TargetMaterialConfig
