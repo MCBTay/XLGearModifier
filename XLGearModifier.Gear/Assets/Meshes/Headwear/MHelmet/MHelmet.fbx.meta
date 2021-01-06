@@ -3,7 +3,22 @@ guid: 950d3d9ed12639847a70f8c626acb2b4
 ModelImporter:
   serializedVersion: 19301
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: helmet
+    second: {fileID: 2100000, guid: efdfa585f9971aa4f9f018a90bf5ee42, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: metal
+    second: {fileID: 2100000, guid: 4260ecac5c5420240be741a6a18a1efa, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: padding
+    second: {fileID: 2100000, guid: d6aeb6fe29eedb5489a77c5fd7d898ea, type: 2}
   materials:
     materialImportMode: 1
     materialName: 0

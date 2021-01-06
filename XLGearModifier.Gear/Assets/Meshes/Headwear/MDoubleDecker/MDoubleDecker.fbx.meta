@@ -3,7 +3,17 @@ guid: b4b994ca3a1f8cf43abad532813a40c6
 ModelImporter:
   serializedVersion: 19301
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Default_OBJ.004
+    second: {fileID: 2100000, guid: 56f88a5c412774b419a4d4115f642780, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Lakai_t_cap_logo_1_cc.001
+    second: {fileID: 2100000, guid: f5cb0ca3970e5f34983fd27f32fc37b4, type: 2}
   materials:
     materialImportMode: 1
     materialName: 0
