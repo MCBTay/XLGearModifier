@@ -3,7 +3,12 @@ guid: fd06c81512f810a4aa283a7fcaa1dfd4
 ModelImporter:
   serializedVersion: 19301
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Nike_Mesh_Snapback
+    second: {fileID: 2100000, guid: b0435e0d475ecf5449205d65ea649789, type: 2}
   materials:
     materialImportMode: 1
     materialName: 0

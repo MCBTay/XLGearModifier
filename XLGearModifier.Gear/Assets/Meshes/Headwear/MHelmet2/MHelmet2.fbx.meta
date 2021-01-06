@@ -3,7 +3,12 @@ guid: d9f23ee66b1dd1f48b6e4293bd298766
 ModelImporter:
   serializedVersion: 19301
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: MI_CAS_PT_Helmet_03_EasyRider
+    second: {fileID: 2100000, guid: dbe07e1cbb2e1574099024fc0ac600ef, type: 2}
   materials:
     materialImportMode: 1
     materialName: 0

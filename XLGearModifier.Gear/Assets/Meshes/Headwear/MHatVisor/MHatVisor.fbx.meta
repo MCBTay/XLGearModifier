@@ -3,7 +3,17 @@ guid: 0980f6e1aab7ae34b993317583fd08ec
 ModelImporter:
   serializedVersion: 19301
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Tex_0000_0.dds_cap1.p_cap1.png
+    second: {fileID: 2100000, guid: 94edb7bcb11171047b6e54de0acdf9d8, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Tex_0082_0.dds_cap2.p_cap2.png
+    second: {fileID: 2100000, guid: 3c196ca9bdc689e4eb2bbfae2a60c1f8, type: 2}
   materials:
     materialImportMode: 1
     materialName: 0
