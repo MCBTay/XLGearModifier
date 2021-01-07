@@ -13,4 +13,5 @@ MonoBehaviour:
   m_Name: Spider-Man TextureSet
   m_EditorClassIdentifier: 
   DefaultTexture: {fileID: 11400000, guid: e61e4def7441c584fa86ae266d45a7e8, type: 2}
-  AlternativeTextures: []
+  AlternativeTextures:
+  - {fileID: 11400000, guid: 87b78a1915050b945af95bd0748cd13e, type: 2}
