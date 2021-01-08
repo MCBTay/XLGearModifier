@@ -16,7 +16,7 @@ namespace XLGearModifier.Patches
 				{
 					boardGear = new BoardGearInfo[] { },
 					clothingGear = new CharacterGearInfo[] { },
-					body = new CharacterBodyInfo(skaterName, "mspiderman", false, new List<MaterialChange>
+					body = new CharacterBodyInfo(skaterName, skaterName, false, new List<MaterialChange>
 					{
 						new MaterialChange("head", new[] { new TextureChange("head", "XLGearModifier") }),
 						new MaterialChange("body", new[] { new TextureChange("body", "XLGearModifier") }),
