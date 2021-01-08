@@ -291,6 +291,8 @@ namespace XLGearModifier
 			{
 				if (renderer.material.shader.name != "HDRP/Lit")
 					renderer.material.shader = Shader.Find("HDRP/Lit");
+
+				newMaterialController.UpdateMaterialControllerPropertyNameSubstitutions();
 			}
 
 			newMaterialController.targets.Add(new MaterialController.TargetMaterialConfig
@@ -306,9 +308,6 @@ namespace XLGearModifier
 			textures.Add(shaderName == "MasterShaderCloth_v2" ? "_texture2D_maskPBR" : "_texture2D_rgmtao", Metadata.GetMaterialInformation()?.DefaultTexture?.textureMaskPBR ?? AssetBundleHelper.emptyMaskPBR);
 
 			newMaterialController.SetTextures(textures);
-
-			if (shaderName != "MasterShaderCloth_v2")
-				newMaterialController.UpdateMaterialControllerPropertyNameSubstitutions();
 
 			UpdateMaterialControllerAlphaMasks(newMaterialController);
 
