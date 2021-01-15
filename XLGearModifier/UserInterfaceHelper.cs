@@ -47,7 +47,7 @@ namespace XLGearModifier
 			{
 				var template = GearDatabase.Instance.CharGearTemplateForID[clothingGear.type];
 				var spriteIndex = AssetBundleHelper.Instance.GearModifierUISpriteSheet.spriteCharacterTable[GetSpriteIndex(template)].glyphIndex;
-				var sprite = Sprite.Create(Texture2D.redTexture, new Rect(0, 0, 2, 2), Vector2.zero); //AssetBundleHelper.Instance.GearModifierUISpriteSheetSprites.FirstOrDefault(x => x.name == "GearModifierUISpriteSheet_" + spriteIndex);
+				var sprite = AssetBundleHelper.Instance.GearModifierUISpriteSheetSprites.FirstOrDefault(x => x.name == "GearModifierUISpriteSheet_" + spriteIndex);
 
 				whatsEquipped.AddToList(clothingGear.type, clothingGear.name, sprite);
 			}
