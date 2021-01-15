@@ -85,7 +85,7 @@ namespace XLGearModifier.Patches
 				}
 				else if (index.depth >= 3)
 				{
-					itemView.Label.spriteAsset = AssetBundleHelper.GearModifierUISpriteSheet;
+					itemView.Label.spriteAsset = AssetBundleHelper.Instance.GearModifierUISpriteSheet;
 					//itemView.SetText(GearManager.Instance.CurrentFolder.GetName().Replace("\\", $"<sprite name=\"{GearManager.Instance.CurrentFolder.GetName().Replace("\\", string.Empty)}\"> "));
 					string newText = string.Empty;
 					if (index.depth == 3)
@@ -132,9 +132,9 @@ namespace XLGearModifier.Patches
 					return;
 				}
 
-				if (AssetBundleHelper.GearModifierUISpriteSheet != null)
+				if (AssetBundleHelper.Instance.GearModifierUISpriteSheet != null)
 				{
-					itemView.Label.spriteAsset = AssetBundleHelper.GearModifierUISpriteSheet;
+					itemView.Label.spriteAsset = AssetBundleHelper.Instance.GearModifierUISpriteSheet;
 				}
 
 				if (gearAtIndex.name.StartsWith("\\"))

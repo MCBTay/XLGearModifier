@@ -19,7 +19,7 @@ namespace XLGearModifier.Patches
 
 				if (texturePath.EndsWith("Empty_Albedo.png") || split.Length < 3)
 				{
-					__result = Task.FromResult<Texture>(AssetBundleHelper.emptyAlbedo);
+					__result = Task.FromResult<Texture>(AssetBundleHelper.Instance.emptyAlbedo);
 					return false;
 				}
 				else
