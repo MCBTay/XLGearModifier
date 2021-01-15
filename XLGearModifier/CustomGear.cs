@@ -144,16 +144,10 @@ namespace XLGearModifier
 			GearInfo = new CharacterBodyInfo(name, skaterMetadata.Prefix, false, materialChanges, new string[] { });
 
 			Prefab.AddGearPrefabController();
-			AddBodyMaterialControllers();
+			CreateNewMaterialController(Prefab, "shaderStandard_wTexAlphaCut_DoubleSide");
 
 			this.AddBodyGearTemplate();
 			GearDatabase.Instance.bodyGear.Add(GearInfo as CharacterBodyInfo);
-		}
-
-		private void AddBodyMaterialControllers()
-		{
-			CreateNewMaterialController(Prefab, "shaderStandard_wTexAlphaCut_DoubleSide", "head");
-			CreateNewMaterialController(Prefab, "shaderStandard_wTexAlphaCut_DoubleSide", "body");
 		}
 		#endregion
 
@@ -262,8 +256,8 @@ namespace XLGearModifier
 			}
 
 			var clothingMetdata = Metadata as XLGMClothingGearMetadata;
-			if (clothingMetdata != null && 
-			    (clothingMetdata.Category == Unity.ClothingGearCategory.Hair || clothingMetdata.Category == Unity.ClothingGearCategory.FacialHair))
+			if (clothingMetdata != null &&
+				(clothingMetdata.Category == Unity.ClothingGearCategory.Hair || clothingMetdata.Category == Unity.ClothingGearCategory.FacialHair))
 			{
 				newMaterialController.UpdateMaterialControllerPropertyNameSubstitutions();
 			}
@@ -272,46 +266,61 @@ namespace XLGearModifier
 			Traverse.Create(newMaterialController).Field("_originalMaterial").SetValue(Traverse.Create(origMaterialController).Field("originalMaterial").GetValue<Material>());
 		}
 
-		private void CreateNewMaterialController(GameObject prefab, string shaderName = "", string materialId = null)
+		private void CreateNewMaterialController(GameObject prefab, string shaderName = "")
 		{
-			var newMaterialController = prefab.AddComponent<MaterialController>();
-			newMaterialController.targets = new List<MaterialController.TargetMaterialConfig>();
-
-			if (!string.IsNullOrEmpty(materialId))
-			{
-				newMaterialController.materialID = materialId;
-			}
-
 			var renderer = prefab.GetComponentInChildren<SkinnedMeshRenderer>(true);
-			if (renderer?.material == null) return;
 
-			if (!string.IsNullOrEmpty(shaderName))
-				renderer.material.shader = Shader.Find(shaderName);
-			else
+			var materials = renderer.materials;
+			if (materials == null || !materials.Any()) return;
+
+			int materialIndex = 0;
+			foreach (var material in materials)
 			{
-				if (renderer.material.shader.name != "HDRP/Lit")
-					renderer.material.shader = Shader.Find("HDRP/Lit");
+				var newMaterialController = prefab.AddComponent<MaterialController>();
 
-				newMaterialController.UpdateMaterialControllerPropertyNameSubstitutions();
+				newMaterialController.targets = new List<MaterialController.TargetMaterialConfig>();
+
+				if (!string.IsNullOrEmpty(material.name))
+				{
+					newMaterialController.materialID = material.name;
+				}
+
+				newMaterialController.materialID = materialIndex.ToString();
+
+				if (!string.IsNullOrEmpty(shaderName))
+					material.shader = Shader.Find(shaderName);
+				else
+				{
+					if (material.shader.name != "HDRP/Lit")
+						material.shader = Shader.Find("HDRP/Lit");
+
+					newMaterialController.UpdateMaterialControllerPropertyNameSubstitutions();
+				}
+
+				newMaterialController.targets.Add(new MaterialController.TargetMaterialConfig
+				{
+					renderer = renderer,
+					materialIndex = materialIndex,
+					sharedMaterial = material
+				});
+
+				materialIndex++;
+
+				var textures = new Dictionary<string, Texture>();
+				textures.Add("_texture2D_color", Metadata.GetMaterialInformation()?.DefaultTexture?.textureColor ?? AssetBundleHelper.Instance.emptyAlbedo);
+				textures.Add("_texture2D_normal", Metadata.GetMaterialInformation()?.DefaultTexture?.textureNormalMap ?? AssetBundleHelper.Instance.emptyNormalMap);
+				textures.Add(shaderName == "MasterShaderCloth_v2" ? "_texture2D_maskPBR" : "_texture2D_rgmtao", Metadata.GetMaterialInformation()?.DefaultTexture?.textureMaskPBR ?? AssetBundleHelper.Instance.emptyMaskPBR);
+
+				newMaterialController.SetTextures(textures);
+
+				UpdateMaterialControllerAlphaMasks(newMaterialController);
+
+				Traverse.Create(newMaterialController).Field("_originalMaterial").SetValue(Traverse.Create(newMaterialController).Field("originalMaterial").GetValue<Material>());
+
+
+				if (materialIndex > 5)
+					break;
 			}
-
-			newMaterialController.targets.Add(new MaterialController.TargetMaterialConfig
-			{
-				renderer = renderer,
-				materialIndex = 0,
-				sharedMaterial = renderer.material,
-			});
-
-			var textures = new Dictionary<string, Texture>();
-			textures.Add("_texture2D_color", Metadata.GetMaterialInformation()?.DefaultTexture?.textureColor ?? AssetBundleHelper.Instance.emptyAlbedo);
-			textures.Add("_texture2D_normal", Metadata.GetMaterialInformation()?.DefaultTexture?.textureNormalMap ?? AssetBundleHelper.Instance.emptyNormalMap);
-			textures.Add(shaderName == "MasterShaderCloth_v2" ? "_texture2D_maskPBR" : "_texture2D_rgmtao", Metadata.GetMaterialInformation()?.DefaultTexture?.textureMaskPBR ?? AssetBundleHelper.Instance.emptyMaskPBR);
-
-			newMaterialController.SetTextures(textures);
-
-			UpdateMaterialControllerAlphaMasks(newMaterialController);
-
-			Traverse.Create(newMaterialController).Field("_originalMaterial").SetValue(Traverse.Create(newMaterialController).Field("originalMaterial").GetValue<Material>());
 		}
 
 		private async Task<MaterialController> GetDefaultGearMaterialController()
@@ -607,11 +616,7 @@ namespace XLGearModifier
 				materialController.PropertyNameSubstitutions = new Dictionary<string, string>();
 
 			var traverse = Traverse.Create(materialController);
-			var propNameSubs = traverse.Field("m_propertyNameSubstitutions").GetValue<List<PropertyNameSubstitution>>();
-			if (propNameSubs == null)
-			{
-				propNameSubs = new List<PropertyNameSubstitution>();
-			}
+			var propNameSubs = traverse.Field("m_propertyNameSubstitutions").GetValue<List<PropertyNameSubstitution>>() ?? new List<PropertyNameSubstitution>();
 			propNameSubs.Add(new PropertyNameSubstitution { oldName = "_texture2D_color", newName = "_BaseColorMap" });
 			materialController.PropertyNameSubstitutions = propNameSubs.ToDictionary(s => s.oldName, s => s.newName);
 

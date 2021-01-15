@@ -19,6 +19,7 @@ namespace XLGearModifier
 		public string AssetPacksPath;
 
 		public TMP_SpriteAsset GearModifierUISpriteSheet;
+		public List<Sprite> GearModifierUISpriteSheetSprites;
 		public Texture2D emptyAlbedo;
 		public Texture2D emptyMaskPBR;
 		public Texture2D emptyNormalMap;
@@ -34,6 +35,7 @@ namespace XLGearModifier
 			emptyMaskPBR = bundle.LoadAsset<Texture2D>("Empty_Maskpbr_Map.png");
 			emptyNormalMap = bundle.LoadAsset<Texture2D>("Empty_Normal_Map.png");
 			GearModifierUISpriteSheet = bundle.LoadAsset<TMP_SpriteAsset>("GearModifierUISpriteSheet");
+			GearModifierUISpriteSheetSprites = bundle.LoadAllAssets<Sprite>().Where(x => x.name.StartsWith("GearModifierUISpriteSheet")).ToList();
 
 			Debug.Log("XLGearModifier: Loading " + bundle.name);
 			await GearManager.Instance.LoadAssets(bundle);
