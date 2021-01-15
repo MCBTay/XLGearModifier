@@ -45,8 +45,8 @@ namespace XLGearModifier
 				}
 
 				XLMenuMod.Utilities.UserInterface.UserInterfaceHelper.Instance.LoadAssets();
-				AssetBundleHelper.LoadGearBundle();
-				PlayerController.Instance.StartCoroutine(AssetBundleHelper.LoadUserBundles());
+				AssetBundleHelper.Instance.LoadGearBundle();
+				PlayerController.Instance.StartCoroutine(AssetBundleHelper.Instance.LoadUserBundles());
 			}
 			else
 			{
