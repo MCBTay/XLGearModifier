@@ -11,17 +11,19 @@ using XLGearModifier.Unity;
 
 namespace XLGearModifier
 {
-	public static class AssetBundleHelper
+	public class AssetBundleHelper
 	{
-		public static string AssetPacksPath;
+		private static AssetBundleHelper __instance;
+		public static AssetBundleHelper Instance => __instance ?? (__instance = new AssetBundleHelper());
 
-		public static TMP_SpriteAsset GearModifierUISpriteSheet;
-		public static List<Sprite> GearModifierUISpriteSheetSprites;
-		public static Texture2D emptyAlbedo;
-		public static Texture2D emptyMaskPBR;
-		public static Texture2D emptyNormalMap;
+		public string AssetPacksPath;
 
-		public static async Task LoadGearBundle()
+		public TMP_SpriteAsset GearModifierUISpriteSheet;
+		public Texture2D emptyAlbedo;
+		public Texture2D emptyMaskPBR;
+		public Texture2D emptyNormalMap;
+
+		public async Task LoadGearBundle()
 		{
 			// We're solely making a call here to ensure that the unity assembly is loaded up prior to loading assets.  else we'll get a bunch of errors about things missing.
 			var test = GearModifierTab.CustomMeshes;
@@ -32,7 +34,6 @@ namespace XLGearModifier
 			emptyMaskPBR = bundle.LoadAsset<Texture2D>("Empty_Maskpbr_Map.png");
 			emptyNormalMap = bundle.LoadAsset<Texture2D>("Empty_Normal_Map.png");
 			GearModifierUISpriteSheet = bundle.LoadAsset<TMP_SpriteAsset>("GearModifierUISpriteSheet");
-			GearModifierUISpriteSheetSprites = bundle.LoadAllAssets<Sprite>().Where(x => x.name.StartsWith("GearModifierUISpriteSheet")).ToList();
 
 			Debug.Log("XLGearModifier: Loading " + bundle.name);
 			await GearManager.Instance.LoadAssets(bundle);
@@ -41,7 +42,7 @@ namespace XLGearModifier
 			await PlayerController.Instance.characterCustomizer.LoadLastPlayer();
 		}
 
-		public static IEnumerator LoadUserBundles()
+		public IEnumerator LoadUserBundles()
 		{
 			AssetPacksPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal), "SkaterXL", "XLGearModifier", "Asset Packs");
 
@@ -58,7 +59,7 @@ namespace XLGearModifier
 			}
 		}
 
-		static IEnumerator LoadBundleAsync(string name, bool isEmbedded = false)
+		IEnumerator LoadBundleAsync(string name, bool isEmbedded = false)
 		{
 			AssetBundleCreateRequest abCreateRequest;
 
@@ -81,7 +82,7 @@ namespace XLGearModifier
 			bundle.Unload(false);
 		}
 
-		private static byte[] ExtractResource(string filename)
+		private byte[] ExtractResource(string filename)
 		{
 			Assembly a = Assembly.GetExecutingAssembly();
 			using (var resFilestream = a.GetManifestResourceStream(filename))

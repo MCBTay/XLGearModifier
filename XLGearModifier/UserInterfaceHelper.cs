@@ -46,8 +46,8 @@ namespace XLGearModifier
 			foreach (var clothingGear in customizations.clothingGear)
 			{
 				var template = GearDatabase.Instance.CharGearTemplateForID[clothingGear.type];
-				var spriteIndex = AssetBundleHelper.GearModifierUISpriteSheet.spriteCharacterTable[GetSpriteIndex(template)].glyphIndex;
-				var sprite = AssetBundleHelper.GearModifierUISpriteSheetSprites.FirstOrDefault(x => x.name == "GearModifierUISpriteSheet_" + spriteIndex);
+				var spriteIndex = AssetBundleHelper.Instance.GearModifierUISpriteSheet.spriteCharacterTable[GetSpriteIndex(template)].glyphIndex;
+				var sprite = Sprite.Create(Texture2D.redTexture, new Rect(0, 0, 2, 2), Vector2.zero); //AssetBundleHelper.Instance.GearModifierUISpriteSheetSprites.FirstOrDefault(x => x.name == "GearModifierUISpriteSheet_" + spriteIndex);
 
 				whatsEquipped.AddToList(clothingGear.type, clothingGear.name, sprite);
 			}
@@ -61,27 +61,27 @@ namespace XLGearModifier
 			{
 				case ClothingGearCategory.Shoes:
 					
-					spriteIndex = AssetBundleHelper.GearModifierUISpriteSheet.GetSpriteIndexFromName("Shoes");
+					spriteIndex = AssetBundleHelper.Instance.GearModifierUISpriteSheet.GetSpriteIndexFromName("Shoes");
 					break;
 				case ClothingGearCategory.Hoodie:
 				case ClothingGearCategory.LongSleeve:
 				case ClothingGearCategory.Shirt:
 				case ClothingGearCategory.TankTop:
-					spriteIndex = AssetBundleHelper.GearModifierUISpriteSheet.GetSpriteIndexFromName("Top");
+					spriteIndex = AssetBundleHelper.Instance.GearModifierUISpriteSheet.GetSpriteIndexFromName("Top");
 					break;
 				case ClothingGearCategory.Pants:
 				case ClothingGearCategory.PantsRolledUp:
 				case ClothingGearCategory.Shorts:
-					spriteIndex = AssetBundleHelper.GearModifierUISpriteSheet.GetSpriteIndexFromName("Bottom");
+					spriteIndex = AssetBundleHelper.Instance.GearModifierUISpriteSheet.GetSpriteIndexFromName("Bottom");
 					break;
 				case ClothingGearCategory.Socks:
-					spriteIndex = AssetBundleHelper.GearModifierUISpriteSheet.GetSpriteIndexFromName("Socks");
+					spriteIndex = AssetBundleHelper.Instance.GearModifierUISpriteSheet.GetSpriteIndexFromName("Socks");
 					break;
 				case ClothingGearCategory.Hat:
-					spriteIndex = AssetBundleHelper.GearModifierUISpriteSheet.GetSpriteIndexFromName("Headwear");
+					spriteIndex = AssetBundleHelper.Instance.GearModifierUISpriteSheet.GetSpriteIndexFromName("Headwear");
 					break;
 				default:
-					spriteIndex = AssetBundleHelper.GearModifierUISpriteSheet.GetSpriteIndexFromName("Other");
+					spriteIndex = AssetBundleHelper.Instance.GearModifierUISpriteSheet.GetSpriteIndexFromName("Other");
 					break;
 			}
 
