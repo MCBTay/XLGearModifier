@@ -77,10 +77,10 @@ namespace XLGearModifier.Patches
 					switch (index[1])
 					{
 						case (int)GearModifierTab.CustomMeshes: itemView.SetText("Custom Meshes"); break;
-						case (int)GearModifierTab.ProGear:      itemView.SetText("Pro Gear");      break;
-						case (int)GearModifierTab.FemaleGear:   itemView.SetText("Female Gear");   break;
-						case (int)GearModifierTab.MaleGear:     itemView.SetText("Male Gear");     break;
-						case (int)GearModifierTab.Eyes:         itemView.SetText("Eyes");          break;
+						case (int)GearModifierTab.ProGear: itemView.SetText("Pro Gear"); break;
+						case (int)GearModifierTab.FemaleGear: itemView.SetText("Female Gear"); break;
+						case (int)GearModifierTab.MaleGear: itemView.SetText("Male Gear"); break;
+						case (int)GearModifierTab.Eyes: itemView.SetText("Eyes"); break;
 					}
 				}
 				else if (index.depth >= 3)
@@ -143,8 +143,9 @@ namespace XLGearModifier.Patches
 					if (index.depth == 3)
 					{
 						newText = $"<space=18px><sprite name=\"{gearAtIndex.name.Replace("\\", string.Empty)}\" tint=1>";
+						itemView.SetText(gearAtIndex.name.Replace("\\", newText), true);
 					}
-					else if (index.depth == 4)
+					else if (index.depth >= 4)
 					{
 						var customGearFolder = gearAtIndex as CustomGearFolderInfo;
 						if (customGearFolder != null)
@@ -159,12 +160,27 @@ namespace XLGearModifier.Patches
 									if (child.GetParentObject() is CustomGear customGear)
 									{
 										newText = $"<space=18px><sprite name=\"{customGear.Metadata.GetSprite()}\" tint=1>";
+										itemView.SetText(gearAtIndex.name.Replace("\\", newText), true);
+									}
+									else if (child.GetParentObject() is CustomCharacterGearInfo customCharacterGear)
+									{
+										if (!customCharacterGear.isCustom || gearAtIndex.name.Equals("\\mod.io"))
+										{
+											itemView.SetBrandSprite(customGearFolder);
+										}
+										else
+										{
+											itemView.SetText(gearAtIndex.name.Replace("\\", newText), true);
+										}
+									}
+									else
+									{
+										itemView.SetText(gearAtIndex.name.Replace("\\", newText), true);
 									}
 								}
 							}
 						}
 					}
-					itemView.SetText(gearAtIndex.name.Replace("\\", newText), true);
 				}
 				else if (gearAtIndex.name.Equals("..\\"))
 				{
