@@ -25,11 +25,11 @@ jobs:
       working-directory: ${{env.GITHUB_WORKSPACE}}
       run: nuget restore ${{env.SOLUTION_FILE_PATH}}
       
-    - name: Download a Build Artifact
-      uses: actions/download-artifact@v2.0.8
-      with:
+    #- name: Download a Build Artifact
+      #uses: actions/download-artifact@v2.0.8
+      #with:
         # Artifact name
-        name: XLMenuMod.Utilities.dll
+        #name: XLMenuMod.Utilities.dll
         # Destination path
         #path: # optional
 
