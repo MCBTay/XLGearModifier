@@ -1,9 +1,14 @@
 fileFormatVersion: 2
-guid: 916fd29eec5252440a96284442b3d067
+guid: fe5a6e37033cf61429012ae729e11ca6
 ModelImporter:
   serializedVersion: 19301
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: MI_CAS_Nike_Back_01
+    second: {fileID: 2100000, guid: ecc72fd7effb9fd40bc024b72af60bf9, type: 2}
   materials:
     materialImportMode: 1
     materialName: 0
