@@ -12,6 +12,8 @@ namespace XLGearModifier.Unity
 		public ClothingGearCategory Category;
 		[Tooltip("This checkbox allows a mesh to be 'layerable' over it's own gear slot.  For example, you could apply two separate shirt meshes at the same time if they're both layerable.")]
 		public bool IsLayerable;
+		[Tooltip("This defines which skater the gear is intended for.  This is used to determine which items show up in the gear menu based on which skater you are customizing.")]
+		public SkaterBase Skater;
 
 		[Header("Texturing")]
 		[Tooltip("Use this for a mesh that has a close UV to one of the original meshes. Allows you to re-use the existing textures/prefixes associated with the base mesh.")]
