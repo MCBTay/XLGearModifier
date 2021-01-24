@@ -2,3 +2,4 @@
 *.fbx filter=lfs diff=lfs merge=lfs -text
 *.png filter=lfs diff=lfs merge=lfs -text
 *.blend filter=lfs diff=lfs merge=lfs -text
+XLGearModifier/Assets/xlgm_beta filter=lfs diff=lfs merge=lfs -text
