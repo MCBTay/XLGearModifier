@@ -92,9 +92,9 @@
     <Reference Include="UnityModManager">
       <HintPath>References\UnityModManager.dll</HintPath>
     </Reference>
-    <Reference Include="XLGearModifier.Unity, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="XLGearModifier.Unity, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\XLGearModifier.Gear\Library\ScriptAssemblies\XLGearModifier.Unity.dll</HintPath>
+      <HintPath>References\XLGearModifier.Unity.dll</HintPath>
     </Reference>
     <Reference Include="XLMenuMod.Utilities">
       <HintPath>References\XLMenuMod.Utilities.dll</HintPath>
@@ -120,7 +120,7 @@
     <Compile Include="UserInterfaceHelper.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Assets\xlgm_beta" />
+    <EmbeddedResource Include="Assets\xlgm_beta" />
     <None Include="Info.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
