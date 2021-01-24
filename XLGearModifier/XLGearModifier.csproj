@@ -120,7 +120,7 @@
     <Compile Include="UserInterfaceHelper.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Assets\customgear" />
+    <None Include="Assets\xlgm_beta" />
     <None Include="Info.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
