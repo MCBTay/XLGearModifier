@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: ShowChest
   m_EditorClassIdentifier: 
   MaskLocation: 1
-  Threshold: 40
+  Threshold: 0
   AlphaMask: {fileID: 0}
