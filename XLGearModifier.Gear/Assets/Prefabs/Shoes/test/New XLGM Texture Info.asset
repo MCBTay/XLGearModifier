@@ -9,9 +9,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: da73c905e0670a545aa1b7f44e20178f, type: 3}
-  m_Name: Arms-FullHidden
+  m_Script: {fileID: 11500000, guid: 1edb71787833b6c41a7fba646d45325c, type: 3}
+  m_Name: New XLGM Texture Info
   m_EditorClassIdentifier: 
-  MaskLocation: 0
-  Threshold: 200
-  AlphaMask: {fileID: 0}
+  textureName: 
+  textureColor: {fileID: 0}
+  textureNormalMap: {fileID: 0}
+  textureMaskPBR: {fileID: 0}
