@@ -9,9 +9,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: da73c905e0670a545aa1b7f44e20178f, type: 3}
-  m_Name: New XLGM Gear Alpha Mask Config
+  m_Script: {fileID: 11500000, guid: 1edb71787833b6c41a7fba646d45325c, type: 3}
+  m_Name: MHairDreadMid
   m_EditorClassIdentifier: 
-  MaskLocation: 0
-  Threshold: 0
-  AlphaMask: {fileID: 0}
+  textureName: Tint
+  textureColor: {fileID: 2800000, guid: 955e7216a071426468d613e290785b96, type: 3}
+  textureNormalMap: {fileID: 0}
+  textureMaskPBR: {fileID: 0}
