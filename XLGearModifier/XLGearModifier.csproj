@@ -120,12 +120,14 @@
     <Compile Include="UserInterfaceHelper.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Assets\xlgm_beta" />
     <None Include="Info.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
   <ItemGroup />
+  <ItemGroup>
+    <EmbeddedResource Include="Assets\customgear" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>if "$(ConfigurationName)"=="Debug" ( 

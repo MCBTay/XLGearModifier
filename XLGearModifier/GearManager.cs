@@ -126,7 +126,8 @@ namespace XLGearModifier
 
 				if (Main.XLMenuModEnabled)
 				{
-					LeverageXLMenuMod(gearCategory, currentGearCategory, ref parent, isCustom);
+					var toBeAdded = LeverageXLMenuMod(gearCategory, currentGearCategory, isCustom);
+					AddItemsFromXLMenuMod(toBeAdded, ref parent);
 				}
 				else
 				{
@@ -139,38 +140,6 @@ namespace XLGearModifier
 					}
 				}
 			}
-		}
-
-		public void LeverageXLMenuMod(int gearCategory, GearInfo[] currentGearCategory, ref CustomFolderInfo parent, bool isCustom)
-		{
-			if (isCustom)
-			{
-				CustomGearManager.Instance.LoadNestedItems(currentGearCategory);
-				AddItemsFromXLMenuMod(CustomGearManager.Instance.NestedItems, ref parent);
-			}
-			else
-			{
-				if (gearCategory == (int)GearCategory.Hair)
-				{
-					CustomGearManager.Instance.LoadNestedHairItems(currentGearCategory);
-				}
-				else
-				{
-					CustomGearManager.Instance.LoadNestedOfficialItems(currentGearCategory);
-				}
-
-				AddItemsFromXLMenuMod(CustomGearManager.Instance.NestedOfficialItems, ref parent);
-			}
-		}
-
-		public void AddItemsFromXLMenuMod(List<ICustomInfo> itemsToAdd, ref CustomFolderInfo parent)
-		{
-			foreach (var item in itemsToAdd)
-			{
-				item.Parent = parent;
-			}
-
-			parent.Children.AddRange(itemsToAdd);
 		}
 
 		public void AddItem(CharacterGearInfo currentGear, List<ICustomInfo> destList, ref CustomFolderInfo parent)
@@ -335,9 +304,24 @@ namespace XLGearModifier
 				}
 			}
 
-			foreach (var texture in textures)
+			if (Main.XLMenuModEnabled)
 			{
-				AddToList(customGear, texture, destList, ref parent, isCustom);
+				var toBeAdded = LeverageXLMenuMod(categoryIndex, textures.ToArray(), isCustom);
+
+				foreach(var texture in toBeAdded)
+				{
+					if (texture.GetParentObject() is CustomCharacterGearInfo charGearInfo)
+						AddToList(customGear, charGearInfo, destList, ref parent, isCustom);
+					else if (texture.GetParentObject() is CustomGearFolderInfo folderInfo)
+						AddFolder<CustomGearFolderInfo>(customGear, folderInfo, destList, ref parent, isCustom);
+				}
+			}
+			else
+			{
+				foreach (var texture in textures)
+				{
+					AddToList(customGear, texture, destList, ref parent, isCustom);
+				}
 			}
 
 			if (textures.Any() && isCustom && !customGear.Metadata.BasedOnDefaultGear())
@@ -346,6 +330,36 @@ namespace XLGearModifier
 				if (defaultTexture != null)
 					destList.Remove(defaultTexture);
 			}
+		}
+
+		public List<ICustomInfo> LeverageXLMenuMod(int gearCategory, GearInfo[] currentGearCategory, bool isCustom)
+		{
+			if (isCustom)
+			{
+				CustomGearManager.Instance.LoadNestedItems(currentGearCategory);
+				return CustomGearManager.Instance.NestedItems;
+			}
+
+			if (gearCategory == (int)GearCategory.Hair)
+			{
+				CustomGearManager.Instance.LoadNestedHairItems(currentGearCategory);
+			}
+			else
+			{
+				CustomGearManager.Instance.LoadNestedOfficialItems(currentGearCategory);
+			}
+
+			return CustomGearManager.Instance.NestedOfficialItems;
+		}
+
+		public void AddItemsFromXLMenuMod(List<ICustomInfo> itemsToAdd, ref CustomFolderInfo parent)
+		{
+			foreach (var item in itemsToAdd)
+			{
+				item.Parent = parent;
+			}
+
+			parent.Children.AddRange(itemsToAdd);
 		}
 
 		private void AddToList(CustomGear customGear, GearInfoSingleMaterial baseTexture, List<ICustomInfo> destList, ref CustomFolderInfo parent, bool isCustom)
@@ -394,6 +408,48 @@ namespace XLGearModifier
 			else
 			{
 				parent = child;
+			}
+		}
+
+		public void AddFolder<T>(CustomGear customGear, CustomGearFolderInfo gearFolder, List<ICustomInfo> sourceList, ref CustomFolderInfo parent, bool isCustom) where T : ICustomFolderInfo
+		{
+			var child = sourceList.FirstOrDefault(x => x.GetName().Equals(gearFolder.FolderInfo.Name, StringComparison.InvariantCultureIgnoreCase) && x is CustomFolderInfo) as CustomFolderInfo;
+			if (child == null)
+			{
+				CustomGearFolderInfo newFolder;
+
+				if (typeof(T) == typeof(CustomGearFolderInfo))
+				{
+					newFolder = gearFolder;
+					newFolder.isCustom = isCustom;
+					newFolder.FolderInfo.Parent = parent;
+
+					var goBack = newFolder.FolderInfo.Children.FirstOrDefault();
+					if (goBack != null)
+						goBack.Parent = parent;
+
+					UpdateChildren(newFolder, customGear);
+				}
+				else return;
+
+				sourceList.Add(newFolder.FolderInfo);
+			}
+		}
+
+		private void UpdateChildren(ICustomFolderInfo folder, CustomGear customGear)
+		{
+			foreach (var child in folder.FolderInfo.Children)
+			{
+				if (child.GetParentObject() is CustomCharacterGearInfo characterGear)
+				{
+					characterGear.type = customGear.Metadata.Prefix.ToLower();
+					//child.ParentObject = customGear;
+					child.ParentObject = new CustomGear(customGear, characterGear);
+				}
+				else if (child.GetParentObject() is CustomGearFolderInfo customGearFolder)
+				{
+					UpdateChildren(customGearFolder, customGear);
+				}
 			}
 		}
 	}
