@@ -14,8 +14,29 @@ using XLMenuMod.Utilities.UserInterface;
 
 namespace XLGearModifier.Patches
 {
-	public class GearSelectionControllerPatch
+	public static class GearSelectionControllerPatch
 	{
+		private static void SetItemText(this MVCListItemView item, GearInfo gearAtIndex, CustomGearFolderInfo customGearFolder)
+		{
+			if (!customGearFolder.isCustom || gearAtIndex.name.Equals("\\mod.io"))
+				item.SetBrandSprite(customGearFolder);
+			else
+			{
+				string newText = "<space=18px><sprite name=\"folder_outline\" tint=1>";
+				if (customGearFolder.CustomSprite != null)
+				{
+					item.Label.spriteAsset = customGearFolder.CustomSprite;
+					newText = "<space=18px><sprite=0 tint=1>";
+				}
+				else
+				{
+					item.Label.spriteAsset = SpriteHelper.MenuIcons;
+				}
+
+				item.SetText(gearAtIndex.name.Replace("\\", newText), true);
+			}
+		}
+
 		[HarmonyPatch(typeof(GearSelectionController), nameof(GearSelectionController.GetNumberOfItems))]
 		public static class GetNumberOfItemsPatch
 		{
@@ -86,7 +107,6 @@ namespace XLGearModifier.Patches
 				else if (index.depth >= 3)
 				{
 					itemView.Label.spriteAsset = AssetBundleHelper.Instance.GearModifierUISpriteSheet;
-					//itemView.SetText(GearManager.Instance.CurrentFolder.GetName().Replace("\\", $"<sprite name=\"{GearManager.Instance.CurrentFolder.GetName().Replace("\\", string.Empty)}\"> "));
 					string newText = string.Empty;
 					if (index.depth == 3)
 					{
@@ -94,23 +114,93 @@ namespace XLGearModifier.Patches
 					}
 					else if (index.depth == 4)
 					{
-						// since this is just a folder representing the mesh, we can get the configured sprite type out of of one of the actual items, which is a child
-						// of this folder.  get the 2nd child because the first will always be the "Go Back" folder.
-						if (GearManager.Instance.CurrentFolder.Children.Count > 1)
-						{
-							var child = GearManager.Instance.CurrentFolder.Children.ElementAt(1);
-							if (child != null)
-							{
-								if (child.GetParentObject() is CustomGear customGear)
-								{
-									newText = $"<space=18px><sprite name=\"{customGear.Metadata.GetSprite()}\" tint=1>";
-								}
-							}
-						}
+						SetMeshFoldersText(itemView, GearManager.Instance.CurrentFolder.GetParentObject() as CustomGearFolderInfo, index);
+						return;
 					}
 					itemView.SetText(GearManager.Instance.CurrentFolder.GetName().Replace("\\", newText), true);
+
 				}
 			}
+		}
+
+		private static void SetMeshFoldersText(MenuButton itemView, GearInfo gearAtIndex, IndexPath index)
+		{
+			string newText = string.Empty;
+
+			var customGearFolder = gearAtIndex as CustomGearFolderInfo;
+			if (customGearFolder != null)
+			{
+				// since this is just a folder representing the mesh, we can get the configured sprite type out of of one of the actual items, which is a child
+				// of this folder.  get the 2nd child because the first will always be the "Go Back" folder.
+				if (customGearFolder.FolderInfo.Children.Count > 1)
+				{
+					var child = GetFirstChild(customGearFolder);
+
+					if (child != null)
+					{
+						if (child.GetParentObject() is CustomGear customGear)
+						{
+							newText = $"<space=18px><sprite name=\"{customGear.Metadata.GetSprite()}\" tint=1>";
+							itemView.SetText(gearAtIndex.name.Replace("\\", newText), true);
+						}
+						else if (child.GetParentObject() is CustomCharacterGearInfo customCharacterGear)
+						{
+							if (!customCharacterGear.isCustom || gearAtIndex.name.Equals("\\mod.io"))
+							{
+								if (index[1] != (int)GearModifierTab.CustomMeshes)
+								{
+									switch (itemView)
+									{
+										case MVCListItemView listItem:
+											listItem.SetBrandSprite(customGearFolder);
+											break;
+										case MVCListHeaderView headerItem:
+											headerItem.SetBrandSprite(customGearFolder);
+											break;
+									}
+								}
+								else
+								{
+									itemView.SetText(gearAtIndex.name.Replace("\\", newText), true);
+								}
+							}
+							else
+							{
+								itemView.SetText(gearAtIndex.name.Replace("\\", newText), true);
+							}
+						}
+						else
+						{
+							itemView.SetText(gearAtIndex.name.Replace("\\", newText), true);
+						}
+					}
+
+				}
+			}
+		}
+
+		private static ICustomInfo GetFirstChild(CustomGearFolderInfo customGearFolder)
+		{
+			// get the second as the first child will always be the "Go Back" folder
+			if (customGearFolder.FolderInfo.Children == null || customGearFolder.FolderInfo.Children.Count <= 1) return null;
+
+			var child = customGearFolder.FolderInfo.Children.ElementAt(1);
+			if (child == null) return null;
+
+			if (child.GetParentObject() is CustomGearFolderInfo nestedFolder)
+			{
+				return GetFirstChild(nestedFolder);
+			}
+			if (child.GetParentObject() is CustomCharacterGearInfo)
+			{
+				return child;
+			}
+			if (child.GetParentObject() is CustomGear)
+			{
+				return child;
+			}
+
+			return null;
 		}
 
 		[HarmonyPatch(typeof(GearSelectionController), nameof(GearSelectionController.ConfigureListItemView))]
@@ -145,39 +235,27 @@ namespace XLGearModifier.Patches
 						newText = $"<space=18px><sprite name=\"{gearAtIndex.name.Replace("\\", string.Empty)}\" tint=1>";
 						itemView.SetText(gearAtIndex.name.Replace("\\", newText), true);
 					}
-					else if (index.depth >= 4)
+					else if (index.depth == 4)
+					{
+						SetMeshFoldersText(itemView, gearAtIndex, index);
+					}
+					else if (index.depth > 4)
 					{
 						var customGearFolder = gearAtIndex as CustomGearFolderInfo;
 						if (customGearFolder != null)
 						{
-							// since this is just a folder representing the mesh, we can get the configured sprite type out of of one of the actual items, which is a child
-							// of this folder.  get the 2nd child because the first will always be the "Go Back" folder.
-							if (customGearFolder.FolderInfo.Children.Count > 1)
+							var child = GetFirstChild(customGearFolder);
+							if (child.GetParentObject() is CustomGear)
 							{
-								var child = customGearFolder.FolderInfo.Children.ElementAt(1);
-								if (child != null)
-								{
-									if (child.GetParentObject() is CustomGear customGear)
-									{
-										newText = $"<space=18px><sprite name=\"{customGear.Metadata.GetSprite()}\" tint=1>";
-										itemView.SetText(gearAtIndex.name.Replace("\\", newText), true);
-									}
-									else if (child.GetParentObject() is CustomCharacterGearInfo customCharacterGear)
-									{
-										if (!customCharacterGear.isCustom || gearAtIndex.name.Equals("\\mod.io"))
-										{
-											itemView.SetBrandSprite(customGearFolder);
-										}
-										else
-										{
-											itemView.SetText(gearAtIndex.name.Replace("\\", newText), true);
-										}
-									}
-									else
-									{
-										itemView.SetText(gearAtIndex.name.Replace("\\", newText), true);
-									}
-								}
+								itemView.SetItemText(gearAtIndex, customGearFolder);
+							}
+							else if (child.GetParentObject() is CustomGearFolderInfo)
+							{
+								itemView.SetItemText(gearAtIndex, customGearFolder);
+							}
+							else if (child.GetParentObject() is CustomCharacterGearInfo)
+							{
+								itemView.SetItemText(gearAtIndex, customGearFolder);
 							}
 						}
 					}
@@ -198,6 +276,8 @@ namespace XLGearModifier.Patches
 
 				Traverse.Create(__instance).Method("SetIsEquippedIndicators", itemView, __instance.previewCustomizer.HasEquipped(gearAtIndex)).GetValue();
 			}
+
+			
 		}
 
 		[HarmonyPatch(typeof(GearSelectionController), "ListView_OnItemSelectedEvent")]
