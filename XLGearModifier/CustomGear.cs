@@ -96,6 +96,15 @@ namespace XLGearModifier
 				name = name,
 				GearFilters = new TypeFilterList(new List<TypeFilter>
 				{
+					//new TypeFilter
+					//{
+					//	allowCustomGear = true,
+					//	cameraView = GearRoomCameraView.FullSkater,
+					//	excludedTags = new[] { "ProOnly" },
+					//	includedTypes = new [] { skaterMetadata.Prefix },
+					//	label = "Skintone",
+					//	requiredTag = ""
+					//},
 					new TypeFilter
 					{
 						allowCustomGear = true,
@@ -144,7 +153,7 @@ namespace XLGearModifier
 			GearInfo = new CharacterBodyInfo(name, skaterMetadata.Prefix, false, materialChanges, new string[] { });
 
 			Prefab.AddGearPrefabController();
-			CreateNewMaterialController(Prefab, "shaderStandard_wTexAlphaCut_DoubleSide");
+			CreateNewMaterialController(Prefab);
 
 			this.AddBodyGearTemplate();
 			GearDatabase.Instance.bodyGear.Add(GearInfo as CharacterBodyInfo);
@@ -307,19 +316,24 @@ namespace XLGearModifier
 				materialIndex++;
 
 				var textures = new Dictionary<string, Texture>();
-				textures.Add("_texture2D_color", Metadata.GetMaterialInformation()?.DefaultTexture?.textureColor ?? AssetBundleHelper.Instance.emptyAlbedo);
-				textures.Add("_texture2D_normal", Metadata.GetMaterialInformation()?.DefaultTexture?.textureNormalMap ?? AssetBundleHelper.Instance.emptyNormalMap);
-				textures.Add(shaderName == "MasterShaderCloth_v2" ? "_texture2D_maskPBR" : "_texture2D_rgmtao", Metadata.GetMaterialInformation()?.DefaultTexture?.textureMaskPBR ?? AssetBundleHelper.Instance.emptyMaskPBR);
+
+				if (Metadata is XLGMSkaterMetadata)
+				{
+					textures.Add("_texture2D_color", material.GetTexture("_texture2D_color"));
+					textures.Add("_texture2D_normal", material.GetTexture("_texture2D_normal"));
+					textures.Add("_texture2D_rgmtao", material.GetTexture("_texture2D_rgmtao"));
+				}
+				else
+				{
+					textures.Add("_texture2D_color", Metadata.GetMaterialInformation()?.DefaultTexture?.textureColor ?? AssetBundleHelper.Instance.emptyAlbedo);
+					textures.Add("_texture2D_normal", Metadata.GetMaterialInformation()?.DefaultTexture?.textureNormalMap ?? AssetBundleHelper.Instance.emptyNormalMap);
+					textures.Add(shaderName == "MasterShaderCloth_v2" ? "_texture2D_maskPBR" : "_texture2D_rgmtao", Metadata.GetMaterialInformation()?.DefaultTexture?.textureMaskPBR ?? AssetBundleHelper.Instance.emptyMaskPBR);
+				}
 
 				newMaterialController.SetTextures(textures);
-
 				UpdateMaterialControllerAlphaMasks(newMaterialController);
 
 				Traverse.Create(newMaterialController).Field("_originalMaterial").SetValue(Traverse.Create(newMaterialController).Field("originalMaterial").GetValue<Material>());
-
-
-				if (materialIndex > 5)
-					break;
 			}
 		}
 
