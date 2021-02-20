@@ -428,6 +428,12 @@ namespace XLGearModifier.Patches
 				}
 
 				if (index.depth < 3) return;
+
+				if (index[1] == (int)GearCategory.SkinTone && index[0] > 5)
+				{
+					__instance.previewCustomizer.PreviewItem(GearDatabase.Instance.GetGearAtIndex(index), null);
+				}
+
 				if (!IsOnXLGMTab(index[1])) return;
 
 				GearInfo gearAtIndex1 = GearDatabase.Instance.GetGearAtIndex(index);
