@@ -1,6 +1,7 @@
 ﻿using HarmonyLib;
 using System.Collections.Generic;
 using System.Linq;
+using SkaterXL.Data;
 using XLGearModifier.Unity;
 using XLMenuMod.Utilities;
 using XLMenuMod.Utilities.Gear;

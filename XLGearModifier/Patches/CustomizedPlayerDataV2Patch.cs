@@ -1,5 +1,6 @@
 ﻿using HarmonyLib;
 using System.Collections.Generic;
+using SkaterXL.Data;
 
 namespace XLGearModifier.Patches
 {
