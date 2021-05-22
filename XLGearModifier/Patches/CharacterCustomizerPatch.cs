@@ -1,4 +1,5 @@
 ﻿using HarmonyLib;
+using SkaterXL.Data;
 using XLMenuMod.Utilities;
 using XLMenuMod.Utilities.Gear;
 using XLMenuMod.Utilities.Gear.Interfaces;
