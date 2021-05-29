@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 using SkaterXL.Data;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
@@ -22,6 +23,7 @@ namespace XLGearModifier
 		public XLGMSkaterMetadata SkaterMetadata => Metadata as XLGMSkaterMetadata;
 
 		public GameObject Prefab;
+		[JsonIgnore]
 		public GearInfo GearInfo;
 
 		public CustomGear(XLGMMetadata metadata, GameObject prefab)
