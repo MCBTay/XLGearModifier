@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: TankTop-Chest
   m_EditorClassIdentifier: 
   MaskLocation: 1
-  Threshold: 40
+  Threshold: 100
   AlphaMask: {fileID: 0}
