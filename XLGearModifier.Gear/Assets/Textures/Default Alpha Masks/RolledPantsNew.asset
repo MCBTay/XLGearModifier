@@ -10,8 +10,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: da73c905e0670a545aa1b7f44e20178f, type: 3}
-  m_Name: GearAlphaMaskConfig
+  m_Name: RolledPantsNew
   m_EditorClassIdentifier: 
   MaskLocation: 2
-  Threshold: 100
+  Threshold: 50
   AlphaMask: {fileID: 0}

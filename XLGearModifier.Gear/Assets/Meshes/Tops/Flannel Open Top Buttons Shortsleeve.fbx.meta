@@ -3,7 +3,12 @@ guid: 50713f104d29d41449eddabbb2ee65b5
 ModelImporter:
   serializedVersion: 19301
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Shirt_scan66_mat
+    second: {fileID: 2100000, guid: 6079475384346b34a8715beb5556e78e, type: 2}
   materials:
     materialImportMode: 1
     materialName: 0
