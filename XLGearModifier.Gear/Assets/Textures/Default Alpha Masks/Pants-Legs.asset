@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: Pants-Legs
   m_EditorClassIdentifier: 
   MaskLocation: 2
-  Threshold: 250
+  Threshold: 200
   AlphaMask: {fileID: 0}
