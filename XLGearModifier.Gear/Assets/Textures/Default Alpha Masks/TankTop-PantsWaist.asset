@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: TankTop-PantsWaist
   m_EditorClassIdentifier: 
   MaskLocation: 10
-  Threshold: 99
+  Threshold: 100
   AlphaMask: {fileID: 0}
