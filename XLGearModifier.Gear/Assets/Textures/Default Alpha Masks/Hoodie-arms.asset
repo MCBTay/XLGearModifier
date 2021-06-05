@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: Hoodie-arms
   m_EditorClassIdentifier: 
   MaskLocation: 0
-  Threshold: 100
+  Threshold: 200
   AlphaMask: {fileID: 0}
