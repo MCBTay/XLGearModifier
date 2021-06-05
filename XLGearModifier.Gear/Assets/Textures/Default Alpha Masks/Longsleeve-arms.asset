@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: Longsleeve-arms
   m_EditorClassIdentifier: 
   MaskLocation: 0
-  Threshold: 255
+  Threshold: 200
   AlphaMask: {fileID: 0}
