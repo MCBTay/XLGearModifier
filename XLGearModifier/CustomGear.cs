@@ -200,7 +200,7 @@ namespace XLGearModifier
 			{
 				foreach (Transform child in Prefab.transform)
 				{
-					CreateNewMaterialController(child.gameObject, "MasterShaderCloth_v2");
+					CreateNewMaterialController(child.gameObject);
 				}
 			}
 		}
