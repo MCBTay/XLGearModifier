@@ -9,9 +9,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 943143b4b75855b46b74ea5a14558a96, type: 3}
-  m_Name: MediumPartRedo 1
+  m_Script: {fileID: 11500000, guid: 1edb71787833b6c41a7fba646d45325c, type: 3}
+  m_Name: MediumPartRedoTint
   m_EditorClassIdentifier: 
-  DefaultTexture: {fileID: 11400000, guid: fbad472e673c9e94e946eeb4e40eca08, type: 2}
-  AlternativeTextures:
-  - {fileID: 11400000, guid: 10f2f9563da0bb448803820ea23b5963, type: 2}
+  textureName: Medium Part Tint
+  textureColor: {fileID: 2800000, guid: 71bf35b52ebb57b468e6f5c2d1ff5578, type: 3}
+  textureNormalMap: {fileID: 0}
+  textureMaskPBR: {fileID: 0}

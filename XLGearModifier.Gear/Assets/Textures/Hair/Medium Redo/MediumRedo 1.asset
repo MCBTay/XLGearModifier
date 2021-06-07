@@ -13,4 +13,5 @@ MonoBehaviour:
   m_Name: MediumRedo 1
   m_EditorClassIdentifier: 
   DefaultTexture: {fileID: 11400000, guid: ff9411ed2b29a184c821624ace53377d, type: 2}
-  AlternativeTextures: []
+  AlternativeTextures:
+  - {fileID: 11400000, guid: f65ab6a6cbf32cf489455c35e3c2a1aa, type: 2}
