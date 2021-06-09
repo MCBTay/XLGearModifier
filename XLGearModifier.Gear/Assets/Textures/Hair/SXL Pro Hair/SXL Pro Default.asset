@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   textureName: Brown
   textureColor: {fileID: 2800000, guid: af3c8ce851dd63a47bdb79f159a2db2d, type: 3}
-  textureNormalMap: {fileID: 0}
-  textureMaskPBR: {fileID: 0}
+  textureNormalMap: {fileID: 2800000, guid: 2191ba9a47718f84cabe6a8eb29bd517, type: 3}
+  textureMaskPBR: {fileID: 2800000, guid: a288ccaa3d4f11b4da5e2f735bd6456c, type: 3}

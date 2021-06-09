@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1edb71787833b6c41a7fba646d45325c, type: 3}
-  m_Name: Spikt Black
+  m_Name: TABeanieTexture
   m_EditorClassIdentifier: 
-  textureName: Spikt Black
-  textureColor: {fileID: 2800000, guid: 7debabc7a2b942f48a25f5596259fac3, type: 3}
-  textureNormalMap: {fileID: 2800000, guid: 2191ba9a47718f84cabe6a8eb29bd517, type: 3}
-  textureMaskPBR: {fileID: 2800000, guid: 858b57fa89a06cc4188a6214ef751d6b, type: 3}
+  textureName: Slouch Black
+  textureColor: {fileID: 2800000, guid: ef3e202b08f851c48856d84195f839e7, type: 3}
+  textureNormalMap: {fileID: 2800000, guid: 971407ffa9d98574f92024c0a4a7ea02, type: 3}
+  textureMaskPBR: {fileID: 2800000, guid: a288ccaa3d4f11b4da5e2f735bd6456c, type: 3}

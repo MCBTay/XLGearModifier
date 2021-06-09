@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   textureName: Wavy Black
   textureColor: {fileID: 2800000, guid: 545f88675e4b0b54fb9393e9404f9014, type: 3}
-  textureNormalMap: {fileID: 0}
-  textureMaskPBR: {fileID: 0}
+  textureNormalMap: {fileID: 2800000, guid: 2191ba9a47718f84cabe6a8eb29bd517, type: 3}
+  textureMaskPBR: {fileID: 2800000, guid: 858b57fa89a06cc4188a6214ef751d6b, type: 3}
