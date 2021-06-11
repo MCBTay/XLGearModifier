@@ -3,7 +3,12 @@ guid: 686c93921f3432f4ca8660ec4fcb315b
 ModelImporter:
   serializedVersion: 19301
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Mustang.001
+    second: {fileID: 2100000, guid: 2607d5d6fdef1e342b7f24d85cefef88, type: 2}
   materials:
     materialImportMode: 1
     materialName: 0

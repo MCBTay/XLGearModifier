@@ -3,7 +3,12 @@ guid: c12fade1628bc0e418313953401ad12f
 ModelImporter:
   serializedVersion: 19301
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Inesta_01.001
+    second: {fileID: 2100000, guid: dd575c27a7cf98849b4a559484e25f83, type: 2}
   materials:
     materialImportMode: 1
     materialName: 0
