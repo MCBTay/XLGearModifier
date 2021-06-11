@@ -3,7 +3,12 @@ guid: 9e5f02cef3642d341a9d5ba2724725bd
 ModelImporter:
   serializedVersion: 19301
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Vogue_01.001
+    second: {fileID: 2100000, guid: 2a82091b4c808c348a8e8cfc7ab2fdbb, type: 2}
   materials:
     materialImportMode: 1
     materialName: 0

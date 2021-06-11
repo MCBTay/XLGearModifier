@@ -1,4 +1,4 @@
-﻿################################################################################
+################################################################################
 # This .gitignore file was automatically created by Microsoft(R) Visual Studio.
 ################################################################################
 
@@ -18,3 +18,4 @@
 /.vs
 /packages/Newtonsoft.Json.13.0.1
 /XLGearModifier.Gear/AssetBundles/StandaloneWindows
+XLGearModifier.Gear/Assets/00. Redgouf Custom/
