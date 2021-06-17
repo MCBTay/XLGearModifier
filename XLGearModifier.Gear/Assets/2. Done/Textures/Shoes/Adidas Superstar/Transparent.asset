@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1edb71787833b6c41a7fba646d45325c, type: 3}
+  m_Name: Transparent
+  m_EditorClassIdentifier: 
+  textureName: Transparent
+  textureColor: {fileID: 2800000, guid: fe202052e7c40ee459a44ab73f19b6e7, type: 3}
+  textureNormalMap: {fileID: 2800000, guid: 3a9a08691a2318c4fb6e78bb36105066, type: 3}
+  textureMaskPBR: {fileID: 2800000, guid: 1f431c117b59fa04c8d5c1372896da36, type: 3}
