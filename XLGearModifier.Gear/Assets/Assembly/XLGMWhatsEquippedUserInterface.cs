@@ -29,7 +29,7 @@ namespace XLGearModifier.Unity
 			//EventSystem.current.SetSelectedGameObject(null);
 		}
 
-		public GameObject AddToList(string meshName, string textureName, string creatorName, Sprite sprite, UnityAction objectClicked = null, UnityAction objectSelected = null)
+		public GameObject AddToList(string meshName, string textureName, Sprite sprite, UnityAction objectClicked = null, UnityAction objectSelected = null)
 		{
 			var listItem = Instantiate(listItemPrefab, listContent.transform);
 
@@ -39,7 +39,6 @@ namespace XLGearModifier.Unity
 				whatsEquipped.image.sprite = sprite;
 				whatsEquipped.meshName.SetText(meshName);
 				whatsEquipped.textureName.SetText(textureName);
-				whatsEquipped.creatorName.SetText(creatorName);
 			}
 			//if (objectClicked != null)
 			//{
