@@ -9,5 +9,6 @@ namespace XLGearModifier.Unity
 		public Image image;
 		public TMP_Text meshName;
 		public TMP_Text textureName;
+		public TMP_Text creatorName;
 	}
 }
