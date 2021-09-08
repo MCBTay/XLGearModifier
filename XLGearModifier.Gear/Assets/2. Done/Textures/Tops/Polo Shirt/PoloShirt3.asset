@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1edb71787833b6c41a7fba646d45325c, type: 3}
+  m_Name: PoloShirt3
+  m_EditorClassIdentifier: 
+  textureName: Black-White
+  textureColor: {fileID: 2800000, guid: 5ecdb54eb76dbf34fb1b92347216a507, type: 3}
+  textureNormalMap: {fileID: 2800000, guid: 1bf5cc9a319b3084196a8534bf3a1777, type: 3}
+  textureMaskPBR: {fileID: 2800000, guid: b466be1e285cf3240ae62ac9ff3ebad5, type: 3}

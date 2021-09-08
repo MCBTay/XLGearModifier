@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1edb71787833b6c41a7fba646d45325c, type: 3}
+  m_Name: Algar
+  m_EditorClassIdentifier: 
+  textureName: Default
+  textureColor: {fileID: 2800000, guid: 9bcacd11542be344c8c846b6731c1fc4, type: 3}
+  textureNormalMap: {fileID: 2800000, guid: 041c4baa6d39131488f8c0fd0b329813, type: 3}
+  textureMaskPBR: {fileID: 0}

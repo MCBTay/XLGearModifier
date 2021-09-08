@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1edb71787833b6c41a7fba646d45325c, type: 3}
+  m_Name: Juul
+  m_EditorClassIdentifier: 
+  textureName: Juul
+  textureColor: {fileID: 2800000, guid: d02c7a0a7400ee5439027a828480036b, type: 3}
+  textureNormalMap: {fileID: 2800000, guid: e00157099991d50419958094b347722d, type: 3}
+  textureMaskPBR: {fileID: 2800000, guid: 8e585de5001155c42b18b01137d8b11a, type: 3}
