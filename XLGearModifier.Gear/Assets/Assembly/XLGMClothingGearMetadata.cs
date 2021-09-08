@@ -14,7 +14,7 @@ namespace XLGearModifier.Unity
 		public bool IsLayerable;
 		[Tooltip("This defines which skater the gear is intended for.  This is used to determine which items show up in the gear menu based on which skater you are customizing.")]
 		public SkaterBase Skater;
-		[Tooltip("This is the name of the creator that will be displayed in the menu.  If left blank, we will use the prefab name.")]
+		[Tooltip("This is the name of the creator that will be displayed in the menu.")]
 		public string CreatorName;
 
 		[Header("Texturing")]

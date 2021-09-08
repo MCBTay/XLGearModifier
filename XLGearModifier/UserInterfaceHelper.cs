@@ -52,9 +52,9 @@ namespace XLGearModifier
 
 				var mesh = GearManager.Instance.CustomGear.FirstOrDefault(x => x.GearInfo.type == clothingGear.type);
 
-				var creatorName = mesh?.ClothingMetadata?.CreatorName ?? "No creator_";
+				var creatorName = mesh?.ClothingMetadata?.CreatorName ?? "N/A";
 
-				whatsEquipped.AddToList(clothingGear.type, clothingGear.name, creatorName, sprite);
+				whatsEquipped.AddToList("Prefix: " + clothingGear.type, clothingGear.name, "Creator: " + creatorName, sprite);
 			}
 		}
 
