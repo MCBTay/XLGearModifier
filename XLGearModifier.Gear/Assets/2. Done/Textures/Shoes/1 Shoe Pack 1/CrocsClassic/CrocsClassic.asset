@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1edb71787833b6c41a7fba646d45325c, type: 3}
+  m_Name: CrocsClassic
+  m_EditorClassIdentifier: 
+  textureName: ClassicDefault
+  textureColor: {fileID: 2800000, guid: 6ce6333488161ff4ab1ff13f61b40c6b, type: 3}
+  textureNormalMap: {fileID: 2800000, guid: 35245599722bb8c4d99fd6bd41297d5e, type: 3}
+  textureMaskPBR: {fileID: 0}
