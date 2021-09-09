@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1edb71787833b6c41a7fba646d45325c, type: 3}
+  m_Name: SXL Alpha Pants
+  m_EditorClassIdentifier: 
+  textureName: SXL Alpha Pants - Default
+  textureColor: {fileID: 2800000, guid: 587c96bd9c0945d4392e12ccf5aaf21e, type: 3}
+  textureNormalMap: {fileID: 2800000, guid: 38c1ad577924aab43bfb5e68b0558ff1, type: 3}
+  textureMaskPBR: {fileID: 0}
