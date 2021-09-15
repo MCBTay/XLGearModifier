@@ -50,7 +50,11 @@ namespace XLGearModifier
 				var spriteIndex = AssetBundleHelper.Instance.GearModifierUISpriteSheet.spriteCharacterTable[GetSpriteIndex(template)].glyphIndex;
 				var sprite = AssetBundleHelper.Instance.GearModifierUISpriteSheetSprites.FirstOrDefault(x => x.name == "GearModifierUISpriteSheet_" + spriteIndex);
 
-				whatsEquipped.AddToList(clothingGear.type, clothingGear.name, sprite);
+				var mesh = GearManager.Instance.CustomGear.FirstOrDefault(x => x.GearInfo.type == clothingGear.type);
+
+				var creatorName = mesh?.ClothingMetadata?.CreatorName ?? "N/A";
+
+				whatsEquipped.AddToList("Prefix: " + clothingGear.type, clothingGear.name, "Creator: " + creatorName, sprite);
 			}
 		}
 
