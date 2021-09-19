@@ -9,7 +9,7 @@ namespace XLGearModifier.Unity.ScriptableObjects
 	public class XLGMGearAlphaMaskConfig : ScriptableObject
 	{
 		public AlphaMaskLocation MaskLocation;
-		[Range(0.0f, 255f)]
+		[Range(0.0f, 250f)]
 		public int Threshold;
 
 		public Texture2D AlphaMask;

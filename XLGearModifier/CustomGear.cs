@@ -574,6 +574,8 @@ namespace XLGearModifier
 			{
 				if (mask == null) continue;
 
+				if (mask.Threshold > 250) mask.Threshold = 250;
+
 				var existing = template.alphaMasks.FirstOrDefault(x => (int)x.MaskLocation == (int)mask.MaskLocation);
 				if (existing == null)
 				{
