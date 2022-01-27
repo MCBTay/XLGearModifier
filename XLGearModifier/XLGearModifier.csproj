@@ -143,23 +143,13 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>if "$(ConfigurationName)"=="Debug" ( 
-del /Q /F "F:\Steam\steamapps\common\Skater XL\Mods\XLGearModifier\"
-copy /Y "$(TargetDir)XLGearModifier.dll" "F:\Steam\steamapps\common\Skater XL\Mods\XLGearModifier\XLGearModifier.dll"
-copy /Y "$(TargetDir)XLGearModifier.pdb" "F:\Steam\steamapps\common\Skater XL\Mods\XLGearModifier\XLGearModifier.pdb"
-copy /Y "$(TargetDir)XLGearModifier.Unity.dll" "F:\Steam\steamapps\common\Skater XL\Mods\XLGearModifier\XLGearModifier.Unity.dll"
-copy /Y "$(TargetDir)XLGearModifier.Unity.pdb" "F:\Steam\steamapps\common\Skater XL\Mods\XLGearModifier\XLGearModifier.Unity.pdb"
-copy /Y "$(TargetDir)XLMenuMod.Utilities.dll" "F:\Steam\steamapps\common\Skater XL\Mods\XLGearModifier\XLMenuMod.Utilities.dll"
-copy /Y "$(TargetDir)Info.json" "F:\Steam\steamapps\common\Skater XL\Mods\XLGearModifier\Info.json"
-)
-
-if "$(ConfigurationName)"=="Release" (
-mkdir $(TargetDir)XLGearModifier
-copy /Y "$(TargetDir)XLGearModifier.dll" "$(TargetDir)XLGearModifier\XLGearModifier.dll"
-copy /Y "$(TargetDir)XLGearModifier.Unity.dll" "$(TargetDir)XLGearModifier\XLGearModifier.Unity.dll"
-copy /Y "$(TargetDir)XLMenuMod.Utilities.dll" "$(TargetDir)XLGearModifier\XLMenuMod.Utilities.dll"
-copy /Y "$(TargetDir)Info.json" "$(TargetDir)XLGearModifier\Info.json"
-
-powershell Compress-Archive -Path '$(TargetDir)XLGearModifier' -DestinationPath '$(TargetDir)XLGearModifier-1-5-1.zip' -Force
+del /Q /F "G:\Steam\steamapps\common\Skater XL\Mods\XLGearModifier\"
+copy /Y "$(TargetDir)XLGearModifier.dll" "G:\Steam\steamapps\common\Skater XL\Mods\XLGearModifier\XLGearModifier.dll"
+copy /Y "$(TargetDir)XLGearModifier.pdb" "G:\Steam\steamapps\common\Skater XL\Mods\XLGearModifier\XLGearModifier.pdb"
+copy /Y "$(TargetDir)XLGearModifier.Unity.dll" "G:\Steam\steamapps\common\Skater XL\Mods\XLGearModifier\XLGearModifier.Unity.dll"
+copy /Y "$(TargetDir)XLGearModifier.Unity.pdb" "G:\Steam\steamapps\common\Skater XL\Mods\XLGearModifier\XLGearModifier.Unity.pdb"
+copy /Y "$(TargetDir)XLMenuMod.Utilities.dll" "G:\Steam\steamapps\common\Skater XL\Mods\XLGearModifier\XLMenuMod.Utilities.dll"
+copy /Y "$(TargetDir)Info.json" "G:\Steam\steamapps\common\Skater XL\Mods\XLGearModifier\Info.json"
 )</PostBuildEvent>
   </PropertyGroup>
 </Project>
