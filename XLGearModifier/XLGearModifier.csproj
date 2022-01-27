@@ -41,7 +41,7 @@
     <Reference Include="AwaitExtensions">
       <HintPath>..\packages\SkaterXL.Assemblies.1.2.3.11\AwaitExtensions.dll</HintPath>
     </Reference>
-	<Reference Include="BFSUtilities">
+    <Reference Include="BFSUtilities">
       <HintPath>..\packages\SkaterXL.Assemblies.1.2.3.11\BFSUtilities.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
@@ -104,6 +104,10 @@
     <Reference Include="XLGearModifier.Unity, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>References\XLGearModifier.Unity.dll</HintPath>
+    </Reference>
+    <Reference Include="XLMenuMod.Utilities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>References\XLMenuMod.Utilities.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
