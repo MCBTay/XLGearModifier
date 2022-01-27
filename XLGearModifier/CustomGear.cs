@@ -250,7 +250,9 @@ namespace XLGearModifier
 			var newMaterialController = prefab.AddComponent<MaterialController>();
 			newMaterialController.targets = new List<MaterialController.TargetMaterialConfig>();
 
-			newMaterialController.PropertyNameSubstitutions = origMaterialController.PropertyNameSubstitutions;
+            var traverse = Traverse.Create(newMaterialController);
+            traverse.Field("m_propertyNameSubstitutionsDict").SetValue(origMaterialController.PropertyNameSubstitutions);
+
 			newMaterialController.alphaMasks = origMaterialController.alphaMasks;
 			newMaterialController.materialID = origMaterialController.materialID;
 
@@ -333,7 +335,7 @@ namespace XLGearModifier
 					textures.Add(shaderName == "MasterShaderCloth_v2" ? "_texture2D_maskPBR" : "_texture2D_rgmtao", Metadata.GetMaterialInformation()?.DefaultTexture?.textureMaskPBR ?? AssetBundleHelper.Instance.emptyMaskPBR);
 				}
 
-				newMaterialController.SetTextures(textures);
+                newMaterialController.SetMaterial(newMaterialController.GenerateMaterialWithChanges(textures));
 				UpdateMaterialControllerAlphaMasks(newMaterialController);
 
 				Traverse.Create(newMaterialController).Field("_originalMaterial").SetValue(Traverse.Create(newMaterialController).Field("originalMaterial").GetValue<Material>());
@@ -631,15 +633,14 @@ namespace XLGearModifier
 		#region MaterialController methods
 		public static void UpdateMaterialControllerPropertyNameSubstitutions(this MaterialController materialController)
 		{
-			if (materialController.PropertyNameSubstitutions == null)
-				materialController.PropertyNameSubstitutions = new Dictionary<string, string>();
+            var traverse = Traverse.Create(materialController);
 
-			var traverse = Traverse.Create(materialController);
-			var propNameSubs = traverse.Field("m_propertyNameSubstitutions").GetValue<List<PropertyNameSubstitution>>() ?? new List<PropertyNameSubstitution>();
+            traverse.Field("m_propertyNameSubstitutionsDict").SetValue(new Dictionary<string, string>());
+
+            var propNameSubs = traverse.Field("m_propertyNameSubstitutions").GetValue<List<PropertyNameSubstitution>>() ?? new List<PropertyNameSubstitution>();
 			propNameSubs.Add(new PropertyNameSubstitution { oldName = "_texture2D_color", newName = "_BaseColorMap" });
-			materialController.PropertyNameSubstitutions = propNameSubs.ToDictionary(s => s.oldName, s => s.newName);
 
-			traverse.Field("m_propertyNameSubstitutions").SetValue(propNameSubs);
+            traverse.Field("m_propertyNameSubstitutionsDict").SetValue(propNameSubs.ToDictionary(s => s.oldName, s => s.newName));
 		}
 		#endregion
 	}
