@@ -65,30 +65,18 @@ namespace XLGearModifier
 
 			if (clothingMetadata.Category == Unity.ClothingGearCategory.Shoes || clothingMetadata.Category == Unity.ClothingGearCategory.Socks)
 			{
-				AddShoePrefabControllers();
-				await AddShoeMaterialControllers(clothingMetadata);
+                await AddShoeMaterialControllers(clothingMetadata);
 			}
 			else
 			{
-				Prefab.AddGearPrefabController();
-				await AddMaterialController(clothingMetadata);
+                await AddMaterialController(clothingMetadata);
 			}
 
 			this.AddPrefixToGearFilters();
 			this.AddCharacterGearTemplate(clothingMetadata);
 		}
 
-		#region Shoe GearPrefabController and MaterialController methods
-		private void AddShoePrefabControllers()
-		{
-			foreach (Transform child in Prefab.transform)
-			{
-				child.gameObject.AddGearPrefabController();
-			}
-		}
-		#endregion
-
-		#endregion
+        #endregion
 
 		#region Custom Skater methods
 		private void InstantiateCustomSkater(XLGMSkaterMetadata skaterMetadata)
@@ -158,7 +146,6 @@ namespace XLGearModifier
 			};
 			GearInfo = new CharacterBodyInfo(name, skaterMetadata.Prefix, false, materialChanges, new string[] { });
 
-			Prefab.AddGearPrefabController();
 			CreateNewMaterialController(Prefab);
 
 			this.AddBodyGearTemplate();
@@ -178,8 +165,7 @@ namespace XLGearModifier
 			}
 			else
 			{
-				Prefab.AddGearPrefabController();
-				await AddMaterialController(boardMetadata);
+                await AddMaterialController(boardMetadata);
 			}
 
 			this.AddPrefixToGearFilters();
@@ -507,13 +493,7 @@ namespace XLGearModifier
 
 	public static class CustomGearExtensions
 	{
-		public static void AddGearPrefabController(this GameObject gameObject)
-		{
-			var gearPrefabController = gameObject.AddComponent<GearPrefabController>();
-			gearPrefabController.PreparePrefab();
-		}
-
-		public static void AddPrefixToGearFilters(this CustomGear customGear)
+        public static void AddPrefixToGearFilters(this CustomGear customGear)
 		{
 			var typeFilter = GearDatabase.Instance.skaters[customGear.GetSkaterIndex()].GearFilters[customGear.GetCategoryIndex(customGear.GetSkaterIndex())];
 
