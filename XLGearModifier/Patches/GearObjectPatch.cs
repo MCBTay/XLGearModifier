@@ -1,6 +1,6 @@
-﻿using System;
+﻿using HarmonyLib;
+using SkaterXL.Gear;
 using System.Collections.Generic;
-using HarmonyLib;
 using System.Linq;
 using System.Threading.Tasks;
 using UnityEngine;

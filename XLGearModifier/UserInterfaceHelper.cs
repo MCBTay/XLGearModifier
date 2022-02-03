@@ -1,12 +1,14 @@
-﻿using System.Linq;
-using SkaterXL.Data;
+﻿using SkaterXL.Data;
+using SkaterXL.Gear;
+using System.Linq;
 using UnityEngine;
 using XLGearModifier.Unity;
+using ClothingGearCategory = SkaterXL.Gear.ClothingGearCategory;
 using Object = UnityEngine.Object;
 
 namespace XLGearModifier
 {
-	public class UserInterfaceHelper
+    public class UserInterfaceHelper
 	{
 		private static UserInterfaceHelper _instance;
 		public static UserInterfaceHelper Instance => _instance ?? (_instance = new UserInterfaceHelper());

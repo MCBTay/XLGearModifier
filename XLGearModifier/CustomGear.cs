@@ -1,10 +1,11 @@
 ﻿using HarmonyLib;
+using Newtonsoft.Json;
+using SkaterXL.Data;
+using SkaterXL.Gear;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
-using SkaterXL.Data;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
@@ -12,10 +13,12 @@ using XLGearModifier.Unity;
 using XLMenuMod;
 using XLMenuMod.Utilities;
 using XLMenuMod.Utilities.Gear;
+using AlphaMaskLocation = SkaterXL.Gear.AlphaMaskLocation;
+using ClothingGearCategory = SkaterXL.Gear.ClothingGearCategory;
 
 namespace XLGearModifier
 {
-	public class CustomGear : CustomInfo
+    public class CustomGear : CustomInfo
 	{
 		public XLGMMetadata Metadata;
 		public XLGMClothingGearMetadata ClothingMetadata => Metadata as XLGMClothingGearMetadata;

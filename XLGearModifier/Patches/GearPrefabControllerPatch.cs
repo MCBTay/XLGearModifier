@@ -1,9 +1,10 @@
 ﻿using HarmonyLib;
+using SkaterXL.Gear;
 using UnityEngine;
 
 namespace XLGearModifier.Patches
 {
-	public class GearPrefabControllerPatch
+    public class GearPrefabControllerPatch
 	{
 		[HarmonyPatch(typeof(GearPrefabController), nameof(GearPrefabController.skinnedMeshRenderer), MethodType.Getter)]
 		static class skinnedMeshRendererGetterPatch
