@@ -3,6 +3,7 @@ using System;
 using System.Linq;
 using XLGearModifier.Unity;
 using XLMenuMod.Utilities.Gear;
+using ClothingGearCategory = SkaterXL.Gear.ClothingGearCategory;
 
 namespace XLGearModifier.Patches
 {
