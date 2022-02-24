@@ -1,10 +1,13 @@
 ﻿using HarmonyLib;
+using SkaterXL.Data;
+using SkaterXL.Gear;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using SkaterXL.Data;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
+using UnityEngine.ResourceManagement.AsyncOperations;
 using XLGearModifier.Unity;
 using XLMenuMod;
 using XLMenuMod.Utilities;
@@ -13,7 +16,7 @@ using XLMenuMod.Utilities.Interfaces;
 
 namespace XLGearModifier
 {
-	public class GearManager
+    public class GearManager
 	{
 		private static GearManager __instance;
 		public static GearManager Instance => __instance ?? (__instance = new GearManager());
@@ -28,6 +31,8 @@ namespace XLGearModifier
 		public List<ICustomInfo> MaleGear;
 		public List<ICustomInfo> Eyes;
 
+        public Shader MasterShaderCloth_v2;
+
 		public GearManager()
 		{
 			CustomMeshes = new List<ICustomInfo>();
@@ -38,7 +43,26 @@ namespace XLGearModifier
 			MaleGear = new List<ICustomInfo>();
 
 			Eyes = new List<ICustomInfo>();
-		}
+        }
+
+        public async Task LoadClothingShader()
+        {
+            var mshirtTemplate = GearDatabase.Instance.CharGearTemplateForID[TopTypes.MShirt.ToString().ToLower()];
+
+            AsyncOperationHandle<GameObject> loadOp = Addressables.LoadAssetAsync<GameObject>(mshirtTemplate.path);
+            await new WaitUntil(() => loadOp.IsDone);
+            GameObject result = loadOp.Result;
+            if (result == null)
+            {
+                Debug.Log("XLGM: No prefab found for template at path '" + mshirtTemplate.path + "'");
+                return;
+            }
+
+            var materialController = result.GetComponentInChildren<MaterialController>();
+            if (materialController == null) return;
+
+            MasterShaderCloth_v2 = materialController?.targets?.FirstOrDefault()?.renderer.material.shader;
+        }
 
 		#region In Game Gear
 		public void LoadGameGear()
