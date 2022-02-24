@@ -29,13 +29,16 @@ namespace XLGearModifier
 			// We're solely making a call here to ensure that the unity assembly is loaded up prior to loading assets.  else we'll get a bunch of errors about things missing.
 			var test = GearModifierTab.CustomMeshes;
 
-			AssetBundle bundle = AssetBundle.LoadFromMemory(ExtractResource("XLGearModifier.Assets.customgear"));
+            var bytes = ExtractResource("XLGearModifier.Assets.sdkbundle");
+			var bundle = AssetBundle.LoadFromMemory(bytes);
 
 			emptyAlbedo = bundle.LoadAsset<Texture2D>("Empty_Albedo.png");
 			emptyMaskPBR = bundle.LoadAsset<Texture2D>("Empty_Maskpbr_Map.png");
 			emptyNormalMap = bundle.LoadAsset<Texture2D>("Empty_Normal_Map.png");
 			GearModifierUISpriteSheet = bundle.LoadAsset<TMP_SpriteAsset>("GearModifierUISpriteSheet");
 			GearModifierUISpriteSheetSprites = bundle.LoadAllAssets<Sprite>().Where(x => x.name.StartsWith("GearModifierUISpriteSheet")).ToList();
+
+            await GearManager.Instance.LoadClothingShader();
 
 			Debug.Log("XLGearModifier: Loading " + bundle.name);
 			await GearManager.Instance.LoadAssets(bundle);
