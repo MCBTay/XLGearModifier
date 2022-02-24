@@ -221,17 +221,35 @@ namespace XLGearModifier
 			}
 			else
 			{
-				CreateNewMaterialController(Prefab);
-				//if (clothingMetadata != null && 
-				//    (clothingMetadata.Category == Unity.ClothingGearCategory.Hair || clothingMetadata.Category == Unity.ClothingGearCategory.FacialHair))
-				//{
-				//	CreateNewMaterialController(Prefab);
-				//}
-				//else
-				//{
-				//	CreateNewMaterialController(Prefab, "MasterShaderCloth_v2");
-				//}
-			}
+                var textures = new Dictionary<string, Texture>();
+
+                var defaultTexture = Metadata.GetMaterialInformation()?.DefaultTexture;
+
+				textures.Add("_texture2D_color", defaultTexture?.textureColor ?? AssetBundleHelper.Instance.emptyAlbedo);
+                textures.Add("_texture2D_normal", defaultTexture?.textureNormalMap ?? AssetBundleHelper.Instance.emptyNormalMap);
+                textures.Add("_texture2D_maskPBR", defaultTexture?.textureMaskPBR ?? AssetBundleHelper.Instance.emptyMaskPBR);
+                //textures.Add(shaderName == "MasterShaderCloth_v2" ? "_texture2D_maskPBR" : "_texture2D_rgmtao", Metadata.GetMaterialInformation()?.DefaultTexture?.textureMaskPBR ?? AssetBundleHelper.Instance.emptyMaskPBR);
+
+				var materialControllers = Prefab.GetComponentsInChildren<MaterialController>(true);
+
+                foreach (var materialController in materialControllers)
+                {
+                    var material = materialController.GenerateMaterialWithChanges(textures);
+
+                    if (clothingMetadata != null &&
+                        (clothingMetadata.Category == Unity.ClothingGearCategory.Hair ||
+                         clothingMetadata.Category == Unity.ClothingGearCategory.FacialHair))
+                    {
+						material.shader = Shader.Find("HDRP/Lit");
+                    }
+                    else
+                    {
+						material.shader = GearManager.Instance.MasterShaderCloth_v2;
+					}
+
+                    materialController.SetMaterial(material);
+				}
+            }
 		}
 
 		private void CreateNewMaterialController(GameObject prefab, MaterialController origMaterialController)
@@ -334,13 +352,13 @@ namespace XLGearModifier
 		private async Task<MaterialController> GetDefaultGearMaterialController()
 		{
 			var baseObject = await GetBaseObject();
-			return baseObject != null ? baseObject.GetComponentInChildren<MaterialController>() : null;
+			return baseObject?.GetComponentInChildren<MaterialController>();
 		}
 
 		private async Task<IEnumerable<MaterialController>> GetDefaultGearMaterialControllers()
 		{
 			var baseObject = await GetBaseObject();
-			return baseObject != null ? baseObject.GetComponentsInChildren<MaterialController>() : null;
+			return baseObject?.GetComponentsInChildren<MaterialController>();
 		}
 
 		private void UpdateMaterialControllerAlphaMasks(MaterialController materialController)
@@ -378,21 +396,16 @@ namespace XLGearModifier
 
 		private TextureChange[] GetDefaultTextureChanges()
 		{
-			var info = GetBaseGearInfo();
-			if (info != null)
-			{
-				return info.textureChanges;
-			}
-
-			return null;
-		}
+            return GetBaseGearInfo()?.textureChanges;
+        }
 
 		public async Task<GameObject> GetBaseObject()
 		{
 			var info = GetBaseGearInfo();
 			if (info == null) return null;
 
-			string path = BoardMetadata != null ? GearDatabase.Instance.DeckTemplateForID[info.type].path : GearDatabase.Instance.CharGearTemplateForID[info.type].path;
+            var path = BoardMetadata != null ? GearDatabase.Instance.DeckTemplateForID[info.type].path : GearDatabase.Instance.CharGearTemplateForID[info.type].path;
+			
 			AsyncOperationHandle<GameObject> loadOp = Addressables.LoadAssetAsync<GameObject>(path);
 			await new WaitUntil(() => loadOp.IsDone);
 			GameObject result = loadOp.Result;
@@ -520,12 +533,11 @@ namespace XLGearModifier
 			if (metadata.BaseOnDefaultGear)
 			{
 				var baseGearTemplate = GearDatabase.Instance.CharGearTemplateForID.FirstOrDefault(x => x.Key == customGear.Metadata.GetBaseType().ToLower()).Value;
-				if (baseGearTemplate != null)
-				{
-					newGearTemplate.alphaMasks = baseGearTemplate.alphaMasks;
-					newGearTemplate.category = baseGearTemplate.category;
-				}
-			}
+
+                newGearTemplate = baseGearTemplate.Copy();
+				// TODO: remove when Copy() copies this field over too
+                newGearTemplate.alphaMasks = baseGearTemplate?.alphaMasks;
+            }
 
 			AddOrUpdateTemplateAlphaMasks(metadata, newGearTemplate);
 
