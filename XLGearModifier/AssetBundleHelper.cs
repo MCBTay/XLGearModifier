@@ -38,9 +38,9 @@ namespace XLGearModifier
 			GearModifierUISpriteSheet = bundle.LoadAsset<TMP_SpriteAsset>("GearModifierUISpriteSheet");
 			GearModifierUISpriteSheetSprites = bundle.LoadAllAssets<Sprite>().Where(x => x.name.StartsWith("GearModifierUISpriteSheet")).ToList();
 
-            await GearManager.Instance.LoadClothingShader();
+            await GearManager.Instance.LoadGameShaders();
 
-			Debug.Log("XLGearModifier: Loading " + bundle.name);
+            Debug.Log("XLGearModifier: Loading " + bundle.name);
 			await GearManager.Instance.LoadAssets(bundle);
 			Debug.Log("XLGearModifier: Loaded " + GearManager.Instance.CustomGear.Count + " assets");
 			

@@ -32,6 +32,7 @@ namespace XLGearModifier
 		public List<ICustomInfo> Eyes;
 
         public Shader MasterShaderCloth_v2;
+        public Shader MasterShaderHair_AlphaTest_v1;
 
 		public GearManager()
 		{
@@ -45,23 +46,43 @@ namespace XLGearModifier
 			Eyes = new List<ICustomInfo>();
         }
 
-        public async Task LoadClothingShader()
+        public async Task LoadGameShaders()
         {
-            var mshirtTemplate = GearDatabase.Instance.CharGearTemplateForID[TopTypes.MShirt.ToString().ToLower()];
+            await Task.WhenAll(new List<Task>
+            {
+                LoadClothingShader(),
+                LoadHairShader()
+            });
+        }
 
-            AsyncOperationHandle<GameObject> loadOp = Addressables.LoadAssetAsync<GameObject>(mshirtTemplate.path);
+        private async Task LoadClothingShader()
+        {
+            MasterShaderCloth_v2 = await LoadBaseGameAssetShader(TopTypes.MShirt.ToString().ToLower());
+		}
+
+        private async Task LoadHairShader()
+        {
+            MasterShaderHair_AlphaTest_v1 = await LoadBaseGameAssetShader(HairStyles.MHairCounterpart.ToString().ToLower());
+        }
+
+        private async Task<Shader> LoadBaseGameAssetShader(string templateId)
+        {
+            var template = GearDatabase.Instance.CharGearTemplateForID[templateId];
+            if (template == null) return null;
+
+            AsyncOperationHandle<GameObject> loadOp = Addressables.LoadAssetAsync<GameObject>(template.path);
             await new WaitUntil(() => loadOp.IsDone);
             GameObject result = loadOp.Result;
             if (result == null)
             {
-                Debug.Log("XLGM: No prefab found for template at path '" + mshirtTemplate.path + "'");
-                return;
+                Debug.Log("XLGM: No prefab found for template at path '" + template.path + "'");
+                return null;
             }
 
             var materialController = result.GetComponentInChildren<MaterialController>();
-            if (materialController == null) return;
+            if (materialController == null) return null;
 
-            MasterShaderCloth_v2 = materialController?.targets?.FirstOrDefault()?.renderer.material.shader;
+			return materialController?.targets?.FirstOrDefault()?.renderer.material.shader;
         }
 
 		#region In Game Gear
