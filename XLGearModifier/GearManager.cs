@@ -310,15 +310,31 @@ namespace XLGearModifier
 					// Either a default texture or an alternative texture is defined
 					if (defaultTexture.textureColor != null)
 					{
-						var texturePath = $"XLGearModifier/{customGear.Prefab.name}/{defaultTexture.textureName}";
-						var characterGearInfo = new CustomCharacterGearInfo(defaultTexture.textureName, customGear.Metadata.Prefix, false, new[] { new TextureChange("albedo", texturePath) }, new string[] { });
+						var texturePath = $"XLGearModifier/{customGear.Prefab.name}/{defaultTexture.textureName}/";
+
+                        var textureChanges = new List<TextureChange>
+                        {
+                            new TextureChange("albedo", texturePath + "albedo"),
+                            new TextureChange("normal", texturePath + "normal"),
+                            new TextureChange("maskpbr", texturePath + "maskpbr")
+                        };
+
+						var characterGearInfo = new CustomCharacterGearInfo(defaultTexture.textureName, customGear.Metadata.Prefix, false, textureChanges.ToArray(), new string[] { });
 						AddToList(customGear, characterGearInfo, destList, ref parent, isCustom);
 					}
 
 					foreach (var texture in altTextures.Where(x => x.textureColor != null))
 					{
 						var texturePath = $"XLGearModifier/{customGear.Prefab.name}/{texture.textureName}";
-						var characterGearInfo = new CustomCharacterGearInfo(texture.textureName, customGear.Metadata.Prefix, false, new[] { new TextureChange("albedo", texturePath) }, new string[] { });
+
+                        var textureChanges = new List<TextureChange>
+                        {
+                            new TextureChange("albedo", texturePath + "albedo"),
+                            new TextureChange("normal", texturePath + "normal"),
+                            new TextureChange("maskpbr", texturePath + "maskpbr")
+                        };
+
+						var characterGearInfo = new CustomCharacterGearInfo(texture.textureName, customGear.Metadata.Prefix, false, textureChanges.ToArray(), new string[] { });
 						AddToList(customGear, characterGearInfo, destList, ref parent, isCustom);
 					}
 				}
