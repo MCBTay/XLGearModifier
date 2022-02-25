@@ -18,33 +18,45 @@ namespace XLGearModifier.Patches
 
 				var split = texturePath.Split('/');
 
-				if (texturePath.EndsWith("Empty_Albedo.png") || split.Length < 3)
+				if (texturePath.EndsWith("Empty_Albedo.png"))
 				{
 					__result = Task.FromResult<Texture>(AssetBundleHelper.Instance.emptyAlbedo);
 					return false;
 				}
-				else
-				{
-					var prefabName = split[1];
-					var textureName = split[2];
-                    var textureType = split[3];
 
-					var customGear = GearManager.Instance.CustomGear.FirstOrDefault(x => x.Prefab.name == prefabName);
-					if (customGear == null) return true;
-
-					var defaultTexture = customGear.Metadata?.GetMaterialInformation()?.DefaultTexture;
-					var altTextures = customGear.Metadata?.GetMaterialInformation()?.AlternativeTextures;
-
-					if (textureName == defaultTexture.textureName)
-					{
-						__result = Task.FromResult<Texture>(GetTextureByType(defaultTexture, textureType));
-					}
-					else if (altTextures != null && altTextures.Any(x => textureName == x.textureName && x.textureColor != null))
-					{
-                        __result = Task.FromResult<Texture>(GetTextureByType(altTextures.FirstOrDefault(x => textureName == x.textureName), textureType));
-					}
-					return false;
+                if (texturePath.EndsWith("Empty_Normal_Map.png"))
+                {
+                    __result = Task.FromResult<Texture>(AssetBundleHelper.Instance.emptyNormalMap);
+                    return false;
 				}
+
+                if (texturePath.EndsWith("Empty_Maskpbr_Map.png"))
+                {
+                    __result = Task.FromResult<Texture>(AssetBundleHelper.Instance.emptyMaskPBR);
+                    return false;
+				}
+
+                if (split.Length < 4) return true;
+
+                var prefabName = split[1];
+                var textureName = split[2];
+                var textureType = split[3];
+
+                var customGear = GearManager.Instance.CustomGear.FirstOrDefault(x => x.Prefab.name == prefabName);
+                if (customGear == null) return true;
+
+                var defaultTexture = customGear.Metadata?.GetMaterialInformation()?.DefaultTexture;
+                var altTextures = customGear.Metadata?.GetMaterialInformation()?.AlternativeTextures;
+
+                if (textureName == defaultTexture.textureName)
+                {
+                    __result = Task.FromResult<Texture>(GetTextureByType(defaultTexture, textureType));
+                }
+                else if (altTextures != null && altTextures.Any(x => textureName == x.textureName && x.textureColor != null))
+                {
+                    __result = Task.FromResult<Texture>(GetTextureByType(altTextures.FirstOrDefault(x => textureName == x.textureName), textureType));
+                }
+                return false;
 			}
 
             private static Texture2D GetTextureByType(XLGMTextureInfo textureInfo, string type)
