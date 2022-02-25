@@ -3,6 +3,7 @@ using HarmonyLib;
 using System.Linq;
 using System.Threading.Tasks;
 using UnityEngine;
+using XLGearModifier.Unity.ScriptableObjects;
 
 namespace XLGearModifier.Patches
 {
@@ -26,6 +27,7 @@ namespace XLGearModifier.Patches
 				{
 					var prefabName = split[1];
 					var textureName = split[2];
+                    var textureType = split[3];
 
 					var customGear = GearManager.Instance.CustomGear.FirstOrDefault(x => x.Prefab.name == prefabName);
 					if (customGear == null) return true;
@@ -35,15 +37,26 @@ namespace XLGearModifier.Patches
 
 					if (textureName == defaultTexture.textureName)
 					{
-						__result = Task.FromResult<Texture>(defaultTexture.textureColor);
+						__result = Task.FromResult<Texture>(GetTextureByType(defaultTexture, textureType));
 					}
 					else if (altTextures != null && altTextures.Any(x => textureName == x.textureName && x.textureColor != null))
 					{
-						__result = Task.FromResult<Texture>(altTextures.FirstOrDefault(x => textureName == x.textureName).textureColor);
+                        __result = Task.FromResult<Texture>(GetTextureByType(altTextures.FirstOrDefault(x => textureName == x.textureName), textureType));
 					}
 					return false;
 				}
 			}
+
+            private static Texture2D GetTextureByType(XLGMTextureInfo textureInfo, string type)
+            {
+                switch (type)
+                {
+					case "albedo": return textureInfo.textureColor;
+					case "normal": return textureInfo.textureNormalMap;
+					case "maskpbr": return textureInfo.textureMaskPBR;
+                    default: return null;
+                }
+            }
 		}
 	}
 }
