@@ -12,9 +12,7 @@ namespace XLGearModifier.Unity
 		public bool BaseOnDefaultGear;
 
 		#region Base Styles
-		[HideIf(nameof(BaseOnDefaultGear), false)]
-		[HideIfEnumValue(nameof(Category), HideIf.NotEqual, (int)BoardGearCategory.Trucks)]
-		[Tooltip("This is the list of base truck styles in the game.")]
+        [Tooltip("This is the list of base truck styles in the game.")]
 		public TruckTypes BaseTruckStyle;
 		#endregion
 
