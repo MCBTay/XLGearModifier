@@ -62,10 +62,10 @@ namespace XLGearModifier
 			var name = string.IsNullOrEmpty(clothingMetadata.DisplayName) ? Prefab.name : clothingMetadata.DisplayName;
 
 			GearInfo = new CustomCharacterGearInfo(name, clothingMetadata.Prefix, false, GetDefaultTextureChanges(), new string[0]);
-
+            
             SetTexturesAndShader(clothingMetadata);
-
-            this.AddPrefixToGearFilters();
+            
+			this.AddPrefixToGearFilters();
 			this.AddCharacterGearTemplate(clothingMetadata);
 		}
 
@@ -230,115 +230,15 @@ namespace XLGearModifier
 
             var defaultTexture = Metadata.GetMaterialInformation()?.DefaultTexture;
 
-            textures.Add("_texture2D_color", defaultTexture?.textureColor ?? AssetBundleHelper.Instance.emptyAlbedo);
-            textures.Add("_texture2D_normal", defaultTexture?.textureNormalMap ?? AssetBundleHelper.Instance.emptyNormalMap);
-            textures.Add("_texture2D_maskPBR", defaultTexture?.textureMaskPBR ?? AssetBundleHelper.Instance.emptyMaskPBR);
+            textures.Add("albedo", defaultTexture?.textureColor ?? AssetBundleHelper.Instance.emptyAlbedo);
+            textures.Add("normal", defaultTexture?.textureNormalMap ?? AssetBundleHelper.Instance.emptyNormalMap);
+            textures.Add("maskpbr", defaultTexture?.textureMaskPBR ?? AssetBundleHelper.Instance.emptyMaskPBR);
             //textures.Add(shaderName == "MasterShaderCloth_v2" ? "_texture2D_maskPBR" : "_texture2D_rgmtao", Metadata.GetMaterialInformation()?.DefaultTexture?.textureMaskPBR ?? AssetBundleHelper.Instance.emptyMaskPBR);
 
             return textures;
         }
 
-		//private void CreateNewMaterialController(GameObject prefab, MaterialController origMaterialController)
-		//{
-		//	var newMaterialController = prefab.AddComponent<MaterialController>();
-		//	newMaterialController.targets = new List<MaterialController.TargetMaterialConfig>();
 
-  //          var traverse = Traverse.Create(newMaterialController);
-  //          traverse.Field("m_propertyNameSubstitutionsDict").SetValue(origMaterialController.PropertyNameSubstitutions);
-
-		//	newMaterialController.alphaMasks = origMaterialController.alphaMasks;
-		//	newMaterialController.materialID = origMaterialController.materialID;
-
-		//	var renderer = prefab.GetComponentInChildren<Renderer>();
-		//	foreach (var target in origMaterialController.targets)
-		//	{
-		//		renderer.sharedMaterials = target.renderer.sharedMaterials;
-
-		//		newMaterialController.targets.Add(new MaterialController.TargetMaterialConfig
-		//		{
-		//			renderer = renderer,
-		//			materialIndex = target.materialIndex,
-		//			sharedMaterial = target.renderer.material
-		//		});
-		//	}
-
-		//	var clothingMetdata = Metadata as XLGMClothingGearMetadata;
-		//	if (clothingMetdata != null &&
-		//		(clothingMetdata.Category == Unity.ClothingGearCategory.Hair || clothingMetdata.Category == Unity.ClothingGearCategory.FacialHair))
-		//	{
-		//		newMaterialController.UpdateMaterialControllerPropertyNameSubstitutions();
-		//	}
-		//	UpdateMaterialControllerAlphaMasks(newMaterialController);
-
-		//	Traverse.Create(newMaterialController).Field("_originalMaterial").SetValue(Traverse.Create(origMaterialController).Field("originalMaterial").GetValue<Material>());
-		//}
-
-		//private void CreateNewMaterialController(GameObject prefab, string shaderName = "")
-		//{
-		//	var renderer = prefab.GetComponentInChildren<SkinnedMeshRenderer>(true);
-
-		//	var materials = renderer.materials;
-		//	if (materials == null || !materials.Any()) return;
-
-		//	int materialIndex = 0;
-		//	foreach (var material in materials)
-		//	{
-		//		var newMaterialController = prefab.AddComponent<MaterialController>();
-
-		//		newMaterialController.targets = new List<MaterialController.TargetMaterialConfig>();
-
-		//		if (!string.IsNullOrEmpty(material.name))
-		//		{
-		//			newMaterialController.materialID = material.name;
-		//		}
-
-		//		newMaterialController.materialID = materialIndex.ToString();
-
-		//		if (!string.IsNullOrEmpty(shaderName))
-		//			material.shader = Shader.Find(shaderName);
-		//		else
-		//		{
-		//			if (material.shader.name != "HDRP/Lit")
-		//				material.shader = Shader.Find("HDRP/Lit");
-
-		//			newMaterialController.UpdateMaterialControllerPropertyNameSubstitutions();
-		//		}
-
-		//		newMaterialController.targets.Add(new MaterialController.TargetMaterialConfig
-		//		{
-		//			renderer = renderer,
-		//			materialIndex = materialIndex,
-		//			sharedMaterial = material
-		//		});
-
-		//		materialIndex++;
-
-		//		var textures = new Dictionary<string, Texture>();
-
-		//		if (Metadata is XLGMSkaterMetadata)
-		//		{
-		//			textures.Add("_texture2D_color", material.GetTexture("_texture2D_color"));
-		//			textures.Add("_texture2D_normal", material.GetTexture("_texture2D_normal"));
-		//			textures.Add("_texture2D_rgmtao", material.GetTexture("_texture2D_rgmtao"));
-		//		}
-		//		else
-		//		{
-		//			textures.Add("_texture2D_color", Metadata.GetMaterialInformation()?.DefaultTexture?.textureColor ?? AssetBundleHelper.Instance.emptyAlbedo);
-		//			textures.Add("_texture2D_normal", Metadata.GetMaterialInformation()?.DefaultTexture?.textureNormalMap ?? AssetBundleHelper.Instance.emptyNormalMap);
-		//			textures.Add(shaderName == "MasterShaderCloth_v2" ? "_texture2D_maskPBR" : "_texture2D_rgmtao", Metadata.GetMaterialInformation()?.DefaultTexture?.textureMaskPBR ?? AssetBundleHelper.Instance.emptyMaskPBR);
-		//		}
-
-  //              newMaterialController.SetMaterial(newMaterialController.GenerateMaterialWithChanges(textures));
-		//		UpdateMaterialControllerAlphaMasks(newMaterialController);
-
-		//		Traverse.Create(newMaterialController).Field("_originalMaterial").SetValue(Traverse.Create(newMaterialController).Field("originalMaterial").GetValue<Material>());
-		//	}
-		//}
-
-		private async Task<MaterialController> GetDefaultGearMaterialController()
-		{
-			return (await GetBaseObject())?.GetComponentInChildren<MaterialController>();
-		}
 
 		private async Task<IEnumerable<MaterialController>> GetDefaultGearMaterialControllers()
 		{
