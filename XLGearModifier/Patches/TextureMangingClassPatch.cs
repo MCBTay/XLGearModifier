@@ -1,5 +1,4 @@
-﻿using System.IO;
-using HarmonyLib;
+﻿using HarmonyLib;
 using System.Linq;
 using System.Threading.Tasks;
 using UnityEngine;
@@ -7,7 +6,7 @@ using XLGearModifier.Unity.ScriptableObjects;
 
 namespace XLGearModifier.Patches
 {
-	public class TextureMangingClassPatch
+    public class TextureMangingClassPatch
 	{
 		[HarmonyPatch(typeof(TextureMangingClass), "LoadTextureAsync")]
 		static class LoadTextureAsyncPatch
