@@ -187,18 +187,17 @@ namespace XLGearModifier
 
 			if (clothingMetadata == null && boardMetadata == null) return;
 
-            foreach (Transform child in Prefab.transform)
-            {
-                var renderer = child.GetComponentInChildren<SkinnedMeshRenderer>();
-                if (renderer == null) continue;
+            var materialControllers = Prefab.GetComponentsInChildren<MaterialController>();
+            if (materialControllers == null || !materialControllers.Any()) return;
 
-				CreateMaterialWithTexturesOnProperShader(child.gameObject, clothingMetadata);
-            }
+            foreach (var materialController in materialControllers)
+            {
+                CreateMaterialWithTexturesOnProperShader(materialController, clothingMetadata);
+			}
         }
 
-        private void CreateMaterialWithTexturesOnProperShader(GameObject gameObject, XLGMClothingGearMetadata clothingMetadata)
+        private void CreateMaterialWithTexturesOnProperShader(MaterialController materialController, XLGMClothingGearMetadata clothingMetadata)
         {
-            var materialController = gameObject.GetComponentInChildren<MaterialController>();
             if (materialController == null) return;
 
             var textures = CreateTextureDictionary();
@@ -216,7 +215,7 @@ namespace XLGearModifier
                 (clothingMetadata.Category == Unity.ClothingGearCategory.Hair ||
                  clothingMetadata.Category == Unity.ClothingGearCategory.FacialHair))
             {
-                return Shader.Find("HDRP/Lit");
+                return GearManager.Instance.MasterShaderHair_AlphaTest_v1;
             }
 
             return GearManager.Instance.MasterShaderCloth_v2;
