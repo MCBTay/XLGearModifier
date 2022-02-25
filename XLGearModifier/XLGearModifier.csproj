@@ -122,7 +122,6 @@
     <Compile Include="Patches\CustomizedPlayerDataV2Patch.cs" />
     <Compile Include="Patches\GearObjectPatch.cs" />
     <Compile Include="Patches\GearDatabasePatch.cs" />
-    <Compile Include="Patches\GearPrefabControllerPatch.cs" />
     <Compile Include="Patches\GearSelectionControllerPatch.cs" />
     <Compile Include="Patches\ClothingGearObjectPatch.cs" />
     <Compile Include="Patches\GearSelectionStatePatch.cs" />
@@ -135,6 +134,7 @@
   <ItemGroup>
     <None Include="app.config" />
     <EmbeddedResource Include="Assets\customgear" />
+    <EmbeddedResource Include="Assets\sdkbundle" />
     <None Include="Info.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
