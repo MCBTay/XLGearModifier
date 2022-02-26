@@ -1,10 +1,10 @@
 ﻿using HarmonyLib;
-using System.Collections.Generic;
 using SkaterXL.Data;
+using System.Linq;
 
 namespace XLGearModifier.Patches
 {
-	public class CustomizedPlayerDataV2Patch
+    public class CustomizedPlayerDataV2Patch
 	{
 		[HarmonyPatch(typeof(CustomizedPlayerDataV2), nameof(CustomizedPlayerDataV2.GetBuiltInSkater))]
 		static class GetBuiltInSkaterPatch
@@ -17,11 +17,7 @@ namespace XLGearModifier.Patches
 				{
 					boardGear = new BoardGearInfo[] { },
 					clothingGear = new CharacterGearInfo[] { },
-					body = new CharacterBodyInfo(skaterName, skaterName, false, new List<MaterialChange>
-					{
-						new MaterialChange("head", new[] { new TextureChange("head", "XLGearModifier") }),
-						new MaterialChange("body", new[] { new TextureChange("body", "XLGearModifier") }),
-					}, new string[] { })
+					body = GearManager.Instance.CustomGear.FirstOrDefault(x => x.GearInfo is CharacterBodyInfo cbi && cbi.name == skaterName)?.GearInfo as CharacterBodyInfo
 				};
 			}
 		}
