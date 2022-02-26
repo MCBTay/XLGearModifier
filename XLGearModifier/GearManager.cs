@@ -302,7 +302,14 @@ namespace XLGearModifier
 
 				if (defaultTexture == null && (altTextures == null || !altTextures.Any()))
 				{
-					var characterGearInfo = new CustomCharacterGearInfo(customGear.Metadata.Prefix, customGear.Metadata.Prefix, false, new[] { new TextureChange("albedo", "XLGearModifier/Empty_Albedo.png") }, new string[] { });
+                    var textureChanges = new List<TextureChange>
+                    {
+                        new TextureChange("albedo", "XLGearModifier/Empty_Albedo.png"),
+                        new TextureChange("normal", "XLGearModifier/Empty_Normal_Map.png"),
+                        new TextureChange("maskpbr", "XLGearModifier/Empty_Maskpbr_Map.png")
+                    };
+
+					var characterGearInfo = new CustomCharacterGearInfo(customGear.Metadata.Prefix, customGear.Metadata.Prefix, false, textureChanges.ToArray(), new List<string>().ToArray());
 					AddToList(customGear, characterGearInfo, destList, ref parent, isCustom);
 				}
 				else
@@ -319,13 +326,13 @@ namespace XLGearModifier
                             new TextureChange("maskpbr", texturePath + "maskpbr")
                         };
 
-						var characterGearInfo = new CustomCharacterGearInfo(defaultTexture.textureName, customGear.Metadata.Prefix, false, textureChanges.ToArray(), new string[] { });
+						var characterGearInfo = new CustomCharacterGearInfo(defaultTexture.textureName, customGear.Metadata.Prefix, false, textureChanges.ToArray(), new List<string>().ToArray());
 						AddToList(customGear, characterGearInfo, destList, ref parent, isCustom);
 					}
 
 					foreach (var texture in altTextures.Where(x => x.textureColor != null))
 					{
-						var texturePath = $"XLGearModifier/{customGear.Prefab.name}/{texture.textureName}";
+						var texturePath = $"XLGearModifier/{customGear.Prefab.name}/{texture.textureName}/";
 
                         var textureChanges = new List<TextureChange>
                         {
