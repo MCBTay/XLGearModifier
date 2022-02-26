@@ -1,6 +1,8 @@
 ﻿using HarmonyLib;
 using System.Linq;
 using System.Threading.Tasks;
+using SkaterXL.Data;
+using SkaterXL.Gear;
 using UnityEngine;
 using XLGearModifier.Unity.ScriptableObjects;
 
@@ -44,10 +46,19 @@ namespace XLGearModifier.Patches
                 var customGear = GearManager.Instance.CustomGear.FirstOrDefault(x => x.Prefab.name == prefabName);
                 if (customGear == null) return true;
 
+                if (customGear.GearInfo is CharacterBodyInfo cbi)
+                {
+                    //TODO: Assumes 1 target per controller.  Update to handle more
+                    var materialController = customGear.Prefab.GetComponentsInChildren<MaterialController>().FirstOrDefault(x => x.materialID == textureName);
+                    __result = Task.FromResult<Texture>(materialController.targets[0].renderer.materials[materialController.targets[0].materialIndex].mainTexture);
+
+                    return false;
+                }
+
                 var defaultTexture = customGear.Metadata?.GetMaterialInformation()?.DefaultTexture;
                 var altTextures = customGear.Metadata?.GetMaterialInformation()?.AlternativeTextures;
 
-                if (textureName == defaultTexture.textureName)
+                if (textureName == defaultTexture?.textureName)
                 {
                     __result = Task.FromResult<Texture>(GetTextureByType(defaultTexture, textureType));
                 }
