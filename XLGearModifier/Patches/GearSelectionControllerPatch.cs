@@ -277,9 +277,7 @@ namespace XLGearModifier.Patches
 
 				Traverse.Create(__instance).Method("SetIsEquippedIndicators", itemView, __instance.previewCustomizer.HasEquipped(gearAtIndex)).GetValue();
 			}
-
-			
-		}
+        }
 
 		[HarmonyPatch(typeof(GearSelectionController), "ListView_OnItemSelectedEvent")]
 		public static class ListView_OnItemSelectedEventPatch
