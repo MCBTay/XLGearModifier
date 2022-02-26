@@ -45,7 +45,7 @@ namespace XLGearModifier
 			switch (Metadata)
 			{
 				case XLGMClothingGearMetadata clothingMetadata:
-					await InstantiateCustomClothing(clothingMetadata);
+					InstantiateCustomClothing(clothingMetadata);
 					break;
 				case XLGMSkaterMetadata skaterMetadata:
 					InstantiateCustomSkater(skaterMetadata);
@@ -57,7 +57,7 @@ namespace XLGearModifier
 		}
 
 		#region Custom Clothing methods
-		private async Task InstantiateCustomClothing(XLGMClothingGearMetadata clothingMetadata)
+		private void InstantiateCustomClothing(XLGMClothingGearMetadata clothingMetadata)
 		{
 			var name = string.IsNullOrEmpty(clothingMetadata.DisplayName) ? Prefab.name : clothingMetadata.DisplayName;
 
@@ -238,8 +238,6 @@ namespace XLGearModifier
             return textures;
         }
 
-
-
 		private async Task<IEnumerable<MaterialController>> GetDefaultGearMaterialControllers()
 		{
 			return (await GetBaseObject())?.GetComponentsInChildren<MaterialController>();
@@ -397,7 +395,7 @@ namespace XLGearModifier
 			if (!typeFilter.includedTypes.Contains(customGear.Metadata.Prefix))
 			{
 				Array.Resize(ref typeFilter.includedTypes, typeFilter.includedTypes.Length + 1);
-                typeFilter.includedTypes.AddItem(customGear.Metadata.Prefix);
+                typeFilter.includedTypes[typeFilter.includedTypes.Length - 1] = customGear.Metadata.Prefix;
             }
 		}
 
