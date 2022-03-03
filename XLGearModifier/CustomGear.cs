@@ -132,18 +132,62 @@ namespace XLGearModifier
 			});
 			Traverse.Create(GearDatabase.Instance).Method("GenerateGearListSource").GetValue();
 
-			var materialChanges = new List<MaterialChange>()
-			{
-				new MaterialChange("head", new[] { new TextureChange("head", "XLGearModifier") }),
-				new MaterialChange("body", new[] { new TextureChange("body", "XLGearModifier") }),
-			};
-			GearInfo = new CharacterBodyInfo(name, skaterMetadata.Prefix, false, materialChanges, new string[] { });
+			GearInfo = new CharacterBodyInfo(name, skaterMetadata.Prefix, false, new List<MaterialChange>(), new string[] { });
 
-			//CreateNewMaterialController(Prefab);
+			SetTexturesAndShader(skaterMetadata);
 
 			this.AddBodyGearTemplate();
 			GearDatabase.Instance.bodyGear.Add(GearInfo as CharacterBodyInfo);
 		}
+
+        private void SetTexturesAndShader(XLGMSkaterMetadata metadata)
+        {
+            if (metadata == null) return;
+
+            var cbi = GearInfo as CharacterBodyInfo;
+            if (cbi == null) return;
+
+            var materialControllers = Prefab.GetComponentsInChildren<MaterialController>();
+            if (materialControllers == null || !materialControllers.Any()) return;
+
+            var materialChanges = new List<MaterialChange>();
+
+            foreach (var materialController in materialControllers)
+            {
+                CreateMaterialWithTexturesOnProperShader(materialController, metadata);
+
+                var texturePath = $"XLGearModifier/{Prefab.name}/{materialController.materialID}/";
+
+				var textureChanges = new List<TextureChange>
+                {
+                    new TextureChange("albedo", texturePath + "albedo"),
+                    //new TextureChange("normal", texturePath + "normal"),
+                    //new TextureChange("maskpbr", texturePath + "maskpbr")
+                };
+
+				materialChanges.Add(new MaterialChange(materialController.materialID, textureChanges.ToArray()));
+            }
+
+			cbi.materialChanges = materialChanges;
+		}
+
+        private void CreateMaterialWithTexturesOnProperShader(MaterialController materialController, XLGMSkaterMetadata metadata)
+        {
+            if (materialController == null) return;
+
+            var renderer = materialController.targets.FirstOrDefault()?.renderer;
+			if (renderer == null) return;
+
+            var textures = new Dictionary<string, Texture>();
+
+            textures.Add("albedo", renderer.materials[materialController.targets.FirstOrDefault().materialIndex].mainTexture);
+            //textures.Add("normal", renderer.materials[materialController.targets.FirstOrDefault().materialIndex].GetTexture("_BumpMap"));
+            //textures.Add("maskpbr", renderer.materials[materialController.targets.FirstOrDefault().materialIndex].GetTexture("_MaskMap"));
+
+			var material = materialController.GenerateMaterialWithChanges(textures);
+            material.shader = Shader.Find("MasterShaderCloth_v1");
+            materialController.SetMaterial(material);
+        }
 		#endregion
 
 		// likely broken, can come back to this
@@ -159,7 +203,7 @@ namespace XLGearModifier
 			}
 			else
 			{
-                SetTexturesAndShader(boardMetadata);
+                //SetTexturesAndShader(boardMetadata);
 			}
 
 			this.AddPrefixToGearFilters();
@@ -180,19 +224,16 @@ namespace XLGearModifier
 		/// <summary>
 		/// Adds the default texture from XLGMTextureSet (if exists, else uses empties), and puts the asset material on the MasterShaderCloth_v2 shader.
 		/// </summary>
-        private void SetTexturesAndShader(XLGMMetadata metadata)
+        private void SetTexturesAndShader(XLGMClothingGearMetadata metadata)
 		{
-			var clothingMetadata = metadata as XLGMClothingGearMetadata;
-			var boardMetadata = metadata as XLGMBoardGearMetadata;
-
-			if (clothingMetadata == null && boardMetadata == null) return;
+            if (metadata == null) return;
 
             var materialControllers = Prefab.GetComponentsInChildren<MaterialController>();
             if (materialControllers == null || !materialControllers.Any()) return;
 
             foreach (var materialController in materialControllers)
             {
-                CreateMaterialWithTexturesOnProperShader(materialController, clothingMetadata);
+                CreateMaterialWithTexturesOnProperShader(materialController, metadata);
 			}
         }
 
@@ -207,9 +248,9 @@ namespace XLGearModifier
 		}
 
 		/// <summary>
-		/// Gets reference to MasterShaderCloth_v2 unless the metadata category is Hair or Facial Hair.
+		/// Gets reference to MasterShaderCloth_v2 unless the metadata category is Hair or Facial Hair, then returns a reference to MasterShaderHair_AlphaTest_v1.
 		/// </summary>
-        private Shader GetClothingShader(XLGMClothingGearMetadata clothingMetadata)
+		private Shader GetClothingShader(XLGMClothingGearMetadata clothingMetadata)
         {
             if (clothingMetadata != null &&
                 (clothingMetadata.Category == Unity.ClothingGearCategory.Hair ||
@@ -242,39 +283,7 @@ namespace XLGearModifier
 		{
 			return (await GetBaseObject())?.GetComponentsInChildren<MaterialController>();
 		}
-
-		private void UpdateMaterialControllerAlphaMasks(MaterialController materialController)
-		{
-			if (ClothingMetadata?.MaterialAlphaMasks == null || !ClothingMetadata.MaterialAlphaMasks.Any()) return;
-
-			if (materialController.alphaMasks == null)
-			{
-				materialController.alphaMasks = new AlphaMaskTextureInfo[] { };
-			}
-
-			foreach (var mask in ClothingMetadata.MaterialAlphaMasks)
-			{
-				if (mask == null) continue;
-
-				var existing = materialController.alphaMasks?.FirstOrDefault(x => (int)x.type == (int)mask.type);
-				if (existing == null)
-				{
-					var newAlphaMask = new AlphaMaskTextureInfo
-					{
-						type = (AlphaMaskLocation)(int)mask.type,
-						texture = mask.texture,
-					};
-
-					Array.Resize(ref materialController.alphaMasks, materialController.alphaMasks.Length + 1);
-					materialController.alphaMasks[materialController.alphaMasks.Length - 1] = newAlphaMask;
-				}
-				else
-				{
-					existing.texture = mask.texture;
-				}
-			}
-		}
-		#endregion
+        #endregion
 
 		private TextureChange[] GetDefaultTextureChanges()
 		{
