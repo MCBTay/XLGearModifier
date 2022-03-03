@@ -72,6 +72,59 @@ namespace XLGearModifier
         #endregion
 
 		#region Custom Skater methods
+
+        private TypeFilterList GetCustomSkaterTypeFilters()
+        {
+            return new TypeFilterList(new List<TypeFilter>
+            {
+                //new TypeFilter
+                //{
+                //	allowCustomGear = true,
+                //	cameraView = GearRoomCameraView.FullSkater,
+                //	excludedTags = new[] { "ProOnly" },
+                //	includedTypes = new [] { skaterMetadata.Prefix },
+                //	label = "Skintone",
+                //	requiredTag = ""
+                //},
+                new TypeFilter
+                {
+                    allowCustomGear = true,
+                    cameraView = GearRoomCameraView.Deck,
+                    excludedTags = new[] { "ProOnly" },
+                    includedTypes = new[] { "Deck" },
+                    label = "Deck",
+                    requiredTag = ""
+                },
+                new TypeFilter
+                {
+                    allowCustomGear = true,
+                    cameraView = GearRoomCameraView.Grip,
+                    excludedTags = new[] { "ProOnly" },
+                    includedTypes = new[] { "GripTape" },
+                    label = "Griptape",
+                    requiredTag = ""
+                },
+                new TypeFilter
+                {
+                    allowCustomGear = true,
+                    cameraView = GearRoomCameraView.Truck,
+                    excludedTags = new[] { "ProOnly" },
+                    includedTypes = new [] { "Trucks", "TrucksIndependent", "TrucksThunder", "TrucksVenture" },
+                    label = "Trucks",
+                    requiredTag = ""
+                },
+                new TypeFilter
+                {
+                    allowCustomGear = true,
+                    cameraView = GearRoomCameraView.Wheel,
+                    excludedTags = new[] { "ProOnly" },
+                    includedTypes = new [] { "Wheels" },
+                    label = "Wheels",
+                    requiredTag = ""
+                }
+            });
+        }
+
 		private void InstantiateCustomSkater(XLGMSkaterMetadata skaterMetadata)
 		{
 			var name = string.IsNullOrEmpty(skaterMetadata.DisplayName) ? Prefab.name : skaterMetadata.DisplayName;
@@ -81,54 +134,7 @@ namespace XLGearModifier
 				stance = SkaterInfo.Stance.Regular,
 				bodyID = skaterMetadata.Prefix,
 				name = name,
-				GearFilters = new TypeFilterList(new List<TypeFilter>
-				{
-					//new TypeFilter
-					//{
-					//	allowCustomGear = true,
-					//	cameraView = GearRoomCameraView.FullSkater,
-					//	excludedTags = new[] { "ProOnly" },
-					//	includedTypes = new [] { skaterMetadata.Prefix },
-					//	label = "Skintone",
-					//	requiredTag = ""
-					//},
-					new TypeFilter
-					{
-						allowCustomGear = true,
-						cameraView = GearRoomCameraView.Deck,
-						excludedTags = new[] { "ProOnly" },
-						includedTypes = new[] { "Deck" },
-						label = "Deck",
-						requiredTag = ""
-					},
-					new TypeFilter
-					{
-						allowCustomGear = true,
-						cameraView = GearRoomCameraView.Grip,
-						excludedTags = new[] { "ProOnly" },
-						includedTypes = new[] { "GripTape" },
-						label = "Griptape",
-						requiredTag = ""
-					},
-					new TypeFilter
-					{
-						allowCustomGear = true,
-						cameraView = GearRoomCameraView.Truck,
-						excludedTags = new[] { "ProOnly" },
-						includedTypes = new [] { "Trucks", "TrucksIndependent", "TrucksThunder", "TrucksVenture" },
-						label = "Trucks",
-						requiredTag = ""
-					},
-					new TypeFilter
-					{
-						allowCustomGear = true,
-						cameraView = GearRoomCameraView.Wheel,
-						excludedTags = new[] { "ProOnly" },
-						includedTypes = new [] { "Wheels" },
-						label = "Wheels",
-						requiredTag = ""
-					}
-				})
+				GearFilters = GetCustomSkaterTypeFilters(),
 			});
 			Traverse.Create(GearDatabase.Instance).Method("GenerateGearListSource").GetValue();
 
