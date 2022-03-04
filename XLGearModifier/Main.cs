@@ -2,12 +2,11 @@
 using System.Linq;
 using System.Reflection;
 using UnityModManagerNet;
-using XLMenuMod.Utilities.UserInterface;
 
 namespace XLGearModifier
 {
 #if DEBUG
-	[EnableReloading]
+    [EnableReloading]
 #endif
 	static class Main
 	{
@@ -47,7 +46,7 @@ namespace XLGearModifier
 				XLMenuMod.Utilities.UserInterface.UserInterfaceHelper.Instance.LoadAssets();
 				AssetBundleHelper.Instance.LoadGearBundle();
 				PlayerController.Instance.StartCoroutine(AssetBundleHelper.Instance.LoadUserBundles());
-			}
+            }
 			else
 			{
 				Harmony.UnpatchAll(Harmony.Id);
