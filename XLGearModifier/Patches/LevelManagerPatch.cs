@@ -9,6 +9,9 @@ using UnityEngine.ResourceManagement.ResourceProviders;
 
 namespace XLGearModifier.Patches
 {
+    /// <summary>
+    /// Patching into LoadSceneAdditive in order to provide custom texturing capability to the "skateshop" or character editing scene.
+    /// </summary>
     static class LevelManagerPatch
     {
         [HarmonyPatch(typeof(LevelManager), nameof(LevelManager.LoadSceneAdditive))]
@@ -32,17 +35,20 @@ namespace XLGearModifier.Patches
 
                 completion = () =>
                 {
+                    // This was something being done by Easy Day, since we're overwriting this Action, we should do it too.
                     Time.timeScale = 1f;
 
                     var renderer = GetSkateshopRenderer(__instance);
-                    if (renderer?.material == null) return;
-
                     LookForSkateshopTextures();
-
                     SetRendererTextures(renderer);
                 };
             }
 
+            /// <summary>
+            /// References the loaded additive scene and searches for a specific game object in that scene called "root".  This was determined by looking at the assets via Asset Studio.
+            /// It then looks for a particular mesh renderer, "SS_WallsandFloors_01", as that's the renderer of the mesh you see, and returns that mesh renderer.
+            /// </summary>
+            /// <returns></returns>
             private static MeshRenderer GetSkateshopRenderer(LevelManager __instance)
             {
                 var sceneHandle = new Traverse(__instance).Field("LoadedAdditiveSceneHandle").GetValue<AsyncOperationHandle<SceneInstance>>();
@@ -51,12 +57,12 @@ namespace XLGearModifier.Patches
                 var meshRenderers = rootGO.GetComponentsInChildren<MeshRenderer>();
                 if (meshRenderers == null || !meshRenderers.Any()) return null;
 
-                var meshRenderer = meshRenderers.FirstOrDefault(x => x.name == "SS_WallsandFloors_01");
-                if (meshRenderer == null) return null;
-
-                return meshRenderer;
+                return meshRenderers.FirstOrDefault(x => x.name == "SS_WallsandFloors_01"); ;
             }
 
+            /// <summary>
+            /// Attempts to find custom textures in the gear folder for color, normal, and rgmtao.
+            /// </summary>
             private static void LookForSkateshopTextures()
             {
                 LookForSkateshopTexture(ColorTextureFilename);
@@ -64,6 +70,10 @@ namespace XLGearModifier.Patches
                 LookForSkateshopTexture(RgmtaoTextureFilename);
             }
 
+            /// <summary>
+            /// Recursively searches the gear folder for a particular filename.  If found, it will load the appropriate texture (SkateshopTexture, SkateshopNormal, or SkateshopRgMtAo) from the texture found on disk
+            /// </summary>
+            /// <param name="textureFilename">The filename of the texture being searched for.</param>
             private static void LookForSkateshopTexture(string textureFilename)
             {
                 var texture = Directory.GetFiles(SaveManager.Instance.CustomGearDir, textureFilename, SearchOption.AllDirectories).FirstOrDefault();
@@ -104,8 +114,14 @@ namespace XLGearModifier.Patches
                 }
             }
 
+            /// <summary>
+            /// Applies SkateshopTexture, SkateshopNormal, and/or SkateshopRgMtAo to the passed in MeshRenderer if they are not null.
+            /// </summary>
+            /// <param name="renderer">The renderer to apply the textures to.</param>
             private static void SetRendererTextures(MeshRenderer renderer)
             {
+                if (renderer?.material == null) return;
+
                 if (SkateshopTexture != null)
                 {
                     renderer.material.SetTexture(ColorTextureName, SkateshopTexture);
