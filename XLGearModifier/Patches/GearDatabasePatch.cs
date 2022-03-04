@@ -132,6 +132,8 @@ namespace XLGearModifier.Patches
 						filter.allowCustomGear = true;
 					}
 				}
+
+				SkateShopTextureManager.Instance.LookForSkateshopTextures();
 			}
 		}
 	}
