@@ -88,6 +88,9 @@
     <Reference Include="UnityEngine.CoreModule">
       <HintPath>References\UnityEngine.CoreModule.dll</HintPath>
     </Reference>
+    <Reference Include="UnityEngine.ImageConversionModule">
+      <HintPath>References\UnityEngine.ImageConversionModule.dll</HintPath>
+    </Reference>
     <Reference Include="UnityEngine.IMGUIModule">
       <HintPath>References\UnityEngine.IMGUIModule.dll</HintPath>
     </Reference>
@@ -125,6 +128,7 @@
     <Compile Include="Patches\GearSelectionControllerPatch.cs" />
     <Compile Include="Patches\ClothingGearObjectPatch.cs" />
     <Compile Include="Patches\GearSelectionStatePatch.cs" />
+    <Compile Include="Patches\LevelManagerPatch.cs" />
     <Compile Include="Patches\MVCListViewPatch.cs" />
     <Compile Include="Patches\TextureMangingClassPatch.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
