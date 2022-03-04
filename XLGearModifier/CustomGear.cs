@@ -248,8 +248,39 @@ namespace XLGearModifier
 
             var textures = CreateTextureDictionary();
             var material = materialController.GenerateMaterialWithChanges(textures);
-            material.shader = GetClothingShader(clothingMetadata);
-            materialController.SetMaterial(material);
+
+			// TODO: Because we're having to make the materials in HDRP/Lit in the editor (until we get their shader, hopefully)
+			// we need to store off a copy of the normal and mask maps, and ensure we assign them to the correct property names once the shader has been changed.
+			// Hopefully, if we can get access to their cloth shader, we can just assign properties directly in editor and get rid of most of this code.
+            var normalMap = GetNormalMap(material);
+            var maskMap = GetMaskMap(material);
+
+			material.shader = GetClothingShader(clothingMetadata);
+
+			material.SetTexture("_texture2D_normal", normalMap);
+            material.SetTexture("_texture2D_maskPBR", maskMap);
+
+			materialController.SetMaterial(material);
+		}
+
+		/// <summary>
+		/// Gets the normal map from the material using HDRP/Lit property names.  If no normal is found, then it returns the default empty normal we have in our base bundle.
+		/// </summary>
+		/// <param name="material">The material to look for textures on.</param>
+		/// <returns>Either the normal found on the material or a default empty normal.</returns>
+        private Texture GetNormalMap(Material material)
+        {
+            return material.GetTexture("_NormalMap") ?? AssetBundleHelper.Instance.emptyNormalMap;
+        }
+
+        /// <summary>
+        /// Gets the mask map from the material using HDRP/Lit property names.  If no mask is found, then it returns the default empty mask we have in our base bundle.
+        /// </summary>
+        /// <param name="material">The material to look for textures on.</param>
+        /// <returns>Either the mask found on the material or a default empty mask.</returns>
+		private Texture GetMaskMap(Material material)
+        {
+            return material.GetTexture("_MaskMap") ?? AssetBundleHelper.Instance.emptyNormalMap;
 		}
 
 		/// <summary>
