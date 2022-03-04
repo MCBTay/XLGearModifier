@@ -13,7 +13,6 @@ using XLGearModifier.Unity;
 using XLMenuMod;
 using XLMenuMod.Utilities;
 using XLMenuMod.Utilities.Gear;
-using AlphaMaskLocation = SkaterXL.Gear.AlphaMaskLocation;
 using ClothingGearCategory = SkaterXL.Gear.ClothingGearCategory;
 
 namespace XLGearModifier
@@ -48,7 +47,7 @@ namespace XLGearModifier
 					InstantiateCustomClothing(clothingMetadata);
 					break;
 				case XLGMSkaterMetadata skaterMetadata:
-					InstantiateCustomSkater(skaterMetadata);
+					//InstantiateCustomSkater(skaterMetadata);
 					break;
 				case XLGMBoardGearMetadata boardMetadata:
 					await InstantiateCustomBoard(boardMetadata);
@@ -136,7 +135,7 @@ namespace XLGearModifier
 				name = name,
 				GearFilters = GetCustomSkaterTypeFilters(),
 			});
-			Traverse.Create(GearDatabase.Instance).Method("GenerateGearListSource").GetValue();
+			//Traverse.Create(GearDatabase.Instance).Method("GenerateGearListSource").GetValue();
 
 			GearInfo = new CharacterBodyInfo(name, skaterMetadata.Prefix, false, new List<MaterialChange>(), new string[] { });
 
@@ -473,13 +472,7 @@ namespace XLGearModifier
 				var existing = template.alphaMasks.FirstOrDefault(x => (int)x.MaskLocation == (int)mask.MaskLocation);
 				if (existing == null)
 				{
-					var alphaMaskConfig = new GearAlphaMaskConfig
-					{
-						MaskLocation = (AlphaMaskLocation)(int)mask.MaskLocation,
-						Threshold = mask.Threshold,
-					};
-
-					template.alphaMasks.Add(alphaMaskConfig);
+					template.alphaMasks.Add(mask);
 				}
 				else
 				{
