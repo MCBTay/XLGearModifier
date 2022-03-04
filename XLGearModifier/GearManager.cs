@@ -281,6 +281,8 @@ namespace XLGearModifier
 
 		public void LoadAssetCustomTextures()
 		{
+            var customTextures = Traverse.Create(GearDatabase.Instance).Field("customGearListSource").GetValue<GearInfo[][][]>();
+
 			foreach (var customGear in CustomGear)
 			{
 				CustomFolderInfo parent = null;
@@ -288,7 +290,6 @@ namespace XLGearModifier
 				AddFolder<CustomGearFolderInfo>(customGear.Metadata.GetCategory(), string.Empty, CustomMeshes, ref parent);
 				AddFolder<CustomGearFolderInfo>(string.IsNullOrEmpty(customGear.Metadata.DisplayName) ? customGear.Prefab.name : customGear.Metadata.DisplayName, string.Empty, parent.Children, ref parent);
 
-				var customTextures = Traverse.Create(GearDatabase.Instance).Field("customGearListSource").GetValue<GearInfo[][][]>();
 				AddItem(customGear, customTextures, parent.Children, ref parent, true);
 			}
 		}
