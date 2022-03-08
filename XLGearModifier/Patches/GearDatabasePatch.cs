@@ -1,7 +1,7 @@
 ﻿using HarmonyLib;
+using SkaterXL.Data;
 using System.Collections.Generic;
 using System.Linq;
-using SkaterXL.Data;
 using XLGearModifier.Unity;
 using XLMenuMod.Utilities;
 using XLMenuMod.Utilities.Gear;
@@ -9,7 +9,7 @@ using XLMenuMod.Utilities.Interfaces;
 
 namespace XLGearModifier.Patches
 {
-	public class GearDatabasePatch
+    public class GearDatabasePatch
 	{
 		[HarmonyPatch(typeof(GearDatabase), nameof(GearDatabase.GetGearListAtIndex), new[] { typeof(IndexPath), typeof(bool) }, new[] { ArgumentType.Normal, ArgumentType.Out })]
 		public static class GetGearListAtIndexPatch
@@ -32,18 +32,7 @@ namespace XLGearModifier.Patches
 					return;
 				}
 
-				List<ICustomInfo> sourceList = null;
-
-				switch (index[1])
-				{
-					case (int) GearModifierTab.CustomMeshes: sourceList = GearManager.Instance.CustomMeshes; break;
-					case (int) GearModifierTab.ProGear:      sourceList = GearManager.Instance.ProGear;      break;
-					case (int) GearModifierTab.FemaleGear:   sourceList = GearManager.Instance.FemaleGear;   break;
-					case (int) GearModifierTab.MaleGear:     sourceList = GearManager.Instance.MaleGear;     break;
-					case (int) GearModifierTab.Eyes:         sourceList = GearManager.Instance.Eyes;         break;
-				}
-
-				if (sourceList == null) return;
+                var sourceList = GetSourceList(index[1]);
 
 				var list = GearManager.Instance.CurrentFolder.HasChildren() ? GearManager.Instance.CurrentFolder.Children : sourceList;
 
@@ -52,7 +41,7 @@ namespace XLGearModifier.Patches
 			}
 		}
 
-		[HarmonyPatch(typeof(GearDatabase), nameof(GearDatabase.GetGearAtIndex), new[] { typeof(IndexPath), typeof(bool) }, new[] { ArgumentType.Normal, ArgumentType.Out })]
+        [HarmonyPatch(typeof(GearDatabase), nameof(GearDatabase.GetGearAtIndex), new[] { typeof(IndexPath), typeof(bool) }, new[] { ArgumentType.Normal, ArgumentType.Out })]
 		public static class GetGearAtIndexPatch
 		{
 			static void Postfix(IndexPath index, ref GearInfo __result)
@@ -60,28 +49,7 @@ namespace XLGearModifier.Patches
 				if (index.depth < 3) return;
 				if (!GearSelectionControllerPatch.IsOnXLGMTab(index[1])) return;
 
-				List<ICustomInfo> sourceList = null;
-
-				switch (index[1])
-				{
-					case (int)GearModifierTab.CustomMeshes:
-						sourceList = GearManager.Instance.CustomMeshes;
-						break;
-					case (int)GearModifierTab.ProGear:
-						sourceList = GearManager.Instance.ProGear;
-						break;
-					case (int)GearModifierTab.FemaleGear:
-						sourceList = GearManager.Instance.FemaleGear;
-						break;
-					case (int)GearModifierTab.MaleGear:
-						sourceList = GearManager.Instance.MaleGear;
-						break;
-					case (int)GearModifierTab.Eyes:
-						sourceList = GearManager.Instance.Eyes;
-						break;
-				}
-
-				if (sourceList == null) return;
+                var sourceList = GetSourceList(index[1]);
 
 				if (index.depth == 3)
 				{
@@ -136,5 +104,18 @@ namespace XLGearModifier.Patches
 				SkateShopTextureManager.Instance.LookForSkateshopTextures();
 			}
 		}
+
+        private static List<ICustomInfo> GetSourceList(int index)
+        {
+            switch ((GearModifierTab)index)
+            {
+                case GearModifierTab.CustomMeshes: return GearManager.Instance.CustomMeshes;
+                case GearModifierTab.ProGear: return GearManager.Instance.ProGear;
+                case GearModifierTab.FemaleGear: return GearManager.Instance.FemaleGear;
+                case GearModifierTab.MaleGear: return GearManager.Instance.MaleGear;
+                case GearModifierTab.Eyes: return GearManager.Instance.Eyes;
+                default: return new List<ICustomInfo>();
+            }
+        }
 	}
 }
