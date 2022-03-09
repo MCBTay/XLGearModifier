@@ -47,8 +47,8 @@ namespace XLGearModifier
             Debug.Log("XLGearModifier: Loading " + bundle.name);
 			await GearManager.Instance.LoadAssets(bundle);
 			Debug.Log("XLGearModifier: Loaded " + GearManager.Instance.CustomGear.Count + " assets");
-			
-			await PlayerController.Instance.characterCustomizer.LoadLastPlayer();
+
+            await PlayerController.Instance.characterCustomizer.LoadLastPlayer();
 		}
 
         private void LoadEmptyDefaultTextures(AssetBundle bundle)
@@ -79,6 +79,8 @@ namespace XLGearModifier
 
 				yield return PlayerController.Instance.StartCoroutine(LoadBundleAsync(assetPack));
 			}
+
+            PlayerController.Instance.characterCustomizer.LoadLastPlayer();
 		}
 
 		IEnumerator LoadBundleAsync(string name, bool isEmbedded = false)
