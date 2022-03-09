@@ -83,20 +83,12 @@ namespace XLGearModifier
             PlayerController.Instance.characterCustomizer.LoadLastPlayer();
 		}
 
-		IEnumerator LoadBundleAsync(string name, bool isEmbedded = false)
+		IEnumerator LoadBundleAsync(string name)
 		{
 			AssetBundleCreateRequest abCreateRequest;
 
-			if (isEmbedded)
-			{
-				abCreateRequest = AssetBundle.LoadFromMemoryAsync(ExtractResource(name));
-			}
-			else
-			{
-				abCreateRequest = AssetBundle.LoadFromFileAsync(name);
-			}
-
-			yield return abCreateRequest;
+            abCreateRequest = AssetBundle.LoadFromFileAsync(name);
+            yield return abCreateRequest;
 
 			var bundle = abCreateRequest?.assetBundle;
 			if (bundle == null) yield break;
