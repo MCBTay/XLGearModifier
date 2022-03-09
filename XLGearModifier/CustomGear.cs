@@ -71,20 +71,15 @@ namespace XLGearModifier
         #endregion
 
 		#region Custom Skater methods
-
+		/// <summary>
+		/// Creates a list of type filters for custom skaters.  This controls what "texture groups" they do/don't have access to, and which prefixes to use.
+		/// By default, custom skaters currently only have access to custom board textures.
+		/// </summary>
+		/// <returns>List of TypeFilters</returns>
         private TypeFilterList GetCustomSkaterTypeFilters()
         {
             return new TypeFilterList(new List<TypeFilter>
             {
-                //new TypeFilter
-                //{
-                //	allowCustomGear = true,
-                //	cameraView = GearRoomCameraView.FullSkater,
-                //	excludedTags = new[] { "ProOnly" },
-                //	includedTypes = new [] { skaterMetadata.Prefix },
-                //	label = "Skintone",
-                //	requiredTag = ""
-                //},
                 new TypeFilter
                 {
                     allowCustomGear = true,
@@ -128,14 +123,15 @@ namespace XLGearModifier
 		{
 			var name = string.IsNullOrEmpty(skaterMetadata.DisplayName) ? Prefab.name : skaterMetadata.DisplayName;
 
-			GearDatabase.Instance.skaters.Add(new SkaterInfo
+            var skaterInfo = new SkaterInfo
 			{
 				stance = SkaterInfo.Stance.Regular,
-				bodyID = skaterMetadata.Prefix,
-				name = name,
-				GearFilters = GetCustomSkaterTypeFilters(),
-			});
-			//Traverse.Create(GearDatabase.Instance).Method("GenerateGearListSource").GetValue();
+                bodyID = skaterMetadata.Prefix,
+                name = name,
+                GearFilters = GetCustomSkaterTypeFilters(),
+            };
+            GearDatabase.Instance.skaters.Add(skaterInfo);
+            //Traverse.Create(GearDatabase.Instance).Method("GenerateGearListSource").GetValue();
 
 			GearInfo = new CharacterBodyInfo(name, skaterMetadata.Prefix, false, new List<MaterialChange>(), new string[] { });
 
@@ -145,7 +141,7 @@ namespace XLGearModifier
 			GearDatabase.Instance.bodyGear.Add(GearInfo as CharacterBodyInfo);
 		}
 
-        private void SetTexturesAndShader(XLGMSkaterMetadata metadata)
+		private void SetTexturesAndShader(XLGMSkaterMetadata metadata)
         {
             if (metadata == null) return;
 
@@ -166,8 +162,8 @@ namespace XLGearModifier
 				var textureChanges = new List<TextureChange>
                 {
                     new TextureChange("albedo", texturePath + "albedo"),
-                    //new TextureChange("normal", texturePath + "normal"),
-                    //new TextureChange("maskpbr", texturePath + "maskpbr")
+                    new TextureChange("normal", texturePath + "normal"),
+                    new TextureChange("maskpbr", texturePath + "maskpbr")
                 };
 
 				materialChanges.Add(new MaterialChange(materialController.materialID, textureChanges.ToArray()));
@@ -185,13 +181,18 @@ namespace XLGearModifier
 
             var textures = new Dictionary<string, Texture>();
 
-            textures.Add("albedo", renderer.materials[materialController.targets.FirstOrDefault().materialIndex].mainTexture);
-            //textures.Add("normal", renderer.materials[materialController.targets.FirstOrDefault().materialIndex].GetTexture("_BumpMap"));
-            //textures.Add("maskpbr", renderer.materials[materialController.targets.FirstOrDefault().materialIndex].GetTexture("_MaskMap"));
+            var target = materialController.targets.FirstOrDefault();
+			if (target == null) return;
 
-			var material = materialController.GenerateMaterialWithChanges(textures);
-            material.shader = Shader.Find("MasterShaderCloth_v1");
-            materialController.SetMaterial(material);
+            var material = renderer.materials[target.materialIndex];
+
+			textures.Add("albedo", material.GetTexture("_BaseColorMap") ?? AssetBundleHelper.Instance.emptyAlbedo);
+			textures.Add("normal", material.GetTexture("_NormalMap") ?? AssetBundleHelper.Instance.emptyNormalMap);
+			textures.Add("maskpbr", material.GetTexture("_MaskMap") ?? AssetBundleHelper.Instance.emptyMaskPBR);
+
+			var newMaterial = materialController.GenerateMaterialWithChanges(textures);
+            //material.shader = Shader.Find("MasterShaderCloth_v1");
+            materialController.SetMaterial(newMaterial);
         }
 		#endregion
 
@@ -356,49 +357,46 @@ namespace XLGearModifier
 		{
 			var skaterIndex = (int)Skater.MaleStandard;
 
-			var type = Metadata.Prefix;
+            var type = Metadata.Prefix;
 
-			var clothingMetadata = Metadata as XLGMClothingGearMetadata;
-			var boardMetadata = Metadata as XLGMBoardGearMetadata;
+            if (ClothingMetadata != null && ClothingMetadata.BaseOnDefaultGear)
+            {
+                type = ClothingMetadata.GetBaseType();
+            }
+            else if (BoardMetadata != null && BoardMetadata.BaseOnDefaultGear)
+            {
+                type = BoardMetadata.GetBaseType();
+            }
 
-			if (clothingMetadata != null && clothingMetadata.BaseOnDefaultGear)
-			{
-				type = clothingMetadata.GetBaseType();
-			}
-			else if (boardMetadata != null && boardMetadata.BaseOnDefaultGear)
-			{
-				type = boardMetadata.GetBaseType();
-			}
+            if (string.IsNullOrEmpty(type)) return (int)Skater.MaleStandard;
 
-			if (string.IsNullOrEmpty(type)) return (int)Skater.MaleStandard;
+            if (type.StartsWith("m", StringComparison.InvariantCultureIgnoreCase))
+            {
+                skaterIndex = (int)Skater.MaleStandard;
+            }
+            else if (type.StartsWith("f", StringComparison.InvariantCultureIgnoreCase))
+            {
+                skaterIndex = (int)Skater.FemaleStandard;
+            }
+            else if (type.StartsWith("es", StringComparison.InvariantCultureIgnoreCase))
+            {
+                skaterIndex = (int)Skater.EvanSmith;
+            }
+            else if (type.StartsWith("ta", StringComparison.InvariantCultureIgnoreCase))
+            {
+                skaterIndex = (int)Skater.TomAsta;
+            }
+            else if (type.StartsWith("bw", StringComparison.InvariantCultureIgnoreCase))
+            {
+                skaterIndex = (int)Skater.BrandonWestgate;
+            }
+            else if (type.StartsWith("tl", StringComparison.InvariantCultureIgnoreCase))
+            {
+                skaterIndex = (int)Skater.TiagoLemos;
+            }
 
-			if (type.StartsWith("m", StringComparison.InvariantCultureIgnoreCase))
-			{
-				skaterIndex = (int)Skater.MaleStandard;
-			}
-			else if (type.StartsWith("f", StringComparison.InvariantCultureIgnoreCase))
-			{
-				skaterIndex = (int)Skater.FemaleStandard;
-			}
-			else if (type.StartsWith("es", StringComparison.InvariantCultureIgnoreCase))
-			{
-				skaterIndex = (int)Skater.EvanSmith;
-			}
-			else if (type.StartsWith("ta", StringComparison.InvariantCultureIgnoreCase))
-			{
-				skaterIndex = (int)Skater.TomAsta;
-			}
-			else if (type.StartsWith("bw", StringComparison.InvariantCultureIgnoreCase))
-			{
-				skaterIndex = (int)Skater.BrandonWestgate;
-			}
-			else if (type.StartsWith("tl", StringComparison.InvariantCultureIgnoreCase))
-			{
-				skaterIndex = (int)Skater.TiagoLemos;
-			}
-
-			return skaterIndex;
-		}
+            return skaterIndex;
+        }
 
 		public int GetCategoryIndex(int skaterIndex)
 		{
@@ -434,8 +432,10 @@ namespace XLGearModifier
 	public static class CustomGearExtensions
 	{
         public static void AddPrefixToGearFilters(this CustomGear customGear)
-		{
-			var typeFilter = GearDatabase.Instance.skaters[customGear.GetSkaterIndex()].GearFilters[customGear.GetCategoryIndex(customGear.GetSkaterIndex())];
+        {
+            var skaterIndex = GetSkaterIndex(customGear);
+
+			var typeFilter = GearDatabase.Instance.skaters[skaterIndex].GearFilters[customGear.GetCategoryIndex(skaterIndex)];
 
 			if (!typeFilter.includedTypes.Contains(customGear.Metadata.Prefix))
 			{
@@ -443,6 +443,12 @@ namespace XLGearModifier
                 typeFilter.includedTypes[typeFilter.includedTypes.Length - 1] = customGear.Metadata.Prefix;
             }
 		}
+
+        private static int GetSkaterIndex(CustomGear customGear)
+        {
+            if (customGear.ClothingMetadata == null) return (int)SkaterBase.Male;
+            return (int)customGear.ClothingMetadata.Skater;
+        }
 
 		#region Gear Template methods
 		public static void AddCharacterGearTemplate(this CustomGear customGear, XLGMClothingGearMetadata metadata)
@@ -454,19 +460,10 @@ namespace XLGearModifier
 				alphaMasks = new List<GearAlphaMaskConfig>(),
 				category = MapCategory(metadata.Category),
 				id = metadata.Prefix.ToLower(),
-				path = "XLGearModifier"
+				path = $"XLGearModifier/{customGear.Prefab.name}"
 			};
 
-			if (metadata.BaseOnDefaultGear)
-			{
-				var baseGearTemplate = GearDatabase.Instance.CharGearTemplateForID.FirstOrDefault(x => x.Key == customGear.Metadata.GetBaseType().ToLower()).Value;
-
-                newGearTemplate = baseGearTemplate.Copy();
-                // TODO: remove when Copy() copies this field over too
-                newGearTemplate.alphaMasks = baseGearTemplate?.alphaMasks;
-            }
-
-			AddOrUpdateTemplateAlphaMasks(metadata, newGearTemplate);
+            AddOrUpdateTemplateAlphaMasks(metadata, newGearTemplate);
 
 			GearDatabase.Instance.CharGearTemplateForID.Add(metadata.Prefix.ToLower(), newGearTemplate);
 		}
@@ -519,7 +516,7 @@ namespace XLGearModifier
 			var newBodyTemplate = new CharacterBodyTemplate
 			{
 				id = customGear.Metadata.Prefix.ToLower(),
-				path = "XLGearModifier",
+                path = $"XLGearModifier/{customGear.Prefab.name}",
 				leftEyeLocalPosition = new Vector3(1, 0, 0),
 				rightEyeLocalPosition = new Vector3(-1, 0, 0)
 			};
@@ -531,7 +528,7 @@ namespace XLGearModifier
 			if (metadata.Category != Unity.BoardGearCategory.Deck) return;
 			if (GearDatabase.Instance.DeckTemplateForID.ContainsKey(metadata.Prefix.ToLower())) return;
 
-			var newGearTemplate = new DeckTemplate { id = string.Empty, path = "XLGearModifier" };
+			var newGearTemplate = new DeckTemplate { id = string.Empty, path = $"XLGearModifier/{customGear.Prefab.name}" };
 
 			if (metadata.BaseOnDefaultGear)
 			{
