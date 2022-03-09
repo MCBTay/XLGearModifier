@@ -52,7 +52,7 @@ namespace XLGearModifier
 				var spriteIndex = AssetBundleHelper.Instance.GearModifierUISpriteSheet.spriteCharacterTable[GetSpriteIndex(template)].glyphIndex;
 				var sprite = AssetBundleHelper.Instance.GearModifierUISpriteSheetSprites.FirstOrDefault(x => x.name == "GearModifierUISpriteSheet_" + spriteIndex);
 
-				var mesh = GearManager.Instance.CustomGear.FirstOrDefault(x => x.GearInfo.type == clothingGear.type);
+				var mesh = GearManager.Instance.CustomGear.FirstOrDefault(x => x.GearInfo != null && x.GearInfo.type == clothingGear.type);
 
 				var creatorName = mesh?.ClothingMetadata?.CreatorName ?? "N/A";
 
