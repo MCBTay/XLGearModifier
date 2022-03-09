@@ -1,6 +1,7 @@
 ﻿using HarmonyLib;
 using System.Linq;
 using System.Reflection;
+using System.Threading.Tasks;
 using UnityModManagerNet;
 
 namespace XLGearModifier
@@ -19,7 +20,7 @@ namespace XLGearModifier
 			Settings.Instance = UnityModManager.ModSettings.Load<Settings>(modEntry);
 			Settings.ModEntry = modEntry;
 
-			modEntry.OnToggle = OnToggle;
+            modEntry.OnToggle = OnToggle;
 #if DEBUG
 			modEntry.OnUnload = Unload;
 #endif
@@ -44,8 +45,8 @@ namespace XLGearModifier
 				}
 
 				XLMenuMod.Utilities.UserInterface.UserInterfaceHelper.Instance.LoadAssets();
-				AssetBundleHelper.Instance.LoadGearBundle();
-				PlayerController.Instance.StartCoroutine(AssetBundleHelper.Instance.LoadUserBundles());
+
+                AssetBundleHelper.Instance.LoadBundles();
             }
 			else
 			{
@@ -54,6 +55,8 @@ namespace XLGearModifier
 
 			return true;
 		}
+
+        
 
 #if DEBUG
 		static bool Unload(UnityModManager.ModEntry modEntry)

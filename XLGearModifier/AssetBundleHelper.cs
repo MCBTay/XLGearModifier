@@ -11,7 +11,7 @@ using XLGearModifier.Unity;
 
 namespace XLGearModifier
 {
-	public class AssetBundleHelper
+    public class AssetBundleHelper
 	{
 		private static AssetBundleHelper __instance;
 		public static AssetBundleHelper Instance => __instance ?? (__instance = new AssetBundleHelper());
@@ -24,7 +24,16 @@ namespace XLGearModifier
 		public Texture2D emptyMaskPBR;
 		public Texture2D emptyNormalMap;
 
-		public async Task LoadGearBundle()
+        public async Task LoadBundles()
+        {
+            await GearManager.Instance.LoadGameShaders();
+
+			await LoadBuiltInBundle();
+
+            PlayerController.Instance.StartCoroutine(LoadUserBundles());
+        }
+
+		private async Task LoadBuiltInBundle()
 		{
 			// We're solely making a call here to ensure that the unity assembly is loaded up prior to loading assets.  else we'll get a bunch of errors about things missing.
 			var test = GearModifierTab.CustomMeshes;
@@ -32,14 +41,9 @@ namespace XLGearModifier
             var bytes = ExtractResource("XLGearModifier.Assets.sdkbundle");
 			var bundle = AssetBundle.LoadFromMemory(bytes);
 
-			emptyAlbedo = bundle.LoadAsset<Texture2D>("Empty_Albedo.png");
-			emptyMaskPBR = bundle.LoadAsset<Texture2D>("Empty_Maskpbr_Map.png");
-			emptyNormalMap = bundle.LoadAsset<Texture2D>("Empty_Normal_Map.png");
-			GearModifierUISpriteSheet = bundle.LoadAsset<TMP_SpriteAsset>("GearModifierUISpriteSheet");
-			GearModifierUISpriteSheetSprites = bundle.LoadAllAssets<Sprite>().Where(x => x.name.StartsWith("GearModifierUISpriteSheet")).ToList();
-
-            await GearManager.Instance.LoadGameShaders();
-
+			LoadEmptyDefaultTextures(bundle);
+            LoadSpriteSheets(bundle);
+            
             Debug.Log("XLGearModifier: Loading " + bundle.name);
 			await GearManager.Instance.LoadAssets(bundle);
 			Debug.Log("XLGearModifier: Loaded " + GearManager.Instance.CustomGear.Count + " assets");
@@ -47,7 +51,20 @@ namespace XLGearModifier
 			await PlayerController.Instance.characterCustomizer.LoadLastPlayer();
 		}
 
-		public IEnumerator LoadUserBundles()
+        private void LoadEmptyDefaultTextures(AssetBundle bundle)
+        {
+            emptyAlbedo = bundle.LoadAsset<Texture2D>("Empty_Albedo.png");
+            emptyMaskPBR = bundle.LoadAsset<Texture2D>("Empty_Maskpbr_Map.png");
+            emptyNormalMap = bundle.LoadAsset<Texture2D>("Empty_Normal_Map.png");
+		}
+
+        private void LoadSpriteSheets(AssetBundle bundle)
+        {
+            GearModifierUISpriteSheet = bundle.LoadAsset<TMP_SpriteAsset>("GearModifierUISpriteSheet");
+            GearModifierUISpriteSheetSprites = bundle.LoadAllAssets<Sprite>().Where(x => x.name.StartsWith("GearModifierUISpriteSheet")).ToList();
+		}
+
+		private IEnumerator LoadUserBundles()
 		{
 			AssetPacksPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal), "SkaterXL", "XLGearModifier", "Asset Packs");
 
