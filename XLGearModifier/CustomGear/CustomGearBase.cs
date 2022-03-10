@@ -13,7 +13,7 @@ using XLMenuMod.Utilities;
 
 namespace XLGearModifier.CustomGear
 {
-    public abstract class CustomGear : CustomInfo
+    public abstract class CustomGearBase : CustomInfo
 	{
 		public XLGMMetadata Metadata;
 
@@ -22,13 +22,13 @@ namespace XLGearModifier.CustomGear
 		[JsonIgnore]
 		public GearInfo GearInfo;
 
-		public CustomGear(XLGMMetadata metadata, GameObject prefab)
+		public CustomGearBase(XLGMMetadata metadata, GameObject prefab)
 		{
 			Metadata = metadata;
 			Prefab = prefab;
 		}
 
-		public CustomGear(CustomGear gearToClone, GearInfoSingleMaterial gearInfo) : this(gearToClone.Metadata, gearToClone.Prefab)
+		public CustomGearBase(CustomGearBase gearBaseToClone, GearInfoSingleMaterial gearInfo) : this(gearBaseToClone.Metadata, gearBaseToClone.Prefab)
 		{
 			GearInfo = gearInfo;
 		}

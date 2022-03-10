@@ -2,6 +2,7 @@
 using SkaterXL.Data;
 using System.Collections.Generic;
 using System.Linq;
+using XLGearModifier.CustomGear;
 using XLGearModifier.Unity;
 using XLMenuMod.Utilities;
 using XLMenuMod.Utilities.Gear;
@@ -80,7 +81,7 @@ namespace XLGearModifier.Patches
 						case CustomGearFolderInfo customGearFolderInfo:
 							__result = customGearFolderInfo;
 							break;
-						case CustomGear.CustomGear customGear:
+						case CustomGearBase customGear:
 							__result = customGear.GearInfo;
 							break;
 					}

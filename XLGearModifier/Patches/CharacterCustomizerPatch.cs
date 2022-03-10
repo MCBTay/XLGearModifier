@@ -1,12 +1,13 @@
 ﻿using HarmonyLib;
 using SkaterXL.Data;
+using XLGearModifier.CustomGear;
 using XLMenuMod.Utilities;
 using XLMenuMod.Utilities.Gear;
 using XLMenuMod.Utilities.Gear.Interfaces;
 
 namespace XLGearModifier.Patches
 {
-	public class CharacterCustomizerPatch
+    public class CharacterCustomizerPatch
 	{
 		[HarmonyPatch(typeof(CharacterCustomizer), nameof(CharacterCustomizer.HasEquipped), typeof(ICharacterCustomizationItem))]
 		static class HasEquippedPatch
@@ -16,7 +17,7 @@ namespace XLGearModifier.Patches
 				if (item is ICustomGearInfo customGearInfo)
 				{
 					if (customGearInfo.Info is CustomFolderInfo) return false;
-					if (customGearInfo.Info is CustomGear.CustomGear customGear) item = customGear.GearInfo;
+					if (customGearInfo.Info is CustomGearBase customGear) item = customGear.GearInfo;
 				}
 				if (item is CustomCharacterGearInfo customCharGearInfo) item = customCharGearInfo;
 				if (item is CustomBoardGearInfo customBoardGearInfo) item = customBoardGearInfo;

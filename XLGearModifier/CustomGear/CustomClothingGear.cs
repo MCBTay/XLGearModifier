@@ -14,7 +14,7 @@ using ClothingGearCategory = SkaterXL.Gear.ClothingGearCategory;
 
 namespace XLGearModifier.CustomGear
 {
-    public class CustomClothingGear : CustomGear
+    public class CustomClothingGear : CustomGearBase
     {
         public XLGMClothingGearMetadata ClothingMetadata => Metadata as XLGMClothingGearMetadata;
 
@@ -23,8 +23,8 @@ namespace XLGearModifier.CustomGear
         {
         }
 
-        public CustomClothingGear(CustomGear customGear, CustomCharacterGearInfo gearInfo)
-            : base(customGear, gearInfo)
+        public CustomClothingGear(CustomGearBase customGearBase, CustomCharacterGearInfo gearInfo)
+            : base(customGearBase, gearInfo)
         {
 
         }

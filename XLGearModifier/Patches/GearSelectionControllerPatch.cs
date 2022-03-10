@@ -6,6 +6,7 @@ using SkaterXL.Data;
 using TMPro;
 using UnityEngine.EventSystems;
 using UnityModManagerNet;
+using XLGearModifier.CustomGear;
 using XLGearModifier.Unity;
 using XLMenuMod;
 using XLMenuMod.Utilities;
@@ -139,7 +140,7 @@ namespace XLGearModifier.Patches
 
 					if (child != null)
 					{
-						if (child.GetParentObject() is CustomGear.CustomGear customGear)
+						if (child.GetParentObject() is CustomGearBase customGear)
 						{
 							newText = $"<space=18px><sprite name=\"{customGear.Metadata.GetSprite()}\" tint=1>";
 							itemView.SetText(gearAtIndex.name.Replace("\\", newText), true);
@@ -196,7 +197,7 @@ namespace XLGearModifier.Patches
 			{
 				return child;
 			}
-			if (child.GetParentObject() is CustomGear.CustomGear)
+			if (child.GetParentObject() is CustomGearBase)
 			{
 				return child;
 			}
@@ -246,7 +247,7 @@ namespace XLGearModifier.Patches
 						if (customGearFolder != null)
 						{
 							var child = GetFirstChild(customGearFolder);
-							if (child.GetParentObject() is CustomGear.CustomGear)
+							if (child.GetParentObject() is CustomGearBase)
 							{
 								itemView.SetItemText(gearAtIndex, customGearFolder);
 							}
@@ -460,7 +461,7 @@ namespace XLGearModifier.Patches
 					}
 
 					var child = gearFolder.FolderInfo.Children.ElementAt(1);
-					if (child != null && child.GetParentObject() is CustomGear.CustomGear customGear)
+					if (child != null && child.GetParentObject() is CustomGearBase customGear)
 					{
 						__instance.previewCustomizer.PreviewItem(customGear.GearInfo, toBeCachedGear);
 					}

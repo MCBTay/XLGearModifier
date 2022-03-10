@@ -11,7 +11,7 @@ using XLMenuMod.Utilities.Gear;
 
 namespace XLGearModifier.CustomGear
 {
-    public class CustomBoardGear : CustomGear
+    public class CustomBoardGear : CustomGearBase
     {
         public XLGMBoardGearMetadata BoardMetadata => Metadata as XLGMBoardGearMetadata;
 
@@ -20,8 +20,8 @@ namespace XLGearModifier.CustomGear
         {
         }
 
-        public CustomBoardGear(CustomGear customGear, CustomBoardGearInfo gearInfo)
-            : base(customGear, gearInfo)
+        public CustomBoardGear(CustomGearBase customGearBase, CustomBoardGearInfo gearInfo)
+            : base(customGearBase, gearInfo)
         {
 
         }

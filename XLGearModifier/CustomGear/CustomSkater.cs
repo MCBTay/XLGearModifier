@@ -9,7 +9,7 @@ using XLGearModifier.Unity;
 
 namespace XLGearModifier.CustomGear
 {
-    public class CustomSkater : CustomGear
+    public class CustomSkater : CustomGearBase
     {
         public XLGMSkaterMetadata SkaterMetadata => Metadata as XLGMSkaterMetadata;
 
