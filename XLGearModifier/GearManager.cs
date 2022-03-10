@@ -301,7 +301,9 @@ namespace XLGearModifier
             var customTextures = Traverse.Create(GearDatabase.Instance).Field("customGearListSource").GetValue<GearInfo[][][]>();
 
 			foreach (var customGear in CustomGear)
-			{
+            {
+                if (customGear is CustomSkater) continue;
+
 				CustomFolderInfo parent = null;
 
 				AddFolder<CustomGearFolderInfo>(customGear.Metadata.GetCategory(), string.Empty, CustomMeshes, ref parent);
