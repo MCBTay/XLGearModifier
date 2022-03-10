@@ -329,6 +329,20 @@ namespace XLGearModifier
             //material.shader = Shader.Find("MasterShaderCloth_v1");
             materialController.SetMaterial(newMaterial);
         }
+
+        private void AddBodyGearTemplate()
+        {
+            if (GearDatabase.Instance.CharBodyTemplateForID.ContainsKey(Metadata.Prefix.ToLower())) return;
+
+            var newBodyTemplate = new CharacterBodyTemplate
+            {
+                id = Metadata.Prefix.ToLower(),
+                path = $"XLGearModifier/{Prefab.name}",
+                leftEyeLocalPosition = new Vector3(1, 0, 0),
+                rightEyeLocalPosition = new Vector3(-1, 0, 0)
+            };
+            GearDatabase.Instance.CharBodyTemplateForID.Add(Metadata.Prefix.ToLower(), newBodyTemplate);
+        }
         #endregion
 
         #region Custom BoardGear methods
@@ -348,8 +362,8 @@ namespace XLGearModifier
                 //SetTexturesAndShader(boardMetadata);
 			}
 
-			this.AddPrefixToGearFilters();
-			this.AddBoardGearTemplate(boardMetadata);
+			AddPrefixToGearFilters();
+			AddBoardGearTemplate(boardMetadata);
 		}
 
         private async Task AddDeckMaterialControllers()
@@ -365,6 +379,25 @@ namespace XLGearModifier
         private async Task<IEnumerable<MaterialController>> GetDefaultGearMaterialControllers()
         {
             return (await GetBaseObject())?.GetComponentsInChildren<MaterialController>();
+        }
+
+        private void AddBoardGearTemplate(XLGMBoardGearMetadata metadata)
+        {
+            if (metadata.Category != Unity.BoardGearCategory.Deck) return;
+            if (GearDatabase.Instance.DeckTemplateForID.ContainsKey(metadata.Prefix.ToLower())) return;
+
+            var newGearTemplate = new DeckTemplate { id = string.Empty, path = $"XLGearModifier/{Prefab.name}" };
+
+            if (metadata.BaseOnDefaultGear)
+            {
+                var baseGearTemplate = GearDatabase.Instance.DeckTemplateForID.FirstOrDefault(x => x.Key == Metadata.GetBaseType().ToLower()).Value;
+                if (baseGearTemplate != null)
+                {
+                    newGearTemplate.id = baseGearTemplate.id;
+                }
+            }
+
+            GearDatabase.Instance.DeckTemplateForID.Add(metadata.Prefix.ToLower(), newGearTemplate);
         }
         #endregion
 
@@ -473,57 +506,5 @@ namespace XLGearModifier
 
 			return categoryIndex;
 		}
-	}
-
-	public static class CustomGearExtensions
-	{
-		#region Gear Template methods
-        public static void AddBodyGearTemplate(this CustomGear customGear)
-		{
-			if (GearDatabase.Instance.CharBodyTemplateForID.ContainsKey(customGear.Metadata.Prefix.ToLower())) return;
-
-			var newBodyTemplate = new CharacterBodyTemplate
-			{
-				id = customGear.Metadata.Prefix.ToLower(),
-                path = $"XLGearModifier/{customGear.Prefab.name}",
-				leftEyeLocalPosition = new Vector3(1, 0, 0),
-				rightEyeLocalPosition = new Vector3(-1, 0, 0)
-			};
-			GearDatabase.Instance.CharBodyTemplateForID.Add(customGear.Metadata.Prefix.ToLower(), newBodyTemplate);
-		}
-
-		public static void AddBoardGearTemplate(this CustomGear customGear, XLGMBoardGearMetadata metadata)
-		{
-			if (metadata.Category != Unity.BoardGearCategory.Deck) return;
-			if (GearDatabase.Instance.DeckTemplateForID.ContainsKey(metadata.Prefix.ToLower())) return;
-
-			var newGearTemplate = new DeckTemplate { id = string.Empty, path = $"XLGearModifier/{customGear.Prefab.name}" };
-
-			if (metadata.BaseOnDefaultGear)
-			{
-				var baseGearTemplate = GearDatabase.Instance.DeckTemplateForID.FirstOrDefault(x => x.Key == customGear.Metadata.GetBaseType().ToLower()).Value;
-				if (baseGearTemplate != null)
-				{
-					newGearTemplate.id = baseGearTemplate.id;
-				}
-			}
-
-			GearDatabase.Instance.DeckTemplateForID.Add(metadata.Prefix.ToLower(), newGearTemplate);
-		}
-		#endregion
-
-		#region MaterialController methods
-		public static void UpdateMaterialControllerPropertyNameSubstitutions(this MaterialController materialController)
-		{
-            var traverse = Traverse.Create(materialController);
-
-            traverse.Field("m_propertyNameSubstitutionsDict").SetValue(new Dictionary<string, string>());
-
-            var propNameSubs = traverse.Field("m_propertyNameSubstitutions").GetValue<List<PropertyNameSubstitution>>() ?? new List<PropertyNameSubstitution>();
-			propNameSubs.Add(new PropertyNameSubstitution { oldName = "_texture2D_color", newName = "_BaseColorMap" });
-
-            traverse.Field("m_propertyNameSubstitutionsDict").SetValue(propNameSubs.ToDictionary(s => s.oldName, s => s.newName));
-		}
-		#endregion
 	}
 }
