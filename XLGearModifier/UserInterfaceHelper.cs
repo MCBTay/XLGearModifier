@@ -2,6 +2,7 @@
 using SkaterXL.Gear;
 using System.Linq;
 using UnityEngine;
+using XLGearModifier.CustomGear;
 using XLGearModifier.Unity;
 using ClothingGearCategory = SkaterXL.Gear.ClothingGearCategory;
 using Object = UnityEngine.Object;
@@ -52,7 +53,7 @@ namespace XLGearModifier
 				var spriteIndex = AssetBundleHelper.Instance.GearModifierUISpriteSheet.spriteCharacterTable[GetSpriteIndex(template)].glyphIndex;
 				var sprite = AssetBundleHelper.Instance.GearModifierUISpriteSheetSprites.FirstOrDefault(x => x.name == "GearModifierUISpriteSheet_" + spriteIndex);
 
-				var mesh = GearManager.Instance.CustomGear.FirstOrDefault(x => x.GearInfo != null && x.GearInfo.type == clothingGear.type);
+				var mesh = GearManager.Instance.CustomGear.FirstOrDefault(x => x.GearInfo != null && x.GearInfo.type == clothingGear.type) as CustomClothingGear;
 
 				var creatorName = mesh?.ClothingMetadata?.CreatorName ?? "N/A";
 

@@ -16,7 +16,7 @@ namespace XLGearModifier.Patches
 				if (item is ICustomGearInfo customGearInfo)
 				{
 					if (customGearInfo.Info is CustomFolderInfo) return false;
-					if (customGearInfo.Info is CustomGear customGear) item = customGear.GearInfo;
+					if (customGearInfo.Info is CustomGear.CustomGear customGear) item = customGear.GearInfo;
 				}
 				if (item is CustomCharacterGearInfo customCharGearInfo) item = customCharGearInfo;
 				if (item is CustomBoardGearInfo customBoardGearInfo) item = customBoardGearInfo;

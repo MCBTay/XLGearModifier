@@ -118,7 +118,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssetBundleHelper.cs" />
-    <Compile Include="CustomGear.cs" />
+    <Compile Include="CustomGear\CustomBoardGear.cs" />
+    <Compile Include="CustomGear\CustomClothingGear.cs" />
+    <Compile Include="CustomGear\CustomGear.cs" />
+    <Compile Include="CustomGear\CustomSkater.cs" />
     <Compile Include="GearManager.cs" />
     <Compile Include="Main.cs" />
     <Compile Include="Patches\CharacterCustomizerPatch.cs" />

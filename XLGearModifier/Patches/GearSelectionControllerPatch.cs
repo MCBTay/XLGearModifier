@@ -139,7 +139,7 @@ namespace XLGearModifier.Patches
 
 					if (child != null)
 					{
-						if (child.GetParentObject() is CustomGear customGear)
+						if (child.GetParentObject() is CustomGear.CustomGear customGear)
 						{
 							newText = $"<space=18px><sprite name=\"{customGear.Metadata.GetSprite()}\" tint=1>";
 							itemView.SetText(gearAtIndex.name.Replace("\\", newText), true);
@@ -196,7 +196,7 @@ namespace XLGearModifier.Patches
 			{
 				return child;
 			}
-			if (child.GetParentObject() is CustomGear)
+			if (child.GetParentObject() is CustomGear.CustomGear)
 			{
 				return child;
 			}
@@ -246,7 +246,7 @@ namespace XLGearModifier.Patches
 						if (customGearFolder != null)
 						{
 							var child = GetFirstChild(customGearFolder);
-							if (child.GetParentObject() is CustomGear)
+							if (child.GetParentObject() is CustomGear.CustomGear)
 							{
 								itemView.SetItemText(gearAtIndex, customGearFolder);
 							}
@@ -460,7 +460,7 @@ namespace XLGearModifier.Patches
 					}
 
 					var child = gearFolder.FolderInfo.Children.ElementAt(1);
-					if (child != null && child.GetParentObject() is CustomGear customGear)
+					if (child != null && child.GetParentObject() is CustomGear.CustomGear customGear)
 					{
 						__instance.previewCustomizer.PreviewItem(customGear.GearInfo, toBeCachedGear);
 					}

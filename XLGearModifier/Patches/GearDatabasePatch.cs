@@ -80,7 +80,7 @@ namespace XLGearModifier.Patches
 						case CustomGearFolderInfo customGearFolderInfo:
 							__result = customGearFolderInfo;
 							break;
-						case CustomGear customGear:
+						case CustomGear.CustomGear customGear:
 							__result = customGear.GearInfo;
 							break;
 					}

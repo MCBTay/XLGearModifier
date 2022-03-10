@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
+using XLGearModifier.CustomGear;
 using XLGearModifier.Unity;
 using XLMenuMod;
 using XLMenuMod.Utilities;
@@ -23,7 +24,7 @@ namespace XLGearModifier
 
 		public CustomFolderInfo CurrentFolder;
 		
-		public List<CustomGear> CustomGear;
+		public List<CustomGear.CustomGear> CustomGear;
 
 		public List<ICustomInfo> CustomMeshes;
 		public List<ICustomInfo> ProGear;
@@ -37,7 +38,7 @@ namespace XLGearModifier
 		public GearManager()
 		{
 			CustomMeshes = new List<ICustomInfo>();
-			CustomGear = new List<CustomGear>();
+			CustomGear = new List<CustomGear.CustomGear>();
 
 			ProGear = new List<ICustomInfo>();
 			FemaleGear = new List<ICustomInfo>();
@@ -220,8 +221,24 @@ namespace XLGearModifier
 					if (metadata == null) continue;
 					if (string.IsNullOrEmpty(metadata.Prefix)) continue;
 
-					var customGear = new CustomGear(metadata, asset);
-					await customGear.Instantiate();
+                    CustomGear.CustomGear customGear = null;
+
+                    switch (metadata)
+                    {
+                        case XLGMClothingGearMetadata clothingMetadata:
+                            customGear = new CustomClothingGear(clothingMetadata, asset);
+                            break;
+                        case XLGMSkaterMetadata skaterMetadata:
+                            customGear = new CustomSkater(skaterMetadata, asset);
+                            break;
+                        case XLGMBoardGearMetadata boardMetadata:
+							customGear = new CustomBoardGear(boardMetadata, asset);
+							break;
+					}
+                    if (customGear == null) return;
+
+					customGear.Instantiate();
+
 					CustomGear.Add(customGear);
 
 					switch (metadata)
@@ -243,7 +260,7 @@ namespace XLGearModifier
 			CustomMeshes = CustomMeshes.OrderBy(x => Enum.Parse(typeof(Unity.ClothingGearCategory), x.GetName().Replace("\\", string.Empty))).ToList();
 		}
 
-		private void AddBoardMesh(XLGMBoardGearMetadata metadata, CustomGear customGear, GameObject asset)
+		private void AddBoardMesh(XLGMBoardGearMetadata metadata, CustomGear.CustomGear customGear, GameObject asset)
 		{
 			CustomFolderInfo parent = null;
 
@@ -261,7 +278,7 @@ namespace XLGearModifier
 			}
 		}
 
-		private void AddClothingMesh(XLGMClothingGearMetadata metadata, CustomGear customGear, GameObject asset)
+		private void AddClothingMesh(XLGMClothingGearMetadata metadata, CustomGear.CustomGear customGear, GameObject asset)
 		{
 			CustomFolderInfo parent = null;
 
@@ -294,7 +311,7 @@ namespace XLGearModifier
 			}
 		}
 
-		public void AddItem(CustomGear customGear, GearInfo[][][] sourceList, List<ICustomInfo> destList, ref CustomFolderInfo parent, bool isCustom = false)
+		public void AddItem(CustomGear.CustomGear customGear, GearInfo[][][] sourceList, List<ICustomInfo> destList, ref CustomFolderInfo parent, bool isCustom = false)
 		{
 			if (sourceList == null)
 			{
@@ -362,8 +379,8 @@ namespace XLGearModifier
 
 			if (customGear.Metadata.BasedOnDefaultGear())
 			{
-				if (customGear.BoardMetadata != null)
-				{
+				if (customGear is CustomBoardGear)
+                {
 					var baseTypes = categoryTextures.Where(x => x.type == customGear.Metadata.GetBaseType().ToLower()).Select(x => x as BoardGearInfo).ToList();
 					textures = textures.Concat(baseTypes).ToList();
 				}
@@ -432,16 +449,16 @@ namespace XLGearModifier
 			parent.Children.AddRange(itemsToAdd);
 		}
 
-		private void AddToList(CustomGear customGear, GearInfoSingleMaterial baseTexture, List<ICustomInfo> destList, ref CustomFolderInfo parent, bool isCustom)
+		private void AddToList(CustomGear.CustomGear customGear, GearInfoSingleMaterial baseTexture, List<ICustomInfo> destList, ref CustomFolderInfo parent, bool isCustom)
 		{
 			var child = destList.FirstOrDefault(x => x.GetName().Equals(baseTexture.name, StringComparison.InvariantCultureIgnoreCase));
 			if (child != null) return;
 
-			if (customGear.BoardMetadata != null)
+			if (customGear is CustomBoardGear)
 			{
 				CustomBoardGearInfo gearInfo = new CustomBoardGearInfo(baseTexture.name, customGear.GearInfo.type, isCustom, baseTexture.textureChanges, customGear.GearInfo.tags);
 				gearInfo.Info.Parent = parent;
-				gearInfo.Info.ParentObject = new CustomGear(customGear, gearInfo);
+				gearInfo.Info.ParentObject = new CustomBoardGear(customGear, gearInfo);
 				destList.Add(gearInfo.Info);
 
 				GearDatabase.Instance.boardGear.Add(gearInfo);
@@ -450,7 +467,7 @@ namespace XLGearModifier
 			{
 				CustomCharacterGearInfo gearInfo = new CustomCharacterGearInfo(baseTexture.name, customGear.GearInfo.type, isCustom, baseTexture.textureChanges, customGear.GearInfo.tags);
 				gearInfo.Info.Parent = parent;
-				gearInfo.Info.ParentObject = new CustomGear(customGear, gearInfo);
+				gearInfo.Info.ParentObject = new CustomClothingGear(customGear, gearInfo);
 				destList.Add(gearInfo.Info);
 
 				GearDatabase.Instance.clothingGear.Add(gearInfo);
@@ -481,7 +498,7 @@ namespace XLGearModifier
 			}
 		}
 
-		public void AddFolder<T>(CustomGear customGear, CustomGearFolderInfo gearFolder, List<ICustomInfo> sourceList, ref CustomFolderInfo parent, bool isCustom) where T : ICustomFolderInfo
+		public void AddFolder<T>(CustomGear.CustomGear customGear, CustomGearFolderInfo gearFolder, List<ICustomInfo> sourceList, ref CustomFolderInfo parent, bool isCustom) where T : ICustomFolderInfo
 		{
 			var child = sourceList.FirstOrDefault(x => x.GetName().Equals(gearFolder.FolderInfo.Name, StringComparison.InvariantCultureIgnoreCase) && x is CustomFolderInfo) as CustomFolderInfo;
 			if (child == null)
@@ -506,7 +523,7 @@ namespace XLGearModifier
 			}
 		}
 
-		private void UpdateChildren(ICustomFolderInfo folder, CustomGear customGear)
+		private void UpdateChildren(ICustomFolderInfo folder, CustomGear.CustomGear customGear)
 		{
 			foreach (var child in folder.FolderInfo.Children)
 			{
@@ -514,7 +531,7 @@ namespace XLGearModifier
 				{
 					characterGear.type = customGear.Metadata.Prefix.ToLower();
 					//child.ParentObject = customGear;
-					child.ParentObject = new CustomGear(customGear, characterGear);
+					child.ParentObject = new CustomClothingGear(customGear, characterGear);
 				}
 				else if (child.GetParentObject() is CustomGearFolderInfo customGearFolder)
 				{
