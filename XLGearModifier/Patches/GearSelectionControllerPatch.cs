@@ -108,7 +108,7 @@ namespace XLGearModifier.Patches
 				}
 				else if (index.depth >= 3)
 				{
-					itemView.Label.spriteAsset = AssetBundleHelper.Instance.GearModifierUISpriteSheet;
+					itemView.Label.spriteAsset = UserInterfaceHelper.Instance.GearModifierUISpriteSheet;
 					string newText = string.Empty;
 					if (index.depth == 3)
 					{
@@ -224,9 +224,9 @@ namespace XLGearModifier.Patches
 					return;
 				}
 
-				if (AssetBundleHelper.Instance.GearModifierUISpriteSheet != null)
+				if (UserInterfaceHelper.Instance.GearModifierUISpriteSheet != null)
 				{
-					itemView.Label.spriteAsset = AssetBundleHelper.Instance.GearModifierUISpriteSheet;
+					itemView.Label.spriteAsset = UserInterfaceHelper.Instance.GearModifierUISpriteSheet;
 				}
 
 				if (gearAtIndex.name.StartsWith("\\"))

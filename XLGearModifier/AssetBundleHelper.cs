@@ -19,10 +19,7 @@ namespace XLGearModifier
 
 		public string AssetPacksPath;
 
-		public TMP_SpriteAsset GearModifierUISpriteSheet;
-		public List<Sprite> GearModifierUISpriteSheetSprites;
-
-		public async Task LoadBundles()
+        public async Task LoadBundles()
         {
             await GearManager.Instance.LoadGameShaders();
 
@@ -100,8 +97,8 @@ namespace XLGearModifier
 
         private IEnumerator LoadUserInterface(AssetBundle bundle)
         {
-            yield return LoadAsset<TMP_SpriteAsset>(bundle, "GearModifierUISpriteSheet", value => GearModifierUISpriteSheet = value);
-            yield return LoadAssets<Sprite>(bundle, "GearModifierUISpriteSheet", value => GearModifierUISpriteSheetSprites = value.ToList());
+            yield return LoadAsset<TMP_SpriteAsset>(bundle, "GearModifierUISpriteSheet", value => UserInterfaceHelper.Instance.GearModifierUISpriteSheet = value);
+            yield return LoadAssets<Sprite>(bundle, "GearModifierUISpriteSheet", value => UserInterfaceHelper.Instance.GearModifierUISpriteSheetSprites = value.ToList());
 
             var assets = new List<GameObject>();
             yield return LoadAssets<GameObject>(bundle, string.Empty, value => assets = value.ToList());

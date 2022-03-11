@@ -1,6 +1,8 @@
 ﻿using SkaterXL.Data;
 using SkaterXL.Gear;
+using System.Collections.Generic;
 using System.Linq;
+using TMPro;
 using UnityEngine;
 using XLGearModifier.CustomGear;
 using XLGearModifier.Unity;
@@ -13,6 +15,9 @@ namespace XLGearModifier
 	{
 		private static UserInterfaceHelper _instance;
 		public static UserInterfaceHelper Instance => _instance ?? (_instance = new UserInterfaceHelper());
+
+        public TMP_SpriteAsset GearModifierUISpriteSheet;
+        public List<Sprite> GearModifierUISpriteSheetSprites;
 
 		public GameObject WhatsEquippedUserInterfacePrefab;
 
@@ -50,8 +55,8 @@ namespace XLGearModifier
 			foreach (var clothingGear in customizations.clothingGear)
 			{
 				var template = GearDatabase.Instance.CharGearTemplateForID[clothingGear.type];
-				var spriteIndex = AssetBundleHelper.Instance.GearModifierUISpriteSheet.spriteCharacterTable[GetSpriteIndex(template)].glyphIndex;
-				var sprite = AssetBundleHelper.Instance.GearModifierUISpriteSheetSprites.FirstOrDefault(x => x.name == "GearModifierUISpriteSheet_" + spriteIndex);
+				var spriteIndex = GearModifierUISpriteSheet.spriteCharacterTable[GetSpriteIndex(template)].glyphIndex;
+				var sprite = GearModifierUISpriteSheetSprites.FirstOrDefault(x => x.name == "GearModifierUISpriteSheet_" + spriteIndex);
 
 				var mesh = GearManager.Instance.CustomGear.FirstOrDefault(x => x.GearInfo != null && x.GearInfo.type == clothingGear.type) as CustomClothingGear;
 
@@ -69,27 +74,27 @@ namespace XLGearModifier
 			{
 				case ClothingGearCategory.Shoes:
 					
-					spriteIndex = AssetBundleHelper.Instance.GearModifierUISpriteSheet.GetSpriteIndexFromName("Shoes");
+					spriteIndex = GearModifierUISpriteSheet.GetSpriteIndexFromName("Shoes");
 					break;
 				case ClothingGearCategory.Hoodie:
 				case ClothingGearCategory.LongSleeve:
 				case ClothingGearCategory.Shirt:
 				case ClothingGearCategory.TankTop:
-					spriteIndex = AssetBundleHelper.Instance.GearModifierUISpriteSheet.GetSpriteIndexFromName("Top");
+					spriteIndex = GearModifierUISpriteSheet.GetSpriteIndexFromName("Top");
 					break;
 				case ClothingGearCategory.Pants:
 				case ClothingGearCategory.PantsRolledUp:
 				case ClothingGearCategory.Shorts:
-					spriteIndex = AssetBundleHelper.Instance.GearModifierUISpriteSheet.GetSpriteIndexFromName("Bottom");
+					spriteIndex = GearModifierUISpriteSheet.GetSpriteIndexFromName("Bottom");
 					break;
 				case ClothingGearCategory.Socks:
-					spriteIndex = AssetBundleHelper.Instance.GearModifierUISpriteSheet.GetSpriteIndexFromName("Socks");
+					spriteIndex = GearModifierUISpriteSheet.GetSpriteIndexFromName("Socks");
 					break;
 				case ClothingGearCategory.Hat:
-					spriteIndex = AssetBundleHelper.Instance.GearModifierUISpriteSheet.GetSpriteIndexFromName("Headwear");
+					spriteIndex = GearModifierUISpriteSheet.GetSpriteIndexFromName("Headwear");
 					break;
 				default:
-					spriteIndex = AssetBundleHelper.Instance.GearModifierUISpriteSheet.GetSpriteIndexFromName("Other");
+					spriteIndex = GearModifierUISpriteSheet.GetSpriteIndexFromName("Other");
 					break;
 			}
 
