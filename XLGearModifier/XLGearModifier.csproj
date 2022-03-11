@@ -141,7 +141,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
-	<EmbeddedResource Include="Assets\default-empty-textures" />
+    <EmbeddedResource Include="Assets\default-empty-textures" />
     <EmbeddedResource Include="Assets\user-interface" />
     <EmbeddedResource Include="Assets\facialhair" />
     <EmbeddedResource Include="Assets\hair" />
@@ -159,13 +159,13 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>if "$(ConfigurationName)"=="Debug" ( 
-del /Q /F "G:\Steam\steamapps\common\Skater XL\Mods\XLGearModifier\"
-copy /Y "$(TargetDir)XLGearModifier.dll" "G:\Steam\steamapps\common\Skater XL\Mods\XLGearModifier\XLGearModifier.dll"
-copy /Y "$(TargetDir)XLGearModifier.pdb" "G:\Steam\steamapps\common\Skater XL\Mods\XLGearModifier\XLGearModifier.pdb"
-copy /Y "$(TargetDir)XLGearModifier.Unity.dll" "G:\Steam\steamapps\common\Skater XL\Mods\XLGearModifier\XLGearModifier.Unity.dll"
-copy /Y "$(TargetDir)XLGearModifier.Unity.pdb" "G:\Steam\steamapps\common\Skater XL\Mods\XLGearModifier\XLGearModifier.Unity.pdb"
-copy /Y "$(TargetDir)XLMenuMod.Utilities.dll" "G:\Steam\steamapps\common\Skater XL\Mods\XLGearModifier\XLMenuMod.Utilities.dll"
-copy /Y "$(TargetDir)Info.json" "G:\Steam\steamapps\common\Skater XL\Mods\XLGearModifier\Info.json"
+del /Q /F "C:\Program Files (x86)\Steam\steamapps\common\Skater XL\Mods\XLGearModifier\"
+copy /Y "$(TargetDir)XLGearModifier.dll" "C:\Program Files (x86)\Steam\steamapps\common\Skater XL\Mods\XLGearModifier\XLGearModifier.dll"
+copy /Y "$(TargetDir)XLGearModifier.pdb" "C:\Program Files (x86)\Steam\steamapps\common\Skater XL\Mods\XLGearModifier\XLGearModifier.pdb"
+copy /Y "$(TargetDir)XLGearModifier.Unity.dll" "C:\Program Files (x86)\Steam\steamapps\common\Skater XL\Mods\XLGearModifier\XLGearModifier.Unity.dll"
+copy /Y "$(TargetDir)XLGearModifier.Unity.pdb" "C:\Program Files (x86)\Steam\steamapps\common\Skater XL\Mods\XLGearModifier\XLGearModifier.Unity.pdb"
+copy /Y "$(TargetDir)XLMenuMod.Utilities.dll" "C:\Program Files (x86)\Steam\steamapps\common\Skater XL\Mods\XLGearModifier\XLMenuMod.Utilities.dll"
+copy /Y "$(TargetDir)Info.json" "C:\Program Files (x86)\Steam\steamapps\common\Skater XL\Mods\XLGearModifier\Info.json"
 )</PostBuildEvent>
   </PropertyGroup>
 </Project>
