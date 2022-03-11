@@ -149,6 +149,7 @@
     <EmbeddedResource Include="Assets\shoes" />
     <EmbeddedResource Include="Assets\tops" />
     <EmbeddedResource Include="Assets\user-interface" />
+    <EmbeddedResource Include="Assets\default-empty-textures" />
     <None Include="Info.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
