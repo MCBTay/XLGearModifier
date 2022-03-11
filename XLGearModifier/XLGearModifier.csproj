@@ -141,6 +141,8 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
+	<EmbeddedResource Include="Assets\default-empty-textures" />
+    <EmbeddedResource Include="Assets\user-interface" />
     <EmbeddedResource Include="Assets\facialhair" />
     <EmbeddedResource Include="Assets\hair" />
     <EmbeddedResource Include="Assets\hats" />
@@ -148,8 +150,6 @@
     <EmbeddedResource Include="Assets\pants" />
     <EmbeddedResource Include="Assets\shoes" />
     <EmbeddedResource Include="Assets\tops" />
-    <EmbeddedResource Include="Assets\user-interface" />
-    <EmbeddedResource Include="Assets\default-empty-textures" />
     <None Include="Info.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
