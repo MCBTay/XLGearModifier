@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 943143b4b75855b46b74ea5a14558a96, type: 3}
   m_Name: Tanktop 1
   m_EditorClassIdentifier: 
-  DefaultTexture: {fileID: 0}
+  DefaultTexture: {fileID: 11400000, guid: d352e8eb26172a84b9b56bb2a77303a1, type: 2}
   AlternativeTextures: []

@@ -147,16 +147,7 @@
 		Hair
 	}
 
-	public enum AlphaMaskLocation
-	{
-		Arms = 0,
-		Chest = 1,
-		Legs = 2,
-		Feet = 3,
-		PantsWaist = 10,
-	}
-
-	public enum SkaterBase
+    public enum SkaterBase
 	{
 		Male = 0,
 		Female = 1,

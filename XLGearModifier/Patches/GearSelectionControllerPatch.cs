@@ -6,6 +6,7 @@ using SkaterXL.Data;
 using TMPro;
 using UnityEngine.EventSystems;
 using UnityModManagerNet;
+using XLGearModifier.CustomGear;
 using XLGearModifier.Unity;
 using XLMenuMod;
 using XLMenuMod.Utilities;
@@ -107,7 +108,7 @@ namespace XLGearModifier.Patches
 				}
 				else if (index.depth >= 3)
 				{
-					itemView.Label.spriteAsset = AssetBundleHelper.Instance.GearModifierUISpriteSheet;
+					itemView.Label.spriteAsset = UserInterfaceHelper.Instance.GearModifierUISpriteSheet;
 					string newText = string.Empty;
 					if (index.depth == 3)
 					{
@@ -139,7 +140,7 @@ namespace XLGearModifier.Patches
 
 					if (child != null)
 					{
-						if (child.GetParentObject() is CustomGear customGear)
+						if (child.GetParentObject() is CustomGearBase customGear)
 						{
 							newText = $"<space=18px><sprite name=\"{customGear.Metadata.GetSprite()}\" tint=1>";
 							itemView.SetText(gearAtIndex.name.Replace("\\", newText), true);
@@ -196,7 +197,7 @@ namespace XLGearModifier.Patches
 			{
 				return child;
 			}
-			if (child.GetParentObject() is CustomGear)
+			if (child.GetParentObject() is CustomGearBase)
 			{
 				return child;
 			}
@@ -223,9 +224,9 @@ namespace XLGearModifier.Patches
 					return;
 				}
 
-				if (AssetBundleHelper.Instance.GearModifierUISpriteSheet != null)
+				if (UserInterfaceHelper.Instance.GearModifierUISpriteSheet != null)
 				{
-					itemView.Label.spriteAsset = AssetBundleHelper.Instance.GearModifierUISpriteSheet;
+					itemView.Label.spriteAsset = UserInterfaceHelper.Instance.GearModifierUISpriteSheet;
 				}
 
 				if (gearAtIndex.name.StartsWith("\\"))
@@ -246,7 +247,7 @@ namespace XLGearModifier.Patches
 						if (customGearFolder != null)
 						{
 							var child = GetFirstChild(customGearFolder);
-							if (child.GetParentObject() is CustomGear)
+							if (child.GetParentObject() is CustomGearBase)
 							{
 								itemView.SetItemText(gearAtIndex, customGearFolder);
 							}
@@ -277,9 +278,7 @@ namespace XLGearModifier.Patches
 
 				Traverse.Create(__instance).Method("SetIsEquippedIndicators", itemView, __instance.previewCustomizer.HasEquipped(gearAtIndex)).GetValue();
 			}
-
-			
-		}
+        }
 
 		[HarmonyPatch(typeof(GearSelectionController), "ListView_OnItemSelectedEvent")]
 		public static class ListView_OnItemSelectedEventPatch
@@ -462,7 +461,7 @@ namespace XLGearModifier.Patches
 					}
 
 					var child = gearFolder.FolderInfo.Children.ElementAt(1);
-					if (child != null && child.GetParentObject() is CustomGear customGear)
+					if (child != null && child.GetParentObject() is CustomGearBase customGear)
 					{
 						__instance.previewCustomizer.PreviewItem(customGear.GearInfo, toBeCachedGear);
 					}

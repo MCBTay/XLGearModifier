@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1edb71787833b6c41a7fba646d45325c, type: 3}
   m_Name: XXXShorts Fixed1
   m_EditorClassIdentifier: 
-  textureName: Green/Black Default
+  textureName: Green-Black Default
   textureColor: {fileID: 2800000, guid: 2dcf60124e5f83b41854dbd94a9de229, type: 3}
   textureNormalMap: {fileID: 2800000, guid: 9473386d79bcfde46944697c10bbcc8c, type: 3}
-  textureMaskPBR: {fileID: 2800000, guid: a159fd5dbda8b234cab60165dfd652a2, type: 3}
+  textureMaskPBR: {fileID: 0}
