@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using SkaterXL.Gear;
 using UnityEngine;
 using XLGearModifier.Unity.ScriptableObjects;
 
@@ -17,52 +18,35 @@ namespace XLGearModifier.Unity
 		[Tooltip("This is the name of the creator that will be displayed in the menu.")]
 		public string CreatorName;
 
-		[Header("Texturing")]
-		[Tooltip("Use this for a mesh that has a close UV to one of the original meshes. Allows you to re-use the existing textures/prefixes associated with the base mesh.")]
-		public bool BaseOnDefaultGear;
+        #region Alpha Masks
+        [Tooltip("Set the threshold(s) for various alpha masks when this mesh is applied. It will add it to the gear template if it is not already defined, or override it if it is. Typically used for masking various areas of the body.")]
+        [SerializeField]
+        public List<GearAlphaMaskConfig> AlphaMaskThresholds;
+        #endregion
 
-		#region Base Styles
-		[HideIf(nameof(BaseOnDefaultGear), false)]
-		[HideIfEnumValue(nameof(Category), HideIf.NotEqual, (int)ClothingGearCategory.Hair)]
-		[Tooltip("This is the list of base hair styles in the game.")]
-		public HairStyles BaseHairStyle;
+		[HideInInspector]
+        public bool BaseOnDefaultGear;
 
-		[HideIf(nameof(BaseOnDefaultGear), false)]
-		[HideIfEnumValue(nameof(Category), HideIf.NotEqual, (int)ClothingGearCategory.Headwear)]
-		[Tooltip("This is the list of base headwear styles in the game.")]
-		public HeadwearTypes BaseHeadwearType;
+        [HideInInspector]
+        public HairStyles BaseHairStyle;
 
-		[HideIf(nameof(BaseOnDefaultGear), false)]
-		[HideIfEnumValue(nameof(Category), HideIf.NotEqual, (int)ClothingGearCategory.Shoes)]
-		[Tooltip("This is the list of base shoes in the game.")]
-		public ShoeTypes BaseShoeType;
+		[HideInInspector]
+        public HeadwearTypes BaseHeadwearType;
 
-		[HideIf(nameof(BaseOnDefaultGear), false)]
-		[HideIfEnumValue(nameof(Category), HideIf.NotEqual, (int)ClothingGearCategory.Top)]
-		[Tooltip("This is the list of base top styles in the game.")]
-		public TopTypes BaseTopType;
+		[HideInInspector]
+        public ShoeTypes BaseShoeType;
 
-		[HideIf(nameof(BaseOnDefaultGear), false)]
-		[HideIfEnumValue(nameof(Category), HideIf.NotEqual, (int)ClothingGearCategory.Bottom)]
-		[Tooltip("This is the list of base bottom styles in the game.")]
-		public BottomTypes BaseBottomType;
-		#endregion
+		[HideInInspector]
+        public TopTypes BaseTopType;
+        
+        [HideInInspector]
+        public BottomTypes BaseBottomType;
 
-		//[HideIf(nameof(BaseOnDefaultGear), true)]
-		[SerializeField]
+		[HideInInspector]
+        [SerializeField]
 		public XLGMTextureSet TextureSet;
 
-		#region Alpha Masks
-		[Tooltip("Set the threshold(s) for various alpha masks when this mesh is applied. It will add it to the gear template if it is not already defined, or override it if it is. Typically used for masking various areas of the body.")]
-		[SerializeField] 
-		public List<XLGMGearAlphaMaskConfig> AlphaMaskThresholds;
-
-		[Tooltip("Set the alpha masks on this mesh's material.  The one that makes the most sense here is likely PantsWaist as the other types are meant to apply to the body.")]
-		[SerializeField]
-		public List<XLGMAlphaMaskTextureInfo> MaterialAlphaMasks;
-		#endregion
-
-		public override string GetBaseType()
+        public override string GetBaseType()
 		{  
 			switch (Category)
 			{

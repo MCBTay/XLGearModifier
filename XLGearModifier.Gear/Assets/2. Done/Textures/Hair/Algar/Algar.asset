@@ -15,4 +15,4 @@ MonoBehaviour:
   textureName: Default
   textureColor: {fileID: 2800000, guid: 9bcacd11542be344c8c846b6731c1fc4, type: 3}
   textureNormalMap: {fileID: 2800000, guid: 041c4baa6d39131488f8c0fd0b329813, type: 3}
-  textureMaskPBR: {fileID: 0}
+  textureMaskPBR: {fileID: 2800000, guid: 858b57fa89a06cc4188a6214ef751d6b, type: 3}

@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: MediumPartRedo
   m_EditorClassIdentifier: 
   textureName: Medium Part Brown
-  textureColor: {fileID: 2800000, guid: 6d34aafa53ba28242bae20eb2de76256, type: 3}
-  textureNormalMap: {fileID: 2800000, guid: 2191ba9a47718f84cabe6a8eb29bd517, type: 3}
-  textureMaskPBR: {fileID: 2800000, guid: 858b57fa89a06cc4188a6214ef751d6b, type: 3}
+  textureColor: {fileID: 2800000, guid: ab5dd3d169f9ee647acb6c4751bd718d, type: 3}
+  textureNormalMap: {fileID: 0}
+  textureMaskPBR: {fileID: 0}

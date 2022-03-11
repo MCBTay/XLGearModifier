@@ -1,8 +1,10 @@
 ﻿using HarmonyLib;
 using System;
 using System.Linq;
+using XLGearModifier.CustomGear;
 using XLGearModifier.Unity;
 using XLMenuMod.Utilities.Gear;
+using ClothingGearCategory = SkaterXL.Gear.ClothingGearCategory;
 
 namespace XLGearModifier.Patches
 {
@@ -71,7 +73,7 @@ namespace XLGearModifier.Patches
 			var customGearInfo = clothingGear.gearInfo as CustomCharacterGearInfo;
 			if (customGearInfo == null) return false;
 
-			if (customGearInfo.Info.GetParentObject() is CustomGear customGear)
+			if (customGearInfo.Info.GetParentObject() is CustomClothingGear customGear)
 			{
 				if (!isType)
 				{
@@ -92,7 +94,7 @@ namespace XLGearModifier.Patches
 
 			bool isLayerable = false;
 
-			if (customGearInfo.Info.GetParentObject() is CustomGear customGear)
+			if (customGearInfo.Info.GetParentObject() is CustomClothingGear customGear)
 			{
 				isLayerable = customGear.ClothingMetadata.IsLayerable && customGear.Metadata.GetCategory().StartsWith(clothingGearCategory.ToString());
 			}

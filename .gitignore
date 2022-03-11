@@ -5,9 +5,7 @@
 /.vs/XLGearModifier
 /XLGearModifier/bin/Debug
 /XLGearModifier/obj
-/XLGearModifier/References
 /XLGearModifier/bin/Release
-/XLGearModifier/Assets
 /XLGearModifier.Unity/bin/Debug
 /XLGearModifier.Unity/obj/Debug
 /XLGearModifier.Unity/bin/Release
@@ -19,3 +17,4 @@
 /packages/Newtonsoft.Json.13.0.1
 /XLGearModifier.Gear/AssetBundles/StandaloneWindows
 XLGearModifier.Gear/Assets/000. Temp
+/packages

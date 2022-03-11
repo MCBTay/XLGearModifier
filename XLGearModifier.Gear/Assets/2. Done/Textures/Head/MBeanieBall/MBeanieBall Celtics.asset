@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   textureName: Celtics
   textureColor: {fileID: 2800000, guid: bf1671026dd654f42bed666f4dedf1ea, type: 3}
-  textureNormalMap: {fileID: 2800000, guid: 5e3e19e1a5963a54686cc6cf1621b8a6, type: 3}
+  textureNormalMap: {fileID: 2800000, guid: 09b4dc98ba905e74c8b570a784b1c717, type: 3}
   textureMaskPBR: {fileID: 0}
