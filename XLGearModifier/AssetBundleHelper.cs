@@ -22,10 +22,6 @@ namespace XLGearModifier
 		public TMP_SpriteAsset GearModifierUISpriteSheet;
 		public List<Sprite> GearModifierUISpriteSheetSprites;
 
-		public Texture2D EmptyAlbedo;
-		public Texture2D EmptyMaskPBR;
-		public Texture2D EmptyNormalMap;
-
 		public async Task LoadBundles()
         {
             await GearManager.Instance.LoadGameShaders();
@@ -126,9 +122,9 @@ namespace XLGearModifier
         /// <param name="bundle"></param>
         private IEnumerator LoadEmptyDefaultTextures(AssetBundle bundle)
         {
-            yield return LoadAsset<Texture2D>(bundle, "Empty_Albedo.png", value => EmptyAlbedo = value);
-            yield return LoadAsset<Texture2D>(bundle, "Empty_Normal_Map.png", value => EmptyNormalMap = value);
-            yield return LoadAsset<Texture2D>(bundle, "Empty_Maskpbr_Map.png", value => EmptyMaskPBR = value);
+            yield return LoadAsset<Texture2D>(bundle, "Empty_Albedo.png", value => GearManager.Instance.EmptyAlbedo = value);
+            yield return LoadAsset<Texture2D>(bundle, "Empty_Normal_Map.png", value => GearManager.Instance.EmptyNormalMap = value);
+            yield return LoadAsset<Texture2D>(bundle, "Empty_Maskpbr_Map.png", value => GearManager.Instance.EmptyMaskPBR = value);
         }
 
         /// <summary>
@@ -154,7 +150,7 @@ namespace XLGearModifier
         /// <param name="bundle"></param>
         /// <param name="startsWithName"></param>
         /// <param name="callback"></param>
-        private IEnumerator LoadAssets<T>(AssetBundle bundle, string startsWithName, Action<IList<T>> callback) where T : UnityEngine.Object
+        public IEnumerator LoadAssets<T>(AssetBundle bundle, string startsWithName, Action<IList<T>> callback) where T : UnityEngine.Object
         {
             var assetLoadRequest = bundle.LoadAllAssetsAsync<T>();
             yield return assetLoadRequest;

@@ -2,6 +2,7 @@
 using SkaterXL.Data;
 using SkaterXL.Gear;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -34,6 +35,10 @@ namespace XLGearModifier
 
         public Shader MasterShaderCloth_v2;
         public Shader MasterShaderHair_AlphaTest_v1;
+
+		public Texture2D EmptyAlbedo;
+		public Texture2D EmptyMaskPBR;
+		public Texture2D EmptyNormalMap;
 
 		public GearManager()
 		{
