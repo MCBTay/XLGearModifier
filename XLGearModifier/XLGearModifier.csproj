@@ -141,17 +141,20 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
-    <EmbeddedResource Include="Assets\customgear" />
-    <EmbeddedResource Include="Assets\sdkbundle" />
+    <EmbeddedResource Include="Assets\facialhair" />
+    <EmbeddedResource Include="Assets\hair" />
+    <EmbeddedResource Include="Assets\hats" />
+    <EmbeddedResource Include="Assets\other" />
+    <EmbeddedResource Include="Assets\pants" />
+    <EmbeddedResource Include="Assets\shoes" />
+    <EmbeddedResource Include="Assets\tops" />
+    <EmbeddedResource Include="Assets\user-interface" />
     <None Include="Info.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup />
-  <ItemGroup>
-    <None Include="Assets\xlgm_beta" />
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>if "$(ConfigurationName)"=="Debug" ( 
