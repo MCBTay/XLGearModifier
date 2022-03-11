@@ -260,7 +260,7 @@ namespace XLGearModifier
 			CustomMeshes = CustomMeshes.OrderBy(x => Enum.Parse(typeof(Unity.ClothingGearCategory), x.GetName().Replace("\\", string.Empty))).ToList();
 		}
 
-		private void AddBoardMesh(XLGMBoardGearMetadata metadata, CustomGearBase customGearBase, GameObject asset)
+		public void AddBoardMesh(XLGMBoardGearMetadata metadata, CustomGearBase customGearBase, GameObject asset)
 		{
 			CustomFolderInfo parent = null;
 
@@ -278,7 +278,7 @@ namespace XLGearModifier
 			}
 		}
 
-		private void AddClothingMesh(XLGMClothingGearMetadata metadata, CustomGearBase customGearBase, GameObject asset)
+		public void AddClothingMesh(XLGMClothingGearMetadata metadata, CustomGearBase customGearBase, GameObject asset)
 		{
 			CustomFolderInfo parent = null;
 
