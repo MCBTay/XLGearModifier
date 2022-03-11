@@ -21,19 +21,19 @@ namespace XLGearModifier.Patches
 
 				if (texturePath.EndsWith("Empty_Albedo.png"))
 				{
-					__result = Task.FromResult<Texture>(AssetBundleHelper.Instance.emptyAlbedo);
+					__result = Task.FromResult<Texture>(AssetBundleHelper.Instance.EmptyAlbedo);
 					return false;
 				}
 
                 if (texturePath.EndsWith("Empty_Normal_Map.png"))
                 {
-                    __result = Task.FromResult<Texture>(AssetBundleHelper.Instance.emptyNormalMap);
+                    __result = Task.FromResult<Texture>(AssetBundleHelper.Instance.EmptyNormalMap);
                     return false;
 				}
 
                 if (texturePath.EndsWith("Empty_Maskpbr_Map.png"))
                 {
-                    __result = Task.FromResult<Texture>(AssetBundleHelper.Instance.emptyMaskPBR);
+                    __result = Task.FromResult<Texture>(AssetBundleHelper.Instance.EmptyMaskPBR);
                     return false;
 				}
 

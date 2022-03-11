@@ -106,10 +106,10 @@ namespace XLGearModifier.CustomGear
 
             var defaultTexture = Metadata.GetMaterialInformation()?.DefaultTexture;
 
-            textures.Add("albedo", defaultTexture?.textureColor ?? AssetBundleHelper.Instance.emptyAlbedo);
-            textures.Add("normal", defaultTexture?.textureNormalMap ?? AssetBundleHelper.Instance.emptyNormalMap);
-            textures.Add("maskpbr", defaultTexture?.textureMaskPBR ?? AssetBundleHelper.Instance.emptyMaskPBR);
-            //textures.Add(shaderName == "MasterShaderCloth_v2" ? "_texture2D_maskPBR" : "_texture2D_rgmtao", Metadata.GetMaterialInformation()?.DefaultTexture?.textureMaskPBR ?? AssetBundleHelper.Instance.emptyMaskPBR);
+            textures.Add("albedo", defaultTexture?.textureColor ?? AssetBundleHelper.Instance.EmptyAlbedo);
+            textures.Add("normal", defaultTexture?.textureNormalMap ?? AssetBundleHelper.Instance.EmptyNormalMap);
+            textures.Add("maskpbr", defaultTexture?.textureMaskPBR ?? AssetBundleHelper.Instance.EmptyMaskPBR);
+            //textures.Add(shaderName == "MasterShaderCloth_v2" ? "_texture2D_maskPBR" : "_texture2D_rgmtao", Metadata.GetMaterialInformation()?.DefaultTexture?.textureMaskPBR ?? AssetBundleHelper.Instance.EmptyMaskPBR);
 
             return textures;
         }

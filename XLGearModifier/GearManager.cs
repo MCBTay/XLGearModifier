@@ -201,66 +201,7 @@ namespace XLGearModifier
 		}
 		#endregion
 
-		public async Task LoadAssets(AssetBundle bundle)
-		{
-			var assets = bundle.LoadAllAssets<GameObject>();
-			if (assets == null || !assets.Any()) return;
-
-			foreach (var asset in assets)
-			{
-				try
-				{
-					var whatsEquippedPrefab = asset.GetComponent<XLGMWhatsEquippedUserInterface>();
-					if (whatsEquippedPrefab != null)
-					{
-						UserInterfaceHelper.Instance.WhatsEquippedUserInterfacePrefab = asset;
-						continue;
-					}
-
-					var metadata = asset.GetComponent<XLGMMetadata>();
-					if (metadata == null) continue;
-					if (string.IsNullOrEmpty(metadata.Prefix)) continue;
-
-                    CustomGearBase customGearBase = null;
-
-                    switch (metadata)
-                    {
-                        case XLGMClothingGearMetadata clothingMetadata:
-                            customGearBase = new CustomClothingGear(clothingMetadata, asset);
-                            break;
-                        case XLGMSkaterMetadata skaterMetadata:
-                            customGearBase = new CustomSkater(skaterMetadata, asset);
-                            break;
-                        case XLGMBoardGearMetadata boardMetadata:
-							customGearBase = new CustomBoardGear(boardMetadata, asset);
-							break;
-					}
-                    if (customGearBase == null) return;
-
-					customGearBase.Instantiate();
-
-					CustomGear.Add(customGearBase);
-
-					switch (metadata)
-					{
-						case XLGMClothingGearMetadata clothingMetadata:
-							AddClothingMesh(clothingMetadata, customGearBase, asset);
-							break;
-						case XLGMBoardGearMetadata boardMetadata:
-							AddBoardMesh(boardMetadata, customGearBase, asset);
-							break;
-					}
-				}
-				catch (Exception ex)
-				{
-					Debug.Log("XLGM: Exception loading " + asset.name + " from " + bundle.name + Environment.NewLine + ex.Message + Environment.NewLine + ex.StackTrace);
-				}
-			}
-
-			CustomMeshes = CustomMeshes.OrderBy(x => Enum.Parse(typeof(Unity.ClothingGearCategory), x.GetName().Replace("\\", string.Empty))).ToList();
-		}
-
-		public void AddBoardMesh(XLGMBoardGearMetadata metadata, CustomGearBase customGearBase, GameObject asset)
+        public void AddBoardMesh(XLGMBoardGearMetadata metadata, CustomGearBase customGearBase, GameObject asset)
 		{
 			CustomFolderInfo parent = null;
 

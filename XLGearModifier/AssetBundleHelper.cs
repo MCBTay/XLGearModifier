@@ -21,9 +21,10 @@ namespace XLGearModifier
 
 		public TMP_SpriteAsset GearModifierUISpriteSheet;
 		public List<Sprite> GearModifierUISpriteSheetSprites;
-		public Texture2D emptyAlbedo;
-		public Texture2D emptyMaskPBR;
-		public Texture2D emptyNormalMap;
+
+		public Texture2D EmptyAlbedo;
+		public Texture2D EmptyMaskPBR;
+		public Texture2D EmptyNormalMap;
 
 		public async Task LoadBundles()
         {
@@ -125,9 +126,9 @@ namespace XLGearModifier
         /// <param name="bundle"></param>
         private IEnumerator LoadEmptyDefaultTextures(AssetBundle bundle)
         {
-            yield return LoadAsset<Texture2D>(bundle, "Empty_Albedo.png", value => emptyAlbedo = value);
-            yield return LoadAsset<Texture2D>(bundle, "Empty_Normal_Map.png", value => emptyNormalMap = value);
-            yield return LoadAsset<Texture2D>(bundle, "Empty_Maskpbr_Map.png", value => emptyMaskPBR = value);
+            yield return LoadAsset<Texture2D>(bundle, "Empty_Albedo.png", value => EmptyAlbedo = value);
+            yield return LoadAsset<Texture2D>(bundle, "Empty_Normal_Map.png", value => EmptyNormalMap = value);
+            yield return LoadAsset<Texture2D>(bundle, "Empty_Maskpbr_Map.png", value => EmptyMaskPBR = value);
         }
 
         /// <summary>
