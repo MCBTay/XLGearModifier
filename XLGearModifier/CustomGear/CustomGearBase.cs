@@ -22,13 +22,13 @@ namespace XLGearModifier.CustomGear
 		[JsonIgnore]
 		public GearInfo GearInfo;
 
-		public CustomGearBase(XLGMMetadata metadata, GameObject prefab)
+		protected CustomGearBase(XLGMMetadata metadata, GameObject prefab)
 		{
 			Metadata = metadata;
 			Prefab = prefab;
 		}
 
-		public CustomGearBase(CustomGearBase gearBaseToClone, GearInfoSingleMaterial gearInfo) : this(gearBaseToClone.Metadata, gearBaseToClone.Prefab)
+		protected CustomGearBase(CustomGearBase gearBaseToClone, GearInfoSingleMaterial gearInfo) : this(gearBaseToClone.Metadata, gearBaseToClone.Prefab)
 		{
 			GearInfo = gearInfo;
 		}
@@ -56,14 +56,17 @@ namespace XLGearModifier.CustomGear
 			return officialGear.Where(x => x.type.Equals(Metadata.GetBaseType(), StringComparison.InvariantCultureIgnoreCase)).Cast<GearInfoSingleMaterial>().FirstOrDefault();
 		}
 
+        /// <summary>
+        /// Returns the object's Prefix.
+        /// </summary>
         public virtual string GetTypeName()
         {
             return Metadata.Prefix;
         }
-
-		public int GetSkaterIndex()
-		{
-			var skaterIndex = (int)Skater.MaleStandard;
+        
+        public int GetSkaterIndex()
+        {
+            var skaterIndex = (int)Skater.MaleStandard;
 
             var type = GetTypeName();
 
