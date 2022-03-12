@@ -58,6 +58,8 @@ namespace XLGearModifier.Assets.Editor
                 var textureSetProperty = serializedObject.FindProperty(nameof(item.TextureSet));
                 EditorGUILayout.PropertyField(textureSetProperty);
             }
+
+            serializedObject.ApplyModifiedProperties();
         }
     }
 }
