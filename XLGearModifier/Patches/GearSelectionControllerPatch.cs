@@ -58,7 +58,10 @@ namespace XLGearModifier.Patches
 				switch (index[1])
 				{
 					case (int)GearModifierTab.CustomMeshes:
-						sourceList = GearManager.Instance.CustomMeshes;
+						sourceList = index[0] == (int)Skater.MaleStandard ? GearManager.Instance.CustomMeshes : new List<ICustomInfo>();
+						break;
+                    case (int)GearModifierTab.CustomFemaleMeshes: 
+                        sourceList = index[0] == (int)Skater.FemaleStandard ? GearManager.Instance.CustomFemaleMeshes : new List<ICustomInfo>();
 						break;
 					case (int)GearModifierTab.ProGear:
 						sourceList = GearManager.Instance.ProGear;
@@ -99,7 +102,10 @@ namespace XLGearModifier.Patches
 				{
 					switch (index[1])
 					{
-						case (int)GearModifierTab.CustomMeshes: itemView.SetText("Custom Meshes"); break;
+						case (int)GearModifierTab.CustomMeshes:
+                        case (int)GearModifierTab.CustomFemaleMeshes: 
+                            itemView.SetText("Custom Meshes"); 
+                            break;
 						case (int)GearModifierTab.ProGear: itemView.SetText("Pro Gear"); break;
 						case (int)GearModifierTab.FemaleGear: itemView.SetText("Female Gear"); break;
 						case (int)GearModifierTab.MaleGear: itemView.SetText("Male Gear"); break;
@@ -149,7 +155,7 @@ namespace XLGearModifier.Patches
 						{
 							if (!customCharacterGear.isCustom || gearAtIndex.name.Equals("\\mod.io"))
 							{
-								if (index[1] != (int)GearModifierTab.CustomMeshes)
+								if (index[1] != (int)GearModifierTab.CustomMeshes || index[1] != (int)GearModifierTab.CustomFemaleMeshes)
 								{
 									switch (itemView)
 									{
@@ -320,6 +326,9 @@ namespace XLGearModifier.Patches
 							case (int)GearModifierTab.CustomMeshes:
 								sourceList = GearManager.Instance.CustomMeshes;
 								break;
+                            case (int)GearModifierTab.CustomFemaleMeshes:
+                                sourceList = GearManager.Instance.CustomFemaleMeshes;
+                                break;
 							case (int)GearModifierTab.ProGear:
 								sourceList = GearManager.Instance.ProGear;
 								break;
@@ -515,7 +524,8 @@ namespace XLGearModifier.Patches
 		public static bool IsOnXLGMTab(int tabIndex)
 		{
 			return tabIndex == (int) GearModifierTab.CustomMeshes ||
-			       tabIndex == (int) GearModifierTab.ProGear ||
+                   tabIndex == (int) GearModifierTab.CustomFemaleMeshes ||
+				   tabIndex == (int) GearModifierTab.ProGear ||
 			       tabIndex == (int) GearModifierTab.FemaleGear ||
 			       tabIndex == (int) GearModifierTab.MaleGear ||
 				   tabIndex == (int) GearModifierTab.Eyes;

@@ -2,7 +2,6 @@
 using SkaterXL.Data;
 using SkaterXL.Gear;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -28,9 +27,12 @@ namespace XLGearModifier
 		public List<CustomGearBase> CustomGear;
 
 		public List<ICustomInfo> CustomMeshes;
+        public List<ICustomInfo> CustomFemaleMeshes;
+
 		public List<ICustomInfo> ProGear;
 		public List<ICustomInfo> FemaleGear;
 		public List<ICustomInfo> MaleGear;
+
 		public List<ICustomInfo> Eyes;
 
         public Shader MasterShaderCloth_v2;
@@ -43,6 +45,8 @@ namespace XLGearModifier
 		public GearManager()
 		{
 			CustomMeshes = new List<ICustomInfo>();
+            CustomFemaleMeshes = new List<ICustomInfo>();
+
 			CustomGear = new List<CustomGearBase>();
 
 			ProGear = new List<ICustomInfo>();
@@ -206,10 +210,11 @@ namespace XLGearModifier
 		}
 		#endregion
 
-        public void AddBoardMesh(XLGMBoardGearMetadata metadata, CustomGearBase customGearBase, GameObject asset)
+        public void AddBoardMesh(XLGMBoardGearMetadata metadata, CustomBoardGear customGearBase, GameObject asset)
 		{
 			CustomFolderInfo parent = null;
 
+			//TODO: Probably create a new list for custom board meshes
 			AddFolder<CustomGearFolderInfo>(metadata.Category.ToString(), string.Empty, CustomMeshes, ref parent);
 			AddFolder<CustomGearFolderInfo>(string.IsNullOrEmpty(metadata.DisplayName) ? asset.name : metadata.DisplayName, string.Empty, parent.Children, ref parent);
 
@@ -224,11 +229,11 @@ namespace XLGearModifier
 			}
 		}
 
-		public void AddClothingMesh(XLGMClothingGearMetadata metadata, CustomGearBase customGearBase, GameObject asset)
+		public void AddClothingMesh(XLGMClothingGearMetadata metadata, CustomClothingGear customGearBase, GameObject asset)
 		{
 			CustomFolderInfo parent = null;
 
-			AddFolder<CustomGearFolderInfo>(metadata.Category.ToString(), string.Empty, CustomMeshes, ref parent);
+			AddFolder<CustomGearFolderInfo>(metadata.Category.ToString(), string.Empty, metadata.Skater == SkaterBase.Male ? CustomMeshes : CustomFemaleMeshes, ref parent);
 			AddFolder<CustomGearFolderInfo>(string.IsNullOrEmpty(metadata.DisplayName) ? asset.name : metadata.DisplayName, string.Empty, parent.Children, ref parent);
 
 			if (metadata.BaseOnDefaultGear)
@@ -252,7 +257,9 @@ namespace XLGearModifier
 
 				CustomFolderInfo parent = null;
 
-				AddFolder<CustomGearFolderInfo>(customGear.Metadata.GetCategory(), string.Empty, CustomMeshes, ref parent);
+                var cgi = customGear as CustomClothingGear;
+
+				AddFolder<CustomGearFolderInfo>(customGear.Metadata.GetCategory(), string.Empty, cgi.ClothingMetadata.Skater == SkaterBase.Male ? CustomMeshes : CustomFemaleMeshes, ref parent);
 				AddFolder<CustomGearFolderInfo>(string.IsNullOrEmpty(customGear.Metadata.DisplayName) ? customGear.Prefab.name : customGear.Metadata.DisplayName, string.Empty, parent.Children, ref parent);
 
 				AddItem(customGear, customTextures, parent.Children, ref parent, true);
