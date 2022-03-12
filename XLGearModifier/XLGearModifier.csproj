@@ -161,8 +161,8 @@
     <PostBuildEvent>SET SkaterXLPath=G:\Steam\steamapps\common\Skater XL
 SET DeployPath=%25SkaterXLPath%25\Mods\$(ProjectName)
 
-if "$(ConfigurationName)" == Debug ( 
-    del /Q /F "%25DeployPath%25\"
+if "$(ConfigurationName)" == "Debug" ( 
+    del /Q /F "%25DeployPath%25"
     copy /Y "$(TargetDir)XLGearModifier.dll" "%25DeployPath%25\XLGearModifier.dll"
     copy /Y "$(TargetDir)XLGearModifier.pdb" "%25DeployPath%25\XLGearModifier.pdb"
     copy /Y "$(TargetDir)XLGearModifier.Unity.dll" "%25DeployPath%25\XLGearModifier.Unity.dll"
