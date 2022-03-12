@@ -18,15 +18,12 @@ namespace XLGearModifier.CustomGear
     {
         public XLGMClothingGearMetadata ClothingMetadata => Metadata as XLGMClothingGearMetadata;
 
-        public CustomClothingGear(XLGMClothingGearMetadata metadata, GameObject prefab) 
-            : base(metadata, prefab)
+        public CustomClothingGear(XLGMClothingGearMetadata metadata, GameObject prefab) : base(metadata, prefab)
         {
         }
 
-        public CustomClothingGear(CustomGearBase customGearBase, CustomCharacterGearInfo gearInfo)
-            : base(customGearBase, gearInfo)
+        public CustomClothingGear(CustomGearBase customGearBase, CustomCharacterGearInfo gearInfo) : base(customGearBase, gearInfo)
         {
-
         }
 
         public override void Instantiate()
@@ -45,8 +42,6 @@ namespace XLGearModifier.CustomGear
         /// </summary>
         private void SetTexturesAndShader()
         {
-            if (ClothingMetadata == null) return;
-
             var materialControllers = Prefab.GetComponentsInChildren<MaterialController>();
             if (materialControllers == null || !materialControllers.Any()) return;
 
@@ -148,7 +143,7 @@ namespace XLGearModifier.CustomGear
 
         private void AddPrefixToGearFilters()
         {
-            var skaterIndex = ClothingMetadata != null ? (int)ClothingMetadata.Skater : (int)SkaterBase.Male;
+            var skaterIndex = (int)ClothingMetadata.Skater;
 
             var typeFilter = GearDatabase.Instance.skaters[skaterIndex].GearFilters[GetCategoryIndex(skaterIndex)];
 
@@ -264,6 +259,9 @@ namespace XLGearModifier.CustomGear
             return result;
         }
 
+        /// <summary>
+        /// Returns the object's Prefix, unless BaseOnDefaultGear is true, then returns the base type's Prefix.
+        /// </summary>
         public override string GetTypeName()
         {
             var type = base.GetTypeName();
