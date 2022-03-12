@@ -1,11 +1,11 @@
 ﻿using GameManagement;
 using HarmonyLib;
 using System;
-using System.IO;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.ResourceManagement.AsyncOperations;
 using UnityEngine.ResourceManagement.ResourceProviders;
+using XLGearModifier.Texturing;
 
 namespace XLGearModifier.Patches
 {
