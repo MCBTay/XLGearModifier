@@ -158,14 +158,17 @@
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>if "$(ConfigurationName)"=="Debug" ( 
-del /Q /F "C:\Program Files (x86)\Steam\steamapps\common\Skater XL\Mods\XLGearModifier\"
-copy /Y "$(TargetDir)XLGearModifier.dll" "C:\Program Files (x86)\Steam\steamapps\common\Skater XL\Mods\XLGearModifier\XLGearModifier.dll"
-copy /Y "$(TargetDir)XLGearModifier.pdb" "C:\Program Files (x86)\Steam\steamapps\common\Skater XL\Mods\XLGearModifier\XLGearModifier.pdb"
-copy /Y "$(TargetDir)XLGearModifier.Unity.dll" "C:\Program Files (x86)\Steam\steamapps\common\Skater XL\Mods\XLGearModifier\XLGearModifier.Unity.dll"
-copy /Y "$(TargetDir)XLGearModifier.Unity.pdb" "C:\Program Files (x86)\Steam\steamapps\common\Skater XL\Mods\XLGearModifier\XLGearModifier.Unity.pdb"
-copy /Y "$(TargetDir)XLMenuMod.Utilities.dll" "C:\Program Files (x86)\Steam\steamapps\common\Skater XL\Mods\XLGearModifier\XLMenuMod.Utilities.dll"
-copy /Y "$(TargetDir)Info.json" "C:\Program Files (x86)\Steam\steamapps\common\Skater XL\Mods\XLGearModifier\Info.json"
+    <PostBuildEvent>SET SkaterXLPath=G:\Steam\steamapps\common\Skater XL
+SET DeployPath=%25SkaterXLPath%25\Mods\$(ProjectName)
+
+if "$(ConfigurationName)" == Debug ( 
+    del /Q /F "%25DeployPath%25\"
+    copy /Y "$(TargetDir)XLGearModifier.dll" "%25DeployPath%25\XLGearModifier.dll"
+    copy /Y "$(TargetDir)XLGearModifier.pdb" "%25DeployPath%25\XLGearModifier.pdb"
+    copy /Y "$(TargetDir)XLGearModifier.Unity.dll" "%25DeployPath%25\XLGearModifier.Unity.dll"
+    copy /Y "$(TargetDir)XLGearModifier.Unity.pdb" "%25DeployPath%25\XLGearModifier.Unity.pdb"
+    copy /Y "$(TargetDir)XLMenuMod.Utilities.dll" "%25DeployPath%25\XLMenuMod.Utilities.dll"
+    copy /Y "$(TargetDir)Info.json" "%25DeployPath%25\Info.json"
 )</PostBuildEvent>
   </PropertyGroup>
 </Project>
