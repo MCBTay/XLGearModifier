@@ -58,11 +58,11 @@ namespace XLGearModifier.Patches
 				switch (index[1])
 				{
 					case (int)GearModifierTab.CustomMeshes:
-						sourceList = GearManager.Instance.CustomMeshes;
+						sourceList = index[0] == (int)Skater.MaleStandard ? GearManager.Instance.CustomMeshes : new List<ICustomInfo>();
 						break;
                     case (int)GearModifierTab.CustomFemaleMeshes: 
-                        sourceList = GearManager.Instance.CustomFemaleMeshes;
-                        break;
+                        sourceList = index[0] == (int)Skater.FemaleStandard ? GearManager.Instance.CustomFemaleMeshes : new List<ICustomInfo>();
+						break;
 					case (int)GearModifierTab.ProGear:
 						sourceList = GearManager.Instance.ProGear;
 						break;
@@ -102,8 +102,10 @@ namespace XLGearModifier.Patches
 				{
 					switch (index[1])
 					{
-						case (int)GearModifierTab.CustomMeshes: itemView.SetText("Custom Meshes"); break;
-                        case (int)GearModifierTab.CustomFemaleMeshes: itemView.SetText("Custom Meshes"); break;
+						case (int)GearModifierTab.CustomMeshes:
+                        case (int)GearModifierTab.CustomFemaleMeshes: 
+                            itemView.SetText("Custom Meshes"); 
+                            break;
 						case (int)GearModifierTab.ProGear: itemView.SetText("Pro Gear"); break;
 						case (int)GearModifierTab.FemaleGear: itemView.SetText("Female Gear"); break;
 						case (int)GearModifierTab.MaleGear: itemView.SetText("Male Gear"); break;
