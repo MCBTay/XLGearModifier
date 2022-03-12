@@ -3,10 +3,11 @@
 	public enum GearModifierTab
 	{
 		CustomMeshes = 20,
-		ProGear = 21,
-		FemaleGear = 22,
-		MaleGear = 23,
-		Eyes = 24,
+		CustomFemaleMeshes = 21,
+		ProGear = 22,
+		FemaleGear = 23,
+		MaleGear = 24,
+		Eyes = 25,
 	}
 
 	public enum ClothingGearCategory
