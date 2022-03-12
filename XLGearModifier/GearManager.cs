@@ -28,6 +28,8 @@ namespace XLGearModifier
 		public List<CustomGearBase> CustomGear;
 
 		public List<ICustomInfo> CustomMeshes;
+        public List<ICustomInfo> CustomFemaleMeshes;
+
 		public List<ICustomInfo> ProGear;
 		public List<ICustomInfo> FemaleGear;
 		public List<ICustomInfo> MaleGear;
@@ -43,6 +45,8 @@ namespace XLGearModifier
 		public GearManager()
 		{
 			CustomMeshes = new List<ICustomInfo>();
+            CustomFemaleMeshes = new List<ICustomInfo>();
+
 			CustomGear = new List<CustomGearBase>();
 
 			ProGear = new List<ICustomInfo>();
