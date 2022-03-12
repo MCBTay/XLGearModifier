@@ -68,14 +68,33 @@ namespace XLGearModifier.CustomGear
                 return;
             }
 
+            var material = materialController.GenerateMaterialWithChanges(textures);
+
             // TODO: Because we're having to make the materials in HDRP/Lit in the editor (until we get their shader, hopefully)
             // we need to store off a copy of the normal and mask maps, and ensure we assign them to the correct property names once the shader has been changed.
             // Hopefully, if we can get access to their cloth shader, we can just assign properties directly in editor and get rid of most of this code.
-            materialController.PropertyNameSubstitutions.Add("_NormalMap", "_texture2D_normal");
-            materialController.PropertyNameSubstitutions.Add("_MaskMap", "_texture2D_maskPBR");
+            var color = material.GetTexture("_BaseColorMap");
+            var normal = material.GetTexture("_NormalMap");
+            var mask = material.GetTexture("_MaskMap");
+            var alphaThreshold = material.GetFloat("_AlphaCutoff");
 
-            var material = materialController.GenerateMaterialWithChanges(textures);
             material.shader = GetClothingShader();
+            
+            if (ClothingMetadata.Category == Unity.ClothingGearCategory.Hair || ClothingMetadata.Category == Unity.ClothingGearCategory.FacialHair)
+            {
+                material.SetTexture("_texture_color", color);
+                material.SetTexture("_texture_normal", normal);
+                material.SetTexture("_texture_mask", mask);
+
+                material.SetFloat("_alpha_threshold", alphaThreshold);
+            }
+            else
+            {
+                material.SetTexture("_texture2D_color", color);
+                material.SetTexture("_texture2D_normal", normal);
+                material.SetTexture("_texture2D_maskPBR", mask);
+            }
+
             materialController.SetMaterial(material);
         }
         /// <summary>
@@ -119,9 +138,7 @@ namespace XLGearModifier.CustomGear
         /// </summary>
         private Shader GetClothingShader()
         {
-            if (ClothingMetadata != null &&
-                (ClothingMetadata.Category == Unity.ClothingGearCategory.Hair ||
-                 ClothingMetadata.Category == Unity.ClothingGearCategory.FacialHair))
+            if (ClothingMetadata.Category == Unity.ClothingGearCategory.Hair || ClothingMetadata.Category == Unity.ClothingGearCategory.FacialHair)
             {
                 return GearManager.Instance.MasterShaderHair_AlphaTest_v1;
             }
