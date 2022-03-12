@@ -207,13 +207,13 @@ namespace XLGearModifier
 
                         GearManager.Instance.CustomGear.Add(customGearBase);
 
-                        switch (metadata)
+                        switch (customGearBase)
                         {
-                            case XLGMClothingGearMetadata clothingMetadata:
-                                GearManager.Instance.AddClothingMesh(clothingMetadata, customGearBase, asset);
+                            case CustomClothingGear clothingGear:
+                                GearManager.Instance.AddClothingMesh(clothingGear.ClothingMetadata, clothingGear, asset);
                                 break;
-                            case XLGMBoardGearMetadata boardMetadata:
-                                GearManager.Instance.AddBoardMesh(boardMetadata, customGearBase, asset);
+                            case CustomBoardGear boardGear:
+                                GearManager.Instance.AddBoardMesh(boardGear.BoardMetadata, boardGear, asset);
                                 break;
                         }
                     }
@@ -226,6 +226,7 @@ namespace XLGearModifier
                 Debug.Log("XLGearModifier: Loaded " + GearManager.Instance.CustomGear.Count + " assets");
 
                 GearManager.Instance.CustomMeshes = GearManager.Instance.CustomMeshes.OrderBy(x => Enum.Parse(typeof(ClothingGearCategory), x.GetName().Replace("\\", string.Empty))).ToList();
+                GearManager.Instance.CustomFemaleMeshes = GearManager.Instance.CustomFemaleMeshes.OrderBy(x => Enum.Parse(typeof(ClothingGearCategory), x.GetName().Replace("\\", string.Empty))).ToList();
             });
         }
         
