@@ -1,0 +1,116 @@
+name: Deploy to mod.io
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+        
+env:
+  SOLUTION_FILE_PATH: .
+  BUILD_CONFIGURATION: Release
+  
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+    - name: Setup .NET 5.0.x
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 5.0.x
+        
+    - name: Add MSBuild to PATH
+      uses: microsoft/setup-msbuild@v1
+        
+    - name: Checkout
+      uses: actions/checkout@v2
+      with:
+          ref: ${{ github.head_ref }}
+      
+    - name: Update Info.json
+      uses: jossef/action-set-json-field@v1
+      with:
+        file: ./XLGearModifier/Info.json
+        field: Version
+        value: ${{ github.event.release.tag_name }}
+        
+    - name: Commit Info.json
+      run: |
+        git config user.name "GitHub Actions"
+        git config user.email "<>"
+        git switch -c main
+        git commit -m "Bumping version number in Info.json" ./XLGearModifier/Info.json
+        git push --set-upstream origin main
+        git tag --force ${{ github.event.release.tag_name }}
+        git push origin ${{ github.event.release.tag_name }} --force
+      
+    - name: Restore NuGet packages
+      working-directory: ${{env.GITHUB_WORKSPACE}}
+      run: nuget restore ${{env.SOLUTION_FILE_PATH}}
+      
+    - name: MSBuild
+      working-directory: ${{env.GITHUB_WORKSPACE}}
+      shell: powershell
+      run: msbuild /m /p:Configuration=${{env.BUILD_CONFIGURATION}} ${{env.SOLUTION_FILE_PATH}}
+    
+    - name: Test
+      working-directory: ${{env.GITHUB_WORKSPACE}}
+      run: dotnet test --verbosity normal --settings coverlet.runsettings --logger:trx
+        
+    - name: Prepare Files for Zip
+      run: |
+        New-Item -Path "XLGearModifier\bin\Release\" -name "XLGearModifier" -ItemType "directory"
+        Copy-Item "XLGearModifier\bin\Release\XLGearModifier.dll" -Destination "XLGearModifier\bin\Release\XLGearModifier\XLGearModifier.dll"
+        Copy-Item "XLGearModifier\bin\Release\XLGearModifier.Unity.dll" -Destination "XLGearModifier\bin\Release\XLGearModifier\XLGearModifier.Unity.dll"
+        Copy-Item "XLGearModifier\bin\Release\XLMenuMod.Utilities.dll" -Destination "XLGearModifier\bin\Release\XLGearModifier\XLMenuMod.Utilities.dll"
+        Copy-Item "XLGearModifier\bin\Release\Info.json" "XLGearModifier\bin\Release\XLGearModifier\Info.json"
+        
+    - name: Create ZIP
+      id: filename
+      shell: pwsh
+      run: |
+        $tag = "${{ github.event.release.tag_name }}".Replace('.', '-')
+        $archiveName = "XLGearModifier-${tag}.zip"
+        Compress-Archive -Path XLGearModifier/bin/Release/XLGearModifier -DestinationPath ${archiveName} -CompressionLevel Optimal
+        echo "ARCHIVE_NAME=${archiveName}" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append
+        
+    - name: Upload XLGearModifier.zip to release
+      uses: svenstaro/upload-release-action@v2
+      with:
+        repo_token: ${{ secrets.GITHUB_TOKEN }}
+        file: ${{ env.ARCHIVE_NAME }}
+        asset_name: ${{ env.ARCHIVE_NAME }}
+        tag: ${{ github.event.release.tag_name }}
+        
+    - name: Update repository.json Version
+      id: update-json
+      uses: 898anil/github-actions-json-edit@v0.2
+      with:
+        file_path: ./repository.json
+        field_path: Releases.0.Version
+        field_value: ${{ github.event.release.tag_name }}
+        
+    - name: Update repository.json DownloadUrl
+      id: update-json2
+      uses: 898anil/github-actions-json-edit@v0.2
+      with:
+        file_path: ${{ steps.update-json.outputs.out_file }}
+        field_path: Releases.0.DownloadUrl
+        field_value: "https://github.com/MCBTay/XLGearModifier/releases/download/${{ github.event.release.tag_name }}/${{ env.ARCHIVE_NAME }}"
+        
+    - name: Overwrite repository.json
+      run: |
+        Copy-Item "${{ steps.update-json2.outputs.out_file }}" "repository.json"
+    
+    - name: Commit repository.json
+      run: |
+        git commit -m "Bumping version number and download url in repository.json" ./repository.json
+        git push origin main
+      
+    #- uses: nickelc/upload-to-modio@v1.0.1
+    #  with:
+    #    token: ${{ secrets.MODIO_TOKEN }}
+    #    game: 629 # skaterxl
+    #    mod: 953573 # xlgearmodifier
+    #    path: ${{ env.ARCHIVE_NAME }}
+    #    version: ${{ github.event.release.tag_name }}
+    #    changelog: ${{ github.event.release.body }}
