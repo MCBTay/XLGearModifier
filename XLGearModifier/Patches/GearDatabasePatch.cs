@@ -104,7 +104,8 @@ namespace XLGearModifier.Patches
 				}
 
 				SkateShopTextureManager.Instance.LookForSkateshopTextures();
-			}
+				EyeTextureManager.Instance.LookForEyeTextures();
+            }
 		}
 
         private static List<ICustomInfo> GetSourceList(int index)
