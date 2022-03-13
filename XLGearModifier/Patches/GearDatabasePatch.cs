@@ -56,12 +56,15 @@ namespace XLGearModifier.Patches
 				if (index.depth == 3)
 				{
 					if (index.LastIndex < 0 || index.LastIndex > sourceList.Count - 1) return;
-
+					
 					switch (sourceList.ElementAt(index.LastIndex).GetParentObject())
 					{
 						case CustomGearFolderInfo customGearFolderInfo:
 							__result = customGearFolderInfo;
 							break;
+						case CustomCharacterGearInfo customCharacterGerInfo:
+                            __result = customCharacterGerInfo;
+                            break;
 					}
 				}
 				// mesh per type, you've already selected a type so current folder should be valid, regardless of whether or not XLMenuMod is installed
@@ -119,6 +122,19 @@ namespace XLGearModifier.Patches
                 case GearModifierTab.MaleGear: return GearManager.Instance.MaleGear;
                 case GearModifierTab.Eyes: return GearManager.Instance.Eyes;
                 default: return new List<ICustomInfo>();
+            }
+        }
+
+        [HarmonyPatch(typeof(GearDatabase), nameof(GearDatabase.GetCamerView))]
+        public static class GetCamerViewPatch
+		{
+            static void Postfix(IndexPath index, ref GearRoomCameraView __result)
+            {
+                if (index.depth < 2) return;
+
+                if (index[1] != (int) GearModifierTab.Eyes) return;
+
+                __result = GearRoomCameraView.Head;
             }
         }
 	}
