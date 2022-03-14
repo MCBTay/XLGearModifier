@@ -407,8 +407,15 @@ namespace XLGearModifier.Patches
 					}
 					else
 					{
-						__instance.previewCustomizer.EquipGear(gear);
-					}
+                        if (gear.type == "eyes")
+                        {
+                            __instance.previewCustomizer.EquipCharacterGear(gear as CharacterGearInfo, false);
+						}
+                        else
+                        {
+							__instance.previewCustomizer.EquipGear(gear);
+						}
+                    }
 
 					__instance.previewCustomizer.OnlyShowEquippedGear();
 					Traverse.Create(__instance).Field<bool>("didChangeGear").Value = true;
