@@ -18,6 +18,10 @@ namespace XLGearModifier.Unity
 		[Tooltip("This is the name of the creator that will be displayed in the menu.")]
 		public string CreatorName;
 
+        [HideInInspector]
+		[Tooltip("This is a list of prefix aliases that the mesh can use.  Any prefixes defined here should be able to be applied to the mesh in game.")]
+        public List<string> PrefixAliases;
+
         #region Alpha Masks
         [Tooltip("Set the threshold(s) for various alpha masks when this mesh is applied. It will add it to the gear template if it is not already defined, or override it if it is. Typically used for masking various areas of the body.")]
         [SerializeField]
@@ -25,22 +29,28 @@ namespace XLGearModifier.Unity
         #endregion
 
 		[HideInInspector]
+		[Tooltip("This will enable the use of textures from default gear.  For example, if you've modified MShirt but the UV is still pretty close to the original, you can leverage existing MShirt textures by checking this and setting BaseTopType to MShirt.")]
         public bool BaseOnDefaultGear;
 
         [HideInInspector]
+		[Tooltip("The base hair style to use textures from.")]
         public HairStyles BaseHairStyle;
 
 		[HideInInspector]
-        public HeadwearTypes BaseHeadwearType;
+        [Tooltip("The base headwear to use textures from.")]
+		public HeadwearTypes BaseHeadwearType;
 
 		[HideInInspector]
-        public ShoeTypes BaseShoeType;
+        [Tooltip("The base shoe to use textures from.")]
+		public ShoeTypes BaseShoeType;
 
 		[HideInInspector]
-        public TopTypes BaseTopType;
+        [Tooltip("The base top to use textures from.")]
+		public TopTypes BaseTopType;
         
         [HideInInspector]
-        public BottomTypes BaseBottomType;
+        [Tooltip("The base bottom to use textures from.")]
+		public BottomTypes BaseBottomType;
 
 		[HideInInspector]
         [SerializeField]
