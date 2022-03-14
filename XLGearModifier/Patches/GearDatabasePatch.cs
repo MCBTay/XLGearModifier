@@ -11,7 +11,7 @@ using XLMenuMod.Utilities.Interfaces;
 
 namespace XLGearModifier.Patches
 {
-    public class GearDatabasePatch
+	public class GearDatabasePatch
 	{
 		[HarmonyPatch(typeof(GearDatabase), nameof(GearDatabase.GetGearListAtIndex), new[] { typeof(IndexPath), typeof(bool) }, new[] { ArgumentType.Normal, ArgumentType.Out })]
 		public static class GetGearListAtIndexPatch
@@ -135,6 +135,21 @@ namespace XLGearModifier.Patches
                 if (index[1] != (int) GearModifierTab.Eyes) return;
 
                 __result = GearRoomCameraView.Head;
+            }
+        }
+
+		/// <summary>
+		/// Patching into GearDatabase.ContainsClothingTemplateWithID such that I can call GearDatabase.GetGearIn for eye textures
+		/// and it actually load them properly.
+		/// </summary>
+        [HarmonyPatch(typeof(GearDatabase), nameof(GearDatabase.ContainsClothingTemplateWithID))]
+        public static class ContainsClothingTemplateWithID
+        {
+            static void Postfix(string id, ref bool __result)
+            {
+                if (id != "eyes") return;
+
+                __result = true;
             }
         }
 	}
