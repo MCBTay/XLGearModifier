@@ -143,7 +143,7 @@ namespace XLGearModifier.Patches
 		/// and it actually load them properly.
 		/// </summary>
         [HarmonyPatch(typeof(GearDatabase), nameof(GearDatabase.ContainsClothingTemplateWithID))]
-        public static class ContainsClothingTemplateWithID
+        public static class ContainsClothingTemplateWithIDPatch
         {
             static void Postfix(string id, ref bool __result)
             {
@@ -152,5 +152,5 @@ namespace XLGearModifier.Patches
                 __result = true;
             }
         }
-	}
+    }
 }
