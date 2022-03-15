@@ -26,7 +26,7 @@ namespace XLGearModifier.Patches
 				if (item is CustomBoardGearInfo customBoardGearInfo) item = customBoardGearInfo;
 				if (item is CustomGearFolderInfo) return false;
 
-				return true;
+                return true;
 			}
 		}
 
@@ -36,24 +36,27 @@ namespace XLGearModifier.Patches
         [HarmonyPatch(typeof(CharacterCustomizer), "LoadClothingAsync")]
         static class LoadClothingAsyncPatch
         {
-            static void Postfix(CharacterCustomizer __instance, ref CharacterGearInfo gear, ref ClothingGearObjet __result)
+            static bool Prefix(CharacterCustomizer __instance, ref CharacterGearInfo gear, ref ClothingGearObjet __result)
             {
-                if (gear.type != "eyes" && __result != null) return;
+                if (gear.type != "eyes") return true;
 
-                var clothingGearObject = new ClothingGearObjet(gear, __instance);
-
-                clothingGearObject.template = new CharacterGearTemplate
+                var clothingGearObject = new ClothingGearObjet(gear, __instance)
                 {
-                    alphaMasks = new List<GearAlphaMaskConfig>(),
-                    id = "eyes",
-                    path = string.Empty
+                    template = new CharacterGearTemplate
+                    {
+                        alphaMasks = new List<GearAlphaMaskConfig>(),
+                        id = "eyes",
+                        path = "XLGearModifier/eyes"
+                    }
                 };
 
-				clothingGearObject.LoadOn();
+                clothingGearObject.LoadOn();
 
                 var gearCache = Traverse.Create(__instance).Field("gearCache").GetValue<Dictionary<int, GearObject>>();
                 gearCache.Add(gear.GetHashCode(), clothingGearObject);
 				__result = clothingGearObject;
+
+                return false;
             }
         }
 
@@ -66,7 +69,7 @@ namespace XLGearModifier.Patches
             static bool Prefix(CharacterCustomizer __instance, ref GearInfo preview)
             {
                 if (preview.type != "eyes") return true;
-                
+
                 EyeTextureManager.Instance.SetEyeTextures(preview as CharacterGearInfo);
                 return false;
             }
