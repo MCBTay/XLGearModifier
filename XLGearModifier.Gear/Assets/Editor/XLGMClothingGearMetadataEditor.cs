@@ -59,6 +59,9 @@ namespace XLGearModifier.Assets.Editor
                 EditorGUILayout.PropertyField(textureSetProperty);
             }
 
+            var prefixAliasContent = new GUIContent("Prefix Alias", "This is a prefix aliases that the mesh can use.  A prefix defined here should be able to be applied to the mesh in game. For example, if you create 5 hoodie variations with similar UVs, you could set this field to the same value for all 5 prefabs and they'd be able to share textures.");
+            item.PrefixAlias = EditorGUILayout.TextField(prefixAliasContent, item.PrefixAlias);
+
             serializedObject.ApplyModifiedProperties();
         }
     }
