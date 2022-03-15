@@ -19,8 +19,8 @@ namespace XLGearModifier.Unity
 		public string CreatorName;
 
         [HideInInspector]
-		[Tooltip("This is a list of prefix aliases that the mesh can use.  Any prefixes defined here should be able to be applied to the mesh in game.")]
-        public List<string> PrefixAliases;
+        [Tooltip("This is a prefix aliases that the mesh can use.  A prefix defined here should be able to be applied to the mesh in game. For example, if you create 5 hoodie variations with similar UVs, you could set this field to the same value for all 5 prefabs and they'd be able to share textures.")]
+        public string PrefixAlias;
 
         #region Alpha Masks
         [Tooltip("Set the threshold(s) for various alpha masks when this mesh is applied. It will add it to the gear template if it is not already defined, or override it if it is. Typically used for masking various areas of the body.")]
