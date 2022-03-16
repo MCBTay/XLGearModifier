@@ -4,10 +4,7 @@
 	{
 		CustomMeshes = 20,
 		CustomFemaleMeshes = 21,
-		ProGear = 22,
-		FemaleGear = 23,
-		MaleGear = 24,
-		Eyes = 25,
+        Eyes = 22,
 	}
 
 	public enum ClothingGearCategory
