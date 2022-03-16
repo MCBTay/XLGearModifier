@@ -112,9 +112,6 @@ namespace XLGearModifier.Patches
             {
                 case GearModifierTab.CustomMeshes: return GearManager.Instance.CustomMeshes;
                 case GearModifierTab.CustomFemaleMeshes: return GearManager.Instance.CustomFemaleMeshes;
-				case GearModifierTab.ProGear: return GearManager.Instance.ProGear;
-                case GearModifierTab.FemaleGear: return GearManager.Instance.FemaleGear;
-                case GearModifierTab.MaleGear: return GearManager.Instance.MaleGear;
                 case GearModifierTab.Eyes: return GearManager.Instance.Eyes;
                 default: return new List<ICustomInfo>();
             }
