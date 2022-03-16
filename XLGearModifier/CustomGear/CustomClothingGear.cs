@@ -166,7 +166,7 @@ namespace XLGearModifier.CustomGear
             if (typeFilter.includedTypes.Contains(ClothingMetadata.PrefixAlias)) return;
 
             Array.Resize(ref typeFilter.includedTypes, typeFilter.includedTypes.Length + 1);
-            typeFilter.includedTypes[typeFilter.includedTypes.Length - 1] = Metadata.Prefix;
+            typeFilter.includedTypes[typeFilter.includedTypes.Length - 1] = ClothingMetadata.PrefixAlias;
         }
 
         private void AddCharacterGearTemplate()
