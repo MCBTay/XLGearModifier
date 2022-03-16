@@ -1,8 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using HarmonyLib;
+﻿using HarmonyLib;
 using SkaterXL.Data;
+using System;
 using System.Linq;
+using XLGearModifier.CustomGear;
 
 namespace XLGearModifier.Patches
 {
