@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 943143b4b75855b46b74ea5a14558a96, type: 3}
+  m_Name: New Era
+  m_EditorClassIdentifier: 
+  DefaultTexture: {fileID: 11400000, guid: 01119a1c6f50d804f8c4d56eb770ca58, type: 2}
+  AlternativeTextures:
+  - {fileID: 11400000, guid: 713a6f02ac42e9d409a109e64a8fec0b, type: 2}
+  - {fileID: 11400000, guid: 450c2969e43483b46b712d105ede3220, type: 2}
