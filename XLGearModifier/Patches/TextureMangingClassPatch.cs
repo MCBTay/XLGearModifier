@@ -1,9 +1,10 @@
 ﻿using HarmonyLib;
-using System.Linq;
-using System.Threading.Tasks;
 using SkaterXL.Data;
 using SkaterXL.Gear;
+using System.Linq;
+using System.Threading.Tasks;
 using UnityEngine;
+using XLGearModifier.CustomGear;
 using XLGearModifier.Unity.ScriptableObjects;
 
 namespace XLGearModifier.Patches

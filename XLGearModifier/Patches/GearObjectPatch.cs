@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityModManagerNet;
+using XLGearModifier.CustomGear;
 
 namespace XLGearModifier.Patches
 {
