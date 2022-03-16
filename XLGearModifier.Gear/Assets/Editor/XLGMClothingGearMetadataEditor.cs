@@ -1,4 +1,5 @@
 ﻿using UnityEditor;
+using UnityEditor.SceneManagement;
 using UnityEngine;
 using XLGearModifier.Unity;
 
@@ -63,6 +64,12 @@ namespace XLGearModifier.Assets.Editor
             }
 
             serializedObject.ApplyModifiedProperties();
+
+            if (GUI.changed)
+            {
+                EditorUtility.SetDirty(item);
+                EditorSceneManager.MarkSceneDirty(item.gameObject.scene);
+            }
         }
     }
 }

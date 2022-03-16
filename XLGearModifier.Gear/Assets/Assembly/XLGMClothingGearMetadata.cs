@@ -1,10 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using SkaterXL.Gear;
 using UnityEngine;
 using XLGearModifier.Unity.ScriptableObjects;
 
 namespace XLGearModifier.Unity
 {
+    [Serializable]
 	public class XLGMClothingGearMetadata : XLGMMetadata
 	{
 		[Tooltip("This is the sprite that will be used in the menu.")]
