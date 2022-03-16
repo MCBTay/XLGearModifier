@@ -152,11 +152,26 @@ namespace XLGearModifier.CustomGear
                 Array.Resize(ref typeFilter.includedTypes, typeFilter.includedTypes.Length + 1);
                 typeFilter.includedTypes[typeFilter.includedTypes.Length - 1] = Metadata.Prefix;
             }
+
+            AddPrefixAliasToGearFilters(typeFilter);
+        }
+
+        /// <summary>
+        /// Adds the PrefixAlias to the TypeFilter.includedTypes list if it is not already there.
+        /// </summary>
+        /// <param name="typeFilter"></param>
+        private void AddPrefixAliasToGearFilters(TypeFilter typeFilter)
+        {
+            if (string.IsNullOrEmpty(ClothingMetadata.PrefixAlias)) return;
+            if (typeFilter.includedTypes.Contains(ClothingMetadata.PrefixAlias)) return;
+
+            Array.Resize(ref typeFilter.includedTypes, typeFilter.includedTypes.Length + 1);
+            typeFilter.includedTypes[typeFilter.includedTypes.Length - 1] = Metadata.Prefix;
         }
 
         private void AddCharacterGearTemplate()
         {
-            if (GearDatabase.Instance.CharGearTemplateForID.ContainsKey(ClothingMetadata.Prefix.ToLower())) return;
+            if (GearDatabase.Instance.ContainsClothingTemplateWithID(ClothingMetadata.Prefix)) return;
 
             var newGearTemplate = new CharacterGearTemplate
             {
@@ -169,6 +184,20 @@ namespace XLGearModifier.CustomGear
             AddOrUpdateTemplateAlphaMasks(ClothingMetadata, newGearTemplate);
 
             GearDatabase.Instance.CharGearTemplateForID.Add(ClothingMetadata.Prefix.ToLower(), newGearTemplate);
+
+            if (string.IsNullOrEmpty(ClothingMetadata.PrefixAlias)) return;
+
+            if (GearDatabase.Instance.ContainsClothingTemplateWithID(ClothingMetadata.PrefixAlias)) return;
+
+            var newAliasTemplate = new CharacterGearTemplate
+            {
+                alphaMasks = new List<GearAlphaMaskConfig>(),
+                category = newGearTemplate.category,
+                id = ClothingMetadata.PrefixAlias.ToLower(),
+                path = $"XLGearModifier/alias/{ClothingMetadata.PrefixAlias.ToLower()}"
+            };
+
+            GearDatabase.Instance.CharGearTemplateForID.Add(ClothingMetadata.PrefixAlias.ToLower(), newAliasTemplate);
         }
 
         private ClothingGearCategory MapCategory(Unity.ClothingGearCategory category)
