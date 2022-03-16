@@ -9,11 +9,11 @@ using XLGearModifier.Unity;
 
 namespace XLGearModifier.CustomGear
 {
-    public class CustomSkater : CustomGearBase
+    public class Skater : CustomGearBase
     {
         public XLGMSkaterMetadata SkaterMetadata => Metadata as XLGMSkaterMetadata;
 
-        public CustomSkater(XLGMSkaterMetadata metadata, GameObject prefab) 
+        public Skater(XLGMSkaterMetadata metadata, GameObject prefab) 
             : base(metadata, prefab)
         {
         }

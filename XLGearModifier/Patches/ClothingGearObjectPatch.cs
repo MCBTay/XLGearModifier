@@ -73,7 +73,7 @@ namespace XLGearModifier.Patches
 			var customGearInfo = clothingGear.gearInfo as CustomCharacterGearInfo;
 			if (customGearInfo == null) return false;
 
-			if (customGearInfo.Info.GetParentObject() is CustomClothingGear customGear)
+			if (customGearInfo.Info.GetParentObject() is ClothingGear customGear)
 			{
 				if (!isType)
 				{
@@ -94,7 +94,7 @@ namespace XLGearModifier.Patches
 
 			bool isLayerable = false;
 
-			if (customGearInfo.Info.GetParentObject() is CustomClothingGear customGear)
+			if (customGearInfo.Info.GetParentObject() is ClothingGear customGear)
 			{
 				isLayerable = customGear.ClothingMetadata.IsLayerable && customGear.Metadata.GetCategory().StartsWith(clothingGearCategory.ToString());
 			}

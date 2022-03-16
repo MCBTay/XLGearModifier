@@ -87,7 +87,7 @@ namespace XLGearModifier.CustomGear
 			return materialController?.targets?.FirstOrDefault()?.renderer.material.shader;
         }
 		
-        public void AddBoardMesh(XLGMBoardGearMetadata metadata, CustomBoardGear customGearBase, GameObject asset)
+        public void AddBoardMesh(XLGMBoardGearMetadata metadata, BoardGear gearBase, GameObject asset)
 		{
 			CustomFolderInfo parent = null;
 
@@ -98,15 +98,15 @@ namespace XLGearModifier.CustomGear
 			if (metadata.BaseOnDefaultGear)
 			{
 				var officialTextures = Traverse.Create(GearDatabase.Instance).Field("gearListSource").GetValue<GearInfo[][][]>();
-				AddItem(customGearBase, officialTextures, parent.Children, ref parent);
+				AddItem(gearBase, officialTextures, parent.Children, ref parent);
 			}
 			else
 			{
-				AddItem(customGearBase, null, parent.Children, ref parent);
+				AddItem(gearBase, null, parent.Children, ref parent);
 			}
 		}
 
-		public void AddClothingMesh(XLGMClothingGearMetadata metadata, CustomClothingGear customGearBase, GameObject asset)
+		public void AddClothingMesh(XLGMClothingGearMetadata metadata, ClothingGear gearBase, GameObject asset)
 		{
 			CustomFolderInfo parent = null;
 
@@ -116,11 +116,11 @@ namespace XLGearModifier.CustomGear
 			if (metadata.BaseOnDefaultGear)
 			{
 				var officialTextures = Traverse.Create(GearDatabase.Instance).Field("gearListSource").GetValue<GearInfo[][][]>();
-				AddItem(customGearBase, officialTextures, parent.Children, ref parent);
+				AddItem(gearBase, officialTextures, parent.Children, ref parent);
 			}
 			else
 			{
-				AddItem(customGearBase, null, parent.Children, ref parent);
+				AddItem(gearBase, null, parent.Children, ref parent);
 			}
 		}
 
@@ -130,11 +130,11 @@ namespace XLGearModifier.CustomGear
 
 			foreach (var customGear in CustomGear)
             {
-                if (customGear is CustomSkater) continue;
+                if (customGear is Skater) continue;
 
 				CustomFolderInfo parent = null;
 
-                var cgi = customGear as CustomClothingGear;
+                var cgi = customGear as ClothingGear;
 
 				AddFolder<CustomGearFolderInfo>(customGear.Metadata.GetCategory(), string.Empty, cgi.ClothingMetadata.Skater == SkaterBase.Male ? CustomMeshes : CustomFemaleMeshes, ref parent);
 				AddFolder<CustomGearFolderInfo>(string.IsNullOrEmpty(customGear.Metadata.DisplayName) ? customGear.Prefab.name : customGear.Metadata.DisplayName, string.Empty, parent.Children, ref parent);
@@ -211,7 +211,7 @@ namespace XLGearModifier.CustomGear
 
 			if (customGearBase.Metadata.BasedOnDefaultGear())
 			{
-				if (customGearBase is CustomBoardGear)
+				if (customGearBase is BoardGear)
                 {
 					var baseTypes = categoryTextures.Where(x => x.type == customGearBase.Metadata.GetBaseType().ToLower()).Select(x => x as BoardGearInfo).ToList();
 					textures = textures.Concat(baseTypes).ToList();
@@ -293,11 +293,11 @@ namespace XLGearModifier.CustomGear
 			var child = destList.FirstOrDefault(x => x.GetName().Equals(baseTexture.name, StringComparison.InvariantCultureIgnoreCase));
 			if (child != null) return;
 
-			if (customGearBase is CustomBoardGear)
+			if (customGearBase is BoardGear)
 			{
 				CustomBoardGearInfo gearInfo = new CustomBoardGearInfo(baseTexture.name, customGearBase.GearInfo.type, isCustom, baseTexture.textureChanges, customGearBase.GearInfo.tags);
 				gearInfo.Info.Parent = parent;
-				gearInfo.Info.ParentObject = new CustomBoardGear(customGearBase, gearInfo);
+				gearInfo.Info.ParentObject = new BoardGear(customGearBase, gearInfo);
 				destList.Add(gearInfo.Info);
 
 				GearDatabase.Instance.boardGear.Add(gearInfo);
@@ -306,7 +306,7 @@ namespace XLGearModifier.CustomGear
 			{
 				CustomCharacterGearInfo gearInfo = new CustomCharacterGearInfo(baseTexture.name, customGearBase.GearInfo.type, isCustom, baseTexture.textureChanges, customGearBase.GearInfo.tags);
 				gearInfo.Info.Parent = parent;
-				gearInfo.Info.ParentObject = new CustomClothingGear(customGearBase, gearInfo);
+				gearInfo.Info.ParentObject = new ClothingGear(customGearBase, gearInfo);
 				destList.Add(gearInfo.Info);
 
 				GearDatabase.Instance.clothingGear.Add(gearInfo);
@@ -370,7 +370,7 @@ namespace XLGearModifier.CustomGear
 				{
 					characterGear.type = customGearBase.Metadata.Prefix.ToLower();
 					//child.ParentObject = customGear;
-					child.ParentObject = new CustomClothingGear(customGearBase, characterGear);
+					child.ParentObject = new ClothingGear(customGearBase, characterGear);
 				}
 				else if (child.GetParentObject() is CustomGearFolderInfo customGearFolder)
 				{

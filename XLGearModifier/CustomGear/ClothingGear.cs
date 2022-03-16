@@ -14,15 +14,15 @@ using ClothingGearCategory = SkaterXL.Gear.ClothingGearCategory;
 
 namespace XLGearModifier.CustomGear
 {
-    public class CustomClothingGear : CustomGearBase
+    public class ClothingGear : CustomGearBase
     {
         public XLGMClothingGearMetadata ClothingMetadata => Metadata as XLGMClothingGearMetadata;
 
-        public CustomClothingGear(XLGMClothingGearMetadata metadata, GameObject prefab) : base(metadata, prefab)
+        public ClothingGear(XLGMClothingGearMetadata metadata, GameObject prefab) : base(metadata, prefab)
         {
         }
 
-        public CustomClothingGear(CustomGearBase customGearBase, CustomCharacterGearInfo gearInfo) : base(customGearBase, gearInfo)
+        public ClothingGear(CustomGearBase customGearBase, CustomCharacterGearInfo gearInfo) : base(customGearBase, gearInfo)
         {
         }
 
@@ -250,19 +250,19 @@ namespace XLGearModifier.CustomGear
 
             switch (skaterIndex)
             {
-                case (int)Skater.EvanSmith:
+                case (int)XLMenuMod.Skater.EvanSmith:
                     Enum.TryParse(category, out EvanSmithGearCategory esCategory);
                     categoryIndex = (int)esCategory;
                     break;
-                case (int)Skater.TomAsta:
+                case (int)XLMenuMod.Skater.TomAsta:
                     Enum.TryParse(category, out TomAstaGearCategory taCategory);
                     categoryIndex = (int)taCategory;
                     break;
-                case (int)Skater.BrandonWestgate:
+                case (int)XLMenuMod.Skater.BrandonWestgate:
                     Enum.TryParse(category, out BrandonWestgateGearCategory bwCategory);
                     categoryIndex = (int)bwCategory;
                     break;
-                case (int)Skater.TiagoLemos:
+                case (int)XLMenuMod.Skater.TiagoLemos:
                     Enum.TryParse(category, out TiagoLemosGearCategory tlCategory);
                     categoryIndex = (int)tlCategory;
                     break;

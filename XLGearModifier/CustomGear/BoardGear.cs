@@ -11,16 +11,16 @@ using XLMenuMod.Utilities.Gear;
 
 namespace XLGearModifier.CustomGear
 {
-    public class CustomBoardGear : CustomGearBase
+    public class BoardGear : CustomGearBase
     {
         public XLGMBoardGearMetadata BoardMetadata => Metadata as XLGMBoardGearMetadata;
 
-        public CustomBoardGear(XLGMBoardGearMetadata metadata, GameObject prefab) 
+        public BoardGear(XLGMBoardGearMetadata metadata, GameObject prefab) 
             : base(metadata, prefab)
         {
         }
 
-        public CustomBoardGear(CustomGearBase customGearBase, CustomBoardGearInfo gearInfo)
+        public BoardGear(CustomGearBase customGearBase, CustomBoardGearInfo gearInfo)
             : base(customGearBase, gearInfo)
         {
 
@@ -102,19 +102,19 @@ namespace XLGearModifier.CustomGear
 
             switch (skaterIndex)
             {
-                case (int)Skater.EvanSmith:
+                case (int)XLMenuMod.Skater.EvanSmith:
                     Enum.TryParse(category, out EvanSmithGearCategory esCategory);
                     categoryIndex = (int)esCategory;
                     break;
-                case (int)Skater.TomAsta:
+                case (int)XLMenuMod.Skater.TomAsta:
                     Enum.TryParse(category, out TomAstaGearCategory taCategory);
                     categoryIndex = (int)taCategory;
                     break;
-                case (int)Skater.BrandonWestgate:
+                case (int)XLMenuMod.Skater.BrandonWestgate:
                     Enum.TryParse(category, out BrandonWestgateGearCategory bwCategory);
                     categoryIndex = (int)bwCategory;
                     break;
-                case (int)Skater.TiagoLemos:
+                case (int)XLMenuMod.Skater.TiagoLemos:
                     Enum.TryParse(category, out TiagoLemosGearCategory tlCategory);
                     categoryIndex = (int)tlCategory;
                     break;

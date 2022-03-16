@@ -13,6 +13,7 @@ using XLMenuMod.Utilities;
 using XLMenuMod.Utilities.Gear;
 using XLMenuMod.Utilities.Interfaces;
 using XLMenuMod.Utilities.UserInterface;
+using Skater = XLMenuMod.Skater;
 
 namespace XLGearModifier.Patches
 {
