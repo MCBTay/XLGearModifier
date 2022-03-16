@@ -17,7 +17,7 @@ using XLMenuMod.Utilities.Interfaces;
 
 namespace XLGearModifier
 {
-    public class GearManager
+    public class GearManager : CustomGearManager
 	{
 		private static GearManager __instance;
 		public static GearManager Instance => __instance ?? (__instance = new GearManager());
@@ -141,9 +141,9 @@ namespace XLGearModifier
 
 				AddItem(customGear, customTextures, parent.Children, ref parent, true);
 			}
-		}
+        }
 
-		public void AddItem(CustomGearBase customGearBase, GearInfo[][][] sourceList, List<ICustomInfo> destList, ref CustomFolderInfo parent, bool isCustom = false)
+        public void AddItem(CustomGearBase customGearBase, GearInfo[][][] sourceList, List<ICustomInfo> destList, ref CustomFolderInfo parent, bool isCustom = false)
 		{
 			if (sourceList == null)
 			{
@@ -378,5 +378,13 @@ namespace XLGearModifier
 				}
 			}
 		}
-	}
+
+        public override List<ICustomInfo> SortList(List<ICustomInfo> sourceList)
+        {
+            CurrentSort = (int)GearSortMethod.Name_ASC;
+            
+            return base.SortList(sourceList);
+        }
+
+    }
 }
