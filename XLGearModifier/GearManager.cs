@@ -28,11 +28,7 @@ namespace XLGearModifier
 
 		public List<ICustomInfo> CustomMeshes;
         public List<ICustomInfo> CustomFemaleMeshes;
-
-		public List<ICustomInfo> ProGear;
-		public List<ICustomInfo> FemaleGear;
-		public List<ICustomInfo> MaleGear;
-
+		
 		public List<ICustomInfo> Eyes;
 
         public Shader MasterShaderCloth_v2;
@@ -49,11 +45,7 @@ namespace XLGearModifier
 
 			CustomGear = new List<CustomGearBase>();
 
-			ProGear = new List<ICustomInfo>();
-			FemaleGear = new List<ICustomInfo>();
-			MaleGear = new List<ICustomInfo>();
-
-			Eyes = new List<ICustomInfo>();
+            Eyes = new List<ICustomInfo>();
         }
 
         public async Task LoadGameShaders()
@@ -94,122 +86,7 @@ namespace XLGearModifier
 
 			return materialController?.targets?.FirstOrDefault()?.renderer.material.shader;
         }
-
-		#region In Game Gear
-		public void LoadGameGear()
-		{
-			LoadMaleGear();
-			LoadFemaleGear();
-			LoadProGear();
-		}
-
-		private void LoadMaleGear()
-		{
-			LoadCharacterGear(Skater.MaleStandard, MaleGear);
-		}
-
-		private void LoadFemaleGear()
-		{
-			LoadCharacterGear(Skater.FemaleStandard, FemaleGear);
-		}
-
-		private void LoadProGear()
-		{
-			LoadCharacterGear(Skater.EvanSmith, ProGear);
-			LoadCharacterGear(Skater.TomAsta, ProGear);
-			LoadCharacterGear(Skater.TiagoLemos, ProGear);
-			LoadCharacterGear(Skater.BrandonWestgate, ProGear);
-
-			// We have to re-sort the list because TomAsta has a hat, which causes Headwear to show up at the bottom of the pro gear list.
-			ProGear = ProGear.OrderBy(x => Enum.Parse(typeof(GearCategory), x.GetName().Replace("\\", string.Empty))).ToList();
-		}
-
-		private void LoadCharacterGear(Skater skater, List<ICustomInfo> destList)
-		{
-			var gearListSource = Traverse.Create(GearDatabase.Instance).Field("gearListSource").GetValue<GearInfo[][][]>();
-			var gearCategories = gearListSource[(int)skater];
-			CustomFolderInfo parent = null;
-			AddCharacterGear(skater, gearCategories, destList, ref parent, false);
-
-			var customGearListSource = Traverse.Create(GearDatabase.Instance).Field("customGearListSource").GetValue<GearInfo[][][]>();
-			if (customGearListSource == null) return;
-			var customGearCategories = customGearListSource[(int)skater];
-			parent = null;
-			AddCharacterGear(skater, customGearCategories, destList, ref parent, true);
-		}
-
-		private void AddCharacterGear(Skater skater, GearInfo[][] gearCategories, List<ICustomInfo> destList, ref CustomFolderInfo parent, bool isCustom)
-		{
-			for (int gearCategory = 0; gearCategory < gearCategories.Length; gearCategory++)
-			{
-				var currentGearCategory = gearCategories[gearCategory];
-				if (currentGearCategory.Length <= 0) continue;
-
-				switch (skater)
-				{
-					case Skater.MaleStandard when (gearCategory < (int)GearCategory.Hair || gearCategory > (int)GearCategory.Shoes):
-					case Skater.FemaleStandard when (gearCategory < (int)GearCategory.Hair || gearCategory > (int)GearCategory.Shoes):
-					case Skater.EvanSmith when (gearCategory < (int)EvanSmithGearCategory.Top || gearCategory > (int)EvanSmithGearCategory.Shoes):
-					case Skater.TomAsta when (gearCategory < (int)TomAstaGearCategory.Headwear || gearCategory > (int)TomAstaGearCategory.Shoes):
-					case Skater.BrandonWestgate when (gearCategory < (int)BrandonWestgateGearCategory.Top || gearCategory > (int)BrandonWestgateGearCategory.Shoes):
-					case Skater.TiagoLemos when (gearCategory < (int)TiagoLemosGearCategory.Top || gearCategory > (int)TiagoLemosGearCategory.Shoes):
-						continue;
-				}
-
-				string folderName = string.Empty;
-				switch (skater)
-				{
-					case Skater.EvanSmith:
-						folderName = ((EvanSmithGearCategory)gearCategory).ToString();
-						break;
-					case Skater.TomAsta:
-						folderName = ((TomAstaGearCategory)gearCategory).ToString();
-						break;
-					case Skater.BrandonWestgate:
-						folderName = ((BrandonWestgateGearCategory)gearCategory).ToString();
-						break;
-					case Skater.TiagoLemos:
-						folderName = ((TiagoLemosGearCategory)gearCategory).ToString();
-						break;
-					case Skater.MaleStandard:
-					case Skater.FemaleStandard:
-					default:
-						folderName = ((GearCategory)gearCategory).ToString();
-						break;
-				}
-
-				AddFolder<CustomGearFolderInfo>(folderName, string.Empty, destList, ref parent);
-
-				if (Main.XLMenuModEnabled)
-				{
-					var toBeAdded = LeverageXLMenuMod(gearCategory, currentGearCategory, isCustom);
-					AddItemsFromXLMenuMod(toBeAdded, ref parent);
-				}
-				else
-				{
-					foreach (var gear in currentGearCategory)
-					{
-						var currentGear = gear as CharacterGearInfo;
-						if (currentGear == null) continue;
-
-						AddItem(currentGear, parent.Children, ref parent);
-					}
-				}
-			}
-		}
-
-		public void AddItem(CharacterGearInfo currentGear, List<ICustomInfo> destList, ref CustomFolderInfo parent)
-		{
-			var existing = destList.FirstOrDefault(x => x.Name == currentGear.name);
-			if (existing == null)
-			{
-				var customInfo = new CustomCharacterGearInfo(currentGear.name, currentGear.type, currentGear.isCustom, currentGear.textureChanges, currentGear.tags);
-				customInfo.Info.Parent = parent;
-				destList.Add(customInfo.Info);
-			}
-		}
-		#endregion
-
+		
         public void AddBoardMesh(XLGMBoardGearMetadata metadata, CustomBoardGear customGearBase, GameObject asset)
 		{
 			CustomFolderInfo parent = null;
@@ -344,6 +221,13 @@ namespace XLGearModifier
 					var baseTypes = categoryTextures.Where(x => x.type == customGearBase.Metadata.GetBaseType().ToLower()).Select(x => x as CharacterGearInfo).ToList();
 					textures = textures.Concat(baseTypes).ToList();
 				}
+			}
+
+            var clothingMetadata = customGearBase.Metadata as XLGMClothingGearMetadata;
+            if (!string.IsNullOrEmpty(clothingMetadata?.PrefixAlias))
+            {
+				var aliasTypes = categoryTextures.Where(x => x.type == clothingMetadata.PrefixAlias.ToLower()).Select(x => x as CharacterGearInfo).ToList();
+                textures = textures.Concat(aliasTypes).ToList();
 			}
 
 			if (Main.XLMenuModEnabled)

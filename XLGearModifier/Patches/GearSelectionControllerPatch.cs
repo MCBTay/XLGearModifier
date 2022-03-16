@@ -63,16 +63,7 @@ namespace XLGearModifier.Patches
                     case (int)GearModifierTab.CustomFemaleMeshes: 
                         sourceList = index[0] == (int)Skater.FemaleStandard ? GearManager.Instance.CustomFemaleMeshes : new List<ICustomInfo>();
 						break;
-					case (int)GearModifierTab.ProGear:
-						sourceList = GearManager.Instance.ProGear;
-						break;
-					case (int)GearModifierTab.FemaleGear:
-						sourceList = index[0] == (int)Skater.FemaleStandard ? new List<ICustomInfo>() : GearManager.Instance.FemaleGear;
-						break;
-					case (int)GearModifierTab.MaleGear:
-						sourceList = index[0] == (int)Skater.MaleStandard ? new List<ICustomInfo>() : GearManager.Instance.MaleGear;
-						break;
-					case (int)GearModifierTab.Eyes:
+                    case (int)GearModifierTab.Eyes:
 						sourceList = GearManager.Instance.Eyes;
 						break;
 				}
@@ -106,10 +97,7 @@ namespace XLGearModifier.Patches
                         case (int)GearModifierTab.CustomFemaleMeshes: 
                             itemView.SetText("Custom Meshes"); 
                             break;
-						case (int)GearModifierTab.ProGear: itemView.SetText("Pro Gear"); break;
-						case (int)GearModifierTab.FemaleGear: itemView.SetText("Female Gear"); break;
-						case (int)GearModifierTab.MaleGear: itemView.SetText("Male Gear"); break;
-						case (int)GearModifierTab.Eyes: itemView.SetText("Eyes"); break;
+                        case (int)GearModifierTab.Eyes: itemView.SetText("Eyes"); break;
 					}
 				}
 				else if (index.depth >= 3)
@@ -329,16 +317,7 @@ namespace XLGearModifier.Patches
                             case (int)GearModifierTab.CustomFemaleMeshes:
                                 sourceList = GearManager.Instance.CustomFemaleMeshes;
                                 break;
-							case (int)GearModifierTab.ProGear:
-								sourceList = GearManager.Instance.ProGear;
-								break;
-							case (int)GearModifierTab.FemaleGear:
-								sourceList = GearManager.Instance.FemaleGear;
-								break;
-							case (int)GearModifierTab.MaleGear:
-								sourceList = GearManager.Instance.MaleGear;
-								break;
-							case (int)GearModifierTab.Eyes:
+                            case (int)GearModifierTab.Eyes:
 								sourceList = GearManager.Instance.Eyes;
 								break;
 						}
@@ -504,8 +483,7 @@ namespace XLGearModifier.Patches
 			{
 				if (__instance.initialized && needsXLGMInitialization)
 				{
-					GearManager.Instance.LoadGameGear();
-					GearManager.Instance.LoadAssetCustomTextures();
+                    GearManager.Instance.LoadAssetCustomTextures();
 
 					needsXLGMInitialization = false;
 				}
@@ -532,10 +510,7 @@ namespace XLGearModifier.Patches
 		{
 			return tabIndex == (int) GearModifierTab.CustomMeshes ||
                    tabIndex == (int) GearModifierTab.CustomFemaleMeshes ||
-				   tabIndex == (int) GearModifierTab.ProGear ||
-			       tabIndex == (int) GearModifierTab.FemaleGear ||
-			       tabIndex == (int) GearModifierTab.MaleGear ||
-				   tabIndex == (int) GearModifierTab.Eyes;
+                   tabIndex == (int) GearModifierTab.Eyes;
 		}
 	}
 }
