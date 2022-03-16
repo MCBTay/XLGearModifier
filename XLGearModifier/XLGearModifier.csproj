@@ -122,7 +122,7 @@
     <Compile Include="CustomGear\CustomClothingGear.cs" />
     <Compile Include="CustomGear\CustomGearBase.cs" />
     <Compile Include="CustomGear\CustomSkater.cs" />
-    <Compile Include="GearManager.cs" />
+    <Compile Include="CustomGear\GearManager.cs" />
     <Compile Include="Main.cs" />
     <Compile Include="Patches\CharacterCustomizerPatch.cs" />
     <Compile Include="Patches\CustomizedPlayerDataV2Patch.cs" />
