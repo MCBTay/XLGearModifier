@@ -1,8 +1,10 @@
-﻿using XLGearModifier.Unity.ScriptableObjects;
+﻿using System;
+using XLGearModifier.Unity.ScriptableObjects;
 
 namespace XLGearModifier.Unity
 {
-    public class XLGMSkaterMetadata : XLGMMetadata
+    [Serializable]
+	public class XLGMSkaterMetadata : XLGMMetadata
 	{
 		public SkaterBase BasedOn;
 

@@ -1,10 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using SkaterXL.Gear;
 using UnityEngine;
 using XLGearModifier.Unity.ScriptableObjects;
 
 namespace XLGearModifier.Unity
 {
+    [Serializable]
 	public class XLGMClothingGearMetadata : XLGMMetadata
 	{
 		[Tooltip("This is the sprite that will be used in the menu.")]
@@ -18,6 +20,10 @@ namespace XLGearModifier.Unity
 		[Tooltip("This is the name of the creator that will be displayed in the menu.")]
 		public string CreatorName;
 
+        [HideInInspector]
+        [Tooltip("This is a prefix aliases that the mesh can use.  A prefix defined here should be able to be applied to the mesh in game. For example, if you create 5 hoodie variations with similar UVs, you could set this field to the same value for all 5 prefabs and they'd be able to share textures.")]
+        public string PrefixAlias;
+
         #region Alpha Masks
         [Tooltip("Set the threshold(s) for various alpha masks when this mesh is applied. It will add it to the gear template if it is not already defined, or override it if it is. Typically used for masking various areas of the body.")]
         [SerializeField]
@@ -25,22 +31,28 @@ namespace XLGearModifier.Unity
         #endregion
 
 		[HideInInspector]
+		[Tooltip("This will enable the use of textures from default gear.  For example, if you've modified MShirt but the UV is still pretty close to the original, you can leverage existing MShirt textures by checking this and setting BaseTopType to MShirt.")]
         public bool BaseOnDefaultGear;
 
         [HideInInspector]
+		[Tooltip("The base hair style to use textures from.")]
         public HairStyles BaseHairStyle;
 
 		[HideInInspector]
-        public HeadwearTypes BaseHeadwearType;
+        [Tooltip("The base headwear to use textures from.")]
+		public HeadwearTypes BaseHeadwearType;
 
 		[HideInInspector]
-        public ShoeTypes BaseShoeType;
+        [Tooltip("The base shoe to use textures from.")]
+		public ShoeTypes BaseShoeType;
 
 		[HideInInspector]
-        public TopTypes BaseTopType;
+        [Tooltip("The base top to use textures from.")]
+		public TopTypes BaseTopType;
         
         [HideInInspector]
-        public BottomTypes BaseBottomType;
+        [Tooltip("The base bottom to use textures from.")]
+		public BottomTypes BaseBottomType;
 
 		[HideInInspector]
         [SerializeField]
