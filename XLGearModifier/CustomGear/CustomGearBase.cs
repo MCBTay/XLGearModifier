@@ -66,35 +66,35 @@ namespace XLGearModifier.CustomGear
         
         public int GetSkaterIndex()
         {
-            var skaterIndex = (int)Skater.MaleStandard;
+            var skaterIndex = (int)XLMenuMod.Skater.MaleStandard;
 
             var type = GetTypeName();
 
-            if (string.IsNullOrEmpty(type)) return (int)Skater.MaleStandard;
+            if (string.IsNullOrEmpty(type)) return (int)XLMenuMod.Skater.MaleStandard;
 
             if (type.StartsWith("m", StringComparison.InvariantCultureIgnoreCase))
             {
-                skaterIndex = (int)Skater.MaleStandard;
+                skaterIndex = (int)XLMenuMod.Skater.MaleStandard;
             }
             else if (type.StartsWith("f", StringComparison.InvariantCultureIgnoreCase))
             {
-                skaterIndex = (int)Skater.FemaleStandard;
+                skaterIndex = (int)XLMenuMod.Skater.FemaleStandard;
             }
             else if (type.StartsWith("es", StringComparison.InvariantCultureIgnoreCase))
             {
-                skaterIndex = (int)Skater.EvanSmith;
+                skaterIndex = (int)XLMenuMod.Skater.EvanSmith;
             }
             else if (type.StartsWith("ta", StringComparison.InvariantCultureIgnoreCase))
             {
-                skaterIndex = (int)Skater.TomAsta;
+                skaterIndex = (int)XLMenuMod.Skater.TomAsta;
             }
             else if (type.StartsWith("bw", StringComparison.InvariantCultureIgnoreCase))
             {
-                skaterIndex = (int)Skater.BrandonWestgate;
+                skaterIndex = (int)XLMenuMod.Skater.BrandonWestgate;
             }
             else if (type.StartsWith("tl", StringComparison.InvariantCultureIgnoreCase))
             {
-                skaterIndex = (int)Skater.TiagoLemos;
+                skaterIndex = (int)XLMenuMod.Skater.TiagoLemos;
             }
 
             return skaterIndex;

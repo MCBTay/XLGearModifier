@@ -192,13 +192,13 @@ namespace XLGearModifier
                         switch (metadata)
                         {
                             case XLGMClothingGearMetadata clothingMetadata:
-                                customGearBase = new CustomClothingGear(clothingMetadata, asset);
+                                customGearBase = new ClothingGear(clothingMetadata, asset);
                                 break;
                             case XLGMSkaterMetadata skaterMetadata:
-                                customGearBase = new CustomSkater(skaterMetadata, asset);
+                                customGearBase = new Skater(skaterMetadata, asset);
                                 break;
                             case XLGMBoardGearMetadata boardMetadata:
-                                customGearBase = new CustomBoardGear(boardMetadata, asset);
+                                customGearBase = new BoardGear(boardMetadata, asset);
                                 break;
                         }
                         if (customGearBase == null) continue;
@@ -209,10 +209,10 @@ namespace XLGearModifier
 
                         switch (customGearBase)
                         {
-                            case CustomClothingGear clothingGear:
+                            case ClothingGear clothingGear:
                                 GearManager.Instance.AddClothingMesh(clothingGear.ClothingMetadata, clothingGear, asset);
                                 break;
-                            case CustomBoardGear boardGear:
+                            case BoardGear boardGear:
                                 GearManager.Instance.AddBoardMesh(boardGear.BoardMetadata, boardGear, asset);
                                 break;
                         }
