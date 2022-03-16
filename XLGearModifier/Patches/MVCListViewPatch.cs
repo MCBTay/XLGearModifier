@@ -1,8 +1,9 @@
 ﻿using HarmonyLib;
+using XLGearModifier.CustomGear;
 
 namespace XLGearModifier.Patches
 {
-	static class MVCListViewPatch
+    static class MVCListViewPatch
 	{
 		[HarmonyPatch(typeof(MVCListView), "Header_OnPreviousCategory")]
 		public static class Header_OnPreviousCategoryPatch
