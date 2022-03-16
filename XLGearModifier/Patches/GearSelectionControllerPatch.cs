@@ -13,6 +13,7 @@ using XLMenuMod.Utilities;
 using XLMenuMod.Utilities.Gear;
 using XLMenuMod.Utilities.Interfaces;
 using XLMenuMod.Utilities.UserInterface;
+using Skater = XLMenuMod.Skater;
 
 namespace XLGearModifier.Patches
 {
@@ -293,7 +294,7 @@ namespace XLGearModifier.Patches
 
 				if (gear is CustomGearFolderInfo selectedFolder)
 				{
-					selectedFolder.FolderInfo.Children = selectedFolder.FolderInfo.Children;
+					selectedFolder.FolderInfo.Children = GearManager.Instance.SortList(selectedFolder.FolderInfo.Children);
 
 					var currentIndexPath = Traverse.Create(__instance.listView).Property<IndexPath>("currentIndexPath");
 
