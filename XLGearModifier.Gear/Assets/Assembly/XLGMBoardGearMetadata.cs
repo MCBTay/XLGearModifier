@@ -1,8 +1,10 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using XLGearModifier.Unity.ScriptableObjects;
 
 namespace XLGearModifier.Unity
 {
+	[Serializable]
 	public class XLGMBoardGearMetadata : XLGMMetadata
 	{
 		[Tooltip("This is the Category of the gear and will dictate which category folder the mesh shows up in.")]

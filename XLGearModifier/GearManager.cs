@@ -223,6 +223,13 @@ namespace XLGearModifier
 				}
 			}
 
+            var clothingMetadata = customGearBase.Metadata as XLGMClothingGearMetadata;
+            if (!string.IsNullOrEmpty(clothingMetadata?.PrefixAlias))
+            {
+				var aliasTypes = categoryTextures.Where(x => x.type == clothingMetadata.PrefixAlias.ToLower()).Select(x => x as CharacterGearInfo).ToList();
+                textures = textures.Concat(aliasTypes).ToList();
+			}
+
 			if (Main.XLMenuModEnabled)
 			{
 				var toBeAdded = LeverageXLMenuMod(categoryIndex, textures.ToArray(), isCustom);
