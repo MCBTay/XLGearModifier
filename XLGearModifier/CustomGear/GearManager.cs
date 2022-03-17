@@ -132,7 +132,53 @@ namespace XLGearModifier.CustomGear
             AddItem(clothingGear, customTextures, parent.Children, ref parent, true);
 		}
 
-        private void AddTextureSetTextures(ClothingGear clothingGear, List<ICustomInfo> destList, ref CustomFolderInfo parent)
+		public void AddItem(ClothingGear clothingGear, GearInfo[][][] sourceList, List<ICustomInfo> destList, ref CustomFolderInfo parent, bool isCustom = false)
+		{
+            int skaterIndex = (int)SkaterBase.Male;
+
+            if (clothingGear.Metadata is XLGMClothingGearMetadata clothingGearMetadata)
+            {
+                skaterIndex = (int)clothingGearMetadata.Skater;
+            }
+
+			int categoryIndex = clothingGear.GetCategoryIndex(skaterIndex);
+
+			var categoryTextures = sourceList[skaterIndex][categoryIndex];
+
+            var prefixesToSearch = GetPrefixesToSearch(clothingGear.ClothingMetadata);
+
+			var textures = categoryTextures
+                .Where(x => prefixesToSearch.Contains(x.type))
+                .Select(x => x as GearInfoSingleMaterial)
+                .ToList();
+
+            foreach (var texture in textures)
+            {
+                AddToList(clothingGear, texture, destList, ref parent, isCustom);
+            }
+        }
+
+		/// <summary>
+		/// Returns a list of texture prefixes to search for.  By default will return the prefix of the mesh, but if it is based on default or has an alias, it will include those as well.
+		/// </summary>
+        private List<string> GetPrefixesToSearch(XLGMClothingGearMetadata metadata)
+        {
+            var prefixes = new List<string> { metadata.Prefix.ToLower() };
+
+            if (metadata.BaseOnDefaultGear)
+            {
+                prefixes.Add(metadata.GetBaseType().ToLower());
+            }
+
+            if (!string.IsNullOrEmpty(metadata.PrefixAlias))
+            {
+                prefixes.Add(metadata.PrefixAlias.ToLower());
+            }
+
+            return prefixes;
+        }
+
+		private void AddTextureSetTextures(ClothingGear clothingGear, List<ICustomInfo> destList, ref CustomFolderInfo parent)
         {
             if (clothingGear.ClothingMetadata.BaseOnDefaultGear) return;
             if (clothingGear.ClothingMetadata.TextureSet == null) return;
@@ -185,66 +231,7 @@ namespace XLGearModifier.CustomGear
             AddToList(clothingGear, characterGearInfo, destList, ref parent, false);
 		}
 
-        public void AddItem(CustomGearBase customGearBase, GearInfo[][][] sourceList, List<ICustomInfo> destList, ref CustomFolderInfo parent, bool isCustom = false)
-		{
-			int skaterIndex = customGearBase.GetSkaterIndex();
-			int categoryIndex = customGearBase.GetCategoryIndex(skaterIndex);
-
-			var categoryTextures = sourceList[skaterIndex][categoryIndex];
-			
-			var textures = categoryTextures
-				.Where(x => x.type == customGearBase.Metadata.Prefix.ToLower())
-				.Select(x => x as GearInfoSingleMaterial)
-				.ToList();
-
-			if (customGearBase.Metadata.BasedOnDefaultGear())
-			{
-				if (customGearBase is BoardGear)
-                {
-					var baseTypes = categoryTextures.Where(x => x.type == customGearBase.Metadata.GetBaseType().ToLower()).Select(x => x as BoardGearInfo).ToList();
-					textures = textures.Concat(baseTypes).ToList();
-				}
-				else
-				{
-					var baseTypes = categoryTextures.Where(x => x.type == customGearBase.Metadata.GetBaseType().ToLower()).Select(x => x as CharacterGearInfo).ToList();
-					textures = textures.Concat(baseTypes).ToList();
-				}
-			}
-
-            var clothingMetadata = customGearBase.Metadata as XLGMClothingGearMetadata;
-            if (!string.IsNullOrEmpty(clothingMetadata?.PrefixAlias))
-            {
-				var aliasTypes = categoryTextures.Where(x => x.type == clothingMetadata.PrefixAlias.ToLower()).Select(x => x as CharacterGearInfo).ToList();
-                textures = textures.Concat(aliasTypes).ToList();
-			}
-
-			if (Main.XLMenuModEnabled)
-			{
-				var toBeAdded = LeverageXLMenuMod(categoryIndex, textures.ToArray(), isCustom);
-
-				foreach(var texture in toBeAdded)
-				{
-					if (texture.GetParentObject() is CustomCharacterGearInfo charGearInfo)
-						AddToList(customGearBase, charGearInfo, destList, ref parent, isCustom);
-					else if (texture.GetParentObject() is CustomGearFolderInfo folderInfo)
-						AddFolder<CustomGearFolderInfo>(customGearBase, folderInfo, destList, ref parent, isCustom);
-				}
-			}
-			else
-			{
-				foreach (var texture in textures)
-				{
-					AddToList(customGearBase, texture, destList, ref parent, isCustom);
-				}
-			}
-
-			if (textures.Any() && isCustom && !customGearBase.Metadata.BasedOnDefaultGear())
-			{
-				var defaultTexture = destList.FirstOrDefault(x => x.GetName() == customGearBase.Metadata.Prefix);
-				if (defaultTexture != null)
-					destList.Remove(defaultTexture);
-			}
-		}
+        
 
 		public List<ICustomInfo> LeverageXLMenuMod(int gearCategory, GearInfo[] currentGearCategory, bool isCustom)
 		{
