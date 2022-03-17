@@ -49,7 +49,7 @@ namespace XLGearModifier.Patches
 				
 				if (index.depth == 1)
 				{
-					__result = 2 * GearDatabase.Instance.skaters[index[0]].GearFilters.Count + 4;
+					__result = 2 * GearDatabase.Instance.skaters[index[0]].GearFilters.Count + Enum.GetNames(typeof(GearModifierTab)).Length;
 				}
 
 				if (index.depth < 2) return;
