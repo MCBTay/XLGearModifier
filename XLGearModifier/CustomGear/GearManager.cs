@@ -50,6 +50,9 @@ namespace XLGearModifier.CustomGear
             Eyes = new List<ICustomInfo>();
         }
 
+        /// <summary>
+        /// Loads shaders from the base game.  Currently loads up a clothing shader and a hair shader.
+        /// </summary>
         public async Task LoadGameShaders()
         {
             await Task.WhenAll(new List<Task>
@@ -59,16 +62,27 @@ namespace XLGearModifier.CustomGear
             });
         }
 
+        /// <summary>
+        /// Saves a handle to the current shader being used on MShirt such that we can use it on other custom gear.
+        /// </summary>
         private async Task LoadClothingShader()
         {
             MasterShaderCloth_v2 = await LoadBaseGameAssetShader(TopTypes.MShirt.ToString().ToLower());
 		}
 
+        /// <summary>
+        /// Saves a handle to the current shader being used on MHairCounterpart such that we can use it on other custom gear.
+        /// </summary>
         private async Task LoadHairShader()
         {
             MasterShaderHair_AlphaTest_v1 = await LoadBaseGameAssetShader(HairStyles.MHairCounterpart.ToString().ToLower());
         }
 
+        /// <summary>
+        /// Finds the shader being used by the specified TemplateId and returns it.  Has to load the prefab from the Addressables system in order to be able to get that reference to the shader.
+        /// </summary>
+        /// <param name="templateId">The template/mesh to get the shader for.</param>
+        /// <returns>A reference to the shader being used by the mesh/template.</returns>
         private async Task<Shader> LoadBaseGameAssetShader(string templateId)
         {
             var template = GearDatabase.Instance.CharGearTemplateForID[templateId];
