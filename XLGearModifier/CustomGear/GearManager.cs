@@ -9,7 +9,6 @@ using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
 using XLGearModifier.Unity;
-using XLGearModifier.Unity.ScriptableObjects;
 using XLMenuMod;
 using XLMenuMod.Utilities;
 using XLMenuMod.Utilities.Gear;
@@ -111,28 +110,41 @@ namespace XLGearModifier.CustomGear
 				AddFolder<CustomGearFolderInfo>(clothingGear.ClothingMetadata.Category.ToString(), string.Empty, sourceList, ref parent);
                 AddFolder<CustomGearFolderInfo>(string.IsNullOrEmpty(customGear.Metadata.DisplayName) ? customGear.Prefab.name : customGear.Metadata.DisplayName, string.Empty, parent.Children, ref parent);
 
-                AddOfficialTextures(clothingGear, officialTextures, ref parent);
-				AddCustomTextures(clothingGear, customTextures, ref parent);
-                AddTextureSetTextures(clothingGear, parent.Children, ref parent);
+                var officialCount = AddOfficialTextures(clothingGear, officialTextures, ref parent);
+				var customCount = AddCustomTextures(clothingGear, customTextures, ref parent);
+
+                if (officialCount + customCount == 0)
+                {
+					AddDefaultEmptyTexture(clothingGear, parent.Children, ref parent);
+                }
             }
 
             CustomMeshes = CustomMeshes.OrderBy(x => Enum.Parse(typeof(ClothingGearCategory), x.GetName().Replace("\\", string.Empty))).ToList();
             CustomFemaleMeshes = CustomFemaleMeshes.OrderBy(x => Enum.Parse(typeof(ClothingGearCategory), x.GetName().Replace("\\", string.Empty))).ToList();
 		}
 
-        private void AddOfficialTextures(ClothingGear clothingGear, GearInfo[][][] officialTextures, ref CustomFolderInfo parent)
+        private int AddOfficialTextures(ClothingGear clothingGear, GearInfo[][][] officialTextures, ref CustomFolderInfo parent)
         {
-            if (!clothingGear.ClothingMetadata.BaseOnDefaultGear) return;
+            if (!clothingGear.ClothingMetadata.BaseOnDefaultGear) return 0;
 
-            AddItem(clothingGear, officialTextures, parent.Children, ref parent);
+            return AddTextures(clothingGear, officialTextures, parent.Children, ref parent);
 		}
 
-        private void AddCustomTextures(ClothingGear clothingGear, GearInfo[][][] customTextures, ref CustomFolderInfo parent)
+        private int AddCustomTextures(ClothingGear clothingGear, GearInfo[][][] customTextures, ref CustomFolderInfo parent)
         {
-            AddItem(clothingGear, customTextures, parent.Children, ref parent, true);
+            return AddTextures(clothingGear, customTextures, parent.Children, ref parent, true);
 		}
 
-		public void AddItem(ClothingGear clothingGear, GearInfo[][][] sourceList, List<ICustomInfo> destList, ref CustomFolderInfo parent, bool isCustom = false)
+		/// <summary>
+		/// A method to look through gearListSource or customGearListSource in order to add appropriate textures to appropriate mesh lists based on defined prefixes.
+		/// </summary>
+		/// <param name="clothingGear">The clothing gear item we're looking for textures for.</param>
+		/// <param name="sourceList">The source list we'll be looking for textures in.</param>
+		/// <param name="destList">The list where we will be adding the texture.</param>
+		/// <param name="parent">The parent of the list we're adding to.</param>
+		/// <param name="isCustom">True if the texture is on disk, false otherwise.</param>
+		/// <returns>The number of textures added.</returns>
+		public int AddTextures(ClothingGear clothingGear, GearInfo[][][] sourceList, List<ICustomInfo> destList, ref CustomFolderInfo parent, bool isCustom = false)
 		{
             int skaterIndex = (int)SkaterBase.Male;
 
@@ -156,6 +168,8 @@ namespace XLGearModifier.CustomGear
             {
                 AddToList(clothingGear, texture, destList, ref parent, isCustom);
             }
+
+            return textures.Count;
         }
 
 		/// <summary>
@@ -178,92 +192,22 @@ namespace XLGearModifier.CustomGear
             return prefixes;
         }
 
-		private void AddTextureSetTextures(ClothingGear clothingGear, List<ICustomInfo> destList, ref CustomFolderInfo parent)
+        private void AddDefaultEmptyTexture(ClothingGear clothingGear, List<ICustomInfo> destList, ref CustomFolderInfo parent)
         {
-            if (clothingGear.ClothingMetadata.BaseOnDefaultGear) return;
-            if (clothingGear.ClothingMetadata.TextureSet == null) return;
-
-			var defaultTexture = clothingGear.ClothingMetadata.TextureSet.DefaultTexture;
-			var altTextures = clothingGear.ClothingMetadata.TextureSet.AlternativeTextures;
-
-            if (defaultTexture == null && (altTextures == null || !altTextures.Any()))
-			{
-				AddTextureSetTexture(clothingGear, null, destList, ref parent);
-                return;
-            }
-
-			AddTextureSetTexture(clothingGear, defaultTexture, destList, ref parent);
-
-			foreach (var altTexture in altTextures)
-            {
-                AddTextureSetTexture(clothingGear, altTexture, destList, ref parent);
-            }
-        }
-
-        private void AddTextureSetTexture(ClothingGear clothingGear, XLGMTextureInfo textureInfo, List<ICustomInfo> destList, ref CustomFolderInfo parent)
-        {
-            string albedoPath, normalPath, maskPath;
-
-            albedoPath = normalPath = maskPath = $"XLGearModifier/{clothingGear.Prefab.name}/";
-
-            if (textureInfo == null)
-            {
-                albedoPath += "Empty_Albedo.png";
-                normalPath += "Empty_Normal_Map.png";
-				maskPath += "Empty_Maskpbr_Map.png";
-            }
-			else if (textureInfo.textureColor == null) return;
-			else
-			{
-                albedoPath += $"{textureInfo.textureName}/albedo";
-                normalPath += $"{textureInfo.textureName}/normal";
-                maskPath += $"{textureInfo.textureName}/maskpbr";
-            }
+            string texturePath = $"XLGearModifier/{clothingGear.Prefab.name}";
 
             var textureChanges = new List<TextureChange>
             {
-                new TextureChange("albedo", albedoPath),
-                new TextureChange("normal", normalPath),
-                new TextureChange("maskpbr", maskPath)
+                new TextureChange("albedo", $"{texturePath}/Empty_Albedo.png"),
+                new TextureChange("normal", $"{texturePath}/Empty_Normal_Map.png"),
+                new TextureChange("maskpbr", $"{texturePath}/Empty_Maskpbr_Map.png")
             };
 
-            var characterGearInfo = new CustomCharacterGearInfo(textureInfo.textureName, clothingGear.Metadata.Prefix, false, textureChanges.ToArray(), new List<string>().ToArray());
+            var characterGearInfo = new CustomCharacterGearInfo(clothingGear.Metadata.Prefix, clothingGear.Metadata.Prefix, false, textureChanges.ToArray(), new List<string>().ToArray());
             AddToList(clothingGear, characterGearInfo, destList, ref parent, false);
 		}
 
-        
-
-		public List<ICustomInfo> LeverageXLMenuMod(int gearCategory, GearInfo[] currentGearCategory, bool isCustom)
-		{
-			if (isCustom)
-			{
-				CustomGearManager.Instance.LoadNestedItems(currentGearCategory);
-				return CustomGearManager.Instance.NestedItems;
-			}
-
-			if (gearCategory == (int)GearCategory.Hair)
-			{
-				CustomGearManager.Instance.LoadNestedHairItems(currentGearCategory);
-			}
-			else
-			{
-				CustomGearManager.Instance.LoadNestedOfficialItems(currentGearCategory);
-			}
-
-			return CustomGearManager.Instance.NestedOfficialItems;
-		}
-
-		public void AddItemsFromXLMenuMod(List<ICustomInfo> itemsToAdd, ref CustomFolderInfo parent)
-		{
-			foreach (var item in itemsToAdd)
-			{
-				item.Parent = parent;
-			}
-
-			parent.Children.AddRange(itemsToAdd);
-		}
-
-		private void AddToList(CustomGearBase customGearBase, GearInfoSingleMaterial baseTexture, List<ICustomInfo> destList, ref CustomFolderInfo parent, bool isCustom)
+        private void AddToList(CustomGearBase customGearBase, GearInfoSingleMaterial baseTexture, List<ICustomInfo> destList, ref CustomFolderInfo parent, bool isCustom)
 		{
 			var child = destList.FirstOrDefault(x => x.GetName().Equals(baseTexture.name, StringComparison.InvariantCultureIgnoreCase));
 			if (child != null) return;
@@ -288,78 +232,11 @@ namespace XLGearModifier.CustomGear
 			}
 		}
 
-		public void AddFolder<T>(string folder, string path, List<ICustomInfo> sourceList, ref CustomFolderInfo parent) where T : ICustomFolderInfo
-		{
-			string folderName = $"\\{folder}";
-
-			var child = sourceList.FirstOrDefault(x => x.GetName().Equals(folderName, StringComparison.InvariantCultureIgnoreCase) && x is CustomFolderInfo) as CustomFolderInfo;
-			if (child == null)
-			{
-				ICustomFolderInfo newFolder;
-
-				if (typeof(T) == typeof(CustomGearFolderInfo))
-				{
-					newFolder = new CustomGearFolderInfo($"\\{folder}", path, parent);
-				}
-				else return;
-
-				sourceList.Add(newFolder.FolderInfo);
-				parent = newFolder.FolderInfo;
-			}
-			else
-			{
-				parent = child;
-			}
-		}
-
-		public void AddFolder<T>(CustomGearBase customGearBase, CustomGearFolderInfo gearFolder, List<ICustomInfo> sourceList, ref CustomFolderInfo parent, bool isCustom) where T : ICustomFolderInfo
-		{
-			var child = sourceList.FirstOrDefault(x => x.GetName().Equals(gearFolder.FolderInfo.Name, StringComparison.InvariantCultureIgnoreCase) && x is CustomFolderInfo) as CustomFolderInfo;
-			if (child == null)
-			{
-				CustomGearFolderInfo newFolder;
-
-				if (typeof(T) == typeof(CustomGearFolderInfo))
-				{
-					newFolder = gearFolder;
-					newFolder.isCustom = isCustom;
-					newFolder.FolderInfo.Parent = parent;
-
-					var goBack = newFolder.FolderInfo.Children.FirstOrDefault();
-					if (goBack != null)
-						goBack.Parent = parent;
-
-					UpdateChildren(newFolder, customGearBase);
-				}
-				else return;
-
-				sourceList.Add(newFolder.FolderInfo);
-			}
-		}
-
-		private void UpdateChildren(ICustomFolderInfo folder, CustomGearBase customGearBase)
-		{
-			foreach (var child in folder.FolderInfo.Children)
-			{
-				if (child.GetParentObject() is CustomCharacterGearInfo characterGear)
-				{
-					characterGear.type = customGearBase.Metadata.Prefix.ToLower();
-					//child.ParentObject = customGear;
-					child.ParentObject = new ClothingGear(customGearBase, characterGear);
-				}
-				else if (child.GetParentObject() is CustomGearFolderInfo customGearFolder)
-				{
-					UpdateChildren(customGearFolder, customGearBase);
-				}
-			}
-		}
-
         public override List<ICustomInfo> SortList(List<ICustomInfo> sourceList)
         {
             CurrentSort = (int)GearSortMethod.Name_ASC;
             
             return base.SortList(sourceList);
         }
-
     }
 }
