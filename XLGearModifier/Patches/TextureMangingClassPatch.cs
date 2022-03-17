@@ -19,19 +19,19 @@ namespace XLGearModifier.Patches
 
 				var split = texturePath.Split('/');
 
-				if (texturePath.EndsWith("Empty_Albedo.png"))
+				if (texturePath.EndsWith(GearManager.EmptyAlbedoFilename))
 				{
 					__result = Task.FromResult<Texture>(GearManager.Instance.EmptyAlbedo);
 					return false;
 				}
 
-                if (texturePath.EndsWith("Empty_Normal_Map.png"))
+                if (texturePath.EndsWith(GearManager.EmptyNormalFilename))
                 {
                     __result = Task.FromResult<Texture>(GearManager.Instance.EmptyNormalMap);
                     return false;
 				}
 
-                if (texturePath.EndsWith("Empty_Maskpbr_Map.png"))
+                if (texturePath.EndsWith(GearManager.EmptyMaskFilename))
                 {
                     __result = Task.FromResult<Texture>(GearManager.Instance.EmptyMaskPBR);
                     return false;

@@ -35,10 +35,14 @@ namespace XLGearModifier.CustomGear
         public Shader MasterShaderHair_AlphaTest_v1;
 
 		public Texture2D EmptyAlbedo;
-		public Texture2D EmptyMaskPBR;
-		public Texture2D EmptyNormalMap;
+        public Texture2D EmptyMaskPBR;
+        public Texture2D EmptyNormalMap;
 
-		public GearManager()
+        public const string EmptyAlbedoFilename = "Empty_Albedo.png";
+        public const string EmptyNormalFilename = "Empty_Normal_Map.png";
+        public const string EmptyMaskFilename = "Empty_Maskpbr_Map.png";
+
+        public GearManager()
 		{
 			CustomMeshes = new List<ICustomInfo>();
             CustomFemaleMeshes = new List<ICustomInfo>();
@@ -198,9 +202,9 @@ namespace XLGearModifier.CustomGear
 
             var textureChanges = new List<TextureChange>
             {
-                new TextureChange("albedo", $"{texturePath}/Empty_Albedo.png"),
-                new TextureChange("normal", $"{texturePath}/Empty_Normal_Map.png"),
-                new TextureChange("maskpbr", $"{texturePath}/Empty_Maskpbr_Map.png")
+                new TextureChange("albedo", $"{texturePath}/{EmptyAlbedoFilename}"),
+                new TextureChange("normal", $"{texturePath}/{EmptyNormalFilename}"),
+                new TextureChange("maskpbr", $"{texturePath}/{EmptyMaskFilename}")
             };
 
             var characterGearInfo = new CustomCharacterGearInfo(clothingGear.Metadata.Prefix, clothingGear.Metadata.Prefix, false, textureChanges.ToArray(), new List<string>().ToArray());
