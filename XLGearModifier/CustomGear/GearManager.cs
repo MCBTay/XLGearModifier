@@ -207,35 +207,22 @@ namespace XLGearModifier.CustomGear
             AddToList(clothingGear, characterGearInfo, destList, ref parent, false);
 		}
 
-        private void AddToList(CustomGearBase customGearBase, GearInfoSingleMaterial baseTexture, List<ICustomInfo> destList, ref CustomFolderInfo parent, bool isCustom)
+        private void AddToList(ClothingGear customGearBase, GearInfoSingleMaterial baseTexture, List<ICustomInfo> destList, ref CustomFolderInfo parent, bool isCustom)
 		{
 			var child = destList.FirstOrDefault(x => x.GetName().Equals(baseTexture.name, StringComparison.InvariantCultureIgnoreCase));
 			if (child != null) return;
 
-			if (customGearBase is BoardGear)
-			{
-				CustomBoardGearInfo gearInfo = new CustomBoardGearInfo(baseTexture.name, customGearBase.GearInfo.type, isCustom, baseTexture.textureChanges, customGearBase.GearInfo.tags);
-				gearInfo.Info.Parent = parent;
-				gearInfo.Info.ParentObject = new BoardGear(customGearBase, gearInfo);
-				destList.Add(gearInfo.Info);
+            var gearInfo = new CustomCharacterGearInfo(baseTexture.name, customGearBase.GearInfo.type, isCustom, baseTexture.textureChanges, customGearBase.GearInfo.tags);
+            gearInfo.Info.Parent = parent;
+            gearInfo.Info.ParentObject = new ClothingGear(customGearBase, gearInfo);
+            destList.Add(gearInfo.Info);
 
-				GearDatabase.Instance.boardGear.Add(gearInfo);
-			}
-			else
-			{
-				CustomCharacterGearInfo gearInfo = new CustomCharacterGearInfo(baseTexture.name, customGearBase.GearInfo.type, isCustom, baseTexture.textureChanges, customGearBase.GearInfo.tags);
-				gearInfo.Info.Parent = parent;
-				gearInfo.Info.ParentObject = new ClothingGear(customGearBase, gearInfo);
-				destList.Add(gearInfo.Info);
-
-				GearDatabase.Instance.clothingGear.Add(gearInfo);
-			}
-		}
+            GearDatabase.Instance.clothingGear.Add(gearInfo);
+        }
 
         public override List<ICustomInfo> SortList(List<ICustomInfo> sourceList)
         {
             CurrentSort = (int)GearSortMethod.Name_ASC;
-            
             return base.SortList(sourceList);
         }
     }
