@@ -147,12 +147,12 @@ namespace XLGearModifier.CustomGear
 		/// <param name="isCustom">True if the texture is on disk, false otherwise.</param>
 		/// <returns>The number of textures added.</returns>
 		public int AddTextures(ClothingGear clothingGear, GearInfo[][][] sourceList, List<ICustomInfo> destList, ref CustomFolderInfo parent, bool isCustom = false)
-		{
-            int skaterIndex = (int)SkaterBase.Male;
+        {
+            int skaterIndex = (int)clothingGear.ClothingMetadata.Skater;
 
-            if (clothingGear.Metadata is XLGMClothingGearMetadata clothingGearMetadata)
+            if (clothingGear.ClothingMetadata.BaseOnDefaultGear)
             {
-                skaterIndex = (int)clothingGearMetadata.Skater;
+                skaterIndex = clothingGear.GetSkaterIndexForDefaultGear();
             }
 
 			int categoryIndex = clothingGear.GetCategoryIndex(skaterIndex);
