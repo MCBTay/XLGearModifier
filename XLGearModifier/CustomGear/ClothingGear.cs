@@ -55,7 +55,7 @@ namespace XLGearModifier.CustomGear
         {
             if (materialController == null) return;
 
-            var textures = CreateTextureDictionary();
+            var textures = CreateDefaultTextureDictionary();
 
             if (ClothingMetadata.BaseOnDefaultGear)
             {
@@ -63,35 +63,42 @@ namespace XLGearModifier.CustomGear
                 return;
             }
 
-            var material = materialController.GenerateMaterialWithChanges(textures);
+            var alphaThreshold = 0f;
 
             // TODO: Because we're having to make the materials in HDRP/Lit in the editor (until we get their shader, hopefully)
             // we need to store off a copy of the normal and mask maps, and ensure we assign them to the correct property names once the shader has been changed.
             // Hopefully, if we can get access to their cloth shader, we can just assign properties directly in editor and get rid of most of this code.
-            var color = material.GetTexture("_BaseColorMap");
-            var normal = material.GetTexture("_NormalMap");
-            var mask = material.GetTexture("_MaskMap");
-            var alphaThreshold = material.GetFloat("_AlphaCutoff");
+            var materialCopy = materialController.GetMaterialCopy();
+            if (materialCopy != null)
+            {
+                var color = materialCopy.GetTexture("_BaseColorMap");
+                if (color != null) textures["color"] = color;
 
+                var normal = materialCopy.GetTexture("_NormalMap");
+                if (normal != null) textures["normal"] = normal;
+
+                var mask = materialCopy.GetTexture("_MaskMap");
+                if (mask != null) textures["maskpbr"] = mask;
+
+                materialCopy.SetFloat("_alpha_threshold", materialCopy.GetFloat("_AlphaCutoff"));
+            }
+
+            var isHair = ClothingMetadata.Category == Unity.ClothingGearCategory.Hair ||
+                         ClothingMetadata.Category == Unity.ClothingGearCategory.FacialHair;
+
+            var propNameSubs = new List<PropertyNameSubstitution>
+            {
+                new PropertyNameSubstitution { oldName = "color", newName = isHair ? "_texture_color" : "_texture2D_color" },
+                new PropertyNameSubstitution { oldName = "normal", newName = isHair ? "_texture_normal" : "_texture2D_normal" },
+                new PropertyNameSubstitution { oldName = "maskpbr", newName = isHair ? "_texture_mask" : "_texture2D_maskPBR" }
+            };
+            Traverse.Create(materialController).Field("m_propertyNameSubstitutions").SetValue(propNameSubs);
+
+            var material = materialController.GenerateMaterialWithChanges(textures);
             material.shader = GetClothingShader();
-            
-            if (ClothingMetadata.Category == Unity.ClothingGearCategory.Hair || ClothingMetadata.Category == Unity.ClothingGearCategory.FacialHair)
-            {
-                material.SetTexture("_texture_color", color);
-                material.SetTexture("_texture_normal", normal);
-                material.SetTexture("_texture_mask", mask);
-
-                material.SetFloat("_alpha_threshold", alphaThreshold);
-            }
-            else
-            {
-                material.SetTexture("_texture2D_color", color);
-                material.SetTexture("_texture2D_normal", normal);
-                material.SetTexture("_texture2D_maskPBR", mask);
-            }
-
             materialController.SetMaterial(material);
         }
+
         /// <summary>
         /// Intended to be used when an object is based on default gear.  This method looks up the prefab this gear item is based on, pulls the material off of it.
         /// Sets that base material as the original material, such that when we generate the new material with textures, it should have any normals/masks.
@@ -112,17 +119,17 @@ namespace XLGearModifier.CustomGear
         }
 
         /// <summary>
-        /// Creates a dictionary of textures for albedo, normal, and mask pbr.  If we can't find default texture information on the prefab we will use the empties bundled into mod.
+        /// Creates a dictionary of default textures for albedo, normal, and mask pbr using the empty textures in our project.
         /// </summary>
-        private Dictionary<string, Texture> CreateTextureDictionary()
+        private Dictionary<string, Texture> CreateDefaultTextureDictionary()
         {
-            var textures = new Dictionary<string, Texture>();
+            var textures = new Dictionary<string, Texture>
+            {
+                { "albedo", GearManager.Instance.EmptyAlbedo },
+                { "normal", GearManager.Instance.EmptyNormalMap },
+                { "maskpbr", GearManager.Instance.EmptyMaskPBR }
+            };
 
-            var defaultTexture = Metadata.GetMaterialInformation()?.DefaultTexture;
-
-            textures.Add("albedo", defaultTexture?.textureColor ?? GearManager.Instance.EmptyAlbedo);
-            textures.Add("normal", defaultTexture?.textureNormalMap ?? GearManager.Instance.EmptyNormalMap);
-            textures.Add("maskpbr", defaultTexture?.textureMaskPBR ?? GearManager.Instance.EmptyMaskPBR);
             //textures.Add(shaderName == "MasterShaderCloth_v2" ? "_texture2D_maskPBR" : "_texture2D_rgmtao", Metadata.GetMaterialInformation()?.DefaultTexture?.textureMaskPBR ?? AssetBundleHelper.Instance.EmptyMaskPBR);
 
             return textures;
