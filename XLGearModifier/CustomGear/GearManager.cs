@@ -22,9 +22,7 @@ namespace XLGearModifier.CustomGear
 		private static GearManager __instance;
 		public static GearManager Instance => __instance ?? (__instance = new GearManager());
 
-		public CustomFolderInfo CurrentFolder;
-		
-		public List<CustomGearBase> CustomGear;
+        public List<CustomGearBase> CustomGear;
 
 		public List<ICustomInfo> CustomMeshes;
         public List<ICustomInfo> CustomFemaleMeshes;
