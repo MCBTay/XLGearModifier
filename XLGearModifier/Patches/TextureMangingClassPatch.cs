@@ -5,7 +5,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using UnityEngine;
 using XLGearModifier.CustomGear;
-using XLGearModifier.Unity.ScriptableObjects;
 
 namespace XLGearModifier.Patches
 {
@@ -56,30 +55,8 @@ namespace XLGearModifier.Patches
                     return false;
                 }
 
-                var defaultTexture = customGear.Metadata?.GetMaterialInformation()?.DefaultTexture;
-                var altTextures = customGear.Metadata?.GetMaterialInformation()?.AlternativeTextures;
-
-                if (textureName == defaultTexture?.textureName)
-                {
-                    __result = Task.FromResult<Texture>(GetTextureByType(defaultTexture, textureType));
-                }
-                else if (altTextures != null && altTextures.Any(x => textureName == x.textureName && x.textureColor != null))
-                {
-                    __result = Task.FromResult<Texture>(GetTextureByType(altTextures.FirstOrDefault(x => textureName == x.textureName), textureType));
-                }
                 return false;
 			}
-
-            private static Texture2D GetTextureByType(XLGMTextureInfo textureInfo, string type)
-            {
-                switch (type)
-                {
-					case "albedo": return textureInfo.textureColor;
-					case "normal": return textureInfo.textureNormalMap;
-					case "maskpbr": return textureInfo.textureMaskPBR;
-                    default: return null;
-                }
-            }
-		}
+        }
 	}
 }
