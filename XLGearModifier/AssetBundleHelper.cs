@@ -9,6 +9,7 @@ using TMPro;
 using UnityEngine;
 using XLGearModifier.CustomGear;
 using XLGearModifier.Unity;
+using Object = UnityEngine.Object;
 
 namespace XLGearModifier
 {
@@ -42,6 +43,7 @@ namespace XLGearModifier
             }
 
             PlayerController.Instance.characterCustomizer.LoadLastPlayer();
+            GearDatabase.Instance.FetchCustomGear();
         }
 
 		private IEnumerator LoadBuiltInBundle(Assembly assembly, string bundleName)
@@ -76,7 +78,7 @@ namespace XLGearModifier
             yield return LoadPrefabBundle(assetBundle);
 
             assetBundle.Unload(false);
-		}
+        }
 
         /// <summary>
         /// Loads an embedded resource into a byte array.
@@ -132,7 +134,7 @@ namespace XLGearModifier
         /// <param name="assetName">The name of the asset to load.</param>
         /// <param name="callback"></param>
         /// <returns></returns>
-        private IEnumerator LoadAsset<T>(AssetBundle bundle, string assetName, Action<T> callback) where T : UnityEngine.Object
+        private IEnumerator LoadAsset<T>(AssetBundle bundle, string assetName, Action<T> callback) where T : Object
         {
             var assetLoadRequest = bundle.LoadAssetAsync<T>(assetName);
             yield return assetLoadRequest;
@@ -147,7 +149,7 @@ namespace XLGearModifier
         /// <param name="bundle"></param>
         /// <param name="startsWithName"></param>
         /// <param name="callback"></param>
-        public IEnumerator LoadAssets<T>(AssetBundle bundle, string startsWithName, Action<IList<T>> callback) where T : UnityEngine.Object
+        public IEnumerator LoadAssets<T>(AssetBundle bundle, string startsWithName, Action<IList<T>> callback) where T : Object
         {
             var assetLoadRequest = bundle.LoadAllAssetsAsync<T>();
             yield return assetLoadRequest;
@@ -206,16 +208,6 @@ namespace XLGearModifier
                         customGearBase.Instantiate();
 
                         GearManager.Instance.CustomGear.Add(customGearBase);
-
-                        switch (customGearBase)
-                        {
-                            case ClothingGear clothingGear:
-                                GearManager.Instance.AddClothingMesh(clothingGear.ClothingMetadata, clothingGear, asset);
-                                break;
-                            case BoardGear boardGear:
-                                GearManager.Instance.AddBoardMesh(boardGear.BoardMetadata, boardGear, asset);
-                                break;
-                        }
                     }
                     catch (Exception ex)
                     {
@@ -224,9 +216,6 @@ namespace XLGearModifier
                 }
 
                 Debug.Log("XLGearModifier: Loaded " + GearManager.Instance.CustomGear.Count + " assets");
-
-                GearManager.Instance.CustomMeshes = GearManager.Instance.CustomMeshes.OrderBy(x => Enum.Parse(typeof(ClothingGearCategory), x.GetName().Replace("\\", string.Empty))).ToList();
-                GearManager.Instance.CustomFemaleMeshes = GearManager.Instance.CustomFemaleMeshes.OrderBy(x => Enum.Parse(typeof(ClothingGearCategory), x.GetName().Replace("\\", string.Empty))).ToList();
             });
         }
         
@@ -247,6 +236,7 @@ namespace XLGearModifier
 			}
 
             PlayerController.Instance.characterCustomizer.LoadLastPlayer();
-		}
+            GearDatabase.Instance.FetchCustomGear();
+        }
     }
 }
