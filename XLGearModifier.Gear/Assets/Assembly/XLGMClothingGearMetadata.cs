@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using SkaterXL.Gear;
 using UnityEngine;
-using XLGearModifier.Unity.ScriptableObjects;
 
 namespace XLGearModifier.Unity
 {
@@ -54,10 +53,6 @@ namespace XLGearModifier.Unity
         [Tooltip("The base bottom to use textures from.")]
 		public BottomTypes BaseBottomType;
 
-		[HideInInspector]
-        [SerializeField]
-		public XLGMTextureSet TextureSet;
-
         public override string GetBaseType()
 		{  
 			switch (Category)
@@ -83,6 +78,5 @@ namespace XLGearModifier.Unity
 
 		public override string GetCategory() => Category.ToString();
 		public override bool BasedOnDefaultGear() => BaseOnDefaultGear;
-		public override XLGMTextureSet GetMaterialInformation() => TextureSet;
-	}
+    }
 }

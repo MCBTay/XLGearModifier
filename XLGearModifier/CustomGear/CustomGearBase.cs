@@ -51,7 +51,7 @@ namespace XLGearModifier.CustomGear
 		{
 			var gear = Traverse.Create(GearDatabase.Instance).Field("gearListSource").GetValue<GearInfo[][][]>();
 
-			var skaterIndex = GetSkaterIndex();
+			var skaterIndex = GetSkaterIndexForDefaultGear();
 			GearInfo[] officialGear = gear[skaterIndex][GetCategoryIndex(skaterIndex)];
 			return officialGear.Where(x => x.type.Equals(Metadata.GetBaseType(), StringComparison.InvariantCultureIgnoreCase)).Cast<GearInfoSingleMaterial>().FirstOrDefault();
 		}
@@ -64,11 +64,15 @@ namespace XLGearModifier.CustomGear
             return Metadata.Prefix;
         }
         
-        public int GetSkaterIndex()
+        /// <summary>
+        /// Returns the skater index of a default gear item.  Only to be used for items that are based on default gear.
+        /// </summary>
+        /// <returns>The index of the skater that the gear belongs to.</returns>
+        public int GetSkaterIndexForDefaultGear()
         {
             var skaterIndex = (int)XLMenuMod.Skater.MaleStandard;
 
-            var type = GetTypeName();
+            var type = Metadata.GetBaseType();
 
             if (string.IsNullOrEmpty(type)) return (int)XLMenuMod.Skater.MaleStandard;
 

@@ -105,9 +105,13 @@ namespace XLGearModifier.Patches
 						filter.allowCustomGear = true;
 					}
 				}
+            }
 
-				SkateShopTextureManager.Instance.LookForSkateshopTextures();
-				EyeTextureManager.Instance.LookForEyeTextures();
+            static void Postfix(GearDatabase __instance)
+            {
+                SkateShopTextureManager.Instance.LookForSkateshopTextures();
+                EyeTextureManager.Instance.LookForEyeTextures();
+				GearManager.Instance.LoadNestedItems();
             }
 		}
 
