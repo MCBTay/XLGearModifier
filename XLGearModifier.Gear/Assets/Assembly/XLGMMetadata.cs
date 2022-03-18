@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using XLGearModifier.Unity.ScriptableObjects;
 
 namespace XLGearModifier.Unity
 {
@@ -15,6 +14,5 @@ namespace XLGearModifier.Unity
 		public abstract string GetSprite();
 		public abstract string GetCategory();
 		public abstract bool BasedOnDefaultGear();
-		public abstract XLGMTextureSet GetMaterialInformation();
 	}
 }

@@ -49,7 +49,7 @@ namespace XLGearModifier.Patches
 				
 				if (index.depth == 1)
 				{
-					__result = 2 * GearDatabase.Instance.skaters[index[0]].GearFilters.Count + 4;
+					__result = 2 * GearDatabase.Instance.skaters[index[0]].GearFilters.Count + Enum.GetNames(typeof(GearModifierTab)).Length;
 				}
 
 				if (index.depth < 2) return;
@@ -471,17 +471,8 @@ namespace XLGearModifier.Patches
 		[HarmonyPatch(typeof(GearSelectionController), "Update")]
 		public static class UpdatePatch
 		{
-			public static bool needsXLGMInitialization = true;
-
 			static bool Prefix(GearSelectionController __instance)
 			{
-				if (__instance.initialized && needsXLGMInitialization)
-				{
-                    GearManager.Instance.LoadAssetCustomTextures();
-
-					needsXLGMInitialization = false;
-				}
-
 				if (__instance.listView.currentIndexPath.depth < 3) return true;
 				if (!IsOnXLGMTab(__instance.listView.currentIndexPath[1])) return true;
 

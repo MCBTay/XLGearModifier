@@ -33,8 +33,8 @@ namespace XLGearModifier.CustomGear
             GearInfo = new CustomCharacterGearInfo(name, ClothingMetadata.Prefix, false, GetDefaultTextureChanges(), new string[0]);
 
             SetTexturesAndShader();
-            AddPrefixToGearFilters();
-            AddCharacterGearTemplate();
+            AddGearFilters();
+            AddGearTemplates();
         }
 
         /// <summary>
@@ -55,7 +55,20 @@ namespace XLGearModifier.CustomGear
         {
             if (materialController == null) return;
 
-            var textures = CreateTextureDictionary();
+            var textures = CreateDefaultTextureDictionary();
+
+            var isHair = ClothingMetadata.Category == Unity.ClothingGearCategory.Hair ||
+                         ClothingMetadata.Category == Unity.ClothingGearCategory.FacialHair;
+
+            var propNameSubs = new List<PropertyNameSubstitution>
+            {
+                new PropertyNameSubstitution { oldName = "albedo", newName = isHair ? "_texture_color" : "_texture2D_color" },
+                new PropertyNameSubstitution { oldName = "normal", newName = isHair ? "_texture_normal" : "_texture2D_normal" },
+                new PropertyNameSubstitution { oldName = "maskpbr", newName = isHair ? "_texture_mask" : "_texture2D_maskPBR" }
+            };
+
+            var traverse = Traverse.Create(materialController);
+            traverse.Field("m_propertyNameSubstitutions").SetValue(propNameSubs);
 
             if (ClothingMetadata.BaseOnDefaultGear)
             {
@@ -63,35 +76,31 @@ namespace XLGearModifier.CustomGear
                 return;
             }
 
-            var material = materialController.GenerateMaterialWithChanges(textures);
+            var alphaThreshold = 0f;
 
             // TODO: Because we're having to make the materials in HDRP/Lit in the editor (until we get their shader, hopefully)
             // we need to store off a copy of the normal and mask maps, and ensure we assign them to the correct property names once the shader has been changed.
             // Hopefully, if we can get access to their cloth shader, we can just assign properties directly in editor and get rid of most of this code.
-            var color = material.GetTexture("_BaseColorMap");
-            var normal = material.GetTexture("_NormalMap");
-            var mask = material.GetTexture("_MaskMap");
-            var alphaThreshold = material.GetFloat("_AlphaCutoff");
-
-            material.shader = GetClothingShader();
-            
-            if (ClothingMetadata.Category == Unity.ClothingGearCategory.Hair || ClothingMetadata.Category == Unity.ClothingGearCategory.FacialHair)
+            var materialCopy = materialController.GetMaterialCopy();
+            if (materialCopy != null)
             {
-                material.SetTexture("_texture_color", color);
-                material.SetTexture("_texture_normal", normal);
-                material.SetTexture("_texture_mask", mask);
+                var color = materialCopy.GetTexture("_BaseColorMap");
+                if (color != null) textures["albedo"] = color;
 
-                material.SetFloat("_alpha_threshold", alphaThreshold);
-            }
-            else
-            {
-                material.SetTexture("_texture2D_color", color);
-                material.SetTexture("_texture2D_normal", normal);
-                material.SetTexture("_texture2D_maskPBR", mask);
+                var normal = materialCopy.GetTexture("_NormalMap");
+                if (normal != null) textures["normal"] = normal;
+
+                var mask = materialCopy.GetTexture("_MaskMap");
+                if (mask != null) textures["maskpbr"] = mask;
+
+                materialCopy.SetFloat("_alpha_threshold", materialCopy.GetFloat("_AlphaCutoff"));
             }
 
+            traverse.Field("_originalMaterial").GetValue<Material>().shader = GetClothingShader();
+            var material = materialController.GenerateMaterialWithChanges(textures);
             materialController.SetMaterial(material);
         }
+
         /// <summary>
         /// Intended to be used when an object is based on default gear.  This method looks up the prefab this gear item is based on, pulls the material off of it.
         /// Sets that base material as the original material, such that when we generate the new material with textures, it should have any normals/masks.
@@ -112,17 +121,17 @@ namespace XLGearModifier.CustomGear
         }
 
         /// <summary>
-        /// Creates a dictionary of textures for albedo, normal, and mask pbr.  If we can't find default texture information on the prefab we will use the empties bundled into mod.
+        /// Creates a dictionary of default textures for albedo, normal, and mask pbr using the empty textures in our project.
         /// </summary>
-        private Dictionary<string, Texture> CreateTextureDictionary()
+        private Dictionary<string, Texture> CreateDefaultTextureDictionary()
         {
-            var textures = new Dictionary<string, Texture>();
+            var textures = new Dictionary<string, Texture>
+            {
+                { "albedo", GearManager.Instance.EmptyAlbedo },
+                { "normal", GearManager.Instance.EmptyNormalMap },
+                { "maskpbr", GearManager.Instance.EmptyMaskPBR }
+            };
 
-            var defaultTexture = Metadata.GetMaterialInformation()?.DefaultTexture;
-
-            textures.Add("albedo", defaultTexture?.textureColor ?? GearManager.Instance.EmptyAlbedo);
-            textures.Add("normal", defaultTexture?.textureNormalMap ?? GearManager.Instance.EmptyNormalMap);
-            textures.Add("maskpbr", defaultTexture?.textureMaskPBR ?? GearManager.Instance.EmptyMaskPBR);
             //textures.Add(shaderName == "MasterShaderCloth_v2" ? "_texture2D_maskPBR" : "_texture2D_rgmtao", Metadata.GetMaterialInformation()?.DefaultTexture?.textureMaskPBR ?? AssetBundleHelper.Instance.EmptyMaskPBR);
 
             return textures;
@@ -141,63 +150,56 @@ namespace XLGearModifier.CustomGear
             return GearManager.Instance.MasterShaderCloth_v2;
         }
 
-        private void AddPrefixToGearFilters()
+        #region GearFilter methods
+        private void AddGearFilters()
         {
             var skaterIndex = (int)ClothingMetadata.Skater;
-
             var typeFilter = GearDatabase.Instance.skaters[skaterIndex].GearFilters[GetCategoryIndex(skaterIndex)];
 
-            if (!typeFilter.includedTypes.Contains(Metadata.Prefix))
-            {
-                Array.Resize(ref typeFilter.includedTypes, typeFilter.includedTypes.Length + 1);
-                typeFilter.includedTypes[typeFilter.includedTypes.Length - 1] = Metadata.Prefix;
-            }
-
-            AddPrefixAliasToGearFilters(typeFilter);
+            AddGearFilter(ClothingMetadata.Prefix, typeFilter);
+            AddGearFilter(ClothingMetadata.PrefixAlias, typeFilter);
         }
 
-        /// <summary>
-        /// Adds the PrefixAlias to the TypeFilter.includedTypes list if it is not already there.
-        /// </summary>
-        /// <param name="typeFilter"></param>
-        private void AddPrefixAliasToGearFilters(TypeFilter typeFilter)
+        private void AddGearFilter(string type, TypeFilter typeFilter)
         {
-            if (string.IsNullOrEmpty(ClothingMetadata.PrefixAlias)) return;
-            if (typeFilter.includedTypes.Contains(ClothingMetadata.PrefixAlias)) return;
+            if (string.IsNullOrEmpty(type)) return;
+            if (typeFilter.includedTypes.Contains(type)) return;
 
             Array.Resize(ref typeFilter.includedTypes, typeFilter.includedTypes.Length + 1);
-            typeFilter.includedTypes[typeFilter.includedTypes.Length - 1] = ClothingMetadata.PrefixAlias;
+            typeFilter.includedTypes[typeFilter.includedTypes.Length - 1] = type;
+        }
+        #endregion
+
+        #region GearTemplate methods
+        /// <summary>
+        /// Adds the Prefix and Prefix Alias (if exists) to the CharGearTemplateForID dictionary in GearDatabase.
+        /// </summary>
+        private void AddGearTemplates()
+        {
+            AddGearTemplate(ClothingMetadata.Prefix);
+            AddGearTemplate(ClothingMetadata.PrefixAlias, true);
         }
 
-        private void AddCharacterGearTemplate()
+        private void AddGearTemplate(string templateId, bool isAlias = false)
         {
-            if (GearDatabase.Instance.ContainsClothingTemplateWithID(ClothingMetadata.Prefix)) return;
+            if (string.IsNullOrEmpty(templateId)) return;
+            if (GearDatabase.Instance.ContainsClothingTemplateWithID(templateId)) return;
 
-            var newGearTemplate = new CharacterGearTemplate
+            var path = "XLGearModifier";
+            if (isAlias) path += "/alias";
+            path += $"/{Prefab.name}";
+
+            var template = new CharacterGearTemplate
             {
                 alphaMasks = new List<GearAlphaMaskConfig>(),
                 category = MapCategory(ClothingMetadata.Category),
-                id = ClothingMetadata.Prefix.ToLower(),
-                path = $"XLGearModifier/{Prefab.name}"
+                id = templateId.ToLower(),
+                path = path
             };
 
-            AddOrUpdateTemplateAlphaMasks(ClothingMetadata, newGearTemplate);
+            if (!isAlias) AddOrUpdateTemplateAlphaMasks(ClothingMetadata, template);
 
-            GearDatabase.Instance.CharGearTemplateForID.Add(ClothingMetadata.Prefix.ToLower(), newGearTemplate);
-
-            if (string.IsNullOrEmpty(ClothingMetadata.PrefixAlias)) return;
-
-            if (GearDatabase.Instance.ContainsClothingTemplateWithID(ClothingMetadata.PrefixAlias)) return;
-
-            var newAliasTemplate = new CharacterGearTemplate
-            {
-                alphaMasks = new List<GearAlphaMaskConfig>(),
-                category = newGearTemplate.category,
-                id = ClothingMetadata.PrefixAlias.ToLower(),
-                path = $"XLGearModifier/alias/{ClothingMetadata.PrefixAlias.ToLower()}"
-            };
-
-            GearDatabase.Instance.CharGearTemplateForID.Add(ClothingMetadata.PrefixAlias.ToLower(), newAliasTemplate);
+            GearDatabase.Instance.CharGearTemplateForID.Add(templateId.ToLower(), template);
         }
 
         private ClothingGearCategory MapCategory(Unity.ClothingGearCategory category)
@@ -240,6 +242,7 @@ namespace XLGearModifier.CustomGear
                 }
             }
         }
+        #endregion
 
         public override int GetCategoryIndex(int skaterIndex)
         {

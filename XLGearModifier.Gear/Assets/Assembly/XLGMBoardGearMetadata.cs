@@ -1,6 +1,5 @@
 ﻿using System;
 using UnityEngine;
-using XLGearModifier.Unity.ScriptableObjects;
 
 namespace XLGearModifier.Unity
 {
@@ -33,6 +32,5 @@ namespace XLGearModifier.Unity
 		public override string GetSprite() => null;
 		public override string GetCategory() => Category.ToString();
 		public override bool BasedOnDefaultGear() => BaseOnDefaultGear;
-		public override XLGMTextureSet GetMaterialInformation() => null;
-	}
+    }
 }
