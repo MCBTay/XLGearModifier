@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: c3a99abddbc95e046848f2c401a4f6ae
+guid: 7ac40cd9b69e56847a2a888ed061d04e
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -100,5 +100,5 @@ TextureImporter:
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0
   userData: 
-  assetBundleName: facialhair
+  assetBundleName: hair
   assetBundleVariant: 
