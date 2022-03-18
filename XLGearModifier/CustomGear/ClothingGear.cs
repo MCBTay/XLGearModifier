@@ -33,8 +33,8 @@ namespace XLGearModifier.CustomGear
             GearInfo = new CustomCharacterGearInfo(name, ClothingMetadata.Prefix, false, GetDefaultTextureChanges(), new string[0]);
 
             SetTexturesAndShader();
-            AddPrefixToGearFilters();
-            AddCharacterGearTemplate();
+            AddGearFilters();
+            AddGearTemplates();
         }
 
         /// <summary>
@@ -148,63 +148,56 @@ namespace XLGearModifier.CustomGear
             return GearManager.Instance.MasterShaderCloth_v2;
         }
 
-        private void AddPrefixToGearFilters()
+        #region GearFilter methods
+        private void AddGearFilters()
         {
             var skaterIndex = (int)ClothingMetadata.Skater;
-
             var typeFilter = GearDatabase.Instance.skaters[skaterIndex].GearFilters[GetCategoryIndex(skaterIndex)];
 
-            if (!typeFilter.includedTypes.Contains(Metadata.Prefix))
-            {
-                Array.Resize(ref typeFilter.includedTypes, typeFilter.includedTypes.Length + 1);
-                typeFilter.includedTypes[typeFilter.includedTypes.Length - 1] = Metadata.Prefix;
-            }
-
-            AddPrefixAliasToGearFilters(typeFilter);
+            AddGearFilter(ClothingMetadata.Prefix, typeFilter);
+            AddGearFilter(ClothingMetadata.PrefixAlias, typeFilter);
         }
 
-        /// <summary>
-        /// Adds the PrefixAlias to the TypeFilter.includedTypes list if it is not already there.
-        /// </summary>
-        /// <param name="typeFilter"></param>
-        private void AddPrefixAliasToGearFilters(TypeFilter typeFilter)
+        private void AddGearFilter(string type, TypeFilter typeFilter)
         {
-            if (string.IsNullOrEmpty(ClothingMetadata.PrefixAlias)) return;
-            if (typeFilter.includedTypes.Contains(ClothingMetadata.PrefixAlias)) return;
+            if (string.IsNullOrEmpty(type)) return;
+            if (typeFilter.includedTypes.Contains(type)) return;
 
             Array.Resize(ref typeFilter.includedTypes, typeFilter.includedTypes.Length + 1);
-            typeFilter.includedTypes[typeFilter.includedTypes.Length - 1] = ClothingMetadata.PrefixAlias;
+            typeFilter.includedTypes[typeFilter.includedTypes.Length - 1] = type;
+        }
+        #endregion
+
+        #region GearTemplate methods
+        /// <summary>
+        /// Adds the Prefix and Prefix Alias (if exists) to the CharGearTemplateForID dictionary in GearDatabase.
+        /// </summary>
+        private void AddGearTemplates()
+        {
+            AddGearTemplate(ClothingMetadata.Prefix);
+            AddGearTemplate(ClothingMetadata.PrefixAlias, true);
         }
 
-        private void AddCharacterGearTemplate()
+        private void AddGearTemplate(string templateId, bool isAlias = false)
         {
-            if (GearDatabase.Instance.ContainsClothingTemplateWithID(ClothingMetadata.Prefix)) return;
+            if (string.IsNullOrEmpty(templateId)) return;
+            if (GearDatabase.Instance.ContainsClothingTemplateWithID(templateId)) return;
 
-            var newGearTemplate = new CharacterGearTemplate
+            var path = "XLGearModifier";
+            if (isAlias) path += "/alias";
+            path += $"/{Prefab.name}";
+
+            var template = new CharacterGearTemplate
             {
                 alphaMasks = new List<GearAlphaMaskConfig>(),
                 category = MapCategory(ClothingMetadata.Category),
-                id = ClothingMetadata.Prefix.ToLower(),
-                path = $"XLGearModifier/{Prefab.name}"
+                id = templateId.ToLower(),
+                path = path
             };
 
-            AddOrUpdateTemplateAlphaMasks(ClothingMetadata, newGearTemplate);
+            if (!isAlias) AddOrUpdateTemplateAlphaMasks(ClothingMetadata, template);
 
-            GearDatabase.Instance.CharGearTemplateForID.Add(ClothingMetadata.Prefix.ToLower(), newGearTemplate);
-
-            if (string.IsNullOrEmpty(ClothingMetadata.PrefixAlias)) return;
-
-            if (GearDatabase.Instance.ContainsClothingTemplateWithID(ClothingMetadata.PrefixAlias)) return;
-
-            var newAliasTemplate = new CharacterGearTemplate
-            {
-                alphaMasks = new List<GearAlphaMaskConfig>(),
-                category = newGearTemplate.category,
-                id = ClothingMetadata.PrefixAlias.ToLower(),
-                path = $"XLGearModifier/alias/{ClothingMetadata.PrefixAlias.ToLower()}"
-            };
-
-            GearDatabase.Instance.CharGearTemplateForID.Add(ClothingMetadata.PrefixAlias.ToLower(), newAliasTemplate);
+            GearDatabase.Instance.CharGearTemplateForID.Add(templateId.ToLower(), template);
         }
 
         private ClothingGearCategory MapCategory(Unity.ClothingGearCategory category)
@@ -247,6 +240,7 @@ namespace XLGearModifier.CustomGear
                 }
             }
         }
+        #endregion
 
         public override int GetCategoryIndex(int skaterIndex)
         {
