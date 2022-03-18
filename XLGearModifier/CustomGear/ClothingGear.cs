@@ -69,7 +69,12 @@ namespace XLGearModifier.CustomGear
 
             // Because hair/clothing gear are on different shaders, all of Easy Day's hair has this substitution.
             // We're just doing it here in code to avoid every hair in editor needing to add it.
-            if (isHair) propNameSubs.Add(new PropertyNameSubstitution { oldName = "_texture2D_color", newName = "_texture_color" });
+            if (isHair)
+            {
+                propNameSubs.Add(new PropertyNameSubstitution { oldName = "_texture2D_color", newName = "_texture_color" });
+                propNameSubs.Add(new PropertyNameSubstitution { oldName = "_texture2D_normal", newName = "_texture_normal" });
+                propNameSubs.Add(new PropertyNameSubstitution { oldName = "_texture2D_maskPBR", newName = "_texture_mask" });
+            }
 
             var traverse = Traverse.Create(materialController);
             traverse.Field("m_propertyNameSubstitutions").SetValue(propNameSubs);
