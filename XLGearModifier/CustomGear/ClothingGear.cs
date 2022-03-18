@@ -57,6 +57,19 @@ namespace XLGearModifier.CustomGear
 
             var textures = CreateDefaultTextureDictionary();
 
+            var isHair = ClothingMetadata.Category == Unity.ClothingGearCategory.Hair ||
+                         ClothingMetadata.Category == Unity.ClothingGearCategory.FacialHair;
+
+            var propNameSubs = new List<PropertyNameSubstitution>
+            {
+                new PropertyNameSubstitution { oldName = "albedo", newName = isHair ? "_texture_color" : "_texture2D_color" },
+                new PropertyNameSubstitution { oldName = "normal", newName = isHair ? "_texture_normal" : "_texture2D_normal" },
+                new PropertyNameSubstitution { oldName = "maskpbr", newName = isHair ? "_texture_mask" : "_texture2D_maskPBR" }
+            };
+
+            var traverse = Traverse.Create(materialController);
+            traverse.Field("m_propertyNameSubstitutions").SetValue(propNameSubs);
+
             if (ClothingMetadata.BaseOnDefaultGear)
             {
                 SetBaseMaterial(textures, materialController);
@@ -72,7 +85,7 @@ namespace XLGearModifier.CustomGear
             if (materialCopy != null)
             {
                 var color = materialCopy.GetTexture("_BaseColorMap");
-                if (color != null) textures["color"] = color;
+                if (color != null) textures["albedo"] = color;
 
                 var normal = materialCopy.GetTexture("_NormalMap");
                 if (normal != null) textures["normal"] = normal;
@@ -83,19 +96,8 @@ namespace XLGearModifier.CustomGear
                 materialCopy.SetFloat("_alpha_threshold", materialCopy.GetFloat("_AlphaCutoff"));
             }
 
-            var isHair = ClothingMetadata.Category == Unity.ClothingGearCategory.Hair ||
-                         ClothingMetadata.Category == Unity.ClothingGearCategory.FacialHair;
-
-            var propNameSubs = new List<PropertyNameSubstitution>
-            {
-                new PropertyNameSubstitution { oldName = "color", newName = isHair ? "_texture_color" : "_texture2D_color" },
-                new PropertyNameSubstitution { oldName = "normal", newName = isHair ? "_texture_normal" : "_texture2D_normal" },
-                new PropertyNameSubstitution { oldName = "maskpbr", newName = isHair ? "_texture_mask" : "_texture2D_maskPBR" }
-            };
-            Traverse.Create(materialController).Field("m_propertyNameSubstitutions").SetValue(propNameSubs);
-
+            traverse.Field("_originalMaterial").GetValue<Material>().shader = GetClothingShader();
             var material = materialController.GenerateMaterialWithChanges(textures);
-            material.shader = GetClothingShader();
             materialController.SetMaterial(material);
         }
 
