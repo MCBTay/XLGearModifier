@@ -38,7 +38,7 @@ namespace XLGearModifier.CustomGear
         }
 
         /// <summary>
-        /// Adds the default texture from XLGMTextureSet (if exists, else uses empties), and puts the asset material on the MasterShaderCloth_v2 shader.
+        /// Adds the default textures from the material (if they exist, else fall back to empties) to the material, and puts the asset material on the MasterShaderCloth_v2 or MasterShaderHair_AlphaTest_v1 shader.
         /// </summary>
         private void SetTexturesAndShader()
         {
@@ -51,6 +51,11 @@ namespace XLGearModifier.CustomGear
             }
         }
 
+        /// <summary>
+        /// Recreates the material on the material controller to use proper textures as well as the proper shader.  Sets any necessary
+        /// PropertyNameSubstitutions and creates a dictionary of textures to be used when calling GenerateMaterialWithChanges.
+        /// </summary>
+        /// <param name="materialController">The material controller to recreate the material on.</param>
         private void CreateMaterialWithTexturesOnProperShader(MaterialController materialController)
         {
             if (materialController == null) return;
@@ -65,30 +70,24 @@ namespace XLGearModifier.CustomGear
                 return;
             }
 
-            var alphaThreshold = 0f;
-
-            // TODO: Because we're having to make the materials in HDRP/Lit in the editor (until we get their shader, hopefully)
-            // we need to store off a copy of the normal and mask maps, and ensure we assign them to the correct property names once the shader has been changed.
-            // Hopefully, if we can get access to their cloth shader, we can just assign properties directly in editor and get rid of most of this code.
-            var materialCopy = materialController.GetMaterialCopy();
-            if (materialCopy != null)
-            {
-                var color = materialCopy.GetTexture("_BaseColorMap");
-                if (color != null) textures["albedo"] = color;
-
-                var normal = materialCopy.GetTexture("_NormalMap");
-                if (normal != null) textures["normal"] = normal;
-
-                var mask = materialCopy.GetTexture("_MaskMap");
-                if (mask != null) textures["maskpbr"] = mask;
-
-                materialCopy.SetFloat("_alpha_threshold", materialCopy.GetFloat("_AlphaCutoff"));
-            }
+            float alphaThreshold = -1;
 
             var traverse = Traverse.Create(materialController);
-            traverse.Field("_originalMaterial").GetValue<Material>().shader = GetClothingShader();
+            var originalMaterial = traverse.Property("originalMaterial").GetValue<Material>();
+
+            textures = UpdateTextureDictionaryWithMaterialTextures(originalMaterial, textures);
+
+            if (originalMaterial.HasProperty("_AlphaCutoff"))
+            {
+                alphaThreshold = originalMaterial.GetFloat("_AlphaCutoff");
+            }
+
+            SetShaderOnOriginalMaterial(materialController);
 
             var material = materialController.GenerateMaterialWithChanges(textures);
+
+            if (alphaThreshold > 0) material.SetFloat("_alpha_threshold", alphaThreshold);
+
             materialController.SetMaterial(material);
         }
 
@@ -103,6 +102,7 @@ namespace XLGearModifier.CustomGear
             var isHair = ClothingMetadata.Category == Unity.ClothingGearCategory.Hair ||
                          ClothingMetadata.Category == Unity.ClothingGearCategory.FacialHair;
 
+            //TODO: This 3 entries below can likely be removed once we get access to their shaders.
             var propNameSubs = new List<PropertyNameSubstitution>
             {
                 new PropertyNameSubstitution { oldName = "albedo", newName = isHair ? "_texture_color" : "_texture2D_color" },
@@ -121,6 +121,45 @@ namespace XLGearModifier.CustomGear
 
             var traverse = Traverse.Create(materialController);
             traverse.Field("m_propertyNameSubstitutions").SetValue(propNameSubs);
+        }
+
+        /// <summary>
+        /// Pulls _BaseColorMap, _NormalMap, and _MaskMap off of the original material (assuming the material is using HDRP/Lit shader), and updates the textures dictionary passed in
+        /// with their values (if they exist).  This should leave us with a textures dictionary that defaults to our empty textures, and an textures on the material should overwrite them,
+        /// which should give us our desired texture fallback.
+        /// </summary>
+        /// <param name="originalMaterial">The material to pull textures off of.</param>
+        /// <param name="textures">The collection of textures to update, should be a list of the 3 empty textures on the way in.</param>
+        /// <returns>A dictionary of textures that should be the textures off the material (if they existed), else the empty textures.</returns>
+        private Dictionary<string, Texture> UpdateTextureDictionaryWithMaterialTextures(Material originalMaterial, Dictionary<string, Texture> textures)
+        {
+            // TODO: Because we're having to make the materials in HDRP/Lit in the editor (until we get their shader, hopefully)
+            // we need to store off a copy of the normal and mask maps, and ensure we assign them to the correct property names once the shader has been changed.
+            // Hopefully, if we can get access to their cloth shader, we can just assign properties directly in editor and get rid of most of this code.
+            if (originalMaterial == null) return textures;
+
+            var color = originalMaterial.GetTexture("_BaseColorMap");
+            if (color != null) textures["albedo"] = color;
+
+            var normal = originalMaterial.GetTexture("_NormalMap");
+            if (normal != null) textures["normal"] = normal;
+
+            var mask = originalMaterial.GetTexture("_MaskMap");
+            if (mask != null) textures["maskpbr"] = mask;
+
+            return textures;
+        }
+
+        /// <summary>
+        /// Sets the shader on _originalMaterial to the clothing or hair shader depending on the asset.  This allows the material generated by
+        /// GenerateMaterialWithChanges to already be on the proper shader, such that we can leverage the PropertyNameSubstitutions to handle shader
+        /// property name differences.
+        /// </summary>
+        /// <param name="materialController"></param>
+        private void SetShaderOnOriginalMaterial(MaterialController materialController)
+        {
+            var traverse = Traverse.Create(materialController);
+            traverse.Field("_originalMaterial").GetValue<Material>().shader = GetClothingShader();
         }
 
         /// <summary>
