@@ -57,27 +57,7 @@ namespace XLGearModifier.CustomGear
 
             var textures = CreateDefaultTextureDictionary();
 
-            var isHair = ClothingMetadata.Category == Unity.ClothingGearCategory.Hair ||
-                         ClothingMetadata.Category == Unity.ClothingGearCategory.FacialHair;
-
-            var propNameSubs = new List<PropertyNameSubstitution>
-            {
-                new PropertyNameSubstitution { oldName = "albedo", newName = isHair ? "_texture_color" : "_texture2D_color" },
-                new PropertyNameSubstitution { oldName = "normal", newName = isHair ? "_texture_normal" : "_texture2D_normal" },
-                new PropertyNameSubstitution { oldName = "maskpbr", newName = isHair ? "_texture_mask" : "_texture2D_maskPBR" }
-            };
-
-            // Because hair/clothing gear are on different shaders, all of Easy Day's hair has this substitution.
-            // We're just doing it here in code to avoid every hair in editor needing to add it.
-            if (isHair)
-            {
-                propNameSubs.Add(new PropertyNameSubstitution { oldName = "_texture2D_color", newName = "_texture_color" });
-                propNameSubs.Add(new PropertyNameSubstitution { oldName = "_texture2D_normal", newName = "_texture_normal" });
-                propNameSubs.Add(new PropertyNameSubstitution { oldName = "_texture2D_maskPBR", newName = "_texture_mask" });
-            }
-
-            var traverse = Traverse.Create(materialController);
-            traverse.Field("m_propertyNameSubstitutions").SetValue(propNameSubs);
+            SetPropertyNameSubstitutions(materialController);
 
             if (ClothingMetadata.BaseOnDefaultGear)
             {
@@ -105,9 +85,42 @@ namespace XLGearModifier.CustomGear
                 materialCopy.SetFloat("_alpha_threshold", materialCopy.GetFloat("_AlphaCutoff"));
             }
 
+            var traverse = Traverse.Create(materialController);
             traverse.Field("_originalMaterial").GetValue<Material>().shader = GetClothingShader();
+
             var material = materialController.GenerateMaterialWithChanges(textures);
             materialController.SetMaterial(material);
+        }
+
+        /// <summary>
+        /// Sets property name substitutions to handle all of our assets coming from HDRP/Lit to go to Easy Day shaders.  Most of this code
+        /// can hopefully get removed once we get native access to their shaders.  Also adds property name substitutions for hair, to mimic what
+        /// Easy Day does with their own hair meshes in editor.
+        /// </summary>
+        /// <param name="materialController">The material controller to operate on</param>
+        private void SetPropertyNameSubstitutions(MaterialController materialController)
+        {
+            var isHair = ClothingMetadata.Category == Unity.ClothingGearCategory.Hair ||
+                         ClothingMetadata.Category == Unity.ClothingGearCategory.FacialHair;
+
+            var propNameSubs = new List<PropertyNameSubstitution>
+            {
+                new PropertyNameSubstitution { oldName = "albedo", newName = isHair ? "_texture_color" : "_texture2D_color" },
+                new PropertyNameSubstitution { oldName = "normal", newName = isHair ? "_texture_normal" : "_texture2D_normal" },
+                new PropertyNameSubstitution { oldName = "maskpbr", newName = isHair ? "_texture_mask" : "_texture2D_maskPBR" }
+            };
+
+            // Because hair/clothing gear are on different shaders, all of Easy Day's hair has this substitution for color.
+            // We're just doing it here in code to avoid every hair in editor needing to add it.
+            if (isHair)
+            {
+                propNameSubs.Add(new PropertyNameSubstitution { oldName = "_texture2D_color", newName = "_texture_color" });
+                propNameSubs.Add(new PropertyNameSubstitution { oldName = "_texture2D_normal", newName = "_texture_normal" });
+                propNameSubs.Add(new PropertyNameSubstitution { oldName = "_texture2D_maskPBR", newName = "_texture_mask" });
+            }
+
+            var traverse = Traverse.Create(materialController);
+            traverse.Field("m_propertyNameSubstitutions").SetValue(propNameSubs);
         }
 
         /// <summary>
