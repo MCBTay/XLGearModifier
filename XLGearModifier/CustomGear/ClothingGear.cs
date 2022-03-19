@@ -18,12 +18,16 @@ namespace XLGearModifier.CustomGear
     {
         public XLGMClothingGearMetadata ClothingMetadata => Metadata as XLGMClothingGearMetadata;
 
+        public List<BlendShapeInfo> BlendShapes { get; set; }
+
         public ClothingGear(XLGMClothingGearMetadata metadata, GameObject prefab) : base(metadata, prefab)
         {
+            BlendShapes = new List<BlendShapeInfo>();
         }
 
         public ClothingGear(CustomGearBase customGearBase, CustomCharacterGearInfo gearInfo) : base(customGearBase, gearInfo)
         {
+            BlendShapes = new List<BlendShapeInfo>();
         }
 
         public override void Instantiate()
@@ -32,9 +36,31 @@ namespace XLGearModifier.CustomGear
 
             GearInfo = new CustomCharacterGearInfo(name, ClothingMetadata.Prefix, false, GetDefaultTextureChanges(), new string[0]);
 
+            GetBlendshapes();
             SetTexturesAndShader();
             AddGearFilters();
             AddGearTemplates();
+        }
+
+        private void GetBlendshapes()
+        {
+            var skinnedMeshRenderers = Prefab.GetComponentsInChildren<SkinnedMeshRenderer>();
+            if (skinnedMeshRenderers == null || !skinnedMeshRenderers.Any()) return;
+
+            foreach (var skinnedMeshRenderer in skinnedMeshRenderers)
+            {
+                var skinnedMesh = skinnedMeshRenderer?.sharedMesh;
+                if (skinnedMesh == null) continue;
+                if (skinnedMesh.blendShapeCount == 0) continue;
+
+                for (int i = 0; i < skinnedMesh.blendShapeCount; i++)
+                {
+                    var name = skinnedMesh.GetBlendShapeName(i);
+                    var weight = skinnedMeshRenderer.GetBlendShapeWeight(i);
+                    var blendShape = new BlendShapeInfo(i, name, weight);
+                    BlendShapes.Add(blendShape);
+                }
+            }
         }
 
         /// <summary>
