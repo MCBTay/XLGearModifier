@@ -25,9 +25,9 @@ namespace XLGearModifier.CustomGear
             BlendShapes = new List<BlendShapeInfo>();
         }
 
-        public ClothingGear(CustomGearBase customGearBase, CustomCharacterGearInfo gearInfo) : base(customGearBase, gearInfo)
+        public ClothingGear(ClothingGear gearToClone, CustomCharacterGearInfo gearInfo) : base(gearToClone, gearInfo)
         {
-            BlendShapes = new List<BlendShapeInfo>();
+            BlendShapes = gearToClone.BlendShapes;
         }
 
         public override void Instantiate()

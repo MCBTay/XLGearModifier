@@ -28,7 +28,7 @@ namespace XLGearModifier.CustomGear
 			Prefab = prefab;
 		}
 
-		protected CustomGearBase(CustomGearBase gearBaseToClone, GearInfoSingleMaterial gearInfo) : this(gearBaseToClone.Metadata, gearBaseToClone.Prefab)
+		protected CustomGearBase(CustomGearBase gearToClone, GearInfoSingleMaterial gearInfo) : this(gearToClone.Metadata, gearToClone.Prefab)
 		{
 			GearInfo = gearInfo;
 		}
