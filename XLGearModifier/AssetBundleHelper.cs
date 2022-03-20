@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Assets.Assembly.EditAsset;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -108,10 +109,16 @@ namespace XLGearModifier
             foreach (var asset in assets)
             {
                 var whatsEquippedPrefab = asset.GetComponent<XLGMWhatsEquippedUserInterface>();
-                if (whatsEquippedPrefab == null) continue;
+                if (whatsEquippedPrefab != null)
+                {
+                    UserInterfaceHelper.Instance.WhatsEquippedUserInterfacePrefab = asset;
+                }
 
-                UserInterfaceHelper.Instance.WhatsEquippedUserInterfacePrefab = asset;
-                yield break;
+                var editAssetPrefab = asset.GetComponent<XLGMAssetEdit>();
+                if (editAssetPrefab != null)
+                {
+                    UserInterfaceHelper.Instance.EditAssetUserInterfacePrefab = asset;
+                }
             }
         }
 
