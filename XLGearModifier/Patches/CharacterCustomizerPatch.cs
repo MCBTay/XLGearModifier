@@ -1,6 +1,10 @@
 ﻿using HarmonyLib;
 using SkaterXL.Data;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using XLGearModifier.CustomGear;
+using XLGearModifier.Unity;
 using XLMenuMod.Utilities;
 using XLMenuMod.Utilities.Gear;
 using XLMenuMod.Utilities.Gear.Interfaces;
@@ -26,5 +30,37 @@ namespace XLGearModifier.Patches
 				return true;
 			}
 		}
-	}
+
+        [HarmonyPatch(typeof(CharacterCustomizer), nameof(CharacterCustomizer.LoadCustomizations))]
+        static class LoadCustomizationsPatch
+        {
+            static void Postfix(CharacterCustomizer __instance, CustomizedPlayerDataV2 data)
+            {
+                var traverse = Traverse.Create(__instance);
+
+                var equippedGear = traverse.Field("equippedGear").GetValue<List<ClothingGearObjet>>();
+                if (equippedGear == null || !equippedGear.Any()) return;
+
+                foreach (var clothingGearObject in equippedGear)
+                {
+                    var blendShapeController = clothingGearObject.gameObject.GetComponentInChildren<XLGMBlendShapeController>();
+                    if (blendShapeController?.BlendShapes == null) continue;
+
+                    foreach (var blendshape in blendShapeController.BlendShapes)
+                    {
+                        blendShapeController.SkinnedMeshRenderer.SetBlendShapeWeight(blendshape.index, blendshape.weight);
+                    }
+                }
+            }
+        }
+
+        [HarmonyPatch(typeof(SaveManager), nameof(SaveManager.LoadCharacterCustomizations))]
+        static class LoadCharacterCustomizationsPatch
+        {
+            static void Postfix(SaveManager __instance, Task<CustomizedPlayerDataV2> __result)
+            {
+                int x = 5;
+            }
+        }
+    }
 }
