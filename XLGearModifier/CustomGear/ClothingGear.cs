@@ -44,7 +44,7 @@ namespace XLGearModifier.CustomGear
 
         private void GetBlendshapes()
         {
-            var skinnedMeshRenderers = Prefab.GetComponentsInChildren<SkinnedMeshRenderer>();
+            var skinnedMeshRenderers = Prefab.GetComponentsInChildren<SkinnedMeshRenderer>(true);
             if (skinnedMeshRenderers == null || !skinnedMeshRenderers.Any()) return;
 
             foreach (var skinnedMeshRenderer in skinnedMeshRenderers)
