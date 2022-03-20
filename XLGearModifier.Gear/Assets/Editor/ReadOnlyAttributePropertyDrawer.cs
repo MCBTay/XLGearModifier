@@ -1,6 +1,6 @@
 ﻿using UnityEditor;
 using UnityEngine;
-using XLGearModifier.Unity;
+using XLGearModifier.Unity.Attributes;
 
 namespace Assets.Editor
 {
