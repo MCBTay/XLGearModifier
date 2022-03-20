@@ -11,7 +11,7 @@ namespace XLGearModifier.CustomGear
 
         public XLGMCustomCharacterGearInfo(string name, string type, bool isCustom, TextureChange[] textureChanges, string[] tags) : base(name, type, isCustom, textureChanges, tags)
         {
-
+            blendShapes = new List<XLGMBlendShapeData>();
         }
     }
 }
