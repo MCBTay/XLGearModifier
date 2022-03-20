@@ -403,7 +403,12 @@ namespace XLGearModifier.Patches
 				__instance.listView.UpdateList();
 
 				UserInterfaceHelper.Instance.RefreshWhatsEquippedList(___skaterCustomizations, index);
-			}
+
+                if (gear is CustomCharacterGearInfo ccgi)
+                {
+                    UserInterfaceHelper.Instance.RefreshAssetEdit(__instance.previewCustomizer, ccgi.Info.ParentObject as ClothingGear);
+				}
+            }
 		}
 
 		[HarmonyPatch(typeof(GearSelectionController), "ListView_OnItemHighlightedEvent")]
