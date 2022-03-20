@@ -1,4 +1,5 @@
-﻿using SkaterXL.Data;
+﻿using HarmonyLib;
+using SkaterXL.Data;
 using SkaterXL.Gear;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,6 +7,7 @@ using TMPro;
 using UnityEngine;
 using XLGearModifier.CustomGear;
 using XLGearModifier.Unity;
+using XLGearModifier.Unity.EditAsset;
 using ClothingGearCategory = SkaterXL.Gear.ClothingGearCategory;
 using Object = UnityEngine.Object;
 
@@ -20,9 +22,12 @@ namespace XLGearModifier
         public List<Sprite> GearModifierUISpriteSheetSprites;
 
 		public GameObject WhatsEquippedUserInterfacePrefab;
-
-		public GameObject whatsEquippedUI;
+        public GameObject whatsEquippedUI;
 		public XLGMWhatsEquippedUserInterface whatsEquipped;
+
+        public GameObject EditAssetUserInterfacePrefab;
+        public GameObject editAssetUI;
+        public XLGMAssetEdit editAsset;
 
 		public void CreateWhatsEquippedUserInterface()
 		{
@@ -100,5 +105,54 @@ namespace XLGearModifier
 
 			return spriteIndex;
 		}
-	}
+
+        public void CreateAssetEditUserInterface()
+        {
+            if (editAssetUI != null && editAssetUI.activeInHierarchy) return;
+
+            if (editAssetUI == null)
+            {
+                editAssetUI = Object.Instantiate(EditAssetUserInterfacePrefab);
+                Object.DontDestroyOnLoad(editAssetUI);
+            }
+
+            editAssetUI.SetActive(true);
+            editAsset = editAssetUI.GetComponentInChildren<XLGMAssetEdit>(true);
+        }
+
+        public void DestroyAssetEditUserInterface()
+        {
+            if (editAssetUI == null) return;
+
+            editAssetUI.SetActive(false);
+            Object.DestroyImmediate(editAssetUI);
+            editAssetUI = null;
+        }
+
+        public void RefreshAssetEdit(CharacterCustomizer characterCustomizer, ClothingGear clothingGear)
+        {
+            editAsset.ClearList();
+
+            if (clothingGear.BlendShapes == null || !clothingGear.BlendShapes.Any()) return;
+
+            var traverse = Traverse.Create(characterCustomizer);
+
+            foreach (var blendShape in clothingGear.BlendShapes)
+            {
+                editAsset.AddSlider(blendShape.Name, blendShape.Weight, value =>
+                {
+                    var equippedGear = traverse.Field("equippedGear").GetValue<List<ClothingGearObjet>>();
+                    var gear = equippedGear.FirstOrDefault(x => x.gearInfo.type == clothingGear.GearInfo.type)?.gameObject;
+                    if (gear == null) return;
+
+                    var renderers = gear.GetComponentsInChildren<SkinnedMeshRenderer>();
+
+                    foreach (var renderer in renderers)
+                    {
+                        renderer.SetBlendShapeWeight(blendShape.Index, value);
+                    }
+                });
+            }
+        }
+    }
 }
