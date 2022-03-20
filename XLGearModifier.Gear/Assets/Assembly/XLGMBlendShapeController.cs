@@ -8,18 +8,19 @@ namespace XLGearModifier.Unity
     [Serializable]
     public class XLGMBlendShapeController : MonoBehaviour
     {
-        [ReadOnly] 
         public SkinnedMeshRenderer SkinnedMeshRenderer;
 
-        [ReadOnly] 
         public Mesh SkinnedMesh;
 
-        [ReadOnly] 
+        [SerializeField]
         public List<XLGMBlendShapeData> BlendShapes;
 
         public void Start()
         {
-            BlendShapes = new List<XLGMBlendShapeData>();
+            if (BlendShapes == null)
+            {
+                BlendShapes = new List<XLGMBlendShapeData>();
+            }
         }
 
         public void GetBlendShapeData(GameObject gameObject)
