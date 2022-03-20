@@ -48,6 +48,7 @@ namespace XLGearModifier.CustomGear
         {
             BlendShapeController = Prefab.GetComponentInChildren<XLGMBlendShapeController>(true);
 
+            if (BlendShapeController == null) return;
             if (BlendShapeController.BlendShapes != null) return;
 
             BlendShapeController.BlendShapes = new List<XLGMBlendShapeData>();
