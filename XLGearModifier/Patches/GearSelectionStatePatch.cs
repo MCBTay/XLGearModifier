@@ -11,6 +11,7 @@ namespace XLGearModifier.Patches
 			static void Postfix()
 			{
 				UserInterfaceHelper.Instance.CreateWhatsEquippedUserInterface();
+                UserInterfaceHelper.Instance.CreateAssetEditUserInterface();
 			}
 		}
 
@@ -20,6 +21,7 @@ namespace XLGearModifier.Patches
 			static void Postfix()
 			{
 				UserInterfaceHelper.Instance.DestroyWhatsEquippedUserInterface();
+                UserInterfaceHelper.Instance.DestroyAssetEditUserInterface();
 			}
 		}
 	}
