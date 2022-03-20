@@ -219,7 +219,10 @@ namespace XLGearModifier.CustomGear
                 new TextureChange("maskpbr", $"{texturePath}/{EmptyMaskFilename}")
             };
 
-            var characterGearInfo = new CustomCharacterGearInfo(clothingGear.Metadata.Prefix, clothingGear.Metadata.Prefix, false, textureChanges.ToArray(), new List<string>().ToArray());
+            var characterGearInfo = new XLGMCustomCharacterGearInfo(clothingGear.Metadata.Prefix, clothingGear.Metadata.Prefix, false, textureChanges.ToArray(), new List<string>().ToArray())
+            {
+                blendShapes = clothingGear.BlendShapeController?.BlendShapes
+            };
             AddToList(clothingGear, characterGearInfo, destList, ref parent, false);
 		}
 
@@ -228,7 +231,10 @@ namespace XLGearModifier.CustomGear
 			var child = destList.FirstOrDefault(x => x.GetName().Equals(baseTexture.name, StringComparison.InvariantCultureIgnoreCase));
 			if (child != null) return;
 
-            var gearInfo = new CustomCharacterGearInfo(baseTexture.name, clothingGear.GearInfo.type, isCustom, baseTexture.textureChanges, clothingGear.GearInfo.tags);
+            var gearInfo = new XLGMCustomCharacterGearInfo(baseTexture.name, clothingGear.GearInfo.type, isCustom, baseTexture.textureChanges, clothingGear.GearInfo.tags)
+            {
+                blendShapes = clothingGear.BlendShapeController?.BlendShapes
+            };
             gearInfo.Info.Parent = parent;
             gearInfo.Info.ParentObject = new ClothingGear(clothingGear, gearInfo);
             destList.Add(gearInfo.Info);
