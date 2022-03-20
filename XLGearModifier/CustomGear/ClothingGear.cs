@@ -18,16 +18,18 @@ namespace XLGearModifier.CustomGear
     {
         public XLGMClothingGearMetadata ClothingMetadata => Metadata as XLGMClothingGearMetadata;
 
-        public List<BlendShapeInfo> BlendShapes { get; set; }
+        public XLGMCustomCharacterGearInfo XLGMGearInfo => GearInfo as XLGMCustomCharacterGearInfo;
+
+        public XLGMBlendShapeController BlendShapeController { get; set; }
 
         public ClothingGear(XLGMClothingGearMetadata metadata, GameObject prefab) : base(metadata, prefab)
         {
-            BlendShapes = new List<BlendShapeInfo>();
+
         }
 
         public ClothingGear(ClothingGear gearToClone, CustomCharacterGearInfo gearInfo) : base(gearToClone, gearInfo)
         {
-            BlendShapes = gearToClone.BlendShapes;
+            BlendShapeController = gearToClone.BlendShapeController;
         }
 
         public override void Instantiate()
@@ -36,30 +38,32 @@ namespace XLGearModifier.CustomGear
 
             GearInfo = new CustomCharacterGearInfo(name, ClothingMetadata.Prefix, false, GetDefaultTextureChanges(), new string[0]);
 
-            GetBlendshapes();
+            GetBlendShapeController();
             SetTexturesAndShader();
             AddGearFilters();
             AddGearTemplates();
         }
 
-        private void GetBlendshapes()
+        private void GetBlendShapeController()
         {
-            var skinnedMeshRenderers = Prefab.GetComponentsInChildren<SkinnedMeshRenderer>(true);
-            if (skinnedMeshRenderers == null || !skinnedMeshRenderers.Any()) return;
+            BlendShapeController = Prefab.GetComponentInChildren<XLGMBlendShapeController>(true);
 
-            foreach (var skinnedMeshRenderer in skinnedMeshRenderers)
+            if (BlendShapeController.BlendShapes != null) return;
+
+            BlendShapeController.BlendShapes = new List<XLGMBlendShapeData>();
+
+            //TODO: This is a hack, figure out why the blendshapes are coming through null from editor
+            for (int i = 0; i < BlendShapeController.SkinnedMesh.blendShapeCount; i++)
             {
-                var skinnedMesh = skinnedMeshRenderer?.sharedMesh;
-                if (skinnedMesh == null) continue;
-                if (skinnedMesh.blendShapeCount == 0) continue;
+                var name = BlendShapeController.SkinnedMesh.GetBlendShapeName(i);
+                var weight = BlendShapeController.SkinnedMeshRenderer.GetBlendShapeWeight(i);
 
-                for (int i = 0; i < skinnedMesh.blendShapeCount; i++)
+                BlendShapeController.BlendShapes.Add(new XLGMBlendShapeData
                 {
-                    var name = skinnedMesh.GetBlendShapeName(i);
-                    var weight = skinnedMeshRenderer.GetBlendShapeWeight(i);
-                    var blendShape = new BlendShapeInfo(i, name, weight);
-                    BlendShapes.Add(blendShape);
-                }
+                    index = i,
+                    name = name,
+                    weight = weight
+                });
             }
         }
 
