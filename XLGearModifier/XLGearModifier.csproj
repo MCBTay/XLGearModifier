@@ -118,12 +118,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssetBundleHelper.cs" />
-    <Compile Include="CustomGear\BlendShapeInfo.cs" />
     <Compile Include="CustomGear\BoardGear.cs" />
     <Compile Include="CustomGear\ClothingGear.cs" />
     <Compile Include="CustomGear\CustomGearBase.cs" />
     <Compile Include="CustomGear\Skater.cs" />
     <Compile Include="CustomGear\GearManager.cs" />
+    <Compile Include="CustomGear\XLGMCustomCharacterGearInfo.cs" />
     <Compile Include="Main.cs" />
     <Compile Include="Patches\CharacterCustomizerPatch.cs" />
     <Compile Include="Patches\CustomizedPlayerDataV2Patch.cs" />
