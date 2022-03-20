@@ -1,5 +1,4 @@
-﻿using Assets.Assembly.EditAsset;
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -10,6 +9,7 @@ using TMPro;
 using UnityEngine;
 using XLGearModifier.CustomGear;
 using XLGearModifier.Unity;
+using XLGearModifier.Unity.EditAsset;
 using Object = UnityEngine.Object;
 
 namespace XLGearModifier
