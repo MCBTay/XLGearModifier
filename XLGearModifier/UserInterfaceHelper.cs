@@ -29,6 +29,7 @@ namespace XLGearModifier
         public GameObject editAssetUI;
         public XLGMAssetEdit editAsset;
 
+		#region What's Equipped
 		public void CreateWhatsEquippedUserInterface()
 		{
 			if (whatsEquippedUI != null && whatsEquippedUI.activeInHierarchy) return;
@@ -105,8 +106,10 @@ namespace XLGearModifier
 
 			return spriteIndex;
 		}
+		#endregion
 
-        public void CreateAssetEditUserInterface()
+		#region Asset Edit
+		public void CreateAssetEditUserInterface()
         {
             if (editAssetUI != null && editAssetUI.activeInHierarchy) return;
 
@@ -133,26 +136,43 @@ namespace XLGearModifier
         {
             editAsset.ClearList();
 
-            if (clothingGear.BlendShapes == null || !clothingGear.BlendShapes.Any()) return;
+            if (clothingGear.BlendShapeController == null) return;
+            if (clothingGear.BlendShapeController.SkinnedMesh == null) return;
+			if (clothingGear.BlendShapeController.SkinnedMeshRenderer == null) return;
+            if (clothingGear.BlendShapeController.BlendShapes == null) return;
+            if (!clothingGear.BlendShapeController.BlendShapes.Any()) return;
 
-            var traverse = Traverse.Create(characterCustomizer);
-
-            foreach (var blendShape in clothingGear.BlendShapes)
+            foreach (var blendShape in clothingGear.BlendShapeController.BlendShapes)
             {
-                editAsset.AddSlider(blendShape.Name, blendShape.Weight, value =>
-                {
-                    var equippedGear = traverse.Field("equippedGear").GetValue<List<ClothingGearObjet>>();
-                    var gear = equippedGear.FirstOrDefault(x => x.gearInfo.type == clothingGear.GearInfo.type)?.gameObject;
-                    if (gear == null) return;
-
-                    var renderers = gear.GetComponentsInChildren<SkinnedMeshRenderer>();
-
-                    foreach (var renderer in renderers)
-                    {
-                        renderer.SetBlendShapeWeight(blendShape.Index, value);
-                    }
-                });
+                editAsset.AddSlider(blendShape.name, blendShape.weight, x => SliderValueChanged(characterCustomizer, clothingGear, blendShape, x));
             }
         }
-    }
+
+        private void SliderValueChanged(CharacterCustomizer characterCustomizer, ClothingGear clothingGear, XLGMBlendShapeData blendShape, float value)
+        {
+            var traverse = Traverse.Create(characterCustomizer);
+			var equippedGear = traverse.Field("equippedGear").GetValue<List<ClothingGearObjet>>();
+
+            var clothingGearObject = equippedGear.FirstOrDefault(x => x.gearInfo.type == clothingGear.GearInfo.type);
+
+            var gear = clothingGearObject?.gameObject;
+            if (gear == null) return;
+
+            var renderers = gear.GetComponentsInChildren<SkinnedMeshRenderer>();
+
+            foreach (var renderer in renderers)
+            {
+                renderer.SetBlendShapeWeight(blendShape.index, value);
+
+                var gearInfo = clothingGearObject.gearInfo as XLGMCustomCharacterGearInfo;
+                if (gearInfo == null) continue;
+
+                var found = gearInfo.blendShapes.FirstOrDefault(x => x.index == blendShape.index);
+                if (found == null) continue;
+
+                found.weight = value;
+            }
+		}
+		#endregion
+	}
 }
