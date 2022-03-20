@@ -230,7 +230,7 @@ namespace XLGearModifier.CustomGear
 
             var gearInfo = new CustomCharacterGearInfo(baseTexture.name, customGearBase.GearInfo.type, isCustom, baseTexture.textureChanges, customGearBase.GearInfo.tags);
             gearInfo.Info.Parent = parent;
-            gearInfo.Info.ParentObject = new ClothingGear(customGearBase, gearInfo);
+            gearInfo.Info.ParentObject = new ClothingGear(customGearBase, gearInfo) { BlendShapes = customGearBase.BlendShapes };
             destList.Add(gearInfo.Info);
 
             GearDatabase.Instance.clothingGear.Add(gearInfo);
