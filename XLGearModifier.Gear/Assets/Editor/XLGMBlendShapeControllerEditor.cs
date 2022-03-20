@@ -14,12 +14,16 @@ namespace XLGearModifier.Assets.Editor
             if (GUILayout.Button("Get BlendShape Data"))
             {
                 item.GetBlendShapeData(item.gameObject);
+                EditorUtility.SetDirty(item);
             }
 
             if (GUILayout.Button("Clear BlendShape Data"))
             {
                 item.ClearBlendShapeData();
+                EditorUtility.SetDirty(item);
             }
+
+            serializedObject.ApplyModifiedProperties();
 
             this.DrawDefaultInspector();
         }
