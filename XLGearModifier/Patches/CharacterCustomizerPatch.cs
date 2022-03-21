@@ -44,9 +44,12 @@ namespace XLGearModifier.Patches
                 foreach (var clothingGearObject in equippedGear)
                 {
                     var blendShapeController = clothingGearObject.gameObject.GetComponentInChildren<XLGMBlendShapeController>();
-                    if (blendShapeController?.BlendShapes == null) continue;
+                    if (blendShapeController == null) continue;
 
-                    foreach (var blendshape in blendShapeController.BlendShapes)
+                    var xlgmGearInfo = clothingGearObject.gearInfo as XLGMCustomCharacterGearInfo;
+                    if (xlgmGearInfo == null) continue;
+
+                    foreach (var blendshape in xlgmGearInfo.blendShapes)
                     {
                         blendShapeController.SkinnedMeshRenderer.SetBlendShapeWeight(blendshape.index, blendshape.weight);
                     }
