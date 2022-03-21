@@ -2,17 +2,18 @@
 using System.Linq;
 using System.Threading.Tasks;
 using UnityEngine;
+using XLGearModifier.CustomGear;
 
 namespace XLGearModifier.Patches
 {
     public class GearObjectPatch
 	{
-		[HarmonyPatch(typeof(GearObject), "LoadPrefab")]
+        [HarmonyPatch(typeof(GearObject), "LoadPrefab")]
 		public static class LoadPrefabPatch
 		{
 			static bool Prefix(GearObject __instance, string path, ref Task<GameObject> __result)
 			{
-				if (!path.StartsWith("XLGearModifier")) return true;
+                if (!path.StartsWith("XLGearModifier")) return true;
 
 				var customGear = GearManager.Instance.CustomGear.FirstOrDefault(x => x.GearInfo != null && x.GearInfo.type == __instance.gearInfo.type);
 				if (customGear == null) return true;
