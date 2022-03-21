@@ -2,7 +2,6 @@
 using SkaterXL.Data;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using XLGearModifier.CustomGear;
 using XLGearModifier.Unity;
 using XLMenuMod.Utilities;
@@ -54,15 +53,6 @@ namespace XLGearModifier.Patches
                         blendShapeController.SkinnedMeshRenderer.SetBlendShapeWeight(blendshape.index, blendshape.weight);
                     }
                 }
-            }
-        }
-
-        [HarmonyPatch(typeof(SaveManager), nameof(SaveManager.LoadCharacterCustomizations))]
-        static class LoadCharacterCustomizationsPatch
-        {
-            static void Postfix(SaveManager __instance, Task<CustomizedPlayerDataV2> __result)
-            {
-                int x = 5;
             }
         }
     }
