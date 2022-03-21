@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
+using XLGearModifier.Texturing;
 using XLGearModifier.Unity;
 using XLMenuMod;
 using XLMenuMod.Utilities.Gear;
@@ -134,7 +135,7 @@ namespace XLGearModifier.CustomGear
 
             if (ClothingMetadata.BaseOnDefaultGear)
             {
-                var baseTextures = GearManager.Instance.BaseGameTextures[ClothingMetadata.GetBaseType().ToLower()];
+                var baseTextures = BaseGameTextureManager.Instance.BaseGameTextures[ClothingMetadata.GetBaseType().ToLower()];
                 textures["normal"] = baseTextures["normal"];
                 textures["maskpbr"] = baseTextures["maskpbr"];
 
@@ -189,10 +190,10 @@ namespace XLGearModifier.CustomGear
         {
             if (ClothingMetadata.Category == Unity.ClothingGearCategory.Hair || ClothingMetadata.Category == Unity.ClothingGearCategory.FacialHair)
             {
-                return GearManager.Instance.MasterShaderHair_AlphaTest_v1;
+                return BaseGameTextureManager.Instance.MasterShaderHair_AlphaTest_v1;
             }
 
-            return GearManager.Instance.MasterShaderCloth_v2;
+            return BaseGameTextureManager.Instance.MasterShaderCloth_v2;
         }
 
         #region GearFilter methods
