@@ -42,7 +42,7 @@ namespace XLGearModifier.Patches
 
                 foreach (var clothingGearObject in equippedGear)
                 {
-                    var blendShapeController = clothingGearObject.gameObject.GetComponentInChildren<XLGMBlendShapeController>();
+                    var blendShapeController = clothingGearObject.gameObject?.GetComponentInChildren<XLGMBlendShapeController>();
                     if (blendShapeController == null) continue;
 
                     var xlgmGearInfo = clothingGearObject.gearInfo as XLGMCustomCharacterGearInfo;
