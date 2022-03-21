@@ -2,7 +2,7 @@
 using System.Linq;
 using UnityEngine;
 
-namespace XLGearModifier
+namespace XLGearModifier.Texturing
 {
     public class SkateShopTextureManager
     {
