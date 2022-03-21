@@ -71,7 +71,7 @@
 		MShoesEtniesMarana,
 		MShoesLakaiCambridge,
 		MShoesLakaiNewport,
-		MShoesLakaSheffield,
+		MShoesLakaiSheffield,
 		MShoesNewBalance255,
 		MShoesNewBalance288S,
 		MShoesNewBalance913,
