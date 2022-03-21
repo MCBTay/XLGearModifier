@@ -64,12 +64,6 @@ namespace XLGearModifier.CustomGear
 
             SetPropertyNameSubstitutions(materialController);
 
-            if (ClothingMetadata.BaseOnDefaultGear)
-            {
-                SetBaseMaterial(textures, materialController);
-                return;
-            }
-
             float alphaThreshold = -1;
 
             var traverse = Traverse.Create(materialController);
@@ -138,6 +132,15 @@ namespace XLGearModifier.CustomGear
             // Hopefully, if we can get access to their cloth shader, we can just assign properties directly in editor and get rid of most of this code.
             if (originalMaterial == null) return textures;
 
+            if (ClothingMetadata.BaseOnDefaultGear)
+            {
+                var baseTextures = GearManager.Instance.BaseGameTextures[ClothingMetadata.GetBaseType().ToLower()];
+                textures["normal"] = baseTextures["normal"];
+                textures["maskpbr"] = baseTextures["maskpbr"];
+
+                return textures;
+            }
+
             var color = originalMaterial.GetTexture("_BaseColorMap");
             if (color != null) textures["albedo"] = color;
 
@@ -160,25 +163,6 @@ namespace XLGearModifier.CustomGear
         {
             var traverse = Traverse.Create(materialController);
             traverse.Field("_originalMaterial").GetValue<Material>().shader = GetClothingShader();
-        }
-
-        /// <summary>
-        /// Intended to be used when an object is based on default gear.  This method looks up the prefab this gear item is based on, pulls the material off of it.
-        /// Sets that base material as the original material, such that when we generate the new material with textures, it should have any normals/masks.
-        /// </summary>
-        /// <param name="textures"></param>
-        /// <param name="materialController"></param>
-        /// <returns></returns>
-        private async Task SetBaseMaterial(Dictionary<string, Texture> textures, MaterialController materialController)
-        {
-            var baseObject = await GetBaseObject();
-            var renderer = baseObject.GetComponentInChildren<Renderer>();
-
-            // set original material such that when we call generate, the new material will be based off of this one.
-            Traverse.Create(materialController).Field("_originalMaterial").SetValue(renderer.material);
-
-            var newMaterial = materialController.GenerateMaterialWithChanges(textures);
-            materialController.SetMaterial(newMaterial);
         }
 
         /// <summary>
