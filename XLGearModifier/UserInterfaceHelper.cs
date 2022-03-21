@@ -72,44 +72,39 @@ namespace XLGearModifier
 			}
 		}
 
-		private int GetSpriteIndex(CharacterGearTemplate template)
-		{
-			int spriteIndex = 0;
+        private int GetSpriteIndex(CharacterGearTemplate template)
+        {
+            if (GearManager.Instance.CustomGear.FirstOrDefault(x => x.Metadata.Prefix.ToLower() == template.id) is ClothingGear customGear)
+            {
+                var spriteName = customGear.Metadata.GetSprite();
+                return GearModifierUISpriteSheet.GetSpriteIndexFromName(spriteName);
+            }
 
-			switch (template.category)
-			{
-				case ClothingGearCategory.Shoes:
-					
-					spriteIndex = GearModifierUISpriteSheet.GetSpriteIndexFromName("Shoes");
-					break;
-				case ClothingGearCategory.Hoodie:
-				case ClothingGearCategory.LongSleeve:
-				case ClothingGearCategory.Shirt:
-				case ClothingGearCategory.TankTop:
-					spriteIndex = GearModifierUISpriteSheet.GetSpriteIndexFromName("Top");
-					break;
-				case ClothingGearCategory.Pants:
-				case ClothingGearCategory.PantsRolledUp:
-				case ClothingGearCategory.Shorts:
-					spriteIndex = GearModifierUISpriteSheet.GetSpriteIndexFromName("Bottom");
-					break;
-				case ClothingGearCategory.Socks:
-					spriteIndex = GearModifierUISpriteSheet.GetSpriteIndexFromName("Socks");
-					break;
-				case ClothingGearCategory.Hat:
-					spriteIndex = GearModifierUISpriteSheet.GetSpriteIndexFromName("Headwear");
-					break;
-				default:
-					spriteIndex = GearModifierUISpriteSheet.GetSpriteIndexFromName("Other");
-					break;
-			}
+            switch (template.category)
+            {
+                case ClothingGearCategory.Shoes:
+                    return GearModifierUISpriteSheet.GetSpriteIndexFromName("Shoes");
+                case ClothingGearCategory.Hoodie:
+                case ClothingGearCategory.LongSleeve:
+                case ClothingGearCategory.Shirt:
+                case ClothingGearCategory.TankTop:
+                    return GearModifierUISpriteSheet.GetSpriteIndexFromName("Top");
+                case ClothingGearCategory.Pants:
+                case ClothingGearCategory.PantsRolledUp:
+                case ClothingGearCategory.Shorts:
+                    return GearModifierUISpriteSheet.GetSpriteIndexFromName("Bottom");
+                case ClothingGearCategory.Socks:
+                    return GearModifierUISpriteSheet.GetSpriteIndexFromName("Socks");
+                case ClothingGearCategory.Hat:
+                    return GearModifierUISpriteSheet.GetSpriteIndexFromName("Headwear");
+                default:
+                    return GearModifierUISpriteSheet.GetSpriteIndexFromName("Other");
+            }
+        }
+        #endregion
 
-			return spriteIndex;
-		}
-		#endregion
-
-		#region Asset Edit
-		public void CreateAssetEditUserInterface()
+        #region Asset Edit
+        public void CreateAssetEditUserInterface()
         {
             if (editAssetUI != null && editAssetUI.activeInHierarchy) return;
 
