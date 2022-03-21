@@ -1,4 +1,5 @@
 ﻿using HarmonyLib;
+using Newtonsoft.Json;
 using SkaterXL.Data;
 using System;
 using System.Linq;
@@ -40,5 +41,18 @@ namespace XLGearModifier.Patches
                 return customizedPlayerDataV2;
 			}
 		}
+
+        /// <summary>
+        /// Patching into <see cref="CustomizedPlayerDataV2.FromString"/> in order to be able to deserialize the player JSON file
+        /// into our own class, <see cref="XLGMCustomizedPlayerData"/>.
+        /// </summary>
+        [HarmonyPatch(typeof(CustomizedPlayerDataV2), nameof(CustomizedPlayerDataV2.FromString))]
+        public static class FromStringPatch
+        {
+            static void Postfix(string json, CustomizedPlayerDataV2 __result)
+            {
+                __result = JsonConvert.DeserializeObject<XLGMCustomizedPlayerData>(json);
+            }
+        }
 	}
 }
