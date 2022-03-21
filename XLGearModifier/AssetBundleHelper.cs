@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 using XLGearModifier.CustomGear;
+using XLGearModifier.Texturing;
 using XLGearModifier.Unity;
 using XLGearModifier.Unity.EditAsset;
 using Object = UnityEngine.Object;
@@ -23,7 +24,7 @@ namespace XLGearModifier
 
         public async Task LoadBundles()
         {
-            await GearManager.Instance.LoadGameShaders();
+            await BaseGameTextureManager.Instance.LoadGameMaterials();
 
             // We're solely making a call here to ensure that the unity assembly is loaded up prior to loading assets.  else we'll get a bunch of errors about things missing.
             var test = GearModifierTab.CustomMeshes;
