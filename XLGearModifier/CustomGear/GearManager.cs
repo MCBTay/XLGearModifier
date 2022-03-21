@@ -40,6 +40,8 @@ namespace XLGearModifier.CustomGear
         public const string EmptyNormalFilename = "Empty_Normal_Map.png";
         public const string EmptyMaskFilename = "Empty_Maskpbr_Map.png";
 
+        public Dictionary<string, Dictionary<string, Texture>> BaseGameTextures;
+
         public GearManager()
 		{
 			CustomMeshes = new List<ICustomInfo>();
@@ -48,42 +50,60 @@ namespace XLGearModifier.CustomGear
 			CustomGear = new List<CustomGearBase>();
 
             Eyes = new List<ICustomInfo>();
+
+            BaseGameTextures = new Dictionary<string, Dictionary<string, Texture>>();
         }
 
         /// <summary>
-        /// Loads shaders from the base game.  Currently loads up a clothing shader and a hair shader.
+        /// Loads materials from the base game.  Loads materials for tops, bottoms, shoes, headwear, and hair.
         /// </summary>
-        public async Task LoadGameShaders()
+        public async Task LoadGameMaterials()
         {
             await Task.WhenAll(new List<Task>
             {
-                LoadClothingShader(),
-                LoadHairShader()
+                LoadBaseMaterials<TopTypes>(),
+                LoadBaseMaterials<BottomTypes>(),
+                LoadBaseMaterials<ShoeTypes>(),
+                LoadBaseMaterials<HeadwearTypes>(),
+                LoadBaseMaterials<HairStyles>(true)
             });
         }
 
-        /// <summary>
-        /// Saves a handle to the current shader being used on MShirt such that we can use it on other custom gear.
-        /// </summary>
-        private async Task LoadClothingShader()
+        private async Task LoadBaseMaterials<T>(bool isHair = false) where T : Enum
         {
-            MasterShaderCloth_v2 = await LoadBaseGameAssetShader(TopTypes.MShirt.ToString().ToLower());
-		}
+            var names = Enum.GetNames(typeof(T)).Select(x => x.ToLower());
 
-        /// <summary>
-        /// Saves a handle to the current shader being used on MHairCounterpart such that we can use it on other custom gear.
-        /// </summary>
-        private async Task LoadHairShader()
-        {
-            MasterShaderHair_AlphaTest_v1 = await LoadBaseGameAssetShader(HairStyles.MHairCounterpart.ToString().ToLower());
+            foreach (var name in names)
+            {
+                var material = await LoadBaseGameAssetMaterial(name);
+                if (material == null) continue;
+
+                if (name == TopTypes.MShirt.ToString().ToLower() && MasterShaderCloth_v2 == null)
+                {
+                    MasterShaderCloth_v2 = material.shader;
+                }
+
+                if (name == HairStyles.MHairCounterpart.ToString().ToLower() && MasterShaderHair_AlphaTest_v1 == null)
+                {
+                    MasterShaderHair_AlphaTest_v1 = material.shader;
+                }
+
+                var textures = new Dictionary<string, Texture>
+                {
+                    { "normal", material.GetTexture(isHair ? "_texture_normal" : "_texture2D_normal") },
+                    { "maskpbr", material.GetTexture(isHair ? "_texture_mask" : "_texture2D_maskPBR") }
+                };
+
+                BaseGameTextures.Add(name, textures);
+            }
         }
 
         /// <summary>
-        /// Finds the shader being used by the specified TemplateId and returns it.  Has to load the prefab from the Addressables system in order to be able to get that reference to the shader.
+        /// Finds the material being used by the specified TemplateId and returns it.  Has to load the prefab from the Addressables system in order to be able to get that reference to the material.
         /// </summary>
         /// <param name="templateId">The template/mesh to get the shader for.</param>
         /// <returns>A reference to the shader being used by the mesh/template.</returns>
-        private async Task<Shader> LoadBaseGameAssetShader(string templateId)
+        private async Task<Material> LoadBaseGameAssetMaterial(string templateId)
         {
             var template = GearDatabase.Instance.CharGearTemplateForID[templateId];
             if (template == null) return null;
@@ -100,7 +120,10 @@ namespace XLGearModifier.CustomGear
             var materialController = result.GetComponentInChildren<MaterialController>();
             if (materialController == null) return null;
 
-			return materialController?.targets?.FirstOrDefault()?.renderer.material.shader;
+            var target = materialController.targets?.FirstOrDefault();
+            if (target == null) return null;
+
+            return target.renderer?.material;
         }
 
         public void LoadNestedItems()
