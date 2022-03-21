@@ -124,6 +124,7 @@
     <Compile Include="CustomGear\Skater.cs" />
     <Compile Include="CustomGear\GearManager.cs" />
     <Compile Include="CustomGear\XLGMCustomCharacterGearInfo.cs" />
+    <Compile Include="CustomGear\XLGMCustomizedPlayerData.cs" />
     <Compile Include="Main.cs" />
     <Compile Include="Patches\CharacterCustomizerPatch.cs" />
     <Compile Include="Patches\CustomizedPlayerDataV2Patch.cs" />
