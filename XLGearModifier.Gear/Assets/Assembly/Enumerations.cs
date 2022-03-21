@@ -75,7 +75,7 @@
 		MShoesNewBalance255,
 		MShoesNewBalance288S,
 		MShoesNewBalance913,
-		MShoesNewBalanceFoy306,
+		MShoesNewBalance306,
 		MShoesVansKyleWalker2,
 		FShoes,
 		FShoesDCHyde,
