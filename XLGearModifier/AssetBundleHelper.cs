@@ -101,7 +101,7 @@ namespace XLGearModifier
         private IEnumerator LoadUserInterface(AssetBundle bundle)
         {
             yield return LoadAsset<TMP_SpriteAsset>(bundle, "GearModifierUISpriteSheet", value => UserInterfaceHelper.Instance.GearModifierUISpriteSheet = value);
-            yield return LoadAssets<Sprite>(bundle, "GearModifierUISpriteSheet", value => UserInterfaceHelper.Instance.GearModifierUISpriteSheetSprites = value.ToList());
+            yield return LoadAssets<Sprite>(bundle, "", value => UserInterfaceHelper.Instance.GearModifierUISpriteSheetSprites = value.ToList());
 
             var assets = new List<GameObject>();
             yield return LoadAssets<GameObject>(bundle, string.Empty, value => assets = value.ToList());
