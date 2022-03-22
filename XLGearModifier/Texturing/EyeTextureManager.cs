@@ -16,19 +16,17 @@ namespace XLGearModifier.Texturing
         private static EyeTextureManager __instance;
         public static EyeTextureManager Instance => __instance ?? (__instance = new EyeTextureManager());
 
-        private Texture OriginalEyeTexture;
+        private Dictionary<string, Texture> OriginalEyeTextures;
 
         private const string ColorTextureName = "Texture2D_4128E5C7";
         private const string NormalTextureName = "Texture2D_BEC07F52";
         private const string RgmtaoTextureName = "Texture2D_B56F9766";
-
-        private List<MaterialController> PreviewEyeMaterialControllers;
-
+        
         public List<ICustomInfo> Eyes;
 
         public EyeTextureManager()
         {
-            PreviewEyeMaterialControllers = new List<MaterialController>();
+            OriginalEyeTextures = new Dictionary<string, Texture>();
             Eyes = new List<ICustomInfo>();
         }
 
@@ -51,8 +49,10 @@ namespace XLGearModifier.Texturing
             }
         }
 
-        private void SetupMaterialControllers(CharacterCustomizer customizer)
+        private List<MaterialController> SetupMaterialControllers(CharacterCustomizer customizer)
         {
+            var materialControllers = new List<MaterialController>();
+
             var traverse = Traverse.Create(customizer);
             var currentBody = traverse.Field("currentBody").GetValue<CharacterBodyObject>();
 
@@ -60,9 +60,19 @@ namespace XLGearModifier.Texturing
 
             foreach (var eyeRenderer in eyeRenderers)
             {
-                if (OriginalEyeTexture == null)
+                if (!OriginalEyeTextures.ContainsKey("albedo"))
                 {
-                    OriginalEyeTexture = eyeRenderer.material.GetTexture(ColorTextureName);
+                    OriginalEyeTextures.Add("albedo", eyeRenderer.material.GetTexture(ColorTextureName));
+                }
+
+                if (!OriginalEyeTextures.ContainsKey("normal"))
+                {
+                    OriginalEyeTextures.Add("normal", eyeRenderer.material.GetTexture(NormalTextureName));
+                }
+
+                if (!OriginalEyeTextures.ContainsKey("maskpbr"))
+                {
+                    OriginalEyeTextures.Add("maskpbr", eyeRenderer.material.GetTexture(RgmtaoTextureName));
                 }
 
                 var materialController = eyeRenderer.gameObject.GetComponent<MaterialController>();
@@ -76,8 +86,10 @@ namespace XLGearModifier.Texturing
                 SetPropertyNameSubstitutions(materialController);
 
                 materialController.FindTargets();
-                PreviewEyeMaterialControllers.Add(materialController);
+                materialControllers.Add(materialController);
             }
+
+            return materialControllers;
         }
 
         private void SetPropertyNameSubstitutions(MaterialController materialController)
@@ -108,7 +120,7 @@ namespace XLGearModifier.Texturing
         /// <param name="renderer">The renderer to apply the textures to.</param>
         public void SetEyeTextures(CharacterCustomizer customizer, CharacterGearInfo characterGearInfo)
         {
-            SetupMaterialControllers(customizer);
+            var materialControllers = SetupMaterialControllers(customizer);
 
             var dict = new Dictionary<string, Texture>();
 
@@ -120,9 +132,22 @@ namespace XLGearModifier.Texturing
                 dict.Add(textureChange.textureID, texture);
             }
 
-            foreach (var materialController in PreviewEyeMaterialControllers)
+            foreach (var materialController in materialControllers)
             {
                 materialController.SetMaterial(materialController.GenerateMaterialWithChanges(dict));
+            }
+        }
+
+        public void SetEyeTexturesBackToDefault(CharacterCustomizer customizer)
+        {
+            if (OriginalEyeTextures == null) return;
+            if (!OriginalEyeTextures.Any()) return;
+
+            var materialControllers = SetupMaterialControllers(customizer);
+
+            foreach (var materialController in materialControllers)
+            {
+                materialController.SetMaterial(materialController.GenerateMaterialWithChanges(OriginalEyeTextures));
             }
         }
     }
