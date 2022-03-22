@@ -20,6 +20,14 @@ namespace XLGearModifier.Texturing
 
         public Dictionary<string, Dictionary<string, Texture>> BaseGameTextures;
 
+        public const string ColorTextureName = "_texture2D_color";
+        public const string NormalTextureName = "_texture2D_normal";
+        public const string RgmtaoTextureName = "_texture2D_maskPBR";
+
+        public const string HairColorTextureName = "_texture_color";
+        public const string HairNormalTextureName = "_texture_normal";
+        public const string HairRgmtaoTextureName = "_texture_mask";
+
         public BaseGameTextureManager()
         {
             BaseGameTextures = new Dictionary<string, Dictionary<string, Texture>>();
@@ -61,8 +69,8 @@ namespace XLGearModifier.Texturing
 
                 var textures = new Dictionary<string, Texture>
                 {
-                    { "normal", material.GetTexture(isHair ? "_texture_normal" : "_texture2D_normal") },
-                    { "maskpbr", material.GetTexture(isHair ? "_texture_mask" : "_texture2D_maskPBR") }
+                    { "normal", material.GetTexture(isHair ? HairNormalTextureName : NormalTextureName) },
+                    { "maskpbr", material.GetTexture(isHair ? HairRgmtaoTextureName : RgmtaoTextureName) }
                 };
 
                 BaseGameTextures.Add(name, textures);
