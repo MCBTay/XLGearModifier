@@ -32,6 +32,12 @@ namespace XLGearModifier.Patches
 							return false;
 						}
 
+                        if (__instance.template.id == "eyes" || cgo.template.id == "eyes")
+                        {
+                            __result = false;
+                            return false;
+                        }
+
 						return true;
 					}
 					else if((__instance.IsLayerable<TopTypes>(ClothingGearCategory.LongSleeve) && cgo.IsLayerable<TopTypes>(ClothingGearCategory.Shirt)) || 
