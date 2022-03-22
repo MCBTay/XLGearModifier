@@ -6,7 +6,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using UnityEngine;
-using XLGearModifier.CustomGear;
 using XLMenuMod.Utilities.Gear;
 using XLMenuMod.Utilities.Interfaces;
 
@@ -52,13 +51,13 @@ namespace XLGearModifier.Texturing
             }
         }
 
-        private void SetupMaterialControllers()
+        private void SetupMaterialControllers(CharacterCustomizer customizer)
         {
-            var traverse = Traverse.Create(GearSelectionController.Instance.previewCustomizer);
-
+            var traverse = Traverse.Create(customizer);
             var currentBody = traverse.Field("currentBody").GetValue<CharacterBodyObject>();
 
             var eyeRenderers = currentBody.gameObject.GetComponentsInChildren<SkinnedMeshRenderer>(true).Where(x => x.name.Contains("eye_mesh"));
+
             foreach (var eyeRenderer in eyeRenderers)
             {
                 if (OriginalEyeTexture == null)
@@ -74,36 +73,42 @@ namespace XLGearModifier.Texturing
 
                 materialController.alphaMasks = Array.Empty<AlphaMaskTextureInfo>();
 
-                var materialControllerTraverse = Traverse.Create(materialController);
-                materialControllerTraverse.Field("m_propertyNameSubstitutions").SetValue(new List<PropertyNameSubstitution>());
-
-                if (!materialController.PropertyNameSubstitutions.ContainsKey("albedo"))
-                {
-                    materialController.PropertyNameSubstitutions.Add("albedo", ColorTextureName);
-                }
-
-                if (!materialController.PropertyNameSubstitutions.ContainsKey("normal"))
-                {
-                    materialController.PropertyNameSubstitutions.Add("normal", NormalTextureName);
-                }
-
-                if (!materialController.PropertyNameSubstitutions.ContainsKey("rgmtao"))
-                {
-                    materialController.PropertyNameSubstitutions.Add("rgmtao", RgmtaoTextureName);
-                }
+                SetPropertyNameSubstitutions(materialController);
 
                 materialController.FindTargets();
                 PreviewEyeMaterialControllers.Add(materialController);
             }
         }
 
+        private void SetPropertyNameSubstitutions(MaterialController materialController)
+        {
+            var traverse = Traverse.Create(materialController);
+            traverse.Field("m_propertyNameSubstitutions").SetValue(new List<PropertyNameSubstitution>());
+
+            if (!materialController.PropertyNameSubstitutions.ContainsKey("albedo"))
+            {
+                materialController.PropertyNameSubstitutions.Add("albedo", ColorTextureName);
+            }
+
+            if (!materialController.PropertyNameSubstitutions.ContainsKey("normal"))
+            {
+                materialController.PropertyNameSubstitutions.Add("normal", NormalTextureName);
+            }
+
+            if (!materialController.PropertyNameSubstitutions.ContainsKey("rgmtao"))
+            {
+                materialController.PropertyNameSubstitutions.Add("rgmtao", RgmtaoTextureName);
+            }
+        }
+
+
         /// <summary>
         /// Applies textures passed in via gearInfo to the passed in MeshRenderer.
         /// </summary>
         /// <param name="renderer">The renderer to apply the textures to.</param>
-        public void SetEyeTextures(CharacterGearInfo characterGearInfo)
+        public void SetEyeTextures(CharacterCustomizer customizer, CharacterGearInfo characterGearInfo)
         {
-            SetupMaterialControllers();
+            SetupMaterialControllers(customizer);
 
             var dict = new Dictionary<string, Texture>();
 
