@@ -1,14 +1,9 @@
 fileFormatVersion: 2
-guid: 21d7007cf6d6ba94aa2d097c5698e23a
+guid: b32e56cce6d91524a82b994aab3d75c8
 ModelImporter:
   serializedVersion: 19301
   internalIDToNameTable: []
-  externalObjects:
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: Rayban_01
-    second: {fileID: 2100000, guid: b0d89b91937174640a5a3d307ad83b33, type: 2}
+  externalObjects: {}
   materials:
     materialImportMode: 1
     materialName: 0
