@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using UnityEngine;
+using XLGearModifier.CustomGear;
 using XLMenuMod.Utilities.Gear;
 
 namespace XLGearModifier.Texturing
