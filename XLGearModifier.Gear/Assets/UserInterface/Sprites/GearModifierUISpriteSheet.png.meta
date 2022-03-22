@@ -1,19 +1,154 @@
 fileFormatVersion: 2
-guid: 125988c3fbaa6c24fbbf9ce220f96f90
+guid: 51a7009103064b740a2fde8056eb1773
 TextureImporter:
   internalIDToNameTable:
+  - first:
+      213: 4033955085696099258
+    second: GearModifierUISpriteSheet2-invert6_0
+  - first:
+      213: 3164686930776032457
+    second: GearModifierUISpriteSheet2-invert6_1
+  - first:
+      213: 4060338308149616139
+    second: GearModifierUISpriteSheet2-invert6_2
+  - first:
+      213: 4691158919227147909
+    second: GearModifierUISpriteSheet2-invert6_3
+  - first:
+      213: -3294669853140545574
+    second: GearModifierUISpriteSheet2-invert6_4
+  - first:
+      213: 161226663908054478
+    second: GearModifierUISpriteSheet2-invert6_5
+  - first:
+      213: -7380180364014414133
+    second: GearModifierUISpriteSheet2-invert6_6
+  - first:
+      213: 4711137638963509081
+    second: GearModifierUISpriteSheet2-invert6_7
+  - first:
+      213: -1481737768041699279
+    second: GearModifierUISpriteSheet2-invert6_8
+  - first:
+      213: 6484764239695053939
+    second: GearModifierUISpriteSheet2-invert6_9
+  - first:
+      213: -6001096309568125570
+    second: GearModifierUISpriteSheet2-invert6_10
+  - first:
+      213: -8391956975219003577
+    second: GearModifierUISpriteSheet2-invert6_11
+  - first:
+      213: -5462569085085699351
+    second: GearModifierUISpriteSheet2-invert6_12
+  - first:
+      213: -3337649815812275228
+    second: GearModifierUISpriteSheet2-invert6_13
+  - first:
+      213: 6617364475743934058
+    second: GearModifierUISpriteSheet2-invert6_14
+  - first:
+      213: 3829863776126312514
+    second: GearModifierUISpriteSheet2-invert6_15
+  - first:
+      213: -6803069307700235846
+    second: GearModifierUISpriteSheet2-invert6_16
+  - first:
+      213: -2452810862450898070
+    second: GearModifierUISpriteSheet2-invert6_17
+  - first:
+      213: 8173392364939037144
+    second: GearModifierUISpriteSheet2-invert6_18
+  - first:
+      213: 943364567134435611
+    second: GearModifierUISpriteSheet2-invert6_19
+  - first:
+      213: 1337111300825722074
+    second: GearModifierUISpriteSheet2-invert6_20
+  - first:
+      213: -3972288314358621659
+    second: GearModifierUISpriteSheet2-invert6_21
+  - first:
+      213: 7347368571344116977
+    second: GearModifierUISpriteSheet2-invert6_22
+  - first:
+      213: -5438581757094066498
+    second: GearModifierUISpriteSheet2-invert6_23
+  - first:
+      213: 4823967934004809431
+    second: GearModifierUISpriteSheet2-invert6_24
+  - first:
+      213: 1994966680099776935
+    second: GearModifierUISpriteSheet2-invert6_0
+  - first:
+      213: -6785848591711631440
+    second: GearModifierUISpriteSheet2-invert6_1
+  - first:
+      213: -1422294235897454683
+    second: GearModifierUISpriteSheet2-invert6_2
+  - first:
+      213: -4375825427175705550
+    second: GearModifierUISpriteSheet2-invert6_3
+  - first:
+      213: 6262945994419798007
+    second: GearModifierUISpriteSheet2-invert6_4
+  - first:
+      213: -6829311464119273712
+    second: GearModifierUISpriteSheet2-invert6_5
+  - first:
+      213: 7111053628344576687
+    second: GearModifierUISpriteSheet2-invert6_6
+  - first:
+      213: 3466146270128190680
+    second: GearModifierUISpriteSheet2-invert6_7
+  - first:
+      213: -9006127046541217308
+    second: GearModifierUISpriteSheet2-invert6_8
+  - first:
+      213: 2870129515250676520
+    second: GearModifierUISpriteSheet2-invert6_9
+  - first:
+      213: 3847129993198320698
+    second: GearModifierUISpriteSheet2-invert6_10
+  - first:
+      213: 5698415324704724429
+    second: GearModifierUISpriteSheet2-invert6_11
+  - first:
+      213: -5976108956387670263
+    second: GearModifierUISpriteSheet2-invert6_12
+  - first:
+      213: -6307573362291276717
+    second: GearModifierUISpriteSheet2-invert6_13
+  - first:
+      213: 1407073596951066152
+    second: GearModifierUISpriteSheet2-invert6_14
+  - first:
+      213: -1579701760342914031
+    second: GearModifierUISpriteSheet2-invert6_15
+  - first:
+      213: 5468608869439606682
+    second: GearModifierUISpriteSheet2-invert6_16
+  - first:
+      213: 5626810846662987113
+    second: GearModifierUISpriteSheet2-invert6_17
+  - first:
+      213: -3308305801500805311
+    second: GearModifierUISpriteSheet2-invert6_18
+  - first:
+      213: 3957092598890523346
+    second: GearModifierUISpriteSheet2-invert6_19
   - first:
       213: -5495462141743220128
     second: Headwear
   - first:
       213: 5158296661024876734
-    second: Top
+    second: Tops
   - first:
       213: -589789086552718833
     second: Headwear_Layerable
   - first:
       213: -4267128046585666268
-    second: Top_Layerable
+    second: Tops_Layerable
   - first:
       213: -4238092056313116362
     second: Shoes
@@ -27,41 +162,17 @@ TextureImporter:
       213: -5049246343748119653
     second: Bottom_Layerable
   - first:
-      213: 1531973656194227758
-    second: Headwear
-  - first:
-      213: -1558088681043858287
-    second: Top
-  - first:
-      213: -9207859144133343337
-    second: Headwear_Layerable
-  - first:
-      213: -8659878197359861944
-    second: Top_Layerable
-  - first:
-      213: 6108049321560899895
-    second: Shoes
-  - first:
-      213: -6135912545725382221
-    second: Bottom
-  - first:
-      213: -2219631636371630653
-    second: Shoes_Layerable
-  - first:
-      213: 5750667274706767524
-    second: Bottom_Layerable
-  - first:
       213: -5207621082962684495
     second: Socks
   - first:
       213: 5980215751038286846
-    second: Wildcard
+    second: Other
   - first:
       213: 5189513415183059634
     second: Socks_Layerable
   - first:
       213: -8190716239209887090
-    second: Wildcard_Layerable
+    second: Other_Layerable
   - first:
       213: -1597741832852804374
     second: FacialHair
@@ -75,101 +186,71 @@ TextureImporter:
       213: -7137381302474801463
     second: Hair_Layerable
   - first:
+      213: 6738717370711986102
+    second: Eyes
+  - first:
+      213: -5863688658106593108
+    second: GearModifierUISpriteSheet_17
+  - first:
+      213: -5063058803622765842
+    second: GearModifierUISpriteSheet_18
+  - first:
+      213: -3258928539577927803
+    second: GearModifierUISpriteSheet_19
+  - first:
       213: 1531973656194227758
-    second: GearModifierUISpriteSheet_0
+    second: Headwear
   - first:
       213: -1558088681043858287
-    second: GearModifierUISpriteSheet_1
+    second: Tops
   - first:
       213: -9207859144133343337
-    second: GearModifierUISpriteSheet_2
+    second: Headwear_Layerable
   - first:
       213: -8659878197359861944
-    second: GearModifierUISpriteSheet_3
+    second: Tops_Layerable
   - first:
       213: 6108049321560899895
-    second: GearModifierUISpriteSheet_4
+    second: Shoes
   - first:
       213: -6135912545725382221
-    second: GearModifierUISpriteSheet_5
+    second: Bottom
   - first:
       213: -2219631636371630653
-    second: GearModifierUISpriteSheet_6
+    second: Shoes_Layerable
   - first:
       213: 5750667274706767524
-    second: GearModifierUISpriteSheet_7
+    second: Bottom_Layerable
   - first:
       213: -1610831684495961693
-    second: GearModifierUISpriteSheet_8
+    second: Socks
   - first:
       213: -7800121908509700315
-    second: GearModifierUISpriteSheet_9
+    second: Other
   - first:
       213: 1948517706267320439
-    second: GearModifierUISpriteSheet_10
+    second: Socks_Layerable
   - first:
       213: 1432482485644954766
-    second: GearModifierUISpriteSheet_11
+    second: Other_Layerable
   - first:
       213: -3127867383590758136
-    second: GearModifierUISpriteSheet_12
+    second: FacialHair
   - first:
       213: 8448011907231169357
-    second: GearModifierUISpriteSheet_13
+    second: Hair
   - first:
       213: 4499482773517583184
-    second: GearModifierUISpriteSheet_14
+    second: FacialHair_Layerable
   - first:
       213: 5834973362425670354
-    second: GearModifierUISpriteSheet_15
+    second: Hair_Layerable
   - first:
-      213: -5495462141743220128
-    second: GearModifierUISpriteSheet_0
+      213: 1147798025160880888
+    second: Eyes
   - first:
-      213: 5158296661024876734
-    second: GearModifierUISpriteSheet_1
-  - first:
-      213: -589789086552718833
-    second: GearModifierUISpriteSheet_2
-  - first:
-      213: -4267128046585666268
-    second: GearModifierUISpriteSheet_3
-  - first:
-      213: -4238092056313116362
-    second: GearModifierUISpriteSheet_4
-  - first:
-      213: -5383759315929806520
-    second: GearModifierUISpriteSheet_5
-  - first:
-      213: -8785825072926893414
-    second: GearModifierUISpriteSheet_6
-  - first:
-      213: -5049246343748119653
-    second: GearModifierUISpriteSheet_7
-  - first:
-      213: -5207621082962684495
-    second: GearModifierUISpriteSheet_8
-  - first:
-      213: 5980215751038286846
-    second: GearModifierUISpriteSheet_9
-  - first:
-      213: 5189513415183059634
-    second: GearModifierUISpriteSheet_10
-  - first:
-      213: -8190716239209887090
-    second: GearModifierUISpriteSheet_11
-  - first:
-      213: -1597741832852804374
-    second: GearModifierUISpriteSheet_12
-  - first:
-      213: -2339643991806963806
-    second: GearModifierUISpriteSheet_13
-  - first:
-      213: -9184681087401048645
-    second: GearModifierUISpriteSheet_14
-  - first:
-      213: -7137381302474801463
-    second: GearModifierUISpriteSheet_15
+      213: -331147136919821761
+    second: GearModifierUISpriteSheet_17
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -200,11 +281,11 @@ TextureImporter:
   textureSettings:
     serializedVersion: 2
     filterMode: -1
-    aniso: 1
+    aniso: -1
     mipBias: -100
     wrapU: 1
     wrapV: 1
-    wrapW: 1
+    wrapW: -1
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
@@ -229,24 +310,24 @@ TextureImporter:
   platformSettings:
   - serializedVersion: 3
     buildTarget: DefaultTexturePlatform
-    maxTextureSize: 1024
+    maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
     textureCompression: 1
     compressionQuality: 50
-    crunchedCompression: 1
+    crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 3
     buildTarget: Standalone
-    maxTextureSize: 1024
+    maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
     textureCompression: 1
     compressionQuality: 50
-    crunchedCompression: 1
+    crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
     androidETC2FallbackOverride: 0
@@ -255,337 +336,379 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: GearModifierUISpriteSheet_0
+      name: Headwear
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 1024
+        width: 256
+        height: 256
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e2e96be6ce9a24510800000000000000
+      internalID: 1531973656194227758
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Tops
+      rect:
+        serializedVersion: 2
+        x: 256
+        y: 1024
+        width: 256
+        height: 256
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 19ce2d5899e806ae0800000000000000
+      internalID: -1558088681043858287
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Headwear_Layerable
+      rect:
+        serializedVersion: 2
+        x: 512
+        y: 1024
+        width: 256
+        height: 256
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 797891cc4ec173080800000000000000
+      internalID: -9207859144133343337
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Tops_Layerable
+      rect:
+        serializedVersion: 2
+        x: 768
+        y: 1024
+        width: 256
+        height: 256
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 84f173859aee1d780800000000000000
+      internalID: -8659878197359861944
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Shoes
       rect:
         serializedVersion: 2
         x: 0
         y: 768
         width: 256
         height: 256
-      alignment: 6
-      pivot: {x: 0, y: 0}
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 06ab9cc5c423cb3b0800000000000000
-      internalID: -5495462141743220128
+      spriteID: 73104320f7624c450800000000000000
+      internalID: 6108049321560899895
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: GearModifierUISpriteSheet_1
+      name: Bottom
       rect:
         serializedVersion: 2
         x: 256
         y: 768
         width: 256
         height: 256
-      alignment: 6
-      pivot: {x: 0, y: 0}
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: eb8a87ebb73f59740800000000000000
-      internalID: 5158296661024876734
+      spriteID: 3b10d239c0cd8daa0800000000000000
+      internalID: -6135912545725382221
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: GearModifierUISpriteSheet_2
+      name: Shoes_Layerable
       rect:
         serializedVersion: 2
         x: 512
         y: 768
         width: 256
         height: 256
-      alignment: 6
-      pivot: {x: 0, y: 0}
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: f028f9b53f5a0d7f0800000000000000
-      internalID: -589789086552718833
+      spriteID: 3c599dd69c84231e0800000000000000
+      internalID: -2219631636371630653
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: GearModifierUISpriteSheet_3
+      name: Bottom_Layerable
       rect:
         serializedVersion: 2
         x: 768
         y: 768
         width: 256
         height: 256
-      alignment: 6
-      pivot: {x: 0, y: 0}
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 425a72c56ad18c4c0800000000000000
-      internalID: -4267128046585666268
+      spriteID: 4ae4c520b697ecf40800000000000000
+      internalID: 5750667274706767524
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: GearModifierUISpriteSheet_4
+      name: Socks
       rect:
         serializedVersion: 2
         x: 0
         y: 512
         width: 256
         height: 256
-      alignment: 6
-      pivot: {x: 0, y: 0}
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 6394d0aaab54f25c0800000000000000
-      internalID: -4238092056313116362
+      spriteID: 3a19ca41e1d25a9e0800000000000000
+      internalID: -1610831684495961693
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: GearModifierUISpriteSheet_5
+      name: Other
       rect:
         serializedVersion: 2
         x: 256
         y: 512
         width: 256
         height: 256
-      alignment: 6
-      pivot: {x: 0, y: 0}
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 849cdc13d6b0945b0800000000000000
-      internalID: -5383759315929806520
+      spriteID: 52f8986737660c390800000000000000
+      internalID: -7800121908509700315
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: GearModifierUISpriteSheet_6
+      name: Socks_Layerable
       rect:
         serializedVersion: 2
         x: 512
         y: 512
         width: 256
         height: 256
-      alignment: 6
-      pivot: {x: 0, y: 0}
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: a9ad87d35aa721680800000000000000
-      internalID: -8785825072926893414
+      spriteID: 7706f98b7868a0b10800000000000000
+      internalID: 1948517706267320439
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: GearModifierUISpriteSheet_7
+      name: Other_Layerable
       rect:
         serializedVersion: 2
         x: 768
         y: 512
         width: 256
         height: 256
-      alignment: 6
-      pivot: {x: 0, y: 0}
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: b931471d3397de9b0800000000000000
-      internalID: -5049246343748119653
+      spriteID: e8c06d72b3331e310800000000000000
+      internalID: 1432482485644954766
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: GearModifierUISpriteSheet_8
+      name: FacialHair
       rect:
         serializedVersion: 2
         x: 0
         y: 256
         width: 256
         height: 256
-      alignment: 6
-      pivot: {x: 0, y: 0}
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 1b59c295730dab7b0800000000000000
-      internalID: -5207621082962684495
+      spriteID: 809da80df259794d0800000000000000
+      internalID: -3127867383590758136
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: GearModifierUISpriteSheet_9
+      name: Hair
       rect:
         serializedVersion: 2
         x: 256
         y: 256
         width: 256
         height: 256
-      alignment: 6
-      pivot: {x: 0, y: 0}
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: efb35d08a8efdf250800000000000000
-      internalID: 5980215751038286846
+      spriteID: d4bb8c4f11e5d3570800000000000000
+      internalID: 8448011907231169357
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: GearModifierUISpriteSheet_10
+      name: FacialHair_Layerable
       rect:
         serializedVersion: 2
         x: 512
         y: 256
         width: 256
         height: 256
-      alignment: 6
-      pivot: {x: 0, y: 0}
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 2ba4c15b4fad40840800000000000000
-      internalID: 5189513415183059634
+      spriteID: 05341844ebf517e30800000000000000
+      internalID: 4499482773517583184
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: GearModifierUISpriteSheet_11
+      name: Hair_Layerable
       rect:
         serializedVersion: 2
         x: 768
         y: 256
         width: 256
         height: 256
-      alignment: 6
-      pivot: {x: 0, y: 0}
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: e8a0fd90afab45e80800000000000000
-      internalID: -8190716239209887090
+      spriteID: 2daaf3dab5df9f050800000000000000
+      internalID: 5834973362425670354
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: GearModifierUISpriteSheet_12
+      name: Eyes
       rect:
         serializedVersion: 2
         x: 0
         y: 0
         width: 256
         height: 256
-      alignment: 6
-      pivot: {x: 0, y: 0}
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: aece60aa44ea3d9e0800000000000000
-      internalID: -1597741832852804374
+      spriteID: 8f2fb9bf83ccdef00800000000000000
+      internalID: 1147798025160880888
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: GearModifierUISpriteSheet_13
+      name: GearModifierUISpriteSheet_17
       rect:
         serializedVersion: 2
         x: 256
         y: 0
         width: 256
         height: 256
-      alignment: 6
-      pivot: {x: 0, y: 0}
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 2af08777f2ae78fd0800000000000000
-      internalID: -2339643991806963806
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: GearModifierUISpriteSheet_14
-      rect:
-        serializedVersion: 2
-        x: 512
-        y: 0
-        width: 256
-        height: 256
-      alignment: 6
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: bb5463aa635798080800000000000000
-      internalID: -9184681087401048645
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: GearModifierUISpriteSheet_15
-      rect:
-        serializedVersion: 2
-        x: 768
-        y: 0
-        width: 256
-        height: 256
-      alignment: 6
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 9ce7977558de2fc90800000000000000
-      internalID: -7137381302474801463
+      spriteID: f32a187fe67876bf0800000000000000
+      internalID: -331147136919821761
       vertices: []
       indices: 
       edges: []
@@ -593,7 +716,7 @@ TextureImporter:
     outline: []
     physicsShape: []
     bones: []
-    spriteID: 518281ff99c07274aa29b32eadc787aa
+    spriteID: 5e97eb03825dee720800000000000000
     internalID: 0
     vertices: []
     indices: 
