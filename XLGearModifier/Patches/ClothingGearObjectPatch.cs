@@ -32,7 +32,12 @@ namespace XLGearModifier.Patches
 							return false;
 						}
 
-                        if (__instance.template.id == "eyes" || cgo.template.id == "eyes")
+                        if (__instance.template.id == "eyes" && cgo.template.id == "eyes")
+                        {
+                            __result = true;
+                            return false;
+                        }
+                        else if (__instance.template.id == "eyes" || cgo.template.id == "eyes")
                         {
                             __result = false;
                             return false;
