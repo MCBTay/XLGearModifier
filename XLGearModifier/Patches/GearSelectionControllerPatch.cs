@@ -1,12 +1,13 @@
 ﻿using HarmonyLib;
+using SkaterXL.Data;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using SkaterXL.Data;
 using TMPro;
 using UnityEngine.EventSystems;
 using UnityModManagerNet;
 using XLGearModifier.CustomGear;
+using XLGearModifier.Texturing;
 using XLGearModifier.Unity;
 using XLMenuMod;
 using XLMenuMod.Utilities;
@@ -17,7 +18,7 @@ using Skater = XLMenuMod.Skater;
 
 namespace XLGearModifier.Patches
 {
-	public static class GearSelectionControllerPatch
+    public static class GearSelectionControllerPatch
 	{
 		private static void SetItemText(this MVCListItemView item, GearInfo gearAtIndex, CustomGearFolderInfo customGearFolder)
 		{
@@ -65,7 +66,7 @@ namespace XLGearModifier.Patches
                         sourceList = index[0] == (int)Skater.FemaleStandard ? GearManager.Instance.CustomFemaleMeshes : new List<ICustomInfo>();
 						break;
                     case (int)GearModifierTab.Eyes:
-						sourceList = GearManager.Instance.Eyes;
+						sourceList = EyeTextureManager.Instance.Eyes;
 						break;
 				}
 
@@ -319,7 +320,7 @@ namespace XLGearModifier.Patches
                                 sourceList = GearManager.Instance.CustomFemaleMeshes;
                                 break;
                             case (int)GearModifierTab.Eyes:
-								sourceList = GearManager.Instance.Eyes;
+								sourceList = EyeTextureManager.Instance.Eyes;
 								break;
 						}
 

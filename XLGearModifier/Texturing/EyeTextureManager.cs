@@ -8,6 +8,7 @@ using System.Linq;
 using UnityEngine;
 using XLGearModifier.CustomGear;
 using XLMenuMod.Utilities.Gear;
+using XLMenuMod.Utilities.Interfaces;
 
 namespace XLGearModifier.Texturing
 {
@@ -24,9 +25,12 @@ namespace XLGearModifier.Texturing
 
         private List<MaterialController> PreviewEyeMaterialControllers;
 
+        public List<ICustomInfo> Eyes;
+
         public EyeTextureManager()
         {
             PreviewEyeMaterialControllers = new List<MaterialController>();
+            Eyes = new List<ICustomInfo>();
         }
 
         public void LookForEyeTextures()
@@ -34,7 +38,7 @@ namespace XLGearModifier.Texturing
             var eyeTextures = Directory.GetFiles(SaveManager.Instance.CustomGearDir, "Eyes_*.png", SearchOption.AllDirectories).ToList();
             if (!eyeTextures.Any()) return;
 
-            GearManager.Instance.Eyes.Clear();
+            Eyes.Clear();
 
             var gearInfos = GearDatabase.GetGearIn(eyeTextures, true);
 
@@ -44,7 +48,7 @@ namespace XLGearModifier.Texturing
                 if (characterGearInfo == null) continue;
 
                 var newGearInfo = new CustomCharacterGearInfo(gearInfo.name, gearInfo.type, gearInfo.isCustom, characterGearInfo.textureChanges, gearInfo.tags);
-                GearManager.Instance.Eyes.Add(newGearInfo.Info);
+                Eyes.Add(newGearInfo.Info);
             }
         }
 
