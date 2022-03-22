@@ -159,7 +159,7 @@
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>SET SkaterXLPath=G:\Steam\steamapps\common\Skater XL
+    <PostBuildEvent>SET SkaterXLPath=C:\Program Files (x86)\Steam\steamapps\common\Skater XL
 SET DeployPath=%25SkaterXLPath%25\Mods\$(ProjectName)
 
 if "$(ConfigurationName)" == "Debug" ( 
