@@ -1,7 +1,10 @@
-﻿using HarmonyLib;
+﻿using System;
+using HarmonyLib;
 using SkaterXL.Data;
 using SkaterXL.Gear;
 using System.Collections.Generic;
+using System.Linq;
+using ReplayEditor;
 using XLGearModifier.CustomGear;
 using XLGearModifier.Texturing;
 using XLMenuMod.Utilities;
@@ -28,7 +31,7 @@ namespace XLGearModifier.Patches
 
                 return true;
 			}
-		}
+        }
 
         /// <summary>
         /// Patching into CharacterCustomizer.LoadClothingAsync to support loading of eye textures.
@@ -70,8 +73,22 @@ namespace XLGearModifier.Patches
             {
                 if (preview.type != "eyes") return true;
 
-                EyeTextureManager.Instance.SetEyeTextures(preview as CharacterGearInfo);
+                //EyeTextureManager.Instance.SetEyeTextures(preview as CharacterGearInfo);
                 return false;
+            }
+        }
+
+        /// <summary>
+        
+        /// </summary>
+        [HarmonyPatch(typeof(CharacterCustomizer), nameof(CharacterCustomizer.EquipCharacterGear), new [] { typeof(CharacterGearInfo), typeof(bool) })]
+        static class EquipCharacterGearPatch
+        {
+            static void Prefix(CharacterCustomizer __instance, CharacterGearInfo gear)
+            {
+                if (gear.type != "eyes") return;
+
+                EyeTextureManager.Instance.SetEyeTextures(__instance, gear);
             }
         }
     }
