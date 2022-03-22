@@ -27,7 +27,7 @@ namespace XLGearModifier.Patches
 					var customMeshes = GearManager.Instance.CustomGear;
 					foreach (var mesh in customMeshes)
 					{
-						newResult.RemoveAll(x => x.type == mesh.Metadata.Prefix.ToLower());
+						newResult.RemoveAll(x => x.type == mesh.Value.Metadata.Prefix.ToLower());
 					}
 
 					__result = newResult.ToArray();

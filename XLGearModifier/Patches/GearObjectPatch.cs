@@ -1,5 +1,4 @@
 ﻿using HarmonyLib;
-using System.Linq;
 using System.Threading.Tasks;
 using UnityEngine;
 using XLGearModifier.CustomGear;
@@ -15,8 +14,8 @@ namespace XLGearModifier.Patches
 			{
                 if (!path.StartsWith("XLGearModifier")) return true;
 
-				var customGear = GearManager.Instance.CustomGear.FirstOrDefault(x => x.GearInfo != null && x.GearInfo.type == __instance.gearInfo.type);
-				if (customGear == null) return true;
+                var customGear = GearManager.Instance.CustomGear[__instance.gearInfo.type];
+                if (customGear == null) return true;
 
 				__result = Task.FromResult(customGear.Prefab);
 				return false;
