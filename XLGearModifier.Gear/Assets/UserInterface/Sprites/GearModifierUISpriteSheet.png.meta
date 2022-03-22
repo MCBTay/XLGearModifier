@@ -142,13 +142,13 @@ TextureImporter:
     second: Headwear
   - first:
       213: 5158296661024876734
-    second: Tops
+    second: Top
   - first:
       213: -589789086552718833
     second: Headwear_Layerable
   - first:
       213: -4267128046585666268
-    second: Tops_Layerable
+    second: Top_Layerable
   - first:
       213: -4238092056313116362
     second: Shoes
@@ -202,13 +202,13 @@ TextureImporter:
     second: Headwear
   - first:
       213: -1558088681043858287
-    second: Tops
+    second: Top
   - first:
       213: -9207859144133343337
     second: Headwear_Layerable
   - first:
       213: -8659878197359861944
-    second: Tops_Layerable
+    second: Top_Layerable
   - first:
       213: 6108049321560899895
     second: Shoes
@@ -357,7 +357,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Tops
+      name: Top
       rect:
         serializedVersion: 2
         x: 256
@@ -399,7 +399,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Tops_Layerable
+      name: Top_Layerable
       rect:
         serializedVersion: 2
         x: 768
