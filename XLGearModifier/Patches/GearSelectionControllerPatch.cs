@@ -99,7 +99,10 @@ namespace XLGearModifier.Patches
                         case (int)GearModifierTab.CustomFemaleMeshes: 
                             itemView.SetText("Custom Meshes"); 
                             break;
-                        case (int)GearModifierTab.Eyes: itemView.SetText("Eyes"); break;
+                        case (int)GearModifierTab.Eyes:
+                            itemView.Label.spriteAsset = UserInterfaceHelper.Instance.GearModifierUISpriteSheet;
+							var newText = "<space=18px><sprite name=\"Eyes\" tint=1>Eyes";
+                            itemView.SetText(newText); break;
 					}
 				}
 				else if (index.depth >= 3)
