@@ -1,24 +1,9 @@
 fileFormatVersion: 2
-guid: 9298dece6fda98b4b80c39ec6a7bd508
+guid: 9f7bd0bbd2e33ab4996c41ce6d58fc93
 ModelImporter:
   serializedVersion: 19301
   internalIDToNameTable: []
-  externalObjects:
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: 25_Beard.bk1_0.3_0_0.001
-    second: {fileID: 2100000, guid: 293d6323a19803842ad3244f9c5e6176, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: 25_Beard.bk2_0.3_0_0.001
-    second: {fileID: 2100000, guid: b0d85644868f344429eebb579acfc07e, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: 25_Beard_0.3_0_0.003
-    second: {fileID: 2100000, guid: 1138a9ae5be7b504694ade4bdc5168e5, type: 2}
+  externalObjects: {}
   materials:
     materialImportMode: 1
     materialName: 0
@@ -108,5 +93,5 @@ ModelImporter:
   avatarSetup: 0
   additionalBone: 0
   userData: 
-  assetBundleName: facialhair
+  assetBundleName: other
   assetBundleVariant: 
