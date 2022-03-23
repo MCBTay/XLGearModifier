@@ -12,5 +12,6 @@ namespace XLGearModifier.Unity
 		public abstract string GetSprite();
 		public abstract string GetCategory();
 		public abstract bool BasedOnDefaultGear();
-	}
+        public abstract string GetTemplateId();
+    }
 }

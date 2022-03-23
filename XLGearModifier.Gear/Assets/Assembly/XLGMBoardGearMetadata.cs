@@ -35,5 +35,6 @@ namespace XLGearModifier.Unity
 		public override string GetSprite() => null;
 		public override string GetCategory() => Category.ToString();
 		public override bool BasedOnDefaultGear() => BaseOnDefaultGear;
-    }
+        public override string GetTemplateId() => BoardGearTemplate.id.ToLower();
+	}
 }

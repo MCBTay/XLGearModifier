@@ -14,5 +14,6 @@ namespace XLGearModifier.Unity
 		public override string GetSprite() => null;
 		public override string GetCategory() => null;
 		public override bool BasedOnDefaultGear() => false;
+        public override string GetTemplateId() => CharacterBodyTemplate.id.ToLower();
     }
 }

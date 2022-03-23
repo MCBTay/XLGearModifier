@@ -77,5 +77,6 @@ namespace XLGearModifier.Unity
 
 		public override string GetCategory() => Category.ToString();
 		public override bool BasedOnDefaultGear() => BaseOnDefaultGear;
-    }
+        public override string GetTemplateId() => CharacterGearTemplate.id.ToLower();
+	}
 }
