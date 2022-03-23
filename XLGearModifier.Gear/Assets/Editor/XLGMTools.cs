@@ -96,32 +96,6 @@ namespace XLGearModifier.Assets.Editor
             }
         }
 
-        [MenuItem("Tools/XLGM Tools/Update To Use Template Format")]
-        private static void onClick_UpdateToUseTemplate()
-        {
-            string[] guids = AssetDatabase.FindAssets("t:Prefab");
-
-            foreach (var guid in guids)
-            {
-                var path = AssetDatabase.GUIDToAssetPath(guid);
-                GameObject go = AssetDatabase.LoadAssetAtPath<GameObject>(path);
-
-                var metadata = go.GetComponent<XLGMClothingGearMetadata>();
-
-                if (metadata == null) continue;
-
-                metadata.CharacterGearTemplate.id = metadata.Prefix.ToLower();
-                metadata.CharacterGearTemplate.path = $"XLGearModifier/{metadata.Prefix.ToLower()}";
-                metadata.CharacterGearTemplate.alphaMasks = metadata.AlphaMaskThresholds;
-                metadata.CharacterGearTemplate.categoryName = MapCategory(metadata.Category).ToString().ToLower();
-
-                if (!PrefabUtility.IsPartOfImmutablePrefab(go))
-                {
-                    PrefabUtility.SavePrefabAsset(go);
-                }
-            }
-        }
-
         private static SkaterXL.Gear.ClothingGearCategory MapCategory(ClothingGearCategory category)
         {
             switch (category)
