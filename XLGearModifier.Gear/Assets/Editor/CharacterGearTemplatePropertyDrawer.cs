@@ -20,8 +20,13 @@ namespace XLGearModifier.Unity
 
             if (foldout)
             {
-                EditorGUILayout.PropertyField(property.FindPropertyRelative("id"), new GUIContent("Prefix", "This is the 'prefix' or 'type' associated with the mesh. This will be used in order for the mod to know which mesh to load but also to know which textures to load.  Arguably more important for meshes that are not based on default gear.  Examples from the base game would be MHatDad or FHatDad."));
-                EditorGUILayout.PropertyField(property.FindPropertyRelative("alphaMasks"), new GUIContent("Alpha Masks", "Set the threshold(s) for various alpha masks when this mesh is applied. It will add it to the gear template if it is not already defined, or override it if it is. Typically used for masking various areas of the body."));
+                EditorGUILayout.PropertyField(
+                    property.FindPropertyRelative("id"), 
+                    new GUIContent("Prefix", "This is the 'prefix' or 'type' associated with the mesh. This will be used in order for the mod to know which mesh to load but also to know which textures to load.  Arguably more important for meshes that are not based on default gear.  Examples from the base game would be MHatDad or FHatDad."));
+                
+                EditorGUILayout.PropertyField(
+                    property.FindPropertyRelative("alphaMasks"), 
+                    new GUIContent("Alpha Masks", "Set the threshold(s) for various alpha masks when this mesh is applied. It will add it to the gear template if it is not already defined, or override it if it is. Typically used for masking various areas of the body."));
             }
             
             EditorGUI.EndProperty();
