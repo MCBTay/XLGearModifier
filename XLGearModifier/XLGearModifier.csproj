@@ -164,12 +164,8 @@
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>
-SET SkaterXLPath=%25SXL_PATH%25
-echo this is SkaterXLPath variable: %25SkaterXLPath%25
-
+    <PostBuildEvent>SET SkaterXLPath=%25SXL_PATH%25
 SET DeployPath=%25SkaterXLPath%25\Mods\$(ProjectName)
-echo this is DeployPath variable: %25DeployPath%25
 
 if "$(ConfigurationName)" == "Debug" ( 
     del /Q /F "%25DeployPath%25"
