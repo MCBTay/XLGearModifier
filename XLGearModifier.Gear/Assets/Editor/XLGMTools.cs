@@ -24,6 +24,8 @@ namespace XLGearModifier.Assets.Editor
                     PrefabUtility.SavePrefabAsset(go);
                 }
             }
+
+            Debug.Log("Reserialize All Prefabs completed.");
         }
 
         [MenuItem("Tools/XLGM Tools/Ensure Prefab Meshes Have Material Controllers")]
@@ -59,6 +61,8 @@ namespace XLGearModifier.Assets.Editor
                     PrefabUtility.SavePrefabAsset(go);
                 }
             }
+
+            Debug.Log("Ensure Prefab Meshes Have Material Controllers completed.");
         }
 
         [MenuItem("Tools/XLGM Tools/Ensure Prefab Meshes Have Gear Prefab Controllers")]
@@ -94,6 +98,8 @@ namespace XLGearModifier.Assets.Editor
                     PrefabUtility.SavePrefabAsset(go);
                 }
             }
+
+            Debug.Log("Ensure Prefab Meshes Have Gear Prefabs Controllers completed.");
         }
 
         [MenuItem("Tools/XLGM Tools/Find Missing or Invalid Material Controllers")]
@@ -129,6 +135,8 @@ namespace XLGearModifier.Assets.Editor
                     }
                 }
             }
+
+            Debug.Log("Find Missing or Invalid Material Controllers completed.");
         }
 
         [MenuItem("Tools/XLGM Tools/Find Missing or Invalid Gear Prefab Controllers")]
@@ -164,6 +172,8 @@ namespace XLGearModifier.Assets.Editor
                     }
                 }
             }
+
+            Debug.Log("Find Missing or Invalid Gear Prefab Controllers completed.");
         }
 
         private static SkaterXL.Gear.ClothingGearCategory MapCategory(ClothingGearCategory category)
