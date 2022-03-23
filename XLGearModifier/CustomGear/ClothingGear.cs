@@ -31,7 +31,7 @@ namespace XLGearModifier.CustomGear
         {
             var name = string.IsNullOrEmpty(ClothingMetadata.DisplayName) ? Prefab.name : ClothingMetadata.DisplayName;
 
-            GearInfo = new CustomCharacterGearInfo(name, ClothingMetadata.Prefix, false, GetDefaultTextureChanges(), new string[0]);
+            GearInfo = new CustomCharacterGearInfo(name, ClothingMetadata.CharacterGearTemplate.id, false, GetDefaultTextureChanges(), new string[0]);
 
             SetTexturesAndShader();
             AddGearFilters();
@@ -202,7 +202,7 @@ namespace XLGearModifier.CustomGear
             var skaterIndex = (int)ClothingMetadata.Skater;
             var typeFilter = GearDatabase.Instance.skaters[skaterIndex].GearFilters[GetCategoryIndex(skaterIndex)];
 
-            AddGearFilter(ClothingMetadata.Prefix, typeFilter);
+            AddGearFilter(ClothingMetadata.CharacterGearTemplate.id, typeFilter);
             AddGearFilter(ClothingMetadata.PrefixAlias, typeFilter);
         }
 
@@ -222,18 +222,21 @@ namespace XLGearModifier.CustomGear
         /// </summary>
         private void AddGearTemplates()
         {
-            AddGearTemplate(ClothingMetadata.Prefix);
-            AddGearTemplate(ClothingMetadata.PrefixAlias, true);
+            var templateId = ClothingMetadata.CharacterGearTemplate.id.ToLower();
+            if (!GearDatabase.Instance.ContainsClothingTemplateWithID(templateId))
+            {
+                GearDatabase.Instance.CharGearTemplateForID.Add(templateId, ClothingMetadata.CharacterGearTemplate);
+            }
+
+            AddAliasGearTemplate(ClothingMetadata.PrefixAlias);
         }
 
-        private void AddGearTemplate(string templateId, bool isAlias = false)
+        private void AddAliasGearTemplate(string templateId)
         {
             if (string.IsNullOrEmpty(templateId)) return;
             if (GearDatabase.Instance.ContainsClothingTemplateWithID(templateId)) return;
 
-            var path = "XLGearModifier";
-            if (isAlias) path += "/alias";
-            path += $"/{templateId.ToLower()}";
+            var path = $"XLGearModifier/alias/{templateId.ToLower()}";
 
             var template = new CharacterGearTemplate
             {
@@ -242,8 +245,6 @@ namespace XLGearModifier.CustomGear
                 id = templateId.ToLower(),
                 path = path
             };
-
-            if (!isAlias) AddOrUpdateTemplateAlphaMasks(ClothingMetadata, template);
 
             GearDatabase.Instance.CharGearTemplateForID.Add(templateId.ToLower(), template);
         }
@@ -264,28 +265,6 @@ namespace XLGearModifier.CustomGear
                 default:
                 case Unity.ClothingGearCategory.Top:
                     return ClothingGearCategory.Shirt;
-            }
-        }
-
-        private void AddOrUpdateTemplateAlphaMasks(XLGMClothingGearMetadata metadata, CharacterGearTemplate template)
-        {
-            if (metadata.AlphaMaskThresholds == null || !metadata.AlphaMaskThresholds.Any()) return;
-
-            foreach (var mask in metadata.AlphaMaskThresholds)
-            {
-                if (mask == null) continue;
-
-                if (mask.Threshold > 250) mask.Threshold = 250;
-
-                var existing = template.alphaMasks.FirstOrDefault(x => (int)x.MaskLocation == (int)mask.MaskLocation);
-                if (existing == null)
-                {
-                    template.alphaMasks.Add(mask);
-                }
-                else
-                {
-                    existing.Threshold = mask.Threshold;
-                }
             }
         }
         #endregion
@@ -335,21 +314,6 @@ namespace XLGearModifier.CustomGear
                 Debug.Log("XLGM: No prefab found for template at path '" + path + "'");
             }
             return result;
-        }
-
-        /// <summary>
-        /// Returns the object's Prefix, unless BaseOnDefaultGear is true, then returns the base type's Prefix.
-        /// </summary>
-        public override string GetTypeName()
-        {
-            var type = base.GetTypeName();
-
-            if (ClothingMetadata.BaseOnDefaultGear)
-            {
-                type = ClothingMetadata.GetBaseType();
-            }
-
-            return type;
         }
     }
 }
