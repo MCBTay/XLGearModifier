@@ -39,12 +39,13 @@ namespace XLGearModifier.Patches
 
                 if (split.Length < 4) return true;
 
-                var prefabName = split[1];
+                var templateName = split[1];
                 var textureName = split[2];
                 var textureType = split[3];
 
-                var customGear = GearManager.Instance.CustomGear.FirstOrDefault(x => x.Prefab.name == prefabName);
-                if (customGear == null) return true;
+                if (!GearManager.Instance.CustomGear.ContainsKey(templateName)) return true;
+
+                var customGear = GearManager.Instance.CustomGear[templateName];
 
                 if (customGear.GearInfo is CharacterBodyInfo cbi)
                 {

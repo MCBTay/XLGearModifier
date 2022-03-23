@@ -58,7 +58,7 @@ namespace XLGearModifier
 				var spriteIndex = GearModifierUISpriteSheet.spriteCharacterTable[GetSpriteIndex(template)].glyphIndex;
 				var sprite = GearModifierUISpriteSheetSprites.FirstOrDefault(x => x.name == "GearModifierUISpriteSheet_" + spriteIndex);
 
-				var mesh = GearManager.Instance.CustomGear.FirstOrDefault(x => x.GearInfo != null && x.GearInfo.type == clothingGear.type) as ClothingGear;
+				var mesh = GearManager.Instance.CustomGear[clothingGear.type] as ClothingGear;
 
 				var creatorName = mesh?.ClothingMetadata?.CreatorName ?? "N/A";
 
@@ -68,7 +68,7 @@ namespace XLGearModifier
 
 		private int GetSpriteIndex(CharacterGearTemplate template)
         {
-			if (GearManager.Instance.CustomGear.FirstOrDefault(x => x.Metadata.Prefix.ToLower() == template.id) is ClothingGear customGear)
+			if (GearManager.Instance.CustomGear[template.id] is ClothingGear customGear)
             {
                 var spriteName = customGear.Metadata.GetSprite();
                 return GearModifierUISpriteSheet.GetSpriteIndexFromName(spriteName);

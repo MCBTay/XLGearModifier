@@ -18,7 +18,7 @@ namespace XLGearModifier.CustomGear
 		private static GearManager __instance;
 		public static GearManager Instance => __instance ?? (__instance = new GearManager());
 
-        public List<CustomGearBase> CustomGear;
+        public Dictionary<string, CustomGearBase> CustomGear;
 
 		public List<ICustomInfo> CustomMeshes;
         public List<ICustomInfo> CustomFemaleMeshes;
@@ -38,7 +38,7 @@ namespace XLGearModifier.CustomGear
 			CustomMeshes = new List<ICustomInfo>();
             CustomFemaleMeshes = new List<ICustomInfo>();
 
-			CustomGear = new List<CustomGearBase>();
+            CustomGear = new Dictionary<string, CustomGearBase>();
 
             Eyes = new List<ICustomInfo>();
         }
@@ -53,7 +53,7 @@ namespace XLGearModifier.CustomGear
 			CustomMeshes.Clear();
 			CustomFemaleMeshes.Clear();
 
-			foreach (var customGear in CustomGear)
+			foreach (var customGear in CustomGear.Values)
             {
                 if (customGear is Skater) continue;
 
