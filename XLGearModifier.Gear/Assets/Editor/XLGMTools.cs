@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using SkaterXL.Gear;
 using System.Linq;
-using SkaterXL.Gear;
 using UnityEditor;
 using UnityEngine;
 using XLGearModifier.Unity;
@@ -11,6 +9,23 @@ namespace XLGearModifier.Assets.Editor
 {
     public class XLGMTools : EditorWindow
     {
+        [MenuItem("Tools/XLGM Tools/Reserialize All Prefabs")]
+        private static void onClick_ReserializeAllPrefabs()
+        {
+            string[] guids = AssetDatabase.FindAssets("t:Prefab");
+
+            foreach (var guid in guids)
+            {
+                var path = AssetDatabase.GUIDToAssetPath(guid);
+                GameObject go = AssetDatabase.LoadAssetAtPath<GameObject>(path);
+
+                if (!PrefabUtility.IsPartOfImmutablePrefab(go))
+                {
+                    PrefabUtility.SavePrefabAsset(go);
+                }
+            }
+        }
+
         [MenuItem("Tools/XLGM Tools/Ensure Prefab Meshes Have Material Controllers")]
         private static void onClick_UpdateMaterialControllers()
         {
