@@ -208,7 +208,7 @@ namespace XLGearModifier
 
                         customGearBase.Instantiate();
 
-                        GearManager.Instance.CustomGear.Add(customGearBase);
+                        GearManager.Instance.CustomGear.Add(customGearBase.GearInfo.type.ToLower(), customGearBase);
                     }
                     catch (Exception ex)
                     {

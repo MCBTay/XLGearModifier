@@ -233,7 +233,7 @@ namespace XLGearModifier.CustomGear
 
             var path = "XLGearModifier";
             if (isAlias) path += "/alias";
-            path += $"/{Prefab.name}";
+            path += $"/{templateId.ToLower()}";
 
             var template = new CharacterGearTemplate
             {
