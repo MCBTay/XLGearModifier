@@ -57,14 +57,6 @@ namespace XLGearModifier.CustomGear
 		}
 
         /// <summary>
-        /// Returns the object's Prefix.
-        /// </summary>
-        public virtual string GetTypeName()
-        {
-            return Metadata.Prefix;
-        }
-        
-        /// <summary>
         /// Returns the skater index of a default gear item.  Only to be used for items that are based on default gear.
         /// </summary>
         /// <returns>The index of the skater that the gear belongs to.</returns>

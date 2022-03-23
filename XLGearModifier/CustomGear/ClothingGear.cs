@@ -31,7 +31,7 @@ namespace XLGearModifier.CustomGear
         {
             var name = string.IsNullOrEmpty(ClothingMetadata.DisplayName) ? Prefab.name : ClothingMetadata.DisplayName;
 
-            GearInfo = new CustomCharacterGearInfo(name, ClothingMetadata.Prefix, false, GetDefaultTextureChanges(), new string[0]);
+            GearInfo = new CustomCharacterGearInfo(name, ClothingMetadata.CharacterGearTemplate.id, false, GetDefaultTextureChanges(), new string[0]);
 
             SetTexturesAndShader();
             AddGearFilters();
@@ -202,7 +202,7 @@ namespace XLGearModifier.CustomGear
             var skaterIndex = (int)ClothingMetadata.Skater;
             var typeFilter = GearDatabase.Instance.skaters[skaterIndex].GearFilters[GetCategoryIndex(skaterIndex)];
 
-            AddGearFilter(ClothingMetadata.Prefix, typeFilter);
+            AddGearFilter(ClothingMetadata.CharacterGearTemplate.id, typeFilter);
             AddGearFilter(ClothingMetadata.PrefixAlias, typeFilter);
         }
 
@@ -222,7 +222,7 @@ namespace XLGearModifier.CustomGear
         /// </summary>
         private void AddGearTemplates()
         {
-            AddGearTemplate(ClothingMetadata.Prefix);
+            AddGearTemplate(ClothingMetadata.CharacterGearTemplate.id);
             AddGearTemplate(ClothingMetadata.PrefixAlias, true);
         }
 
@@ -269,9 +269,9 @@ namespace XLGearModifier.CustomGear
 
         private void AddOrUpdateTemplateAlphaMasks(XLGMClothingGearMetadata metadata, CharacterGearTemplate template)
         {
-            if (metadata.AlphaMaskThresholds == null || !metadata.AlphaMaskThresholds.Any()) return;
+            if (metadata.CharacterGearTemplate.alphaMasks == null || !metadata.CharacterGearTemplate.alphaMasks.Any()) return;
 
-            foreach (var mask in metadata.AlphaMaskThresholds)
+            foreach (var mask in metadata.CharacterGearTemplate.alphaMasks)
             {
                 if (mask == null) continue;
 
@@ -335,21 +335,6 @@ namespace XLGearModifier.CustomGear
                 Debug.Log("XLGM: No prefab found for template at path '" + path + "'");
             }
             return result;
-        }
-
-        /// <summary>
-        /// Returns the object's Prefix, unless BaseOnDefaultGear is true, then returns the base type's Prefix.
-        /// </summary>
-        public override string GetTypeName()
-        {
-            var type = base.GetTypeName();
-
-            if (ClothingMetadata.BaseOnDefaultGear)
-            {
-                type = ClothingMetadata.GetBaseType();
-            }
-
-            return type;
         }
     }
 }

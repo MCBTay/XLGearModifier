@@ -25,14 +25,14 @@ namespace XLGearModifier.CustomGear
             var skaterInfo = new SkaterInfo
             {
                 stance = SkaterInfo.Stance.Regular,
-                bodyID = SkaterMetadata.Prefix,
+                bodyID = SkaterMetadata.CharacterBodyTemplate.id,
                 name = name,
                 GearFilters = GetCustomSkaterTypeFilters(),
             };
             GearDatabase.Instance.skaters.Add(skaterInfo);
             //Traverse.Create(GearDatabase.Instance).Method("GenerateGearListSource").GetValue();
 
-            GearInfo = new CharacterBodyInfo(name, SkaterMetadata.Prefix, false, new List<MaterialChange>(), new string[] { });
+            GearInfo = new CharacterBodyInfo(name, SkaterMetadata.CharacterBodyTemplate.id, false, new List<MaterialChange>(), new string[] { });
 
             SetTexturesAndShader();
 
@@ -96,16 +96,16 @@ namespace XLGearModifier.CustomGear
 
         private void AddBodyGearTemplate()
         {
-            if (GearDatabase.Instance.CharBodyTemplateForID.ContainsKey(Metadata.Prefix.ToLower())) return;
+            if (GearDatabase.Instance.CharBodyTemplateForID.ContainsKey(SkaterMetadata.CharacterBodyTemplate.id.ToLower())) return;
 
             var newBodyTemplate = new CharacterBodyTemplate
             {
-                id = Metadata.Prefix.ToLower(),
+                id = SkaterMetadata.CharacterBodyTemplate.id.ToLower(),
                 path = $"XLGearModifier/{Prefab.name}",
                 leftEyeLocalPosition = new Vector3(1, 0, 0),
                 rightEyeLocalPosition = new Vector3(-1, 0, 0)
             };
-            GearDatabase.Instance.CharBodyTemplateForID.Add(Metadata.Prefix.ToLower(), newBodyTemplate);
+            GearDatabase.Instance.CharBodyTemplateForID.Add(SkaterMetadata.CharacterBodyTemplate.id.ToLower(), newBodyTemplate);
         }
 
         public override Task<GameObject> GetBaseObject()
