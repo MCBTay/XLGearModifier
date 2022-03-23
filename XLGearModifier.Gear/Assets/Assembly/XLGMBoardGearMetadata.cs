@@ -1,11 +1,14 @@
 ﻿using System;
+using SkaterXL.Gear;
 using UnityEngine;
 
 namespace XLGearModifier.Unity
 {
 	[Serializable]
 	public class XLGMBoardGearMetadata : XLGMMetadata
-	{
+    {
+        public BoardGearTemplate BoardGearTemplate;
+
 		[Tooltip("This is the Category of the gear and will dictate which category folder the mesh shows up in.")]
 		public BoardGearCategory Category;
 
@@ -32,5 +35,6 @@ namespace XLGearModifier.Unity
 		public override string GetSprite() => null;
 		public override string GetCategory() => Category.ToString();
 		public override bool BasedOnDefaultGear() => BaseOnDefaultGear;
-    }
+        public override string GetTemplateId() => BoardGearTemplate.id.ToLower();
+	}
 }

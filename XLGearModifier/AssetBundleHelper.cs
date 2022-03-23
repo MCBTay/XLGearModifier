@@ -188,16 +188,17 @@ namespace XLGearModifier
                     {
                         var metadata = asset.GetComponent<XLGMMetadata>();
                         if (metadata == null) continue;
-                        if (string.IsNullOrEmpty(metadata.Prefix)) continue;
-
+                        
                         CustomGearBase customGearBase = null;
 
                         switch (metadata)
                         {
                             case XLGMClothingGearMetadata clothingMetadata:
+                                if (string.IsNullOrEmpty(clothingMetadata.CharacterGearTemplate.id)) continue;
                                 customGearBase = new ClothingGear(clothingMetadata, asset);
                                 break;
                             case XLGMSkaterMetadata skaterMetadata:
+                                if (string.IsNullOrEmpty(skaterMetadata.CharacterBodyTemplate.id)) continue;
                                 customGearBase = new Skater(skaterMetadata, asset);
                                 break;
                             case XLGMBoardGearMetadata boardMetadata:

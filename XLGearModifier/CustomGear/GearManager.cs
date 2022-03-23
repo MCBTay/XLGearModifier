@@ -133,7 +133,7 @@ namespace XLGearModifier.CustomGear
 		/// </summary>
         private List<string> GetPrefixesToSearch(XLGMClothingGearMetadata metadata)
         {
-            var prefixes = new List<string> { metadata.Prefix.ToLower() };
+            var prefixes = new List<string> { metadata.CharacterGearTemplate.id.ToLower() };
 
             if (metadata.BaseOnDefaultGear)
             {
@@ -161,7 +161,7 @@ namespace XLGearModifier.CustomGear
                 textureChanges.Add(new TextureChange(texture.Key, $"{texturePath}/{texture.Value.name}"));
             }
 
-            var characterGearInfo = new CustomCharacterGearInfo(clothingGear.Metadata.Prefix, clothingGear.Metadata.Prefix, false, textureChanges.ToArray(), new List<string>().ToArray());
+            var characterGearInfo = new CustomCharacterGearInfo(clothingGear.ClothingMetadata.CharacterGearTemplate.id, clothingGear.ClothingMetadata.CharacterGearTemplate.id, false, textureChanges.ToArray(), new List<string>().ToArray());
             AddToList(clothingGear, characterGearInfo, destList, ref parent, false);
 		}
 

@@ -31,7 +31,7 @@ namespace XLGearModifier.CustomGear
         {
             var name = string.IsNullOrEmpty(BoardMetadata.DisplayName) ? Prefab.name : BoardMetadata.DisplayName;
 
-            GearInfo = new CustomBoardGearInfo(name, BoardMetadata.Prefix, false, GetDefaultTextureChanges(), new string[0]);
+            GearInfo = new CustomBoardGearInfo(name, BoardMetadata.BoardGearTemplate.id, false, GetDefaultTextureChanges(), new string[0]);
 
             if (BoardMetadata.Category == Unity.BoardGearCategory.Deck)
             {
@@ -63,17 +63,17 @@ namespace XLGearModifier.CustomGear
 
             var typeFilter = GearDatabase.Instance.skaters[skaterIndex].GearFilters[GetCategoryIndex(skaterIndex)];
 
-            if (!typeFilter.includedTypes.Contains(Metadata.Prefix))
+            if (!typeFilter.includedTypes.Contains(BoardMetadata.BoardGearTemplate.id))
             {
                 Array.Resize(ref typeFilter.includedTypes, typeFilter.includedTypes.Length + 1);
-                typeFilter.includedTypes[typeFilter.includedTypes.Length - 1] = Metadata.Prefix;
+                typeFilter.includedTypes[typeFilter.includedTypes.Length - 1] = BoardMetadata.BoardGearTemplate.id;
             }
         }
 
         private void AddBoardGearTemplate()
         {
             if (BoardMetadata.Category != Unity.BoardGearCategory.Deck) return;
-            if (GearDatabase.Instance.DeckTemplateForID.ContainsKey(BoardMetadata.Prefix.ToLower())) return;
+            if (GearDatabase.Instance.DeckTemplateForID.ContainsKey(BoardMetadata.BoardGearTemplate.id.ToLower())) return;
 
             var newGearTemplate = new DeckTemplate
             {
@@ -90,7 +90,7 @@ namespace XLGearModifier.CustomGear
                 }
             }
 
-            GearDatabase.Instance.DeckTemplateForID.Add(BoardMetadata.Prefix.ToLower(), newGearTemplate);
+            GearDatabase.Instance.DeckTemplateForID.Add(BoardMetadata.BoardGearTemplate.id.ToLower(), newGearTemplate);
         }
 
         public override int GetCategoryIndex(int skaterIndex)
@@ -138,18 +138,6 @@ namespace XLGearModifier.CustomGear
                 Debug.Log("XLGM: No prefab found for template at path '" + path + "'");
             }
             return result;
-        }
-
-        public override string GetTypeName()
-        {
-            var type = base.GetTypeName();
-
-            if (BoardMetadata.BaseOnDefaultGear)
-            {
-                type = BoardMetadata.GetBaseType();
-            }
-
-            return type;
         }
     }
 }
