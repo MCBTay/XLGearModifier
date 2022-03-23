@@ -126,7 +126,7 @@ namespace XLGearModifier.CustomGear
         /// <param name="originalMaterial">The material to pull textures off of.</param>
         /// <param name="textures">The collection of textures to update, should be a list of the 3 empty textures on the way in.</param>
         /// <returns>A dictionary of textures that should be the textures off the material (if they existed), else the empty textures.</returns>
-        private Dictionary<string, Texture> UpdateTextureDictionaryWithMaterialTextures(Material originalMaterial, Dictionary<string, Texture> textures)
+        public Dictionary<string, Texture> UpdateTextureDictionaryWithMaterialTextures(Material originalMaterial, Dictionary<string, Texture> textures)
         {
             // TODO: Because we're having to make the materials in HDRP/Lit in the editor (until we get their shader, hopefully)
             // we need to store off a copy of the normal and mask maps, and ensure we assign them to the correct property names once the shader has been changed.
@@ -169,7 +169,7 @@ namespace XLGearModifier.CustomGear
         /// <summary>
         /// Creates a dictionary of default textures for albedo, normal, and mask pbr using the empty textures in our project.
         /// </summary>
-        private Dictionary<string, Texture> CreateDefaultTextureDictionary()
+        public Dictionary<string, Texture> CreateDefaultTextureDictionary()
         {
             var textures = new Dictionary<string, Texture>
             {

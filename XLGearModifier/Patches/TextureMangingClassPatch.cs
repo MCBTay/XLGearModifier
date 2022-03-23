@@ -1,4 +1,5 @@
-﻿using HarmonyLib;
+﻿using System.IO;
+using HarmonyLib;
 using SkaterXL.Data;
 using SkaterXL.Gear;
 using System.Linq;
@@ -19,19 +20,19 @@ namespace XLGearModifier.Patches
 
 				var split = texturePath.Split('/');
 
-				if (texturePath.EndsWith(GearManager.EmptyAlbedoFilename))
+				if (texturePath.EndsWith(Path.GetFileNameWithoutExtension(GearManager.EmptyAlbedoFilename)))
 				{
 					__result = Task.FromResult<Texture>(GearManager.Instance.EmptyAlbedo);
 					return false;
 				}
 
-                if (texturePath.EndsWith(GearManager.EmptyNormalFilename))
+                if (texturePath.EndsWith(Path.GetFileNameWithoutExtension(GearManager.EmptyNormalFilename)))
                 {
                     __result = Task.FromResult<Texture>(GearManager.Instance.EmptyNormalMap);
                     return false;
 				}
 
-                if (texturePath.EndsWith(GearManager.EmptyMaskFilename))
+                if (texturePath.EndsWith(Path.GetFileNameWithoutExtension(GearManager.EmptyMaskFilename)))
                 {
                     __result = Task.FromResult<Texture>(GearManager.Instance.EmptyMaskPBR);
                     return false;

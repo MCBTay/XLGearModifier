@@ -152,12 +152,14 @@ namespace XLGearModifier.CustomGear
         {
             string texturePath = $"XLGearModifier/{clothingGear.Prefab.name}";
 
-            var textureChanges = new List<TextureChange>
+            var textures = clothingGear.CreateDefaultTextureDictionary();
+            textures = clothingGear.UpdateTextureDictionaryWithMaterialTextures(clothingGear.Prefab.GetComponentInChildren<SkinnedMeshRenderer>()?.material, textures);
+
+            var textureChanges = new List<TextureChange>();
+            foreach (var texture in textures)
             {
-                new TextureChange("albedo", $"{texturePath}/{EmptyAlbedoFilename}"),
-                new TextureChange("normal", $"{texturePath}/{EmptyNormalFilename}"),
-                new TextureChange("maskpbr", $"{texturePath}/{EmptyMaskFilename}")
-            };
+                textureChanges.Add(new TextureChange(texture.Key, $"{texturePath}/{texture.Value.name}"));
+            }
 
             var characterGearInfo = new CustomCharacterGearInfo(clothingGear.Metadata.Prefix, clothingGear.Metadata.Prefix, false, textureChanges.ToArray(), new List<string>().ToArray());
             AddToList(clothingGear, characterGearInfo, destList, ref parent, false);
