@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -20,69 +21,63 @@ namespace XLGearModifier.Texturing
 
         public Dictionary<string, Dictionary<string, Texture>> BaseGameTextures;
 
-        public const string ColorTextureName = "_texture2D_color";
-        public const string NormalTextureName = "_texture2D_normal";
-        public const string RgmtaoTextureName = "_texture2D_maskPBR";
-
-        public const string HairColorTextureName = "_texture_color";
-        public const string HairNormalTextureName = "_texture_normal";
-        public const string HairRgmtaoTextureName = "_texture_mask";
-
         public BaseGameTextureManager()
         {
             BaseGameTextures = new Dictionary<string, Dictionary<string, Texture>>();
         }
 
-        /// <summary>
-        /// Loads materials from the base game.  Loads materials for tops, bottoms, shoes, headwear, and hair.
-        /// </summary>
-        public async Task LoadGameMaterials()
+        public IEnumerator LoadEasyDayTextures(AssetBundle bundle)
         {
-            await Task.WhenAll(new List<Task>
+            var assetLoadRequest = bundle.LoadAllAssetsAsync<Texture2D>();
+            yield return assetLoadRequest;
+
+            var textures = assetLoadRequest.allAssets.Cast<Texture2D>();
+
+            foreach (var texture in textures)
             {
-                LoadBaseMaterials<TopTypes>(),
-                LoadBaseMaterials<BottomTypes>(),
-                LoadBaseMaterials<ShoeTypes>(),
-                LoadBaseMaterials<HeadwearTypes>(),
-                LoadBaseMaterials<HairStyles>(true)
-            });
-        }
+                var textureName = texture.name.ToLower();
 
-        private async Task LoadBaseMaterials<T>(bool isHair = false) where T : Enum
-        {
-            var names = Enum.GetNames(typeof(T)).Select(x => x.ToLower());
+                var split = textureName.Split('.');
+                var templateId = split[0];
+                var textureType = split[1];
 
-            foreach (var name in names)
-            {
-                var material = await LoadBaseGameAssetMaterial(name);
-                if (material == null) continue;
-
-                if (name == TopTypes.MShirt.ToString().ToLower() && MasterShaderCloth_v2 == null)
+                if (!BaseGameTextures.ContainsKey(templateId))
                 {
-                    MasterShaderCloth_v2 = material.shader;
+                    BaseGameTextures.Add(templateId, new Dictionary<string, Texture>());
                 }
 
-                if (name == HairStyles.MHairCounterpart.ToString().ToLower() && MasterShaderHair_AlphaTest_v1 == null)
+                if (!BaseGameTextures[templateId].ContainsKey(textureType))
                 {
-                    MasterShaderHair_AlphaTest_v1 = material.shader;
+                    BaseGameTextures[templateId].Add(textureType, texture);
                 }
-
-                var textures = new Dictionary<string, Texture>
-                {
-                    { "normal", material.GetTexture(isHair ? HairNormalTextureName : NormalTextureName) },
-                    { "maskpbr", material.GetTexture(isHair ? HairRgmtaoTextureName : RgmtaoTextureName) }
-                };
-
-                BaseGameTextures.Add(name, textures);
             }
         }
 
+        public async Task LoadGameShaders()
+        {
+            await Task.WhenAll(new List<Task>
+            {
+                LoadClothingShader(),
+                LoadHairShader()
+            });
+        }
+
+        private async Task LoadClothingShader()
+        {
+            MasterShaderCloth_v2 = await LoadBaseGameAssetShader(TopTypes.MShirt.ToString().ToLower());
+        }
+
+        private async Task LoadHairShader()
+        {
+            MasterShaderHair_AlphaTest_v1 = await LoadBaseGameAssetShader(HairStyles.MHairSidepart.ToString().ToLower());
+        }
+
         /// <summary>
-        /// Finds the material being used by the specified TemplateId and returns it.  Has to load the prefab from the Addressables system in order to be able to get that reference to the material.
+        /// Finds the shader being used by the specified TemplateId and returns it.  Has to load the prefab from the Addressables system in order to be able to get that reference to the shader.
         /// </summary>
-        /// <param name="templateId">The template/mesh to get the shader for.</param>
+        /// <param name="shaderPath">The path to the shader to load.</param>
         /// <returns>A reference to the shader being used by the mesh/template.</returns>
-        private async Task<Material> LoadBaseGameAssetMaterial(string templateId)
+        private async Task<Shader> LoadBaseGameAssetShader(string templateId)
         {
             var template = GearDatabase.Instance.CharGearTemplateForID[templateId];
             if (template == null) return null;
@@ -100,9 +95,8 @@ namespace XLGearModifier.Texturing
             if (materialController == null) return null;
 
             var target = materialController.targets?.FirstOrDefault();
-            if (target == null) return null;
 
-            return target.renderer?.material;
+            return target?.renderer?.material.shader;
         }
     }
 }

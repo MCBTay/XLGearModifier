@@ -69,7 +69,7 @@ namespace XLGearModifier
 				var spriteName = GetSpriteName(template);
                 var sprite = GearModifierUISpriteSheetSprites.FirstOrDefault(x => x.name == spriteName);
 
-				var mesh = GearManager.Instance.CustomGear.FirstOrDefault(x => x.GearInfo != null && x.GearInfo.type == clothingGear.type) as ClothingGear;
+				var mesh = GearManager.Instance.CustomGear[clothingGear.type] as ClothingGear;
 
 				var creatorName = mesh?.ClothingMetadata?.CreatorName ?? "N/A";
 
@@ -79,7 +79,7 @@ namespace XLGearModifier
 
 		private string GetSpriteName(CharacterGearTemplate template)
         {
-			if (GearManager.Instance.CustomGear.FirstOrDefault(x => x.Metadata.Prefix.ToLower() == template.id) is ClothingGear customGear)
+			if (GearManager.Instance.CustomGear[template.id] is ClothingGear customGear)
             {
                 return customGear.Metadata.GetSprite();
             }

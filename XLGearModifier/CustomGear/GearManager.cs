@@ -18,7 +18,7 @@ namespace XLGearModifier.CustomGear
 		private static GearManager __instance;
 		public static GearManager Instance => __instance ?? (__instance = new GearManager());
 
-        public List<CustomGearBase> CustomGear;
+        public Dictionary<string, CustomGearBase> CustomGear;
 
 		public List<ICustomInfo> CustomMeshes;
         public List<ICustomInfo> CustomFemaleMeshes;
@@ -49,7 +49,7 @@ namespace XLGearModifier.CustomGear
 			CustomMeshes.Clear();
 			CustomFemaleMeshes.Clear();
 
-			foreach (var customGear in CustomGear)
+			foreach (var customGear in CustomGear.Values)
             {
                 if (customGear is Skater) continue;
 
@@ -129,7 +129,7 @@ namespace XLGearModifier.CustomGear
 		/// </summary>
         private List<string> GetPrefixesToSearch(XLGMClothingGearMetadata metadata)
         {
-            var prefixes = new List<string> { metadata.Prefix.ToLower() };
+            var prefixes = new List<string> { metadata.CharacterGearTemplate.id.ToLower() };
 
             if (metadata.BaseOnDefaultGear)
             {
@@ -148,14 +148,16 @@ namespace XLGearModifier.CustomGear
         {
             string texturePath = $"XLGearModifier/{clothingGear.Prefab.name}";
 
-            var textureChanges = new List<TextureChange>
-            {
-                new TextureChange("albedo", $"{texturePath}/{EmptyAlbedoFilename}"),
-                new TextureChange("normal", $"{texturePath}/{EmptyNormalFilename}"),
-                new TextureChange("maskpbr", $"{texturePath}/{EmptyMaskFilename}")
-            };
+            var textures = clothingGear.CreateDefaultTextureDictionary();
+            textures = clothingGear.UpdateTextureDictionaryWithMaterialTextures(clothingGear.Prefab.GetComponentInChildren<SkinnedMeshRenderer>()?.material, textures);
 
-            var characterGearInfo = new CustomCharacterGearInfo(clothingGear.Metadata.Prefix, clothingGear.Metadata.Prefix, false, textureChanges.ToArray(), new List<string>().ToArray());
+            var textureChanges = new List<TextureChange>();
+            foreach (var texture in textures)
+            {
+                textureChanges.Add(new TextureChange(texture.Key, $"{texturePath}/{texture.Value.name}"));
+            }
+
+            var characterGearInfo = new CustomCharacterGearInfo(clothingGear.ClothingMetadata.CharacterGearTemplate.id, clothingGear.ClothingMetadata.CharacterGearTemplate.id, false, textureChanges.ToArray(), new List<string>().ToArray());
             AddToList(clothingGear, characterGearInfo, destList, ref parent, false);
 		}
 

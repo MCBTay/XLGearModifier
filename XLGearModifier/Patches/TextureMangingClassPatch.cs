@@ -1,4 +1,5 @@
-﻿using HarmonyLib;
+﻿using System.IO;
+using HarmonyLib;
 using SkaterXL.Data;
 using SkaterXL.Gear;
 using System.Linq;
@@ -19,19 +20,19 @@ namespace XLGearModifier.Patches
 
 				var split = texturePath.Split('/');
 
-				if (texturePath.EndsWith(GearManager.EmptyAlbedoFilename))
+				if (texturePath.EndsWith(Path.GetFileNameWithoutExtension(GearManager.EmptyAlbedoFilename)))
 				{
 					__result = Task.FromResult<Texture>(GearManager.Instance.EmptyAlbedo);
 					return false;
 				}
 
-                if (texturePath.EndsWith(GearManager.EmptyNormalFilename))
+                if (texturePath.EndsWith(Path.GetFileNameWithoutExtension(GearManager.EmptyNormalFilename)))
                 {
                     __result = Task.FromResult<Texture>(GearManager.Instance.EmptyNormalMap);
                     return false;
 				}
 
-                if (texturePath.EndsWith(GearManager.EmptyMaskFilename))
+                if (texturePath.EndsWith(Path.GetFileNameWithoutExtension(GearManager.EmptyMaskFilename)))
                 {
                     __result = Task.FromResult<Texture>(GearManager.Instance.EmptyMaskPBR);
                     return false;
@@ -39,12 +40,13 @@ namespace XLGearModifier.Patches
 
                 if (split.Length < 4) return true;
 
-                var prefabName = split[1];
+                var templateName = split[1];
                 var textureName = split[2];
                 var textureType = split[3];
 
-                var customGear = GearManager.Instance.CustomGear.FirstOrDefault(x => x.Prefab.name == prefabName);
-                if (customGear == null) return true;
+                if (!GearManager.Instance.CustomGear.ContainsKey(templateName)) return true;
+
+                var customGear = GearManager.Instance.CustomGear[templateName];
 
                 if (customGear.GearInfo is CharacterBodyInfo cbi)
                 {
