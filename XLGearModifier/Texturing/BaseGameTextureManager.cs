@@ -44,31 +44,31 @@ namespace XLGearModifier.Texturing
                 if (!BaseGameTextures.ContainsKey(templateId))
                 {
                     BaseGameTextures.Add(templateId, new Dictionary<string, Texture>());
-        }
+                }
 
                 if (!BaseGameTextures[templateId].ContainsKey(textureType))
-        {
+                {
                     BaseGameTextures[templateId].Add(textureType, texture);
                 }
             }
         }
 
         public async Task LoadGameShaders()
-            {
+        {
             await Task.WhenAll(new List<Task>
-                {
+            {
                 LoadClothingShader(),
                 LoadHairShader()
             });
-                }
+        }
 
         private async Task LoadClothingShader()
-                {
+        {
             MasterShaderCloth_v2 = await LoadBaseGameAssetShader(TopTypes.MShirt.ToString().ToLower());
-                }
+        }
 
         private async Task LoadHairShader()
-                {
+        {
             MasterShaderHair_AlphaTest_v1 = await LoadBaseGameAssetShader(HairStyles.MHairSidepart.ToString().ToLower());
         }
 
@@ -95,7 +95,6 @@ namespace XLGearModifier.Texturing
             if (materialController == null) return null;
 
             var target = materialController.targets?.FirstOrDefault();
-            if (target == null) return null;
 
             return target?.renderer?.material.shader;
         }
