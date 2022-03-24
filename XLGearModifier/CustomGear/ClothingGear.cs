@@ -135,10 +135,22 @@ namespace XLGearModifier.CustomGear
 
             if (ClothingMetadata.BaseOnDefaultGear)
             {
-                var baseTextures = BaseGameTextureManager.Instance.BaseGameTextures[ClothingMetadata.GetBaseType().ToLower()];
-                textures["normal"] = baseTextures["normal"];
-                textures["maskpbr"] = baseTextures["maskpbr"];
+                var id = ClothingMetadata.GetBaseType().ToLower();
 
+                if (!BaseGameTextureManager.Instance.BaseGameTextures.ContainsKey(id)) return textures;
+
+                var baseTextures = BaseGameTextureManager.Instance.BaseGameTextures[id];
+
+                if (baseTextures.ContainsKey("normal"))
+                {
+                    textures["normal"] = baseTextures["normal"];
+                }
+
+                if (baseTextures.ContainsKey("maskpbr"))
+                {
+                    textures["maskpbr"] = baseTextures["maskpbr"];
+                }
+                
                 return textures;
             }
 
@@ -222,6 +234,18 @@ namespace XLGearModifier.CustomGear
         /// </summary>
         private void AddGearTemplates()
         {
+
+            //TODO: Remove both of these conditions once the custom property drawer can handle this for us.
+            if (string.IsNullOrEmpty(ClothingMetadata.CharacterGearTemplate.path))
+            {
+                ClothingMetadata.CharacterGearTemplate.path = $"XLGearModifier/{ClothingMetadata.CharacterGearTemplate.id.ToLower()}";
+            }
+
+            if (ClothingMetadata.CharacterGearTemplate.categoryName == "unknown")
+            {
+                ClothingMetadata.CharacterGearTemplate.category = MapCategory(ClothingMetadata.Category);
+            }
+
             var templateId = ClothingMetadata.CharacterGearTemplate.id.ToLower();
             if (!GearDatabase.Instance.ContainsClothingTemplateWithID(templateId))
             {
