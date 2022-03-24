@@ -57,21 +57,18 @@ namespace XLGearModifier
             {
                 CharacterGearTemplate template;
 
-                if (GearDatabase.Instance.CharGearTemplateForID.ContainsKey(clothingGear.type))
-                {
-                    template = GearDatabase.Instance.CharGearTemplateForID[clothingGear.type];
-				}
-                else
-                {
-                    template = new CharacterGearTemplate { id = "eyes" };
-                }
+                template = GearDatabase.Instance.CharGearTemplateForID.ContainsKey(clothingGear.type) ? 
+                    GearDatabase.Instance.CharGearTemplateForID[clothingGear.type] : 
+                    new CharacterGearTemplate { id = "eyes" };
 				
 				var spriteName = GetSpriteName(template);
                 var sprite = GearModifierUISpriteSheetSprites.FirstOrDefault(x => x.name == spriteName);
 
-				var mesh = GearManager.Instance.CustomGear[clothingGear.type] as ClothingGear;
+                ClothingGear mesh = GearManager.Instance.CustomGear.ContainsKey(clothingGear.type) ?
+                    GearManager.Instance.CustomGear[clothingGear.type] as ClothingGear :
+                    null;
 
-				var creatorName = mesh?.ClothingMetadata?.CreatorName ?? "N/A";
+                var creatorName = mesh?.ClothingMetadata?.CreatorName ?? "N/A";
 
 				whatsEquipped.AddToList("Prefix: " + clothingGear.type, clothingGear.name, "Creator: " + creatorName, sprite);
 			}
@@ -79,7 +76,8 @@ namespace XLGearModifier
 
 		private string GetSpriteName(CharacterGearTemplate template)
         {
-			if (GearManager.Instance.CustomGear[template.id] is ClothingGear customGear)
+			if (GearManager.Instance.CustomGear.ContainsKey(template.id) &&
+                GearManager.Instance.CustomGear[template.id] is ClothingGear customGear)
             {
                 return customGear.Metadata.GetSprite();
             }
