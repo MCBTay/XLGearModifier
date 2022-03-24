@@ -1,12 +1,11 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using SkaterXL.Gear;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
-using XLGearModifier.Unity;
 
 namespace XLGearModifier.Texturing
 {
@@ -25,76 +24,85 @@ namespace XLGearModifier.Texturing
             BaseGameTextures = new Dictionary<string, Dictionary<string, Texture>>();
         }
 
-        /// <summary>
-        /// Loads materials from the base game.  Loads materials for tops, bottoms, shoes, headwear, and hair.
-        /// </summary>
-        public async Task LoadGameMaterials()
+        public IEnumerator LoadEasyDayTextures(AssetBundle bundle)
+        {
+            var assetLoadRequest = bundle.LoadAllAssetsAsync<Texture2D>();
+            yield return assetLoadRequest;
+
+            var textures = assetLoadRequest.allAssets.Cast<Texture2D>();
+
+            foreach (var texture in textures)
+            {
+                var textureName = texture.name.ToLower();
+
+                var split = textureName.Split('.');
+                var templateId = split[0];
+                var textureType = split[1];
+
+                if (!BaseGameTextures.ContainsKey(templateId))
+                {
+                    BaseGameTextures.Add(templateId, new Dictionary<string, Texture>());
+                }
+
+                if (!BaseGameTextures[templateId].ContainsKey(textureType))
+                {
+                    BaseGameTextures[templateId].Add(textureType, texture);
+                }
+            }
+        }
+
+        public async Task LoadGameShaders()
         {
             await Task.WhenAll(new List<Task>
             {
-                LoadBaseMaterials<TopTypes>(),
-                LoadBaseMaterials<BottomTypes>(),
-                LoadBaseMaterials<ShoeTypes>(),
-                LoadBaseMaterials<HeadwearTypes>(),
-                LoadBaseMaterials<HairStyles>(true)
+                LoadClothingShader(),
+                LoadHairShader()
             });
         }
 
-        private async Task LoadBaseMaterials<T>(bool isHair = false) where T : Enum
+        private async Task LoadClothingShader()
         {
-            var names = Enum.GetNames(typeof(T)).Select(x => x.ToLower());
+            MasterShaderCloth_v2 = await LoadBaseGameAssetShader("Assets/Materials/Shader/MasterShaderCloth_v2.ShaderGraph");
+        }
 
-            foreach (var name in names)
-            {
-                var material = await LoadBaseGameAssetMaterial(name);
-                if (material == null) continue;
-
-                if (name == TopTypes.MShirt.ToString().ToLower() && MasterShaderCloth_v2 == null)
-                {
-                    MasterShaderCloth_v2 = material.shader;
-                }
-
-                if (name == HairStyles.MHairCounterpart.ToString().ToLower() && MasterShaderHair_AlphaTest_v1 == null)
-                {
-                    MasterShaderHair_AlphaTest_v1 = material.shader;
-                }
-
-                var textures = new Dictionary<string, Texture>
-                {
-                    { "normal", material.GetTexture(isHair ? "_texture_normal" : "_texture2D_normal") },
-                    { "maskpbr", material.GetTexture(isHair ? "_texture_mask" : "_texture2D_maskPBR") }
-                };
-
-                BaseGameTextures.Add(name, textures);
-            }
+        private async Task LoadHairShader()
+        {
+            MasterShaderHair_AlphaTest_v1 = await LoadBaseGameAssetShader("Assets/Materials/Shader/MasterShaderHair_AlphaTest_v1.shadergraph");
         }
 
         /// <summary>
-        /// Finds the material being used by the specified TemplateId and returns it.  Has to load the prefab from the Addressables system in order to be able to get that reference to the material.
+        /// Finds the shader being used by the specified TemplateId and returns it.  Has to load the prefab from the Addressables system in order to be able to get that reference to the shader.
         /// </summary>
-        /// <param name="templateId">The template/mesh to get the shader for.</param>
+        /// <param name="shaderPath">The path to the shader to load.</param>
         /// <returns>A reference to the shader being used by the mesh/template.</returns>
-        private async Task<Material> LoadBaseGameAssetMaterial(string templateId)
+        private async Task<Shader> LoadBaseGameAssetShader(string shaderPath)
         {
-            var template = GearDatabase.Instance.CharGearTemplateForID[templateId];
-            if (template == null) return null;
-
-            AsyncOperationHandle<GameObject> loadOp = Addressables.LoadAssetAsync<GameObject>(template.path);
+            AsyncOperationHandle<Shader> loadOp = Addressables.LoadAssetAsync<Shader>(shaderPath);
             await new WaitUntil(() => loadOp.IsDone);
-            GameObject result = loadOp.Result;
+            Shader result = loadOp.Result;
             if (result == null)
             {
-                Debug.Log("XLGM: No prefab found for template at path '" + template.path + "'");
+                Debug.Log("XLGM: No shader found for template at path '" + shaderPath + "'");
                 return null;
             }
 
-            var materialController = result.GetComponentInChildren<MaterialController>();
-            if (materialController == null) return null;
+            return result;
+        }
 
-            var target = materialController.targets?.FirstOrDefault();
-            if (target == null) return null;
+        /// <summary>
+        /// Loads a single asset of type T from bundle with name of assetName.  Sets result as destination.
+        /// </summary>
+        /// <typeparam name="T">The type of asset to load.</typeparam>
+        /// <param name="bundle">The bundle to load the asset from.</param>
+        /// <param name="assetName">The name of the asset to load.</param>
+        /// <param name="callback"></param>
+        /// <returns></returns>
+        private IEnumerator LoadAsset<T>(AssetBundle bundle, string assetName, Action<T> callback) where T : UnityEngine.Object
+        {
+            var assetLoadRequest = bundle.LoadAssetAsync<T>(assetName);
+            yield return assetLoadRequest;
 
-            return target.renderer?.material;
+            callback(assetLoadRequest.asset as T);
         }
     }
 }
