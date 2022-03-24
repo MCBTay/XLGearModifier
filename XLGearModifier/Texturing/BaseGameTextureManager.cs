@@ -3,9 +3,11 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using SkaterXL.Gear;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
+using XLGearModifier.Unity;
 
 namespace XLGearModifier.Texturing
 {
@@ -62,12 +64,12 @@ namespace XLGearModifier.Texturing
 
         private async Task LoadClothingShader()
         {
-            MasterShaderCloth_v2 = await LoadBaseGameAssetShader("Assets/Materials/Shader/MasterShaderCloth_v2.ShaderGraph");
+            MasterShaderCloth_v2 = await LoadBaseGameAssetShader(TopTypes.MShirt.ToString().ToLower());
         }
 
         private async Task LoadHairShader()
         {
-            MasterShaderHair_AlphaTest_v1 = await LoadBaseGameAssetShader("Assets/Materials/Shader/MasterShaderHair_AlphaTest_v1.shadergraph");
+            MasterShaderHair_AlphaTest_v1 = await LoadBaseGameAssetShader(HairStyles.MHairSidepart.ToString().ToLower());
         }
 
         /// <summary>
@@ -75,18 +77,26 @@ namespace XLGearModifier.Texturing
         /// </summary>
         /// <param name="shaderPath">The path to the shader to load.</param>
         /// <returns>A reference to the shader being used by the mesh/template.</returns>
-        private async Task<Shader> LoadBaseGameAssetShader(string shaderPath)
+        private async Task<Shader> LoadBaseGameAssetShader(string templateId)
         {
-            AsyncOperationHandle<Shader> loadOp = Addressables.LoadAssetAsync<Shader>(shaderPath);
+            var template = GearDatabase.Instance.CharGearTemplateForID[templateId];
+            if (template == null) return null;
+
+            AsyncOperationHandle<GameObject> loadOp = Addressables.LoadAssetAsync<GameObject>(template.path);
             await new WaitUntil(() => loadOp.IsDone);
-            Shader result = loadOp.Result;
+            GameObject result = loadOp.Result;
             if (result == null)
             {
-                Debug.Log("XLGM: No shader found for template at path '" + shaderPath + "'");
+                Debug.Log("XLGM: No prefab found for template at path '" + template.path + "'");
                 return null;
             }
 
-            return result;
+            var materialController = result.GetComponentInChildren<MaterialController>();
+            if (materialController == null) return null;
+
+            var target = materialController.targets?.FirstOrDefault();
+
+            return target?.renderer?.material.shader;
         }
     }
 }
