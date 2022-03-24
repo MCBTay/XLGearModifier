@@ -88,21 +88,5 @@ namespace XLGearModifier.Texturing
 
             return result;
         }
-
-        /// <summary>
-        /// Loads a single asset of type T from bundle with name of assetName.  Sets result as destination.
-        /// </summary>
-        /// <typeparam name="T">The type of asset to load.</typeparam>
-        /// <param name="bundle">The bundle to load the asset from.</param>
-        /// <param name="assetName">The name of the asset to load.</param>
-        /// <param name="callback"></param>
-        /// <returns></returns>
-        private IEnumerator LoadAsset<T>(AssetBundle bundle, string assetName, Action<T> callback) where T : UnityEngine.Object
-        {
-            var assetLoadRequest = bundle.LoadAssetAsync<T>(assetName);
-            yield return assetLoadRequest;
-
-            callback(assetLoadRequest.asset as T);
-        }
     }
 }
