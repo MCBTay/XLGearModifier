@@ -23,8 +23,7 @@ namespace XLGearModifier
 
         public async Task LoadBundles()
         {
-            await BaseGameTextureManager.Instance.LoadGameMaterials();
-
+            await BaseGameTextureManager.Instance.LoadGameShaders();
             // We're solely making a call here to ensure that the unity assembly is loaded up prior to loading assets.  else we'll get a bunch of errors about things missing.
             var test = GearModifierTab.CustomMeshes;
 
@@ -72,6 +71,13 @@ namespace XLGearModifier
             if (assetBundle.name == "default-empty-textures")
             {
                 yield return LoadEmptyDefaultTextures(assetBundle);
+                assetBundle.Unload(false);
+                yield break;
+            }
+
+            if (assetBundle.name == "easy-day-textures")
+            {
+                yield return BaseGameTextureManager.Instance.LoadEasyDayTextures(assetBundle);
                 assetBundle.Unload(false);
                 yield break;
             }

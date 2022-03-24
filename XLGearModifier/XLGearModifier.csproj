@@ -144,6 +144,7 @@
     <None Include="app.config" />
     <EmbeddedResource Include="Assets\default-empty-textures" />
     <EmbeddedResource Include="Assets\user-interface" />
+	<EmbeddedResource Include="Assets\easy-day-textures" />
     <EmbeddedResource Include="Assets\char male\facialhair" />
     <EmbeddedResource Include="Assets\char male\hair" />
     <EmbeddedResource Include="Assets\char male\hats" />
@@ -151,11 +152,11 @@
     <EmbeddedResource Include="Assets\char male\pants" />
     <EmbeddedResource Include="Assets\char male\shoes" />
     <EmbeddedResource Include="Assets\char male\tops" />
-	<EmbeddedResource Include="Assets\char female\female-bottoms" />
-	<EmbeddedResource Include="Assets\char female\female-hair" />
-	<EmbeddedResource Include="Assets\char female\female-hats" />
-	<EmbeddedResource Include="Assets\char female\female-shoes" />	
-	<EmbeddedResource Include="Assets\char female\female-tops" />
+    <EmbeddedResource Include="Assets\char female\female-bottoms" />
+    <EmbeddedResource Include="Assets\char female\female-hair" />
+    <EmbeddedResource Include="Assets\char female\female-hats" />
+    <EmbeddedResource Include="Assets\char female\female-shoes" />
+    <EmbeddedResource Include="Assets\char female\female-tops" />
     <None Include="Info.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
