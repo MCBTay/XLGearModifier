@@ -36,7 +36,7 @@ namespace XLGearModifier.CustomGear
 			CustomMeshes = new List<ICustomInfo>();
             CustomFemaleMeshes = new List<ICustomInfo>();
 
-			CustomGear = new List<CustomGearBase>();
+            CustomGear = new Dictionary<string, CustomGearBase>();
         }
 
         public void LoadNestedItems()
