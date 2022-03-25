@@ -132,25 +132,9 @@ namespace XLGearModifier.Patches
             static void Postfix(IndexPath index, ref GearRoomCameraView __result)
             {
                 if (index.depth < 2) return;
-
                 if (index[1] != (int) GearModifierTab.Eyes) return;
 
                 __result = GearRoomCameraView.Head;
-            }
-        }
-
-		/// <summary>
-		/// Patching into GearDatabase.ContainsClothingTemplateWithID such that I can call GearDatabase.GetGearIn for eye textures
-		/// and it actually load them properly.
-		/// </summary>
-        [HarmonyPatch(typeof(GearDatabase), nameof(GearDatabase.ContainsClothingTemplateWithID))]
-        public static class ContainsClothingTemplateWithIDPatch
-        {
-            static void Postfix(string id, ref bool __result)
-            {
-                if (id != "eyes") return;
-
-                __result = true;
             }
         }
     }
