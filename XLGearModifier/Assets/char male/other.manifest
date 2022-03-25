@@ -1,0 +1,51 @@
+ManifestFileVersion: 0
+CRC: 3229167965
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 9b2a8ff59496b44c7dd2bcad4470abfa
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 3b1292ad0dc0ba8d970660b56f35de13
+HashAppended: 0
+ClassTypes:
+- Class: 1
+  Script: {instanceID: 0}
+- Class: 4
+  Script: {instanceID: 0}
+- Class: 21
+  Script: {instanceID: 0}
+- Class: 28
+  Script: {instanceID: 0}
+- Class: 43
+  Script: {instanceID: 0}
+- Class: 48
+  Script: {instanceID: 0}
+- Class: 114
+  Script: {fileID: 1516140005, guid: 1294320a6233d5d4f9b75ef5667679e7, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: c40aacb17b7be7349bb4ca5e22d17b77, type: 3}
+- Class: 114
+  Script: {fileID: -565638827, guid: 1294320a6233d5d4f9b75ef5667679e7, type: 3}
+- Class: 115
+  Script: {instanceID: 0}
+- Class: 137
+  Script: {instanceID: 0}
+Assets:
+- Assets/1. In Progress/Prefabs/Other/Glasses/GlassesRayban.prefab
+- Assets/1. In Progress/Materials/Other/Glasses/GlassesRayban Material.mat
+- Assets/2. Done/Materials/Other/Mask.mat
+- Assets/2. Done/Meshes/Other/SurgicalMask-STPN.fbx
+- Assets/2. Done/Textures/Other/Glasses/Rayban/RayBan_01_1001_normal.png
+- Assets/2. Done/Materials/Other/GlassesPolo/Frame.mat
+- Assets/2. Done/Prefabs/Other/Converted/GlassesPolo.prefab
+- Assets/2. Done/Prefabs/Other/Converted/GlassesPolo2.prefab
+- Assets/2. Done/Prefabs/Other/Converted/SurgicalMask-STPN.prefab
+- Assets/2. Done/Meshes/Other/GlassesPoloShort.fbx
+- Assets/2. Done/Prefabs/Other/Converted/GlassesPoloShort.prefab
+- Assets/1. In Progress/Meshes/Other/Glasses/GlassesRayban.fbx
+- Assets/2. Done/Meshes/Other/GlassesPolo.fbx
+- Assets/2. Done/Meshes/Other/GlassesPolo2.fbx
+- Assets/2. Done/Textures/Other/Glasses/Rayban/RayBan_01_1001_albedo.jpg
+- Assets/2. Done/Materials/Other/GlassesPolo/Glass.mat
+Dependencies: []

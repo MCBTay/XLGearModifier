@@ -1,0 +1,38 @@
+ManifestFileVersion: 0
+CRC: 3448840948
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 7f68258c66f79f2723d9e8271d0cacc1
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 2c6cd3f3f20ed5f945de048733452567
+HashAppended: 0
+ClassTypes:
+- Class: 1
+  Script: {instanceID: 0}
+- Class: 4
+  Script: {instanceID: 0}
+- Class: 21
+  Script: {instanceID: 0}
+- Class: 43
+  Script: {instanceID: 0}
+- Class: 48
+  Script: {instanceID: 0}
+- Class: 114
+  Script: {fileID: 1516140005, guid: 1294320a6233d5d4f9b75ef5667679e7, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: c40aacb17b7be7349bb4ca5e22d17b77, type: 3}
+- Class: 114
+  Script: {fileID: -565638827, guid: 1294320a6233d5d4f9b75ef5667679e7, type: 3}
+- Class: 115
+  Script: {instanceID: 0}
+- Class: 137
+  Script: {instanceID: 0}
+Assets:
+- Assets/2. Done/Prefabs/Bottoms/Female/TAPants2 Female.prefab
+- Assets/2. Done/Prefabs/Bottoms/Female/ESPants2 Female.prefab
+- Assets/2. Done/Prefabs/Bottoms/Female/BWPants2 Female.prefab
+- Assets/2. Done/Prefabs/Bottoms/Female/Cropped Pants.prefab
+- Assets/2. Done/Prefabs/Bottoms/Female/TLPants2 Female.prefab
+Dependencies: []

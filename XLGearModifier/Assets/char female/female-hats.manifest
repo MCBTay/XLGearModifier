@@ -1,0 +1,34 @@
+ManifestFileVersion: 0
+CRC: 4064472338
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 93d6d848e19ec05fb8afe90b9970f17c
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 2c6cd3f3f20ed5f945de048733452567
+HashAppended: 0
+ClassTypes:
+- Class: 1
+  Script: {instanceID: 0}
+- Class: 4
+  Script: {instanceID: 0}
+- Class: 21
+  Script: {instanceID: 0}
+- Class: 43
+  Script: {instanceID: 0}
+- Class: 48
+  Script: {instanceID: 0}
+- Class: 114
+  Script: {fileID: 1516140005, guid: 1294320a6233d5d4f9b75ef5667679e7, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: c40aacb17b7be7349bb4ca5e22d17b77, type: 3}
+- Class: 114
+  Script: {fileID: -565638827, guid: 1294320a6233d5d4f9b75ef5667679e7, type: 3}
+- Class: 115
+  Script: {instanceID: 0}
+- Class: 137
+  Script: {instanceID: 0}
+Assets:
+- Assets/2. Done/Prefabs/Head/Female/F Snapback Backwards.prefab
+Dependencies: []
