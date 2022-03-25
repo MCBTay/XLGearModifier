@@ -1,0 +1,45 @@
+ManifestFileVersion: 0
+CRC: 746587257
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 2c1543fb618bd43f33e4a9b0e0a9dbc2
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 3b1292ad0dc0ba8d970660b56f35de13
+HashAppended: 0
+ClassTypes:
+- Class: 1
+  Script: {instanceID: 0}
+- Class: 4
+  Script: {instanceID: 0}
+- Class: 21
+  Script: {instanceID: 0}
+- Class: 28
+  Script: {instanceID: 0}
+- Class: 43
+  Script: {instanceID: 0}
+- Class: 48
+  Script: {instanceID: 0}
+- Class: 114
+  Script: {fileID: 1516140005, guid: 1294320a6233d5d4f9b75ef5667679e7, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: c40aacb17b7be7349bb4ca5e22d17b77, type: 3}
+- Class: 114
+  Script: {fileID: -565638827, guid: 1294320a6233d5d4f9b75ef5667679e7, type: 3}
+- Class: 115
+  Script: {instanceID: 0}
+- Class: 137
+  Script: {instanceID: 0}
+Assets:
+- Assets/2. Done/Prefabs/Facial Hair/MFacialHairSnake.prefab
+- Assets/2. Done/Textures/FacialHair/t_obiwan_01_beardcards_ca.png
+- Assets/2. Done/Materials/Facial Hair/MFacialHairSnake_Material.mat
+- Assets/2. Done/Meshes/Facial Hair/MFacialHairObiWan/MFacialHairObiWan.fbx
+- Assets/2. Done/Prefabs/Facial Hair/SnakeBeard-Fitted.prefab
+- Assets/2. Done/Prefabs/Facial Hair/MFacialHairObiWan.prefab
+- Assets/2. Done/Materials/Facial Hair/MFacialHairObiWan_Material.mat
+- Assets/2. Done/Meshes/Facial Hair/MFacialHairSnake/SnakeBeard-Fitted.fbx
+- Assets/2. Done/Textures/FacialHair/Venom_Snake_Hair.png
+- Assets/2. Done/Meshes/Facial Hair/MFacialHairSnake/MFacialHairSnake.fbx
+Dependencies: []

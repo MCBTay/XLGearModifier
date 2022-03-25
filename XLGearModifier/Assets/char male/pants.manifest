@@ -1,0 +1,67 @@
+ManifestFileVersion: 0
+CRC: 2474597329
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: ede2ad6fe6bdbc8a83bdf95adb96f285
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 3b1292ad0dc0ba8d970660b56f35de13
+HashAppended: 0
+ClassTypes:
+- Class: 1
+  Script: {instanceID: 0}
+- Class: 4
+  Script: {instanceID: 0}
+- Class: 21
+  Script: {instanceID: 0}
+- Class: 28
+  Script: {instanceID: 0}
+- Class: 43
+  Script: {instanceID: 0}
+- Class: 48
+  Script: {instanceID: 0}
+- Class: 114
+  Script: {fileID: 1516140005, guid: 1294320a6233d5d4f9b75ef5667679e7, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: c40aacb17b7be7349bb4ca5e22d17b77, type: 3}
+- Class: 114
+  Script: {fileID: -565638827, guid: 1294320a6233d5d4f9b75ef5667679e7, type: 3}
+- Class: 115
+  Script: {instanceID: 0}
+- Class: 137
+  Script: {instanceID: 0}
+Assets:
+- Assets/2. Done/Textures/Bottoms/XXXShorts/mat6_n3-nochamp.png
+- Assets/2. Done/Textures/Bottoms/XXXShorts/mat6_c.png
+- Assets/2. Done/Prefabs/Bottoms/Male/Converted/Pro Fix/BWPants Fix.prefab
+- Assets/2. Done/Prefabs/Bottoms/Male/Converted/Short shorts.prefab
+- Assets/2. Done/Prefabs/Bottoms/Male/Converted/TAShorts-Shorter.prefab
+- Assets/2. Done/Prefabs/Bottoms/Male/Converted/Denim Cropped Cuffed 2.prefab
+- Assets/2. Done/Meshes/Bottoms/Male/Pro Fix/TLPants-Update-Low-Shoes.fbx
+- Assets/2. Done/Meshes/Bottoms/Male/Pro Fix/BWPants Fix.fbx
+- Assets/2. Done/Textures/Default Alpha Masks/Custom Alphas/Legs Full of Holes Demo.png
+- Assets/2. Done/Prefabs/Bottoms/Male/Converted/Pants StraightLeg Cuff.prefab
+- Assets/2. Done/Prefabs/Bottoms/Male/Converted/SXL Alpha Pants.prefab
+- Assets/2. Done/Prefabs/Bottoms/Male/Converted/XXXShorts-High-Short.prefab
+- Assets/2. Done/Prefabs/Bottoms/Male/Converted/Pro Fix/tom_asta_pants.prefab
+- Assets/2. Done/Prefabs/Bottoms/Male/Converted/Denim Cropped 2 1.prefab
+- Assets/2. Done/Prefabs/Bottoms/Male/Converted/Pro Fix/TLPants-Update.prefab
+- Assets/2. Done/Prefabs/Bottoms/Male/Converted/TAShorts.prefab
+- Assets/2. Done/Meshes/Bottoms/Male/Pro Fix/ES Pants Fix 1-25-21.fbx
+- Assets/2. Done/Prefabs/Bottoms/Male/Converted/Pants Cropped Cuffed.prefab
+- Assets/2. Done/Prefabs/Bottoms/Male/Converted/Pro Fix/TLPants-Update-Low-Shoes.prefab
+- Assets/2. Done/Meshes/Bottoms/Male/Pro Fix/TLPants-Update.fbx
+- Assets/2. Done/Prefabs/Bottoms/Male/Converted/Pro Fix/ES Pants Fix 1-25-21.prefab
+- Assets/2. Done/Prefabs/Bottoms/Male/Converted/MPants Shorts.prefab
+- Assets/2. Done/Textures/Default Alpha Masks/Custom Alphas/Legs Full of Holes Demo
+  1.png
+- Assets/2. Done/Prefabs/Bottoms/Male/Converted/XXXShorts-Low-New1.prefab
+- Assets/2. Done/Materials/Bottoms/TAPantsCustom.mat
+- Assets/2. Done/Prefabs/Bottoms/Male/Converted/Pants Cropped.prefab
+- Assets/2. Done/Prefabs/Bottoms/Male/Converted/New Slim Pants 2.prefab
+- Assets/2. Done/Meshes/Bottoms/Male/Pro Fix/tom_asta_pants.fbx
+- Assets/2. Done/Prefabs/Bottoms/Male/Converted/Cargo Shorts.prefab
+- Assets/2. Done/Textures/Default Alpha Masks/male/Legs.png
+- Assets/2. Done/Prefabs/Bottoms/Male/Converted/XXXShorts-High.prefab
+Dependencies: []
