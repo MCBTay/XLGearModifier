@@ -33,6 +33,9 @@ namespace XLGearModifier.Unity
         public string PrefixAlias;
 
         [HideInInspector]
+        public CharacterGearTemplate AliasCharacterGearTemplate;
+
+        [HideInInspector]
 		[Tooltip("This will enable the use of textures from default gear.  For example, if you've modified MShirt but the UV is still pretty close to the original, you can leverage existing MShirt textures by checking this and setting BaseTopType to MShirt.")]
         public bool BaseOnDefaultGear;
 
@@ -91,9 +94,30 @@ namespace XLGearModifier.Unity
         {
             if (CharacterGearTemplate == null) return;
 
+            #region CharacterGearTemplate
             CharacterGearTemplate.id = CharacterGearTemplate.id.ToLower();
 			CharacterGearTemplate.path = $"XLGearModifier/{CharacterGearTemplate.id}";
             CharacterGearTemplate.categoryName = MapCategory(Category).ToString();
+            #endregion
+
+            #region PrefixAlias
+            PrefixAlias = PrefixAlias?.ToLower();
+
+            if (string.IsNullOrEmpty(PrefixAlias))
+            {
+                AliasCharacterGearTemplate = null;
+            }
+            else
+            {
+                AliasCharacterGearTemplate = new CharacterGearTemplate
+                {
+                    alphaMasks = CharacterGearTemplate.alphaMasks,
+                    category = MapCategory(Category),
+                    id = PrefixAlias.ToLower(),
+                    path = $"XLGearModifier/alias/{PrefixAlias}"
+                };
+            }
+            #endregion
         }
 
         public SkaterXL.Gear.ClothingGearCategory MapCategory(ClothingGearCategory category)
