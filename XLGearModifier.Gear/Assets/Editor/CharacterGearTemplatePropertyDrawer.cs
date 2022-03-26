@@ -7,7 +7,7 @@ namespace XLGearModifier.Unity
     [CustomPropertyDrawer(typeof(CharacterGearTemplate))]
     public class CharacterGearTemplatePropertyDrawer : PropertyDrawer
     {
-        private bool foldout;
+        private bool foldout = true;
 
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {

@@ -143,12 +143,12 @@ namespace XLGearModifier.CustomGear
 
                 if (baseTextures.ContainsKey("normal"))
                 {
-                textures["normal"] = baseTextures["normal"];
+                    textures["normal"] = baseTextures["normal"];
                 }
 
                 if (baseTextures.ContainsKey("maskpbr"))
                 {
-                textures["maskpbr"] = baseTextures["maskpbr"];
+                    textures["maskpbr"] = baseTextures["maskpbr"];
                 }
 
                 return textures;
@@ -234,61 +234,15 @@ namespace XLGearModifier.CustomGear
         /// </summary>
         private void AddGearTemplates()
         {
-
-            //TODO: Remove both of these conditions once the custom property drawer can handle this for us.
-            if (string.IsNullOrEmpty(ClothingMetadata.CharacterGearTemplate.path))
+            if (!GearDatabase.Instance.ContainsClothingTemplateWithID(ClothingMetadata.CharacterGearTemplate.id))
             {
-                ClothingMetadata.CharacterGearTemplate.path = $"XLGearModifier/{ClothingMetadata.CharacterGearTemplate.id.ToLower()}";
+                GearDatabase.Instance.CharGearTemplateForID.Add(ClothingMetadata.CharacterGearTemplate.id, ClothingMetadata.CharacterGearTemplate);
             }
 
-            if (ClothingMetadata.CharacterGearTemplate.categoryName == "unknown")
+            if (!string.IsNullOrEmpty(ClothingMetadata.AliasCharacterGearTemplate?.id) &&
+                !GearDatabase.Instance.ContainsClothingTemplateWithID(ClothingMetadata.AliasCharacterGearTemplate.id))
             {
-                ClothingMetadata.CharacterGearTemplate.category = MapCategory(ClothingMetadata.Category);
-            }
-
-            var templateId = ClothingMetadata.CharacterGearTemplate.id.ToLower();
-            if (!GearDatabase.Instance.ContainsClothingTemplateWithID(templateId))
-            {
-                GearDatabase.Instance.CharGearTemplateForID.Add(templateId, ClothingMetadata.CharacterGearTemplate);
-            }
-
-            AddAliasGearTemplate(ClothingMetadata.PrefixAlias);
-        }
-
-        private void AddAliasGearTemplate(string templateId)
-        {
-            if (string.IsNullOrEmpty(templateId)) return;
-            if (GearDatabase.Instance.ContainsClothingTemplateWithID(templateId)) return;
-
-            var path = $"XLGearModifier/alias/{templateId.ToLower()}";
-
-            var template = new CharacterGearTemplate
-            {
-                alphaMasks = new List<GearAlphaMaskConfig>(),
-                category = MapCategory(ClothingMetadata.Category),
-                id = templateId.ToLower(),
-                path = path
-            };
-
-            GearDatabase.Instance.CharGearTemplateForID.Add(templateId.ToLower(), template);
-        }
-
-        private ClothingGearCategory MapCategory(Unity.ClothingGearCategory category)
-        {
-            switch (category)
-            {
-                case Unity.ClothingGearCategory.Hair:
-                case Unity.ClothingGearCategory.FacialHair:
-                case Unity.ClothingGearCategory.Headwear:
-                    return ClothingGearCategory.Hat;
-                case Unity.ClothingGearCategory.Shoes:
-                case Unity.ClothingGearCategory.Socks:
-                    return ClothingGearCategory.Shoes;
-                case Unity.ClothingGearCategory.Bottom:
-                    return ClothingGearCategory.Pants;
-                default:
-                case Unity.ClothingGearCategory.Top:
-                    return ClothingGearCategory.Shirt;
+                GearDatabase.Instance.CharGearTemplateForID.Add(ClothingMetadata.AliasCharacterGearTemplate.id, ClothingMetadata.AliasCharacterGearTemplate);
             }
         }
         #endregion

@@ -175,24 +175,5 @@ namespace XLGearModifier.Assets.Editor
 
             Debug.Log("Find Missing or Invalid Gear Prefab Controllers completed.");
         }
-
-        private static SkaterXL.Gear.ClothingGearCategory MapCategory(ClothingGearCategory category)
-        {
-            switch (category)
-            {
-                case ClothingGearCategory.Hair:
-                case ClothingGearCategory.FacialHair:
-                case ClothingGearCategory.Headwear:
-                    return SkaterXL.Gear.ClothingGearCategory.Hat;
-                case ClothingGearCategory.Shoes:
-                case ClothingGearCategory.Socks:
-                    return SkaterXL.Gear.ClothingGearCategory.Shoes;
-                case ClothingGearCategory.Bottom:
-                    return SkaterXL.Gear.ClothingGearCategory.Pants;
-                default:
-                case ClothingGearCategory.Top:
-                    return SkaterXL.Gear.ClothingGearCategory.Shirt;
-            }
-        }
     }
 }
