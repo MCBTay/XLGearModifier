@@ -234,31 +234,16 @@ namespace XLGearModifier.CustomGear
         /// </summary>
         private void AddGearTemplates()
         {
-            var templateId = ClothingMetadata.CharacterGearTemplate.id.ToLower();
-            if (!GearDatabase.Instance.ContainsClothingTemplateWithID(templateId))
+            if (!GearDatabase.Instance.ContainsClothingTemplateWithID(ClothingMetadata.CharacterGearTemplate.id))
             {
-                GearDatabase.Instance.CharGearTemplateForID.Add(templateId, ClothingMetadata.CharacterGearTemplate);
+                GearDatabase.Instance.CharGearTemplateForID.Add(ClothingMetadata.CharacterGearTemplate.id, ClothingMetadata.CharacterGearTemplate);
             }
 
-            AddAliasGearTemplate(ClothingMetadata.PrefixAlias);
-        }
-
-        private void AddAliasGearTemplate(string templateId)
-        {
-            if (string.IsNullOrEmpty(templateId)) return;
-            if (GearDatabase.Instance.ContainsClothingTemplateWithID(templateId)) return;
-
-            var path = $"XLGearModifier/alias/{templateId.ToLower()}";
-
-            var template = new CharacterGearTemplate
+            if (ClothingMetadata.AliasCharacterGearTemplate != null &&
+                !GearDatabase.Instance.ContainsClothingTemplateWithID(ClothingMetadata.AliasCharacterGearTemplate.id))
             {
-                alphaMasks = new List<GearAlphaMaskConfig>(),
-                category = MapCategory(ClothingMetadata.Category),
-                id = templateId.ToLower(),
-                path = path
-            };
-
-            GearDatabase.Instance.CharGearTemplateForID.Add(templateId.ToLower(), template);
+                GearDatabase.Instance.CharGearTemplateForID.Add(ClothingMetadata.AliasCharacterGearTemplate.id, ClothingMetadata.AliasCharacterGearTemplate);
+            }
         }
 
         private ClothingGearCategory MapCategory(Unity.ClothingGearCategory category)
