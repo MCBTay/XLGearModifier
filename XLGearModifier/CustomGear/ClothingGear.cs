@@ -143,12 +143,12 @@ namespace XLGearModifier.CustomGear
 
                 if (baseTextures.ContainsKey("normal"))
                 {
-                textures["normal"] = baseTextures["normal"];
+                    textures["normal"] = baseTextures["normal"];
                 }
 
                 if (baseTextures.ContainsKey("maskpbr"))
                 {
-                textures["maskpbr"] = baseTextures["maskpbr"];
+                    textures["maskpbr"] = baseTextures["maskpbr"];
                 }
 
                 return textures;
