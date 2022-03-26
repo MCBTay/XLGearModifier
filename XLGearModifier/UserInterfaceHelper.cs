@@ -55,11 +55,7 @@ namespace XLGearModifier
 			var customizations = ___skaterCustomizations[index[0]];
 			foreach (var clothingGear in customizations.clothingGear)
             {
-                CharacterGearTemplate template;
-
-                template = GearDatabase.Instance.CharGearTemplateForID.ContainsKey(clothingGear.type) ? 
-                    GearDatabase.Instance.CharGearTemplateForID[clothingGear.type] : 
-                    new CharacterGearTemplate { id = "eyes" };
+                var template = GearDatabase.Instance.CharGearTemplateForID[clothingGear.type];
 				
 				var spriteName = GetSpriteName(template);
                 var sprite = GearModifierUISpriteSheetSprites.FirstOrDefault(x => x.name == spriteName);
