@@ -245,25 +245,6 @@ namespace XLGearModifier.CustomGear
                 GearDatabase.Instance.CharGearTemplateForID.Add(ClothingMetadata.AliasCharacterGearTemplate.id, ClothingMetadata.AliasCharacterGearTemplate);
             }
         }
-
-        private ClothingGearCategory MapCategory(Unity.ClothingGearCategory category)
-        {
-            switch (category)
-            {
-                case Unity.ClothingGearCategory.Hair:
-                case Unity.ClothingGearCategory.FacialHair:
-                case Unity.ClothingGearCategory.Headwear:
-                    return ClothingGearCategory.Hat;
-                case Unity.ClothingGearCategory.Shoes:
-                case Unity.ClothingGearCategory.Socks:
-                    return ClothingGearCategory.Shoes;
-                case Unity.ClothingGearCategory.Bottom:
-                    return ClothingGearCategory.Pants;
-                default:
-                case Unity.ClothingGearCategory.Top:
-                    return ClothingGearCategory.Shirt;
-            }
-        }
         #endregion
 
         public override int GetCategoryIndex(int skaterIndex)
