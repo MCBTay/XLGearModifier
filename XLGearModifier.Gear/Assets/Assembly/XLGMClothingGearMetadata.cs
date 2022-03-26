@@ -1,6 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using SkaterXL.Gear;
+﻿using SkaterXL.Gear;
+using System;
 using UnityEngine;
 
 namespace XLGearModifier.Unity
@@ -78,5 +77,37 @@ namespace XLGearModifier.Unity
 		public override string GetCategory() => Category.ToString();
 		public override bool BasedOnDefaultGear() => BaseOnDefaultGear;
         public override string GetTemplateId() => CharacterGearTemplate.id.ToLower();
+
+        /// <summary>
+        /// An editor only function that gets called when this changes in inspector.  This allows us
+        /// to hide path/category name from the user while ensuring they get populated as we expect.
+        /// </summary>
+        public void OnValidate()
+        {
+            if (CharacterGearTemplate == null) return;
+
+            CharacterGearTemplate.id = CharacterGearTemplate.id.ToLower();
+			CharacterGearTemplate.path = $"XLGearModifier/{CharacterGearTemplate.id}";
+            CharacterGearTemplate.categoryName = MapCategory(Category).ToString();
+        }
+
+        public SkaterXL.Gear.ClothingGearCategory MapCategory(ClothingGearCategory category)
+        {
+            switch (category)
+            {
+                case ClothingGearCategory.Hair:
+                case ClothingGearCategory.FacialHair:
+                case ClothingGearCategory.Headwear:
+                    return SkaterXL.Gear.ClothingGearCategory.Hat;
+                case ClothingGearCategory.Shoes:
+                case ClothingGearCategory.Socks:
+                    return SkaterXL.Gear.ClothingGearCategory.Shoes;
+                case ClothingGearCategory.Bottom:
+                    return SkaterXL.Gear.ClothingGearCategory.Pants;
+                default:
+                case ClothingGearCategory.Top:
+                    return SkaterXL.Gear.ClothingGearCategory.Shirt;
+            }
+        }
 	}
 }
