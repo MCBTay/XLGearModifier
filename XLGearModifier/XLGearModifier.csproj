@@ -139,12 +139,13 @@
     <Compile Include="Texturing\BaseGameTextureManager.cs" />
     <Compile Include="Texturing\SkateShopTextureManager.cs" />
     <Compile Include="UserInterfaceHelper.cs" />
+    <Compile Include="Utilities\DebugLogHandler.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
     <EmbeddedResource Include="Assets\default-empty-textures" />
     <EmbeddedResource Include="Assets\user-interface" />
-	<EmbeddedResource Include="Assets\easy-day-textures" />
+    <EmbeddedResource Include="Assets\easy-day-textures" />
     <EmbeddedResource Include="Assets\char male\facialhair" />
     <EmbeddedResource Include="Assets\char male\hair" />
     <EmbeddedResource Include="Assets\char male\hats" />
