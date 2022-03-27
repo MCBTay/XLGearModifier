@@ -12,7 +12,7 @@ namespace XLGearModifier.Utilities
 
         public DebugLogHandler()
         {
-            string filePath = Application.persistentDataPath + "/DebugLogs.txt";
+            string filePath = Application.persistentDataPath + "/DebugLogs.log";
 
             m_FileStream = new FileStream(filePath, FileMode.OpenOrCreate, FileAccess.ReadWrite);
             m_StreamWriter = new StreamWriter(m_FileStream);
