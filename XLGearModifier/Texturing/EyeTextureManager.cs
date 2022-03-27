@@ -11,7 +11,7 @@ using XLMenuMod.Utilities.Interfaces;
 
 namespace XLGearModifier.Texturing
 {
-    public  class EyeTextureManager
+    public class EyeTextureManager
     {
         private static EyeTextureManager __instance;
         public static EyeTextureManager Instance => __instance ?? (__instance = new EyeTextureManager());
@@ -24,10 +24,78 @@ namespace XLGearModifier.Texturing
         
         public List<ICustomInfo> Eyes;
 
+        public GameObject EyesGameObject;
+
         public EyeTextureManager()
         {
             OriginalEyeTextures = new Dictionary<string, Texture>();
             Eyes = new List<ICustomInfo>();
+
+            AddEyeTemplate();
+        }
+
+        private void AddEyeTemplate()
+        {
+            var template = new CharacterGearTemplate
+            {
+                alphaMasks = new List<GearAlphaMaskConfig>(),
+                id = "eyes",
+                path = "XLGearModifier/eyes",
+                categoryName = "Hat"
+            };
+
+            if (GearDatabase.Instance.CharGearTemplateForID.ContainsKey(template.id)) return;
+
+            GearDatabase.Instance.CharGearTemplateForID.Add(template.id, template);
+        }
+
+        public void GetGameObjectReference(CharacterCustomizer customizer)
+        {
+            if (EyesGameObject != null) return;
+
+            var traverse = Traverse.Create(customizer);
+
+            var currentBody = traverse.Field("currentBody").GetValue<CharacterBodyObject>();
+            
+            var eyeRenderers = currentBody?.gameObject?
+                .GetComponentsInChildren<SkinnedMeshRenderer>(true)
+                .Where(x => x.name.Contains("eye_mesh"));
+
+            foreach (var eyeRenderer in eyeRenderers)
+            {
+                EyesGameObject = eyeRenderer.gameObject.transform.parent.parent.gameObject;
+
+                if (!OriginalEyeTextures.ContainsKey("albedo"))
+                {
+                    OriginalEyeTextures.Add("albedo", eyeRenderer.material.GetTexture(ColorTextureName));
+                }
+
+                if (!OriginalEyeTextures.ContainsKey("normal"))
+                {
+                    OriginalEyeTextures.Add("normal", eyeRenderer.material.GetTexture(NormalTextureName));
+                }
+
+                if (!OriginalEyeTextures.ContainsKey("maskpbr"))
+                {
+                    OriginalEyeTextures.Add("maskpbr", eyeRenderer.material.GetTexture(RgmtaoTextureName));
+                }
+
+                var materialController = eyeRenderer.gameObject.GetComponent<MaterialController>();
+                if (materialController == null)
+                {
+                    materialController = eyeRenderer.gameObject.AddComponent<MaterialController>();
+                    materialController.name = "testingho";
+                }
+
+                materialController.alphaMasks = Array.Empty<AlphaMaskTextureInfo>();
+
+                SetPropertyNameSubstitutions(materialController);
+
+                materialController.FindTargets();
+
+                var gearPrefabController = eyeRenderer.gameObject.AddComponent<GearPrefabController>();
+                gearPrefabController.PreparePrefab();
+            }
         }
 
         public void LookForEyeTextures()
@@ -94,23 +162,15 @@ namespace XLGearModifier.Texturing
 
         private void SetPropertyNameSubstitutions(MaterialController materialController)
         {
-            var traverse = Traverse.Create(materialController);
-            traverse.Field("m_propertyNameSubstitutions").SetValue(new List<PropertyNameSubstitution>());
+            var propNameSubsTraverse = Traverse.Create(materialController).Field("m_propertyNameSubstitutions");
 
-            if (!materialController.PropertyNameSubstitutions.ContainsKey("albedo"))
-            {
-                materialController.PropertyNameSubstitutions.Add("albedo", ColorTextureName);
-            }
+            propNameSubsTraverse.SetValue(new List<PropertyNameSubstitution>());
+            
+            var propNameSubs = propNameSubsTraverse.GetValue<List<PropertyNameSubstitution>>();
 
-            if (!materialController.PropertyNameSubstitutions.ContainsKey("normal"))
-            {
-                materialController.PropertyNameSubstitutions.Add("normal", NormalTextureName);
-            }
-
-            if (!materialController.PropertyNameSubstitutions.ContainsKey("rgmtao"))
-            {
-                materialController.PropertyNameSubstitutions.Add("rgmtao", RgmtaoTextureName);
-            }
+            propNameSubs.Add(new PropertyNameSubstitution { oldName = BaseGameTextureManager.ColorTextureName, newName = ColorTextureName });
+            propNameSubs.Add(new PropertyNameSubstitution { oldName = BaseGameTextureManager.NormalTextureName, newName = NormalTextureName });
+            propNameSubs.Add(new PropertyNameSubstitution { oldName = BaseGameTextureManager.RgmtaoTextureName, newName = RgmtaoTextureName });
         }
 
 
