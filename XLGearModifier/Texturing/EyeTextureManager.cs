@@ -61,6 +61,8 @@ namespace XLGearModifier.Texturing
                 .GetComponentsInChildren<SkinnedMeshRenderer>(true)
                 .Where(x => x.name.Contains("eye_mesh"));
 
+            if (eyeRenderers == null) return;
+
             foreach (var eyeRenderer in eyeRenderers)
             {
                 EyesGameObject = eyeRenderer.gameObject.transform.parent.parent.gameObject;
@@ -84,7 +86,6 @@ namespace XLGearModifier.Texturing
                 if (materialController == null)
                 {
                     materialController = eyeRenderer.gameObject.AddComponent<MaterialController>();
-                    materialController.name = "testingho";
                 }
 
                 materialController.alphaMasks = Array.Empty<AlphaMaskTextureInfo>();
