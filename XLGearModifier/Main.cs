@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Reflection;
 using UnityModManagerNet;
+using XLGearModifier.Texturing;
 using XLGearModifier.Utilities;
 
 namespace XLGearModifier
@@ -49,6 +50,7 @@ namespace XLGearModifier
 
 				XLMenuMod.Utilities.UserInterface.UserInterfaceHelper.Instance.LoadAssets();
 
+				EyeTextureManager.Instance.AddEyeTemplate();
                 AssetBundleHelper.Instance.LoadBundles();
             }
 			else
