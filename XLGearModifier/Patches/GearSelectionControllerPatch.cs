@@ -388,7 +388,12 @@ namespace XLGearModifier.Patches
 					{
 						if (gear is CustomBoardGearInfo || gear is BoardGearInfo || gear is CustomCharacterBodyInfo || gear is CharacterBodyInfo) return;
 						Traverse.Create(__instance.previewCustomizer).Method("RemoveGear", gear).GetValue();
-					}
+
+                        if (gear.type == "eyes")
+                        {
+                            EyeTextureManager.Instance.EyesGameObject.SetActive(true);
+						}
+                    }
 					else
 					{
 						__instance.previewCustomizer.EquipGear(gear);
