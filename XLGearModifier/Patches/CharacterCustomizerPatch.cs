@@ -1,6 +1,7 @@
 ﻿using HarmonyLib;
 using SkaterXL.Data;
 using XLGearModifier.CustomGear;
+using XLGearModifier.Texturing;
 using XLMenuMod.Utilities;
 using XLMenuMod.Utilities.Gear;
 using XLMenuMod.Utilities.Gear.Interfaces;
@@ -26,5 +27,16 @@ namespace XLGearModifier.Patches
                 return true;
 			}
         }
-    }
+
+        [HarmonyPatch(typeof(CharacterCustomizer), nameof(CharacterCustomizer.EquipCharacterGear), typeof(CharacterGearInfo), typeof(bool))]
+        static class EquipCharacterGearPatch
+        {
+            static void Postfix(CharacterCustomizer __instance, CharacterGearInfo gear, bool updateMask)
+            {
+                if (gear.type != "eyes") return;
+
+				EyeTextureManager.Instance.EyesGameObject.SetActive(false);
+            }
+        }
+	}
 }
