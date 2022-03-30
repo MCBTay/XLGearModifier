@@ -20,7 +20,12 @@ namespace XLGearModifier.Patches
                     var customizer = Traverse.Create(__instance).Field("customizer").GetValue<CharacterCustomizer>();
 
                     EyeTextureManager.Instance.GetGameObjectReference(customizer);
-                    __result = Task.FromResult(EyeTextureManager.Instance.EyesGameObject);
+
+                    if (EyeTextureManager.Instance.EyesGameObjects.ContainsKey(customizer.name))
+                    {
+                        __result = Task.FromResult(EyeTextureManager.Instance.EyesGameObjects[customizer.name]);
+                    }
+
                     return false;
                 }
 

@@ -391,8 +391,11 @@ namespace XLGearModifier.Patches
 
                         if (gear.type == "eyes")
                         {
-                            EyeTextureManager.Instance.EyesGameObject.SetActive(true);
-						}
+                            if (EyeTextureManager.Instance.EyesGameObjects.ContainsKey(__instance.previewCustomizer.name))
+                            {
+                                EyeTextureManager.Instance.EyesGameObjects[__instance.previewCustomizer.name].SetActive(true);
+                            }
+                        }
                     }
 					else
 					{

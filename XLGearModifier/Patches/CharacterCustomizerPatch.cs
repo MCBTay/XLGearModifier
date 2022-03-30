@@ -1,4 +1,5 @@
-﻿using HarmonyLib;
+﻿using System.Collections.Generic;
+using HarmonyLib;
 using SkaterXL.Data;
 using XLGearModifier.CustomGear;
 using XLGearModifier.Texturing;
@@ -35,8 +36,27 @@ namespace XLGearModifier.Patches
             {
                 if (gear.type != "eyes") return;
 
-				EyeTextureManager.Instance.EyesGameObject.SetActive(false);
+                EyeTextureManager.Instance.GetGameObjectReference(__instance);
+
+                if (EyeTextureManager.Instance.EyesGameObjects.ContainsKey(__instance.name))
+                {
+                    EyeTextureManager.Instance.EyesGameObjects[__instance.name].SetActive(false);
+                }
             }
         }
-	}
+
+        [HarmonyPatch(typeof(CharacterCustomizer), nameof(CharacterCustomizer.PreviewItem))]
+        static class PreviewItemPatch
+        {
+            static void Postfix(CharacterCustomizer __instance, GearInfo preview, List<GearInfo> toBeCachedGear)
+            {
+                if (preview.type != "eyes") return;
+
+                if (EyeTextureManager.Instance.EyesGameObjects.ContainsKey(__instance.name))
+                {
+                    EyeTextureManager.Instance.EyesGameObjects[__instance.name].SetActive(false);
+                }
+            }
+        }
+    }
 }

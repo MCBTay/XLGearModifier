@@ -26,12 +26,13 @@ namespace XLGearModifier.Texturing
 
         public CharacterGearTemplate EyeGearTemplate;
 
-        public GameObject EyesGameObject;
+        public Dictionary<string, GameObject> EyesGameObjects;
 
         public EyeTextureManager()
         {
             OriginalEyeTextures = new Dictionary<string, Texture>();
             Eyes = new List<ICustomInfo>();
+            EyesGameObjects = new Dictionary<string, GameObject>();
         }
 
         public void AddEyeTemplate()
@@ -51,13 +52,18 @@ namespace XLGearModifier.Texturing
 
         public void GetGameObjectReference(CharacterCustomizer customizer)
         {
-            if (EyesGameObject != null) return;
+            if (EyesGameObjects.ContainsKey(customizer.name)) return;
 
             var traverse = Traverse.Create(customizer);
 
-            var currentBody = traverse.Field("currentBody").GetValue<CharacterBodyObject>();
+            var currentBodyGO = traverse.Field("currentBody").GetValue<CharacterBodyObject>()?.gameObject;
+
+            if (customizer.name == "Playback Skater Root")
+            {
+                // reset current body go
+            }
             
-            var eyeRenderers = currentBody?.gameObject?
+            var eyeRenderers = currentBodyGO?
                 .GetComponentsInChildren<SkinnedMeshRenderer>(true)
                 .Where(x => x.name.Contains("eye_mesh"));
 
@@ -65,7 +71,10 @@ namespace XLGearModifier.Texturing
 
             foreach (var eyeRenderer in eyeRenderers)
             {
-                EyesGameObject = eyeRenderer.gameObject.transform.parent.parent.gameObject;
+                if (!EyesGameObjects.ContainsKey(customizer.name))
+                {
+                    EyesGameObjects.Add(customizer.name, eyeRenderer.gameObject.transform.parent.parent.gameObject);
+                }
 
                 PopulateOriginalEyeTextureDictionary(eyeRenderer);
 
@@ -73,16 +82,17 @@ namespace XLGearModifier.Texturing
                 if (materialController == null)
                 {
                     materialController = eyeRenderer.gameObject.AddComponent<MaterialController>();
+                    materialController.alphaMasks = Array.Empty<AlphaMaskTextureInfo>();
+                    SetPropertyNameSubstitutions(materialController);
+                    materialController.FindTargets();
                 }
 
-                materialController.alphaMasks = Array.Empty<AlphaMaskTextureInfo>();
-
-                SetPropertyNameSubstitutions(materialController);
-
-                materialController.FindTargets();
-
-                var gearPrefabController = eyeRenderer.gameObject.AddComponent<GearPrefabController>();
-                gearPrefabController.PreparePrefab();
+                var gearPrefabController = eyeRenderer.gameObject.GetComponent<GearPrefabController>();
+                if (gearPrefabController == null)
+                {
+                    gearPrefabController = eyeRenderer.gameObject.AddComponent<GearPrefabController>();
+                    gearPrefabController.PreparePrefab();
+                }
             }
         }
 
