@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Reflection;
 using UnityModManagerNet;
+using XLGearModifier.Texturing;
 using XLGearModifier.Utilities;
 
 namespace XLGearModifier
@@ -31,13 +32,13 @@ namespace XLGearModifier
 			return true;
 		}
 
-		private static bool OnToggle(UnityModManager.ModEntry modEntry, bool value)
+        private static bool OnToggle(UnityModManager.ModEntry modEntry, bool value)
 		{
 			if (Enabled == value) return true;
 			Enabled = value;
 
 			if (Enabled)
-			{
+            {
 				Harmony = new Harmony(modEntry.Info.Id);
 				Harmony.PatchAll(Assembly.GetExecutingAssembly());
 
@@ -49,6 +50,7 @@ namespace XLGearModifier
 
 				XLMenuMod.Utilities.UserInterface.UserInterfaceHelper.Instance.LoadAssets();
 
+				EyeTextureManager.Instance.AddEyeTemplate();
                 AssetBundleHelper.Instance.LoadBundles();
             }
 			else
@@ -58,8 +60,6 @@ namespace XLGearModifier
 
 			return true;
 		}
-
-        
 
 #if DEBUG
 		static bool Unload(UnityModManager.ModEntry modEntry)

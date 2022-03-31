@@ -1,6 +1,8 @@
-﻿using HarmonyLib;
+﻿using System.Collections.Generic;
+using HarmonyLib;
 using SkaterXL.Data;
 using XLGearModifier.CustomGear;
+using XLGearModifier.Texturing;
 using XLMenuMod.Utilities;
 using XLMenuMod.Utilities.Gear;
 using XLMenuMod.Utilities.Gear.Interfaces;
@@ -23,8 +25,38 @@ namespace XLGearModifier.Patches
 				if (item is CustomBoardGearInfo customBoardGearInfo) item = customBoardGearInfo;
 				if (item is CustomGearFolderInfo) return false;
 
-				return true;
+                return true;
 			}
-		}
-	}
+        }
+
+        [HarmonyPatch(typeof(CharacterCustomizer), nameof(CharacterCustomizer.EquipCharacterGear), typeof(CharacterGearInfo), typeof(bool))]
+        static class EquipCharacterGearPatch
+        {
+            static void Postfix(CharacterCustomizer __instance, CharacterGearInfo gear, bool updateMask)
+            {
+                if (gear.type != "eyes") return;
+
+                EyeTextureManager.Instance.GetGameObjectReference(__instance);
+
+                if (EyeTextureManager.Instance.EyesGameObjects.ContainsKey(__instance.name))
+                {
+                    EyeTextureManager.Instance.EyesGameObjects[__instance.name].SetActive(false);
+                }
+            }
+        }
+
+        [HarmonyPatch(typeof(CharacterCustomizer), nameof(CharacterCustomizer.PreviewItem))]
+        static class PreviewItemPatch
+        {
+            static void Postfix(CharacterCustomizer __instance, GearInfo preview, List<GearInfo> toBeCachedGear)
+            {
+                if (preview.type != "eyes") return;
+
+                if (EyeTextureManager.Instance.EyesGameObjects.ContainsKey(__instance.name))
+                {
+                    EyeTextureManager.Instance.EyesGameObjects[__instance.name].SetActive(false);
+                }
+            }
+        }
+    }
 }

@@ -32,6 +32,20 @@ namespace XLGearModifier.Patches
 							return false;
 						}
 
+						// If both are eyes, eyes block each other (only one should be equipped at a time)
+                        if (__instance.template.id == "eyes" && cgo.template.id == "eyes")
+                        {
+                            __result = true;
+                            return false;
+                        }
+
+						// If either are eyes, and the other is not (we wouldn't get this far if they both were), it should not block hats/hair/facialhair
+                        if (__instance.template.id == "eyes" || cgo.template.id == "eyes")
+                        {
+                            __result = false;
+                            return false;
+                        }
+
 						return true;
 					}
 					else if((__instance.IsLayerable<TopTypes>(ClothingGearCategory.LongSleeve) && cgo.IsLayerable<TopTypes>(ClothingGearCategory.Shirt)) || 

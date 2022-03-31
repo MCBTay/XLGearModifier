@@ -22,10 +22,8 @@ namespace XLGearModifier.CustomGear
 
 		public List<ICustomInfo> CustomMeshes;
         public List<ICustomInfo> CustomFemaleMeshes;
-		
-		public List<ICustomInfo> Eyes;
 
-		public Texture2D EmptyAlbedo;
+        public Texture2D EmptyAlbedo;
         public Texture2D EmptyMaskPBR;
         public Texture2D EmptyNormalMap;
 
@@ -39,8 +37,6 @@ namespace XLGearModifier.CustomGear
             CustomFemaleMeshes = new List<ICustomInfo>();
 
             CustomGear = new Dictionary<string, CustomGearBase>();
-
-            Eyes = new List<ICustomInfo>();
         }
 
         public void LoadNestedItems()

@@ -1,12 +1,13 @@
 ﻿using HarmonyLib;
+using SkaterXL.Data;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using SkaterXL.Data;
 using TMPro;
 using UnityEngine.EventSystems;
 using UnityModManagerNet;
 using XLGearModifier.CustomGear;
+using XLGearModifier.Texturing;
 using XLGearModifier.Unity;
 using XLMenuMod;
 using XLMenuMod.Utilities;
@@ -17,7 +18,7 @@ using Skater = XLMenuMod.Skater;
 
 namespace XLGearModifier.Patches
 {
-	public static class GearSelectionControllerPatch
+    public static class GearSelectionControllerPatch
 	{
 		private static void SetItemText(this MVCListItemView item, GearInfo gearAtIndex, CustomGearFolderInfo customGearFolder)
 		{
@@ -65,7 +66,7 @@ namespace XLGearModifier.Patches
                         sourceList = index[0] == (int)Skater.FemaleStandard ? GearManager.Instance.CustomFemaleMeshes : new List<ICustomInfo>();
 						break;
                     case (int)GearModifierTab.Eyes:
-						sourceList = GearManager.Instance.Eyes;
+						sourceList = EyeTextureManager.Instance.Eyes;
 						break;
 				}
 
@@ -98,7 +99,10 @@ namespace XLGearModifier.Patches
                         case (int)GearModifierTab.CustomFemaleMeshes: 
                             itemView.SetText("Custom Meshes"); 
                             break;
-                        case (int)GearModifierTab.Eyes: itemView.SetText("Eyes"); break;
+                        case (int)GearModifierTab.Eyes:
+                            itemView.Label.spriteAsset = UserInterfaceHelper.Instance.GearModifierUISpriteSheet;
+							var newText = "<space=18px><sprite name=\"Eyes\" tint=1>Eyes";
+                            itemView.SetText(newText); break;
 					}
 				}
 				else if (index.depth >= 3)
@@ -319,7 +323,7 @@ namespace XLGearModifier.Patches
                                 sourceList = GearManager.Instance.CustomFemaleMeshes;
                                 break;
                             case (int)GearModifierTab.Eyes:
-								sourceList = GearManager.Instance.Eyes;
+								sourceList = EyeTextureManager.Instance.Eyes;
 								break;
 						}
 
@@ -384,7 +388,15 @@ namespace XLGearModifier.Patches
 					{
 						if (gear is CustomBoardGearInfo || gear is BoardGearInfo || gear is CustomCharacterBodyInfo || gear is CharacterBodyInfo) return;
 						Traverse.Create(__instance.previewCustomizer).Method("RemoveGear", gear).GetValue();
-					}
+
+                        if (gear.type == "eyes")
+                        {
+                            if (EyeTextureManager.Instance.EyesGameObjects.ContainsKey(__instance.previewCustomizer.name))
+                            {
+                                EyeTextureManager.Instance.EyesGameObjects[__instance.previewCustomizer.name].SetActive(true);
+                            }
+                        }
+                    }
 					else
 					{
 						__instance.previewCustomizer.EquipGear(gear);
