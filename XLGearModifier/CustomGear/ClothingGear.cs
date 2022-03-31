@@ -11,7 +11,6 @@ using XLGearModifier.Texturing;
 using XLGearModifier.Unity;
 using XLMenuMod;
 using XLMenuMod.Utilities.Gear;
-using ClothingGearCategory = SkaterXL.Gear.ClothingGearCategory;
 
 namespace XLGearModifier.CustomGear
 {

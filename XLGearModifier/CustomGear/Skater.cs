@@ -13,8 +13,7 @@ namespace XLGearModifier.CustomGear
     {
         public XLGMSkaterMetadata SkaterMetadata => Metadata as XLGMSkaterMetadata;
 
-        public Skater(XLGMSkaterMetadata metadata, GameObject prefab) 
-            : base(metadata, prefab)
+        public Skater(XLGMSkaterMetadata metadata, GameObject prefab) : base(metadata, prefab)
         {
         }
 
