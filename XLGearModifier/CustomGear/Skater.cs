@@ -55,7 +55,7 @@ namespace XLGearModifier.CustomGear
             {
                 CreateMaterialWithTexturesOnProperShader(materialController);
 
-                var texturePath = $"XLGearModifier/{Prefab.name}/{materialController.materialID}/";
+                var texturePath = $"XLGearModifier/{SkaterMetadata.CharacterBodyTemplate.id}/{materialController.materialID}/";
 
                 var textureChanges = new List<TextureChange>
                 {
@@ -95,16 +95,9 @@ namespace XLGearModifier.CustomGear
 
         private void AddBodyGearTemplate()
         {
-            if (GearDatabase.Instance.CharBodyTemplateForID.ContainsKey(SkaterMetadata.CharacterBodyTemplate.id.ToLower())) return;
+            if (GearDatabase.Instance.CharBodyTemplateForID.ContainsKey(SkaterMetadata.CharacterBodyTemplate.id)) return;
 
-            var newBodyTemplate = new CharacterBodyTemplate
-            {
-                id = SkaterMetadata.CharacterBodyTemplate.id.ToLower(),
-                path = $"XLGearModifier/{Prefab.name}",
-                leftEyeLocalPosition = new Vector3(1, 0, 0),
-                rightEyeLocalPosition = new Vector3(-1, 0, 0)
-            };
-            GearDatabase.Instance.CharBodyTemplateForID.Add(SkaterMetadata.CharacterBodyTemplate.id.ToLower(), newBodyTemplate);
+            GearDatabase.Instance.CharBodyTemplateForID.Add(SkaterMetadata.CharacterBodyTemplate.id, SkaterMetadata.CharacterBodyTemplate);
         }
 
         public override Task<GameObject> GetBaseObject()
