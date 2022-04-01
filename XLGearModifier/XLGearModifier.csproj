@@ -159,6 +159,7 @@
     <EmbeddedResource Include="Assets\char female\female-hats" />
     <EmbeddedResource Include="Assets\char female\female-shoes" />
     <EmbeddedResource Include="Assets\char female\female-tops" />
+    <EmbeddedResource Include="Assets\characters" />
     <None Include="Info.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
