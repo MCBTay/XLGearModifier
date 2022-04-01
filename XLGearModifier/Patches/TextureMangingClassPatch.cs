@@ -48,13 +48,12 @@ namespace XLGearModifier.Patches
 
                 var customGear = GearManager.Instance.CustomGear[templateName];
 
-                if (customGear.GearInfo is CharacterBodyInfo cbi)
+                if (customGear is Skater skater)
                 {
-                    //TODO: Assumes 1 target per controller.  Update to handle more
-                    var materialController = customGear.Prefab.GetComponentsInChildren<MaterialController>().FirstOrDefault(x => x.materialID == textureName);
-                    __result = Task.FromResult<Texture>(materialController.targets[0].renderer.materials[materialController.targets[0].materialIndex].mainTexture);
+                    if (!skater.MaterialControllerTextures.ContainsKey(textureName)) return false;
 
-                    return false;
+                    var textures = skater.MaterialControllerTextures[textureName];
+                    __result = Task.FromResult(textures[textureType]);
                 }
 
                 return false;
