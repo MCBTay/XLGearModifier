@@ -4,7 +4,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using HarmonyLib;
 using UnityEngine;
+using XLGearModifier.Texturing;
 using XLGearModifier.Unity;
 
 namespace XLGearModifier.CustomGear
@@ -13,8 +15,15 @@ namespace XLGearModifier.CustomGear
     {
         public XLGMSkaterMetadata SkaterMetadata => Metadata as XLGMSkaterMetadata;
 
+        public Dictionary<string, Dictionary<string, Texture>> MaterialControllerTextures;
+
+        public const string HDRPLitColorName = "_BaseColorMap";
+        public const string HDRPLitNormalName = "_NormalMap";
+        public const string HDRPLitMaskName = "_MaskMap";
+
         public Skater(XLGMSkaterMetadata metadata, GameObject prefab) : base(metadata, prefab)
         {
+            MaterialControllerTextures = new Dictionary<string, Dictionary<string, Texture>>();
         }
 
         public override void Instantiate()
@@ -59,9 +68,9 @@ namespace XLGearModifier.CustomGear
 
                 var textureChanges = new List<TextureChange>
                 {
-                    new TextureChange("albedo", texturePath + "albedo"),
-                    new TextureChange("normal", texturePath + "normal"),
-                    new TextureChange("maskpbr", texturePath + "maskpbr")
+                    new TextureChange(HDRPLitColorName, texturePath + HDRPLitColorName),
+                    new TextureChange(HDRPLitNormalName, texturePath + HDRPLitNormalName),
+                    new TextureChange(HDRPLitMaskName, texturePath + HDRPLitMaskName)
                 };
 
                 materialChanges.Add(new MaterialChange(materialController.materialID, textureChanges.ToArray()));
@@ -74,22 +83,46 @@ namespace XLGearModifier.CustomGear
         {
             if (materialController == null) return;
 
-            var renderer = materialController.targets.FirstOrDefault()?.renderer;
-            if (renderer == null) return;
-
-            var textures = new Dictionary<string, Texture>();
+            SetPropertyNameSubstitutions(materialController);
 
             var target = materialController.targets.FirstOrDefault();
             if (target == null) return;
 
+            var renderer = target.renderer;
+            if (renderer == null) return;
+
+            var textures = new Dictionary<string, Texture>();
+
             var material = renderer.materials[target.materialIndex];
 
-            textures.Add("_BaseColorMap", material.GetTexture("_BaseColorMap") ?? GearManager.Instance.EmptyAlbedo);
-            textures.Add("_NormalMap", material.GetTexture("_NormalMap") ?? GearManager.Instance.EmptyNormalMap);
-            textures.Add("_MaskMap", material.GetTexture("_MaskMap") ?? GearManager.Instance.EmptyMaskPBR);
+            textures.Add(HDRPLitColorName, material.GetTexture(HDRPLitColorName) ?? GearManager.Instance.EmptyAlbedo);
+            textures.Add(HDRPLitNormalName, material.GetTexture(HDRPLitNormalName) ?? GearManager.Instance.EmptyNormalMap);
+            textures.Add(HDRPLitMaskName, material.GetTexture(HDRPLitMaskName) ?? GearManager.Instance.EmptyMaskPBR);
+
+            MaterialControllerTextures.Add(materialController.materialID, textures);
 
             var newMaterial = materialController.GenerateMaterialWithChanges(textures);
             materialController.SetMaterial(newMaterial);
+        }
+
+        /// <summary>
+        /// Sets property name substitutions to handle all of our assets coming from HDRP/Lit to go to Easy Day shaders.  Most of this code
+        /// can hopefully get removed once we get native access to their shaders.  Also adds property name substitutions for hair, to mimic what
+        /// Easy Day does with their own hair meshes in editor.
+        /// </summary>
+        /// <param name="materialController">The material controller to operate on</param>
+        private void SetPropertyNameSubstitutions(MaterialController materialController)
+        {
+            //TODO: This 3 entries below can likely be removed once we get access to their shaders.
+            var propNameSubs = new List<PropertyNameSubstitution>
+            {
+                new PropertyNameSubstitution { oldName = BaseGameTextureManager.ColorTextureName, newName = HDRPLitColorName },
+                new PropertyNameSubstitution { oldName = BaseGameTextureManager.NormalTextureName, newName = HDRPLitNormalName },
+                new PropertyNameSubstitution { oldName = BaseGameTextureManager.RgmtaoTextureName, newName = HDRPLitMaskName }
+            };
+
+            var traverse = Traverse.Create(materialController);
+            traverse.Field("m_propertyNameSubstitutions").SetValue(propNameSubs);
         }
 
         private void AddBodyGearTemplate()
