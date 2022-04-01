@@ -22,14 +22,6 @@ namespace XLGearModifier.Patches
 				if (!GearSelectionControllerPatch.IsOnXLGMTab(index[1]))
 				{
 					List<GearInfo> newResult = new List<GearInfo>(__result);
-
-					// check to see if custom meshes are in list, if so, remove
-					var customMeshes = GearManager.Instance.CustomGear;
-					foreach (var mesh in customMeshes)
-					{
-						newResult.RemoveAll(x => x.type == mesh.Value.Metadata.GetTemplateId());
-					}
-
 					__result = newResult.ToArray();
 					return;
 				}
