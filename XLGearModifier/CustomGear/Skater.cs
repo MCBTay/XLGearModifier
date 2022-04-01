@@ -154,6 +154,15 @@ namespace XLGearModifier.CustomGear
                 new TypeFilter
                 {
                     allowCustomGear = true,
+                    cameraView = GearRoomCameraView.FullSkater,
+                    excludedTags = new string[] { },
+                    includedTypes = new [] { SkaterMetadata.CharacterBodyTemplate.id },
+                    label = "Skin Tone",
+                    requiredTag = ""
+                },
+                new TypeFilter
+                {
+                    allowCustomGear = true,
                     cameraView = GearRoomCameraView.Deck,
                     excludedTags = new[] { "ProOnly" },
                     includedTypes = new[] { "Deck" },
