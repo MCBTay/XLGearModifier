@@ -1,9 +1,9 @@
 ﻿using SkaterXL.Data;
+using SkaterXL.Gear;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using SkaterXL.Gear;
 using UnityEngine;
 using XLGearModifier.Unity;
 
@@ -84,12 +84,11 @@ namespace XLGearModifier.CustomGear
 
             var material = renderer.materials[target.materialIndex];
 
-            textures.Add("albedo", material.GetTexture("_BaseColorMap") ?? GearManager.Instance.EmptyAlbedo);
-            textures.Add("normal", material.GetTexture("_NormalMap") ?? GearManager.Instance.EmptyNormalMap);
-            textures.Add("maskpbr", material.GetTexture("_MaskMap") ?? GearManager.Instance.EmptyMaskPBR);
+            textures.Add("_BaseColorMap", material.GetTexture("_BaseColorMap") ?? GearManager.Instance.EmptyAlbedo);
+            textures.Add("_NormalMap", material.GetTexture("_NormalMap") ?? GearManager.Instance.EmptyNormalMap);
+            textures.Add("_MaskMap", material.GetTexture("_MaskMap") ?? GearManager.Instance.EmptyMaskPBR);
 
             var newMaterial = materialController.GenerateMaterialWithChanges(textures);
-            //material.shader = Shader.Find("MasterShaderCloth_v1");
             materialController.SetMaterial(newMaterial);
         }
 
