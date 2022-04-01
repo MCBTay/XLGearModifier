@@ -38,7 +38,7 @@ namespace XLGearModifier.CustomGear
                 GearFilters = GetCustomSkaterTypeFilters(),
             };
             GearDatabase.Instance.skaters.Add(skaterInfo);
-            //Traverse.Create(GearDatabase.Instance).Method("GenerateGearListSource").GetValue();
+            Traverse.Create(GearDatabase.Instance).Method("GenerateGearListSource").GetValue();
 
             GearInfo = new CharacterBodyInfo(name, SkaterMetadata.CharacterBodyTemplate.id, false, new List<MaterialChange>(), new string[] { });
 
