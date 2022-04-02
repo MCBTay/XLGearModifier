@@ -1,7 +1,9 @@
-﻿using UnityEditor;
+﻿using SkaterXL.Gear;
+using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
 using XLGearModifier.Unity;
+using ClothingGearCategory = XLGearModifier.Unity.ClothingGearCategory;
 
 namespace XLGearModifier.Assets.Editor
 {
@@ -61,6 +63,21 @@ namespace XLGearModifier.Assets.Editor
             }
 
             serializedObject.ApplyModifiedProperties();
+
+            GUILayout.Space(15);
+            if (GUILayout.Button("Prepare XLGM Clothing"))
+            {
+                var renderers = item.gameObject.GetComponentsInChildren<SkinnedMeshRenderer>(true);
+
+                foreach (var renderer in renderers)
+                {
+                    var materialController = renderer.gameObject.AddComponent<MaterialController>();
+                    materialController.FindTargets();
+
+                    var gearPrefabController = renderer.gameObject.AddComponent<GearPrefabController>();
+                    gearPrefabController.PreparePrefab();
+                }
+            }
 
             if (GUI.changed)
             {
