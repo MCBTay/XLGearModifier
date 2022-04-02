@@ -27,21 +27,11 @@ namespace XLGearModifier.Unity
                     int i = 0;
                     foreach (var material in renderer.sharedMaterials)
                     {
-                        var materialController = renderer.gameObject.AddComponent<MaterialController>();
-                        materialController.FindTargets();
-
-                        materialController.materialID = material.name.ToLower();
-
-                        var target = materialController.targets.FirstOrDefault();
-                        if (target == null) continue;
-
-                        target.materialIndex = i;
-
+                        item.AddMaterialController(renderer, material.name.ToLower(), i);
                         i++;
                     }
-                    
-                    var gearPrefabController = renderer.gameObject.AddComponent<GearPrefabController>();
-                    gearPrefabController.PreparePrefab();
+
+                    item.AddGearPrefabController(renderer);
                 }
 
                 Debug.Log("Successfully prepared XLGM Skater " + item.CharacterBodyTemplate.id);
