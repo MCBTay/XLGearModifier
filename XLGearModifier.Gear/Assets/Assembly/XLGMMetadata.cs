@@ -15,7 +15,7 @@ namespace XLGearModifier.Unity
 		public abstract bool BasedOnDefaultGear();
         public abstract string GetTemplateId();
 
-        public void AddMaterialController(Renderer renderer)
+        public MaterialController AddMaterialController(Renderer renderer)
         {
             var materialController = renderer.gameObject.GetComponent<MaterialController>();
             if (materialController == null)
@@ -27,9 +27,11 @@ namespace XLGearModifier.Unity
                 Debug.LogWarning("MaterialController already exists!");
             }
             materialController.FindTargets();
+
+            return materialController;
         }
 
-        public void AddGearPrefabController(Renderer renderer)
+        public GearPrefabController AddGearPrefabController(Renderer renderer)
         {
             var gearPrefabController = renderer.gameObject.GetComponent<GearPrefabController>();
             if (gearPrefabController == null)
@@ -42,6 +44,8 @@ namespace XLGearModifier.Unity
             }
 
             gearPrefabController.PreparePrefab();
+
+            return gearPrefabController;
         }
     }
 }
