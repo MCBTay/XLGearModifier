@@ -67,6 +67,8 @@ namespace XLGearModifier.Assets.Editor
             GUILayout.Space(15);
             if (GUILayout.Button("Prepare XLGM Clothing"))
             {
+                Debug.Log("Preparing XLGM Clothing " + item.CharacterGearTemplate.id);
+
                 var renderers = item.gameObject.GetComponentsInChildren<SkinnedMeshRenderer>(true);
 
                 foreach (var renderer in renderers)
@@ -77,6 +79,8 @@ namespace XLGearModifier.Assets.Editor
                     var gearPrefabController = renderer.gameObject.AddComponent<GearPrefabController>();
                     gearPrefabController.PreparePrefab();
                 }
+
+                Debug.Log("Successfully prepared XLGM Clothing " + item.CharacterGearTemplate.id);
             }
 
             if (GUI.changed)
