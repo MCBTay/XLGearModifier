@@ -1,4 +1,5 @@
-﻿using SkaterXL.Gear;
+﻿using System.Linq;
+using SkaterXL.Gear;
 using UnityEngine;
 
 namespace XLGearModifier.Unity
@@ -15,9 +16,13 @@ namespace XLGearModifier.Unity
 		public abstract bool BasedOnDefaultGear();
         public abstract string GetTemplateId();
 
-        public MaterialController AddMaterialController(Renderer renderer)
+        public MaterialController AddMaterialController(Renderer renderer, string materialId = null, int materialIndex = 0)
         {
-            var materialController = renderer.gameObject.GetComponent<MaterialController>();
+            var materialController = string.IsNullOrEmpty(materialId) ?
+                renderer.gameObject.GetComponent<MaterialController>() :
+                renderer.gameObject.GetComponentsInChildren<MaterialController>()
+                    .FirstOrDefault(x => x.materialID == materialId);
+
             if (materialController == null)
             {
                 materialController = renderer.gameObject.AddComponent<MaterialController>();
@@ -27,6 +32,14 @@ namespace XLGearModifier.Unity
                 Debug.LogWarning("MaterialController already exists!");
             }
             materialController.FindTargets();
+
+            materialController.materialID = materialId;
+
+            var target = materialController.targets.FirstOrDefault();
+            if (target != null)
+            {
+                target.materialIndex = materialIndex;
+            }
 
             return materialController;
         }
