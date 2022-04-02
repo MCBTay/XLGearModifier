@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using SkaterXL.Gear;
+using UnityEngine;
 
 namespace XLGearModifier.Unity
 {
@@ -13,5 +14,34 @@ namespace XLGearModifier.Unity
 		public abstract string GetCategory();
 		public abstract bool BasedOnDefaultGear();
         public abstract string GetTemplateId();
+
+        public void AddMaterialController(Renderer renderer)
+        {
+            var materialController = renderer.gameObject.GetComponent<MaterialController>();
+            if (materialController == null)
+            {
+                materialController = renderer.gameObject.AddComponent<MaterialController>();
+            }
+            else
+            {
+                Debug.LogWarning("MaterialController already exists!");
+            }
+            materialController.FindTargets();
+        }
+
+        public void AddGearPrefabController(Renderer renderer)
+        {
+            var gearPrefabController = renderer.gameObject.GetComponent<GearPrefabController>();
+            if (gearPrefabController == null)
+            {
+                gearPrefabController = renderer.gameObject.AddComponent<GearPrefabController>();
+            }
+            else
+            {
+                Debug.LogWarning("GearPrefabController already exists!");
+            }
+
+            gearPrefabController.PreparePrefab();
+        }
     }
 }

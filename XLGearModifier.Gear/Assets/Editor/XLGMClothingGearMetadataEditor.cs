@@ -73,27 +73,8 @@ namespace XLGearModifier.Assets.Editor
 
                 foreach (var renderer in renderers)
                 {
-                    var materialController = renderer.gameObject.GetComponent<MaterialController>();
-                    if (materialController == null)
-                    {
-                        materialController = renderer.gameObject.AddComponent<MaterialController>();
-                    }
-                    else
-                    {
-                        Debug.LogWarning("MaterialController already exists!");
-                    }
-                    materialController.FindTargets();
-
-                    var gearPrefabController = item.gameObject.GetComponent<GearPrefabController>();
-                    if (gearPrefabController == null)
-                    {
-                        gearPrefabController = renderer.gameObject.AddComponent<GearPrefabController>();
-                    }
-                    else
-                    {
-                        Debug.LogWarning("GearPrefabController already exists!");
-                    }
-                    gearPrefabController.PreparePrefab();
+                    item.AddMaterialController(renderer);
+                    item.AddGearPrefabController(renderer);
                 }
 
                 Debug.Log("Successfully prepared XLGM Clothing " + item.CharacterGearTemplate.id);
