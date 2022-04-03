@@ -19,8 +19,6 @@ namespace XLGearModifier.Texturing
         public Shader MasterShaderCloth_v2;
         public Shader MasterShaderHair_AlphaTest_v1;
 
-        
-
         public Dictionary<string, Dictionary<string, Texture>> BaseGameTextures;
 
         public BaseGameTextureManager()
