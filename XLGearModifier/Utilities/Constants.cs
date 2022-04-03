@@ -1,5 +1,8 @@
 ﻿namespace XLGearModifier.Utilities
 {
+    /// <summary>
+    /// Filenames for our built-in default, empty textures.
+    /// </summary>
     public class EmptyTextureConstants
     {
         public const string EmptyAlbedoFilename = "Empty_Albedo.png";
@@ -7,6 +10,9 @@
         public const string EmptyMaskFilename = "Empty_Maskpbr_Map.png";
     }
 
+    /// <summary>
+    /// Shader property names for the shader the eyes are using.
+    /// </summary>
     public class EyeTextureConstants
     {
         public const string ColorTextureName = "Texture2D_4128E5C7";
@@ -14,6 +20,9 @@
         public const string RgmtaoTextureName = "Texture2D_B56F9766";
     }
 
+    /// <summary>
+    /// Shader property names for MasterShaderCloth_v2.
+    /// </summary>
     public class MasterShaderClothTextureConstants
     {
         public const string ColorTextureName = "_texture2D_color";
@@ -21,6 +30,9 @@
         public const string RgmtaoTextureName = "_texture2D_maskpbr";
     }
 
+    /// <summary>
+    /// Shader property names for MasterShaderHair_AlphaTest_v1.
+    /// </summary>
     public class MasterShaderHairTextureConstants
     {
         public const string ColorTextureName = "_texture_color";
@@ -28,6 +40,9 @@
         public const string RgmtaoTextureName = "_texture_maskpbr";
     }
 
+    /// <summary>
+    /// Shader property names for HDRP/Lit.
+    /// </summary>
     public class HDRPLitTextureConstants
     {
         public const string ColorTextureName = "_BaseColorMap";
@@ -35,6 +50,9 @@
         public const string RgmtaoTextureName = "_MaskMap";
     }
 
+    /// <summary>
+    /// Shader property names for the shader the skateshop is using as well as the filenames the mod is looking for.
+    /// </summary>
     public class SkateShopTextureConstants
     {
         public const string ColorTextureName = "Texture2D_694A07B4";
