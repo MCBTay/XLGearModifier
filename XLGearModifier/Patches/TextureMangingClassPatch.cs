@@ -1,11 +1,9 @@
-﻿using System.IO;
-using HarmonyLib;
-using SkaterXL.Data;
-using SkaterXL.Gear;
-using System.Linq;
+﻿using HarmonyLib;
+using System.IO;
 using System.Threading.Tasks;
 using UnityEngine;
 using XLGearModifier.CustomGear;
+using XLGearModifier.Utilities;
 
 namespace XLGearModifier.Patches
 {
@@ -20,19 +18,19 @@ namespace XLGearModifier.Patches
 
 				var split = texturePath.Split('/');
 
-				if (texturePath.EndsWith(Path.GetFileNameWithoutExtension(GearManager.EmptyAlbedoFilename)))
+				if (texturePath.EndsWith(Path.GetFileNameWithoutExtension(EmptyTextureConstants.EmptyAlbedoFilename)))
 				{
 					__result = Task.FromResult<Texture>(GearManager.Instance.EmptyAlbedo);
 					return false;
 				}
 
-                if (texturePath.EndsWith(Path.GetFileNameWithoutExtension(GearManager.EmptyNormalFilename)))
+                if (texturePath.EndsWith(Path.GetFileNameWithoutExtension(EmptyTextureConstants.EmptyNormalFilename)))
                 {
                     __result = Task.FromResult<Texture>(GearManager.Instance.EmptyNormalMap);
                     return false;
 				}
 
-                if (texturePath.EndsWith(Path.GetFileNameWithoutExtension(GearManager.EmptyMaskFilename)))
+                if (texturePath.EndsWith(Path.GetFileNameWithoutExtension(EmptyTextureConstants.EmptyMaskFilename)))
                 {
                     __result = Task.FromResult<Texture>(GearManager.Instance.EmptyMaskPBR);
                     return false;

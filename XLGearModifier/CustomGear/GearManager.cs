@@ -28,10 +28,6 @@ namespace XLGearModifier.CustomGear
         public Texture2D EmptyMaskPBR;
         public Texture2D EmptyNormalMap;
 
-        public const string EmptyAlbedoFilename = "Empty_Albedo.png";
-        public const string EmptyNormalFilename = "Empty_Normal_Map.png";
-        public const string EmptyMaskFilename = "Empty_Maskpbr_Map.png";
-
         public GearManager()
 		{
 			CustomMeshes = new List<ICustomInfo>();

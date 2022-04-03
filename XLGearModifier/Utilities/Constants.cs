@@ -1,5 +1,12 @@
 ﻿namespace XLGearModifier.Utilities
 {
+    public class EmptyTextureConstants
+    {
+        public const string EmptyAlbedoFilename = "Empty_Albedo.png";
+        public const string EmptyNormalFilename = "Empty_Normal_Map.png";
+        public const string EmptyMaskFilename = "Empty_Maskpbr_Map.png";
+    }
+
     public class EyeTextureConstants
     {
         public const string ColorTextureName = "Texture2D_4128E5C7";
