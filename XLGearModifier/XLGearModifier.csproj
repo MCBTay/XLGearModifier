@@ -140,6 +140,7 @@
     <Compile Include="Texturing\EyeTextureManager.cs" />
     <Compile Include="Texturing\SkateShopTextureManager.cs" />
     <Compile Include="UserInterfaceHelper.cs" />
+    <Compile Include="Utilities\Constants.cs" />
     <Compile Include="Utilities\DebugLogHandler.cs" />
   </ItemGroup>
   <ItemGroup>
