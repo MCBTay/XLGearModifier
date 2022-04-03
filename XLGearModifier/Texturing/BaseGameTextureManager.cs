@@ -19,13 +19,7 @@ namespace XLGearModifier.Texturing
         public Shader MasterShaderCloth_v2;
         public Shader MasterShaderHair_AlphaTest_v1;
 
-        public const string ColorTextureName = "_texture2D_color";
-        public const string NormalTextureName = "_texture2D_normal";
-        public const string RgmtaoTextureName = "_texture2D_maskpbr";
-
-        public const string HairColorTextureName = "_texture_color";
-        public const string HairNormalTextureName = "_texture_normal";
-        public const string HairRgmtaoTextureName = "_texture_maskpbr";
+        
 
         public Dictionary<string, Dictionary<string, Texture>> BaseGameTextures;
 

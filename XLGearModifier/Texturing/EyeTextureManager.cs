@@ -181,9 +181,9 @@ namespace XLGearModifier.Texturing
             
             var propNameSubs = propNameSubsTraverse.GetValue<List<PropertyNameSubstitution>>();
 
-            propNameSubs.Add(new PropertyNameSubstitution { oldName = BaseGameTextureManager.ColorTextureName, newName = EyeTextureConstants.ColorTextureName });
-            propNameSubs.Add(new PropertyNameSubstitution { oldName = BaseGameTextureManager.NormalTextureName, newName = EyeTextureConstants.NormalTextureName });
-            propNameSubs.Add(new PropertyNameSubstitution { oldName = BaseGameTextureManager.RgmtaoTextureName, newName = EyeTextureConstants.RgmtaoTextureName });
+            propNameSubs.Add(new PropertyNameSubstitution { oldName = MasterShaderClothTextureConstants.ColorTextureName, newName = EyeTextureConstants.ColorTextureName });
+            propNameSubs.Add(new PropertyNameSubstitution { oldName = MasterShaderClothTextureConstants.NormalTextureName, newName = EyeTextureConstants.NormalTextureName });
+            propNameSubs.Add(new PropertyNameSubstitution { oldName = MasterShaderClothTextureConstants.RgmtaoTextureName, newName = EyeTextureConstants.RgmtaoTextureName });
         }
 
 

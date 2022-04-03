@@ -8,6 +8,7 @@ using HarmonyLib;
 using UnityEngine;
 using XLGearModifier.Texturing;
 using XLGearModifier.Unity;
+using XLGearModifier.Utilities;
 
 namespace XLGearModifier.CustomGear
 {
@@ -116,9 +117,9 @@ namespace XLGearModifier.CustomGear
             //TODO: This 3 entries below can likely be removed once we get access to their shaders.
             var propNameSubs = new List<PropertyNameSubstitution>
             {
-                new PropertyNameSubstitution { oldName = BaseGameTextureManager.ColorTextureName, newName = HDRPLitColorName },
-                new PropertyNameSubstitution { oldName = BaseGameTextureManager.NormalTextureName, newName = HDRPLitNormalName },
-                new PropertyNameSubstitution { oldName = BaseGameTextureManager.RgmtaoTextureName, newName = HDRPLitMaskName }
+                new PropertyNameSubstitution { oldName = MasterShaderClothTextureConstants.ColorTextureName, newName = HDRPLitColorName },
+                new PropertyNameSubstitution { oldName = MasterShaderClothTextureConstants.NormalTextureName, newName = HDRPLitNormalName },
+                new PropertyNameSubstitution { oldName = MasterShaderClothTextureConstants.RgmtaoTextureName, newName = HDRPLitMaskName }
             };
 
             var traverse = Traverse.Create(materialController);
