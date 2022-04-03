@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using UnityEngine;
+using XLGearModifier.Utilities;
 using XLMenuMod.Utilities.Gear;
 using XLMenuMod.Utilities.Interfaces;
 
@@ -18,10 +19,6 @@ namespace XLGearModifier.Texturing
 
         private Dictionary<string, Texture> OriginalEyeTextures;
 
-        private const string ColorTextureName = "Texture2D_4128E5C7";
-        private const string NormalTextureName = "Texture2D_BEC07F52";
-        private const string RgmtaoTextureName = "Texture2D_B56F9766";
-        
         public List<ICustomInfo> Eyes;
 
         public CharacterGearTemplate EyeGearTemplate;
@@ -100,17 +97,17 @@ namespace XLGearModifier.Texturing
         {
             if (!OriginalEyeTextures.ContainsKey("albedo"))
             {
-                OriginalEyeTextures.Add("albedo", eyeRenderer.material.GetTexture(ColorTextureName));
+                OriginalEyeTextures.Add("albedo", eyeRenderer.material.GetTexture(EyeTextureConstants.ColorTextureName));
             }
 
             if (!OriginalEyeTextures.ContainsKey("normal"))
             {
-                OriginalEyeTextures.Add("normal", eyeRenderer.material.GetTexture(NormalTextureName));
+                OriginalEyeTextures.Add("normal", eyeRenderer.material.GetTexture(EyeTextureConstants.NormalTextureName));
             }
 
             if (!OriginalEyeTextures.ContainsKey("maskpbr"))
             {
-                OriginalEyeTextures.Add("maskpbr", eyeRenderer.material.GetTexture(RgmtaoTextureName));
+                OriginalEyeTextures.Add("maskpbr", eyeRenderer.material.GetTexture(EyeTextureConstants.RgmtaoTextureName));
             }
         }
 
@@ -146,17 +143,17 @@ namespace XLGearModifier.Texturing
             {
                 if (!OriginalEyeTextures.ContainsKey("albedo"))
                 {
-                    OriginalEyeTextures.Add("albedo", eyeRenderer.material.GetTexture(ColorTextureName));
+                    OriginalEyeTextures.Add("albedo", eyeRenderer.material.GetTexture(EyeTextureConstants.ColorTextureName));
                 }
 
                 if (!OriginalEyeTextures.ContainsKey("normal"))
                 {
-                    OriginalEyeTextures.Add("normal", eyeRenderer.material.GetTexture(NormalTextureName));
+                    OriginalEyeTextures.Add("normal", eyeRenderer.material.GetTexture(EyeTextureConstants.NormalTextureName));
                 }
 
                 if (!OriginalEyeTextures.ContainsKey("maskpbr"))
                 {
-                    OriginalEyeTextures.Add("maskpbr", eyeRenderer.material.GetTexture(RgmtaoTextureName));
+                    OriginalEyeTextures.Add("maskpbr", eyeRenderer.material.GetTexture(EyeTextureConstants.RgmtaoTextureName));
                 }
 
                 var materialController = eyeRenderer.gameObject.GetComponent<MaterialController>();
@@ -184,9 +181,9 @@ namespace XLGearModifier.Texturing
             
             var propNameSubs = propNameSubsTraverse.GetValue<List<PropertyNameSubstitution>>();
 
-            propNameSubs.Add(new PropertyNameSubstitution { oldName = BaseGameTextureManager.ColorTextureName, newName = ColorTextureName });
-            propNameSubs.Add(new PropertyNameSubstitution { oldName = BaseGameTextureManager.NormalTextureName, newName = NormalTextureName });
-            propNameSubs.Add(new PropertyNameSubstitution { oldName = BaseGameTextureManager.RgmtaoTextureName, newName = RgmtaoTextureName });
+            propNameSubs.Add(new PropertyNameSubstitution { oldName = BaseGameTextureManager.ColorTextureName, newName = EyeTextureConstants.ColorTextureName });
+            propNameSubs.Add(new PropertyNameSubstitution { oldName = BaseGameTextureManager.NormalTextureName, newName = EyeTextureConstants.NormalTextureName });
+            propNameSubs.Add(new PropertyNameSubstitution { oldName = BaseGameTextureManager.RgmtaoTextureName, newName = EyeTextureConstants.RgmtaoTextureName });
         }
 
 
