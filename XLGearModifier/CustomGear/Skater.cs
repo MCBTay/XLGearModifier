@@ -18,10 +18,6 @@ namespace XLGearModifier.CustomGear
 
         public Dictionary<string, Dictionary<string, Texture>> MaterialControllerTextures;
 
-        public const string HDRPLitColorName = "_BaseColorMap";
-        public const string HDRPLitNormalName = "_NormalMap";
-        public const string HDRPLitMaskName = "_MaskMap";
-
         public Skater(XLGMSkaterMetadata metadata, GameObject prefab) : base(metadata, prefab)
         {
             MaterialControllerTextures = new Dictionary<string, Dictionary<string, Texture>>();
@@ -69,9 +65,9 @@ namespace XLGearModifier.CustomGear
 
                 var textureChanges = new List<TextureChange>
                 {
-                    new TextureChange(HDRPLitColorName, texturePath + HDRPLitColorName),
-                    new TextureChange(HDRPLitNormalName, texturePath + HDRPLitNormalName),
-                    new TextureChange(HDRPLitMaskName, texturePath + HDRPLitMaskName)
+                    new TextureChange(HDRPLitTextureConstants.ColorTextureName, texturePath + HDRPLitTextureConstants.ColorTextureName),
+                    new TextureChange(HDRPLitTextureConstants.NormalTextureName, texturePath + HDRPLitTextureConstants.NormalTextureName),
+                    new TextureChange(HDRPLitTextureConstants.RgmtaoTextureName, texturePath + HDRPLitTextureConstants.RgmtaoTextureName)
                 };
 
                 materialChanges.Add(new MaterialChange(materialController.materialID, textureChanges.ToArray()));
@@ -96,9 +92,9 @@ namespace XLGearModifier.CustomGear
 
             var material = renderer.materials[target.materialIndex];
 
-            textures.Add(HDRPLitColorName, material.GetTexture(HDRPLitColorName) ?? GearManager.Instance.EmptyAlbedo);
-            textures.Add(HDRPLitNormalName, material.GetTexture(HDRPLitNormalName) ?? GearManager.Instance.EmptyNormalMap);
-            textures.Add(HDRPLitMaskName, material.GetTexture(HDRPLitMaskName) ?? GearManager.Instance.EmptyMaskPBR);
+            textures.Add(HDRPLitTextureConstants.ColorTextureName, material.GetTexture(HDRPLitTextureConstants.ColorTextureName) ?? GearManager.Instance.EmptyAlbedo);
+            textures.Add(HDRPLitTextureConstants.NormalTextureName, material.GetTexture(HDRPLitTextureConstants.NormalTextureName) ?? GearManager.Instance.EmptyNormalMap);
+            textures.Add(HDRPLitTextureConstants.RgmtaoTextureName, material.GetTexture(HDRPLitTextureConstants.RgmtaoTextureName) ?? GearManager.Instance.EmptyMaskPBR);
 
             MaterialControllerTextures.Add(materialController.materialID, textures);
 
@@ -117,9 +113,9 @@ namespace XLGearModifier.CustomGear
             //TODO: This 3 entries below can likely be removed once we get access to their shaders.
             var propNameSubs = new List<PropertyNameSubstitution>
             {
-                new PropertyNameSubstitution { oldName = MasterShaderClothTextureConstants.ColorTextureName, newName = HDRPLitColorName },
-                new PropertyNameSubstitution { oldName = MasterShaderClothTextureConstants.NormalTextureName, newName = HDRPLitNormalName },
-                new PropertyNameSubstitution { oldName = MasterShaderClothTextureConstants.RgmtaoTextureName, newName = HDRPLitMaskName }
+                new PropertyNameSubstitution { oldName = MasterShaderClothTextureConstants.ColorTextureName, newName = HDRPLitTextureConstants.ColorTextureName },
+                new PropertyNameSubstitution { oldName = MasterShaderClothTextureConstants.NormalTextureName, newName = HDRPLitTextureConstants.NormalTextureName },
+                new PropertyNameSubstitution { oldName = MasterShaderClothTextureConstants.RgmtaoTextureName, newName = HDRPLitTextureConstants.RgmtaoTextureName }
             };
 
             var traverse = Traverse.Create(materialController);

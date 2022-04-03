@@ -27,4 +27,11 @@
         public const string NormalTextureName = "_texture_normal";
         public const string RgmtaoTextureName = "_texture_maskpbr";
     }
+
+    public class HDRPLitTextureConstants
+    {
+        public const string ColorTextureName = "_BaseColorMap";
+        public const string NormalTextureName = "_NormalMap";
+        public const string RgmtaoTextureName = "_MaskMap";
+    }
 }
