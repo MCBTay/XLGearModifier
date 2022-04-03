@@ -1,10 +1,12 @@
 ﻿using SkaterXL.Data;
+using SkaterXL.Gear;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using SkaterXL.Gear;
+using HarmonyLib;
 using UnityEngine;
+using XLGearModifier.Texturing;
 using XLGearModifier.Unity;
 
 namespace XLGearModifier.CustomGear
@@ -13,9 +15,15 @@ namespace XLGearModifier.CustomGear
     {
         public XLGMSkaterMetadata SkaterMetadata => Metadata as XLGMSkaterMetadata;
 
-        public Skater(XLGMSkaterMetadata metadata, GameObject prefab) 
-            : base(metadata, prefab)
+        public Dictionary<string, Dictionary<string, Texture>> MaterialControllerTextures;
+
+        public const string HDRPLitColorName = "_BaseColorMap";
+        public const string HDRPLitNormalName = "_NormalMap";
+        public const string HDRPLitMaskName = "_MaskMap";
+
+        public Skater(XLGMSkaterMetadata metadata, GameObject prefab) : base(metadata, prefab)
         {
+            MaterialControllerTextures = new Dictionary<string, Dictionary<string, Texture>>();
         }
 
         public override void Instantiate()
@@ -30,7 +38,7 @@ namespace XLGearModifier.CustomGear
                 GearFilters = GetCustomSkaterTypeFilters(),
             };
             GearDatabase.Instance.skaters.Add(skaterInfo);
-            //Traverse.Create(GearDatabase.Instance).Method("GenerateGearListSource").GetValue();
+            Traverse.Create(GearDatabase.Instance).Method("GenerateGearListSource").GetValue();
 
             GearInfo = new CharacterBodyInfo(name, SkaterMetadata.CharacterBodyTemplate.id, false, new List<MaterialChange>(), new string[] { });
 
@@ -56,13 +64,13 @@ namespace XLGearModifier.CustomGear
             {
                 CreateMaterialWithTexturesOnProperShader(materialController);
 
-                var texturePath = $"XLGearModifier/{Prefab.name}/{materialController.materialID}/";
+                var texturePath = $"XLGearModifier/{SkaterMetadata.CharacterBodyTemplate.id}/{materialController.materialID}/";
 
                 var textureChanges = new List<TextureChange>
                 {
-                    new TextureChange("albedo", texturePath + "albedo"),
-                    new TextureChange("normal", texturePath + "normal"),
-                    new TextureChange("maskpbr", texturePath + "maskpbr")
+                    new TextureChange(HDRPLitColorName, texturePath + HDRPLitColorName),
+                    new TextureChange(HDRPLitNormalName, texturePath + HDRPLitNormalName),
+                    new TextureChange(HDRPLitMaskName, texturePath + HDRPLitMaskName)
                 };
 
                 materialChanges.Add(new MaterialChange(materialController.materialID, textureChanges.ToArray()));
@@ -75,37 +83,53 @@ namespace XLGearModifier.CustomGear
         {
             if (materialController == null) return;
 
-            var renderer = materialController.targets.FirstOrDefault()?.renderer;
-            if (renderer == null) return;
-
-            var textures = new Dictionary<string, Texture>();
+            SetPropertyNameSubstitutions(materialController);
 
             var target = materialController.targets.FirstOrDefault();
             if (target == null) return;
 
+            var renderer = target.renderer;
+            if (renderer == null) return;
+
+            var textures = new Dictionary<string, Texture>();
+
             var material = renderer.materials[target.materialIndex];
 
-            textures.Add("albedo", material.GetTexture("_BaseColorMap") ?? GearManager.Instance.EmptyAlbedo);
-            textures.Add("normal", material.GetTexture("_NormalMap") ?? GearManager.Instance.EmptyNormalMap);
-            textures.Add("maskpbr", material.GetTexture("_MaskMap") ?? GearManager.Instance.EmptyMaskPBR);
+            textures.Add(HDRPLitColorName, material.GetTexture(HDRPLitColorName) ?? GearManager.Instance.EmptyAlbedo);
+            textures.Add(HDRPLitNormalName, material.GetTexture(HDRPLitNormalName) ?? GearManager.Instance.EmptyNormalMap);
+            textures.Add(HDRPLitMaskName, material.GetTexture(HDRPLitMaskName) ?? GearManager.Instance.EmptyMaskPBR);
+
+            MaterialControllerTextures.Add(materialController.materialID, textures);
 
             var newMaterial = materialController.GenerateMaterialWithChanges(textures);
-            //material.shader = Shader.Find("MasterShaderCloth_v1");
             materialController.SetMaterial(newMaterial);
+        }
+
+        /// <summary>
+        /// Sets property name substitutions to handle all of our assets coming from HDRP/Lit to go to Easy Day shaders.  Most of this code
+        /// can hopefully get removed once we get native access to their shaders.  Also adds property name substitutions for hair, to mimic what
+        /// Easy Day does with their own hair meshes in editor.
+        /// </summary>
+        /// <param name="materialController">The material controller to operate on</param>
+        private void SetPropertyNameSubstitutions(MaterialController materialController)
+        {
+            //TODO: This 3 entries below can likely be removed once we get access to their shaders.
+            var propNameSubs = new List<PropertyNameSubstitution>
+            {
+                new PropertyNameSubstitution { oldName = BaseGameTextureManager.ColorTextureName, newName = HDRPLitColorName },
+                new PropertyNameSubstitution { oldName = BaseGameTextureManager.NormalTextureName, newName = HDRPLitNormalName },
+                new PropertyNameSubstitution { oldName = BaseGameTextureManager.RgmtaoTextureName, newName = HDRPLitMaskName }
+            };
+
+            var traverse = Traverse.Create(materialController);
+            traverse.Field("m_propertyNameSubstitutions").SetValue(propNameSubs);
         }
 
         private void AddBodyGearTemplate()
         {
-            if (GearDatabase.Instance.CharBodyTemplateForID.ContainsKey(SkaterMetadata.CharacterBodyTemplate.id.ToLower())) return;
+            if (GearDatabase.Instance.CharBodyTemplateForID.ContainsKey(SkaterMetadata.CharacterBodyTemplate.id)) return;
 
-            var newBodyTemplate = new CharacterBodyTemplate
-            {
-                id = SkaterMetadata.CharacterBodyTemplate.id.ToLower(),
-                path = $"XLGearModifier/{Prefab.name}",
-                leftEyeLocalPosition = new Vector3(1, 0, 0),
-                rightEyeLocalPosition = new Vector3(-1, 0, 0)
-            };
-            GearDatabase.Instance.CharBodyTemplateForID.Add(SkaterMetadata.CharacterBodyTemplate.id.ToLower(), newBodyTemplate);
+            GearDatabase.Instance.CharBodyTemplateForID.Add(SkaterMetadata.CharacterBodyTemplate.id, SkaterMetadata.CharacterBodyTemplate);
         }
 
         public override Task<GameObject> GetBaseObject()
@@ -127,6 +151,15 @@ namespace XLGearModifier.CustomGear
         {
             return new TypeFilterList(new List<TypeFilter>
             {
+                new TypeFilter
+                {
+                    allowCustomGear = true,
+                    cameraView = GearRoomCameraView.FullSkater,
+                    excludedTags = new string[] { },
+                    includedTypes = new [] { SkaterMetadata.CharacterBodyTemplate.id },
+                    label = "Skin Tone",
+                    requiredTag = ""
+                },
                 new TypeFilter
                 {
                     allowCustomGear = true,

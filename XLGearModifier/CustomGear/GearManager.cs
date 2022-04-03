@@ -19,8 +19,9 @@ namespace XLGearModifier.CustomGear
 		public static GearManager Instance => __instance ?? (__instance = new GearManager());
 
         public Dictionary<string, CustomGearBase> CustomGear;
+        public Dictionary<string, Skater> CustomSkaters => CustomGear.Where(x => x.Value is Skater).ToDictionary(x => x.Key, x => x.Value as Skater);
 
-		public List<ICustomInfo> CustomMeshes;
+        public List<ICustomInfo> CustomMeshes;
         public List<ICustomInfo> CustomFemaleMeshes;
 
         public Texture2D EmptyAlbedo;
