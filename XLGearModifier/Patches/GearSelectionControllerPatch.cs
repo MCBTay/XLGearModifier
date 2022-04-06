@@ -283,8 +283,9 @@ namespace XLGearModifier.Patches
 		public static class ListView_OnItemSelectedEventPatch
 		{
 			static bool Prefix(GearSelectionController __instance, IndexPath index, CustomizedPlayerDataV2[] ___skaterCustomizations)
-			{
-				if (index.depth < 3) return true;
+            {
+                if (!__instance.initialized) return true;
+                if (index.depth < 3) return true;
 
 				var gear = GearDatabase.Instance.GetGearAtIndex(index);
 				if (!IsOnXLGMTab(index[1]))
