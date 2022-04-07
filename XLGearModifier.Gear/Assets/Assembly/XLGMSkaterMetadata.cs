@@ -1,5 +1,5 @@
-﻿using System;
-using SkaterXL.Gear;
+﻿using SkaterXL.Gear;
+using System;
 using UnityEngine;
 
 namespace XLGearModifier.Unity
