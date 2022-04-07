@@ -60,29 +60,5 @@ namespace XLGearModifier.Patches
                 }
             }
         }
-
-        [HarmonyPatch(typeof(CharacterCustomizer), nameof(CharacterCustomizer.EquipBody))]
-        static class EquipBodyPatch
-        {
-            static void Postfix(CharacterCustomizer __instance, CharacterBodyInfo body)
-            {
-                var defaultSkaterTypes = Enum.GetNames(typeof(XLMenuMod.Skater)).Select(x => x.ToLower().Replace("standard", string.Empty));
-                if (defaultSkaterTypes.Contains(body.type)) return;
-
-                if (!GearManager.Instance.CustomSkaters.ContainsKey(body.type)) return;
-
-                var skater = GearManager.Instance.CustomSkaters[body.type];
-                if (skater == null) return;
-
-                if (!skater.SkaterMetadata.AllowClothing) return;
-
-                var gearFilters = GearDatabase.Instance.skaters[(int) skater.SkaterMetadata.ClothingGearFilters].GearFilters;
-
-                var equippedSkater = GearDatabase.Instance.skaters.FirstOrDefault(x => x.name == body.name);
-                if (equippedSkater == null) return;
-
-                equippedSkater.GearFilters = gearFilters;
-            }
-        }
     }
 }
