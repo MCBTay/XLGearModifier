@@ -16,6 +16,13 @@ namespace XLGearModifier.Unity
             var item = target as XLGMSkaterMetadata;
             if (item == null) return;
 
+            if (item.AllowClothing)
+            {
+                item.ClothingGearFilters = (SkaterBase)EditorGUILayout.EnumPopup(
+                    new GUIContent("Skater Gear Filters", "This is the skater who's gear this custom skater will share."),
+                    item.ClothingGearFilters);
+            }
+
             GUILayout.Space(15);
             if (GUILayout.Button("Prepare XLGM Skater"))
             {

@@ -12,6 +12,11 @@ namespace XLGearModifier.Unity
 		[Header("Template")]
         public CharacterBodyTemplate CharacterBodyTemplate;
 
+        [Tooltip("If enabled, this custom skater will have access to the same clothing as the Skater selected.")]
+        public bool AllowClothing;
+        [HideInInspector]
+        public SkaterBase ClothingGearFilters;
+
 		public override string GetBaseType() => BasedOn.ToString();
 		public override string GetSprite() => null;
 		public override string GetCategory() => null;
