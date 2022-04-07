@@ -56,6 +56,7 @@ namespace XLGearModifier.Patches
 				if (index.depth < 2) return;
 
                 var sourceList = GetSourceList(index);
+                if (!sourceList.Any()) return;
 
                 if (index.depth == 2)
 				{
