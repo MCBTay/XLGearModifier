@@ -95,13 +95,34 @@ namespace XLGearModifier.Patches
         {
             static void Prefix(GearDatabase __instance)
             {
+                var defaultSkaterTypes = Enum.GetNames(typeof(XLMenuMod.Skater)).Select(x => x.ToLower().Replace("standard", string.Empty)).ToList();
+
                 foreach (var skater in __instance.skaters)
                 {
+                    CheckForAllowClothing(defaultSkaterTypes, skater);
+
                     foreach (var filter in skater.GearFilters)
                     {
                         filter.allowCustomGear = true;
                     }
                 }
+            }
+
+            private static void CheckForAllowClothing(IEnumerable<string> defaultSkaterTypes, SkaterInfo currentSkater)
+            {
+                var type = currentSkater.customizations.body.type;
+
+                if (defaultSkaterTypes.Contains(type)) return;
+
+                if (!GearManager.Instance.CustomSkaters.ContainsKey(currentSkater.customizations.body.type)) return;
+
+                var skater = GearManager.Instance.CustomSkaters[currentSkater.customizations.body.type];
+                if (skater == null) return;
+
+                if (!skater.SkaterMetadata.AllowClothing) return;
+
+                currentSkater.GearFilters = GearDatabase.Instance.skaters[(int)skater.SkaterMetadata.ClothingGearFilters].GearFilters;
+                currentSkater.GearFilters[0].includedTypes = new[] { skater.SkaterMetadata.CharacterBodyTemplate.id };
             }
 
             static void Postfix(GearDatabase __instance)
