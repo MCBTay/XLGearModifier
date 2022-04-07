@@ -68,13 +68,13 @@ namespace XLGearModifier.Unity
             var materialControllers = renderer.gameObject.GetComponentsInChildren<MaterialController>(true);
             foreach (var materialController in materialControllers)
             {
-                Destroy(materialController);
+                DestroyImmediate(materialController, true);
             }
 
             var gearPrefabControllers = renderer.gameObject.GetComponentsInChildren<GearPrefabController>(true);
             foreach (var gearPrefabController in gearPrefabControllers)
             {
-                Destroy(gearPrefabController);
+                DestroyImmediate(gearPrefabController, true);
             }
         }
     }
