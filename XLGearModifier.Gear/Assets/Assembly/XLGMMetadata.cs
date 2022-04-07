@@ -29,7 +29,7 @@ namespace XLGearModifier.Unity
             }
             else if (!string.IsNullOrEmpty(materialId))
             {
-                Debug.LogError($"Duplicate materialID {materialId} added to {DisplayName}");
+                Debug.LogError($"Duplicate materialID {materialId}, index {materialIndex} added to {DisplayName}");
                 materialController = renderer.gameObject.AddComponent<MaterialController>();
             }
 
