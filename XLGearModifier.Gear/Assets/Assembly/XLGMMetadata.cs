@@ -27,10 +27,12 @@ namespace XLGearModifier.Unity
             {
                 materialController = renderer.gameObject.AddComponent<MaterialController>();
             }
-            else
+            else if (!string.IsNullOrEmpty(materialId))
             {
-                Debug.LogWarning("MaterialController already exists!");
+                Debug.LogError($"Duplicate materialID {materialId}, index {materialIndex} added to {DisplayName}");
+                materialController = renderer.gameObject.AddComponent<MaterialController>();
             }
+
             materialController.FindTargets();
 
             materialController.materialID = materialId;
@@ -59,6 +61,21 @@ namespace XLGearModifier.Unity
             gearPrefabController.PreparePrefab();
 
             return gearPrefabController;
+        }
+
+        public void ClearControllers(Renderer renderer)
+        {
+            var materialControllers = renderer.gameObject.GetComponentsInChildren<MaterialController>(true);
+            foreach (var materialController in materialControllers)
+            {
+                DestroyImmediate(materialController, true);
+            }
+
+            var gearPrefabControllers = renderer.gameObject.GetComponentsInChildren<GearPrefabController>(true);
+            foreach (var gearPrefabController in gearPrefabControllers)
+            {
+                DestroyImmediate(gearPrefabController, true);
+            }
         }
     }
 }
