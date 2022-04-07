@@ -1,6 +1,4 @@
-﻿using System.Linq;
-using SkaterXL.Gear;
-using UnityEditor;
+﻿using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
 
@@ -31,6 +29,8 @@ namespace XLGearModifier.Unity
 
                 foreach (var renderer in renderers)
                 {
+                    item.ClearControllers(renderer);
+
                     int i = 0;
                     foreach (var material in renderer.sharedMaterials)
                     {
