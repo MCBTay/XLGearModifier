@@ -106,6 +106,8 @@ namespace XLGearModifier.Patches
                         filter.allowCustomGear = true;
                     }
                 }
+
+                Traverse.Create(__instance).Method("GenerateGearListSource").GetValue();
             }
 
             private static void CheckForAllowClothing(IEnumerable<string> defaultSkaterTypes, SkaterInfo currentSkater)
