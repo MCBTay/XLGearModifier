@@ -1,0 +1,227 @@
+fileFormatVersion: 2
+guid: b43ba8f08049cb44eab32eedb573dd6f
+ModelImporter:
+  serializedVersion: 19301
+  internalIDToNameTable: []
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Iris
+    second: {fileID: 2100000, guid: d25a5a7c0b97d7e4a8ca9c30a3b0a2a0, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: MI_Lashes
+    second: {fileID: 2100000, guid: 481a519803498ce48b01d3d997420790, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: MI_RM_Body
+    second: {fileID: 2100000, guid: 4c83311bf779bb74cac4e45eaf598e27, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: MI_RM_Eye
+    second: {fileID: 2100000, guid: 43383bd0f855b7549a831379c109f3af, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: MI_RM_Head
+    second: {fileID: 2100000, guid: c6a6a65248d4d6344a232042e64cd05c, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: MI_RM_Outfit_01_Hair_Inst
+    second: {fileID: 2100000, guid: 3682387a6669b9f44aac24636133e4e4, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: MI_RM_Outfit_01_Legs_Inst
+    second: {fileID: 2100000, guid: 10b3f2bb7699e8b44afab72ad59d9bfb, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: MI_RM_Outfit_01_Shoes_Inst
+    second: {fileID: 2100000, guid: 2fb5516e04b18e947ab014e5e3c4143e, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: MI_RM_Outfit_01_Torso_Inst
+    second: {fileID: 2100000, guid: d32698c756a6b524b98dbf786d5c1c2a, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: MI_RM_Outfit_01_WristAccessories_Inst
+    second: {fileID: 2100000, guid: afcb4515fcd560748a384df3674878b9, type: 2}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: CAS_Body_M_01_N
+    second: {fileID: 2800000, guid: e5281f69780059840b688adb689ab415, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: Sclera_C
+    second: {fileID: 2800000, guid: 0bef8b6f74aade64886b6c54f74a2693, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: T_Iris_RM_C
+    second: {fileID: 2800000, guid: e2569d3a3f51e1c4fa4a7f44cf473e3d, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: T_Lashes_A
+    second: {fileID: 2800000, guid: c61a3398f7cfe3b4e920cd36a32bb248, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: T_RM_Body_C
+    second: {fileID: 2800000, guid: 6f04e6cae5a86d24294b531b27be3152, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: T_RM_Head_C
+    second: {fileID: 2800000, guid: f75746e9b10c69c42b422e2db10cfd01, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: T_RM_Head_N
+    second: {fileID: 2800000, guid: 687a636d600ac9947bf655b06444616f, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: T_RM_Outfit_01_Hair_C
+    second: {fileID: 2800000, guid: ab10e9e7f370b9c4aac625dc9c69c92c, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: T_RM_Outfit_01_Legs_C
+    second: {fileID: 2800000, guid: b5323451f37dc174c9987e9838699fac, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: T_RM_Outfit_01_Legs_N
+    second: {fileID: 2800000, guid: a93139fd5dbeec04abf86e3b01d6b9af, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: T_RM_Outfit_01_Shoes_C
+    second: {fileID: 2800000, guid: 812919c256c364c42ac5dcfa7d6ebc8a, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: T_RM_Outfit_01_Shoes_N
+    second: {fileID: 2800000, guid: 05dbb5379de7aaf4a8b90811dd9ea2dc, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: T_RM_Outfit_01_Torso_C
+    second: {fileID: 2800000, guid: e9b7c0ad376309343a8d6f4531938ae4, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: T_RM_Outfit_01_Torso_N
+    second: {fileID: 2800000, guid: 2ee0b9bc72d37034080307a216dfba9f, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: T_RM_Outfit_01_WristAccessories_C
+    second: {fileID: 2800000, guid: 37c3d46d1b658ae4f8eb0f76b0099ad9, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: T_RM_Outfit_01_WristAccessories_N
+    second: {fileID: 2800000, guid: 352b8ecccff20e142a7c0eba5dd3c8c6, type: 3}
+  materials:
+    materialImportMode: 1
+    materialName: 0
+    materialSearch: 1
+    materialLocation: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    importAnimatedCustomProperties: 0
+    importConstraints: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations: []
+    isReadable: 0
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    useSRGBMaterialColor: 1
+    sortHierarchyByName: 1
+    importVisibility: 1
+    importBlendShapes: 1
+    importCameras: 1
+    importLights: 1
+    fileIdsGeneration: 2
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    keepQuads: 0
+    weldVertices: 1
+    preserveHierarchy: 0
+    skinWeightsMode: 0
+    maxBonesPerVertex: 4
+    minBoneWeight: 0.001
+    meshOptimizationFlags: -1
+    indexFormat: 0
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+    normalCalculationMode: 4
+    legacyComputeAllNormalsFromSmoothingGroupsWhenMeshHasBlendShapes: 0
+    blendShapeNormalImportMode: 1
+    normalSmoothingSource: 0
+  referencedClips: []
+  importAnimation: 1
+  humanDescription:
+    serializedVersion: 3
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    globalScale: 1
+    rootMotionBoneName: 
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  autoGenerateAvatarMappingIfUnspecified: 1
+  animationType: 2
+  humanoidOversampling: 1
+  avatarSetup: 0
+  additionalBone: 0
+  userData: 
+  assetBundleName: characters
+  assetBundleVariant: 
