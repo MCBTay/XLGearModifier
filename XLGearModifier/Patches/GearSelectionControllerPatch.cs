@@ -54,9 +54,10 @@ namespace XLGearModifier.Patches
 				}
 
 				if (index.depth < 2) return;
+                if (!IsOnXLGMTab(index[1])) return;
 
                 var sourceList = GetSourceList(index);
-                if (!sourceList.Any()) return;
+                if (sourceList == null) return;
 
                 if (index.depth == 2)
 				{
@@ -71,30 +72,33 @@ namespace XLGearModifier.Patches
 
         private static List<ICustomInfo> GetSourceList(IndexPath index)
         {
-            switch (index[1])
+            var isMale = index[0] == (int) Skater.MaleStandard;
+            var isFemale = index[0] == (int)Skater.FemaleStandard;
+
+			switch (index[1])
             {
                 case (int)GearModifierTab.CustomMeshes:
-                    return GetCustomMeshesTabList(index, SkaterBase.Male);
-                case (int)GearModifierTab.CustomFemaleMeshes:
-                    return GetCustomMeshesTabList(index, SkaterBase.Female);
-                case (int)GearModifierTab.Eyes:
-                    return EyeTextureManager.Instance.Eyes;
+                    return isMale ? GearManager.Instance.CustomMeshes : new List<ICustomInfo>();
+				case (int)GearModifierTab.CustomFemaleMeshes:
+                    return isFemale ? GearManager.Instance.CustomFemaleMeshes : new List<ICustomInfo>();
+				case (int)GearModifierTab.Eyes:
+                    return isMale || isFemale ? EyeTextureManager.Instance.Eyes : new List<ICustomInfo>();
                 default:
-                    return new List<ICustomInfo>();
+                    return null;
             }
 		}
 
-        private static List<ICustomInfo> GetCustomMeshesTabList(IndexPath index, SkaterBase skaterBase)
+        private static List<ICustomInfo> GetCustomMeshesTabList(IndexPath index)
         {
             var list = new List<ICustomInfo>();
 
-            if (index[0] == (int)skaterBase)
+            if (index[0] == (int) SkaterBase.Male || index[0] == (int) SkaterBase.Female)
             {
-                list = GetCustomMeshesList(skaterBase);
+                list = GetCustomMeshesList(index[0]);
             }
-            else if (index[0] > Enum.GetNames(typeof(Skater)).Length && CustomSkaterAllowsClothing(index, skaterBase))
+            else if (index[0] >= Enum.GetNames(typeof(Skater)).Length && CustomSkaterAllowsClothing(index))
             {
-                list = GetCustomMeshesList(skaterBase);
+                list = GetCustomMeshesList(index[0]);
             }
 
             return list;
@@ -105,9 +109,9 @@ namespace XLGearModifier.Patches
 		/// which <see cref="SkaterBase"/> is passed in.
 		/// </summary>
 		/// <returns><see cref="GearManager.CustomMeshes"/> or <see cref="GearManager.CustomFemaleMeshes"/></returns>
-		private static List<ICustomInfo> GetCustomMeshesList(SkaterBase skaterBase)
+		private static List<ICustomInfo> GetCustomMeshesList(int skaterIndex)
         {
-			return skaterBase == SkaterBase.Male ? GearManager.Instance.CustomMeshes : GearManager.Instance.CustomFemaleMeshes;
+			return skaterIndex == (int)SkaterBase.Male ? GearManager.Instance.CustomMeshes : GearManager.Instance.CustomFemaleMeshes;
 		}
 
 		/// <summary>
@@ -116,7 +120,7 @@ namespace XLGearModifier.Patches
 		/// <param name="index">The IndexPath of the custom skater to be evaluated.</param>
 		/// <param name="clothingGearFilters">Male or Female</param>
 		/// <returns>True if the custom skater allows clothing, false otherwise.</returns>
-        private static bool CustomSkaterAllowsClothing(IndexPath index, SkaterBase clothingGearFilters)
+        private static bool CustomSkaterAllowsClothing(IndexPath index)
         {
             var skater = GearDatabase.Instance.skaters[index[0]];
 
@@ -126,7 +130,7 @@ namespace XLGearModifier.Patches
             if (customSkater == null) return false;
 
             if (!customSkater.SkaterMetadata.AllowClothing) return false;
-            if (customSkater.SkaterMetadata.ClothingGearFilters != clothingGearFilters) return false;
+            //if (customSkater.SkaterMetadata.ClothingGearFilters != clothingGearFilters) return false;
 
             return true;
         }
