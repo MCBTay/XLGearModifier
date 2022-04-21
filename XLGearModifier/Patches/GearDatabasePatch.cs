@@ -33,13 +33,13 @@ namespace XLGearModifier.Patches
                     return;
                 }
 
-                var sourceList = GetSomeListPlzRename(index);
+                var sourceList = GetSourceList(index);
                 if (sourceList == null) return;
 
                 __result = sourceList.Select(x => x.GetParentObject() as GearInfo).ToArray();
             }
 
-            private static List<ICustomInfo> GetSomeListPlzRename(IndexPath index)
+            private static List<ICustomInfo> GetSourceList(IndexPath index)
             {
                 var isMale = index[0] == (int)XLMenuMod.Skater.MaleStandard;
                 var isFemale = index[0] == (int)XLMenuMod.Skater.FemaleStandard;
