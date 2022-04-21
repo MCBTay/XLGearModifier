@@ -54,88 +54,12 @@ namespace XLGearModifier.Patches
 				}
 
 				if (index.depth < 2) return;
-                if (!IsOnXLGMTab(index[1])) return;
 
-                var sourceList = GetSourceList(index);
-                if (sourceList == null) return;
-
-                if (index.depth == 2)
-				{
-					__result = sourceList.Count;
-				}
-				else if (index.depth >= 3)
-				{
-					__result = GearManager.Instance.CurrentFolder.HasChildren() ? GearManager.Instance.CurrentFolder.Children.Count : sourceList.Count;
-				}
-			}
-		}
-
-        private static List<ICustomInfo> GetSourceList(IndexPath index)
-        {
-            var isMale = index[0] == (int) Skater.MaleStandard;
-            var isFemale = index[0] == (int)Skater.FemaleStandard;
-
-			switch (index[1])
-            {
-                case (int)GearModifierTab.CustomMeshes:
-                    return isMale ? GearManager.Instance.CustomMeshes : new List<ICustomInfo>();
-				case (int)GearModifierTab.CustomFemaleMeshes:
-                    return isFemale ? GearManager.Instance.CustomFemaleMeshes : new List<ICustomInfo>();
-				case (int)GearModifierTab.Eyes:
-                    return isMale || isFemale ? EyeTextureManager.Instance.Eyes : new List<ICustomInfo>();
-                default:
-                    return null;
+                __result = GearDatabase.Instance.GetGearListAtIndex(index).Length;
             }
 		}
 
-        private static List<ICustomInfo> GetCustomMeshesTabList(IndexPath index)
-        {
-            var list = new List<ICustomInfo>();
-
-            if (index[0] == (int) SkaterBase.Male || index[0] == (int) SkaterBase.Female)
-            {
-                list = GetCustomMeshesList(index[0]);
-            }
-            else if (index[0] >= Enum.GetNames(typeof(Skater)).Length && CustomSkaterAllowsClothing(index))
-            {
-                list = GetCustomMeshesList(index[0]);
-            }
-
-            return list;
-        }
-
-		/// <summary>
-		/// Helper list to return <see cref="GearManager.CustomMeshes"/> or <see cref="GearManager.CustomFemaleMeshes"/> depending on
-		/// which <see cref="SkaterBase"/> is passed in.
-		/// </summary>
-		/// <returns><see cref="GearManager.CustomMeshes"/> or <see cref="GearManager.CustomFemaleMeshes"/></returns>
-		private static List<ICustomInfo> GetCustomMeshesList(int skaterIndex)
-        {
-			return skaterIndex == (int)SkaterBase.Male ? GearManager.Instance.CustomMeshes : GearManager.Instance.CustomFemaleMeshes;
-		}
-
-		/// <summary>
-		/// Checks to see if a custom skater has the <see cref="XLGMSkaterMetadata.AllowClothing"/> checkbox enabled.
-		/// </summary>
-		/// <param name="index">The IndexPath of the custom skater to be evaluated.</param>
-		/// <param name="clothingGearFilters">Male or Female</param>
-		/// <returns>True if the custom skater allows clothing, false otherwise.</returns>
-        private static bool CustomSkaterAllowsClothing(IndexPath index)
-        {
-            var skater = GearDatabase.Instance.skaters[index[0]];
-
-            if (!GearManager.Instance.CustomSkaters.ContainsKey(skater.customizations.body.type)) return false;
-
-            var customSkater = GearManager.Instance.CustomSkaters[skater.customizations.body.type];
-            if (customSkater == null) return false;
-
-            if (!customSkater.SkaterMetadata.AllowClothing) return false;
-            //if (customSkater.SkaterMetadata.ClothingGearFilters != clothingGearFilters) return false;
-
-            return true;
-        }
-
-		[HarmonyPatch(typeof(GearSelectionController), nameof(GearSelectionController.ConfigureHeaderView))]
+        [HarmonyPatch(typeof(GearSelectionController), nameof(GearSelectionController.ConfigureHeaderView))]
 		public static class ConfigureHeaderViewPatch
 		{
 			static void Postfix(IndexPath index, MVCListHeaderView itemView)
