@@ -1,16 +1,15 @@
-﻿using System;
+﻿using HarmonyLib;
+using SkaterXL.Core;
+using SkaterXL.Data;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
-using HarmonyLib;
-using SkaterXL.Core;
-using SkaterXL.Data;
 using UnityEngine;
 using XLGearModifier.CustomGear;
 using XLGearModifier.Texturing;
 using XLGearModifier.Unity;
-using XLMenuMod.Utilities;
 using XLMenuMod.Utilities.Gear;
 using XLMenuMod.Utilities.Interfaces;
 
@@ -21,22 +20,85 @@ namespace XLGearModifier.Patches
         [HarmonyPatch(typeof(GearDatabase), nameof(GearDatabase.GetGearListAtIndex), new[] { typeof(IndexPath), typeof(bool) }, new[] { ArgumentType.Normal, ArgumentType.Out })]
         public static class GetGearListAtIndexPatch
         {
-            static void Postfix(GearDatabase __instance, IndexPath index, ref GearInfo[][][] ___gearListSource, ref GearInfo[] __result)
+            static void Postfix(GearDatabase __instance, IndexPath index, ref GearInfo[] __result)
             {
                 if (index.depth < 2) return;
+
                 if (!GearSelectionControllerPatch.IsOnXLGMTab(index[1]))
                 {
-                    List<GearInfo> newResult = new List<GearInfo>(__result);
+                    var newResult = new List<GearInfo>(__result);
+                    // check to see if custom meshes are in list, if so, remove
+                    newResult.RemoveAll(x => GearManager.Instance.CustomGear.ContainsKey(x.type) && GearManager.Instance.CustomGear[x.type] is ClothingGear);
                     __result = newResult.ToArray();
                     return;
                 }
 
-                var sourceList = GetSourceList(index[1]);
+                var sourceList = GetSourceList(index);
+                if (sourceList == null) return;
 
-                var list = GearManager.Instance.CurrentFolder.HasChildren() ? GearManager.Instance.CurrentFolder.Children : sourceList;
+                __result = sourceList.Select(x => x.GetParentObject() as GearInfo).ToArray();
+            }
 
-                if (list == null) return;
-                __result = list.Select(x => x.GetParentObject() as GearInfo).ToArray();
+            private static List<ICustomInfo> GetSourceList(IndexPath index)
+            {
+                var isMale = index[0] == (int)XLMenuMod.Skater.MaleStandard;
+                var isFemale = index[0] == (int)XLMenuMod.Skater.FemaleStandard;
+
+                if (isMale || isFemale)
+                {
+                    switch (index[1])
+                    {
+                        case (int)GearModifierTab.CustomMeshes:
+                            return isMale ? GearManager.Instance.CustomMeshes : new List<ICustomInfo>();
+                        case (int)GearModifierTab.CustomFemaleMeshes:
+                            return isFemale ? GearManager.Instance.CustomFemaleMeshes : new List<ICustomInfo>();
+                        case (int)GearModifierTab.Eyes:
+                            return EyeTextureManager.Instance.Eyes;
+                        default:
+                            return null;
+                    }
+                }
+
+                var isCustom = index[0] >= Enum.GetNames(typeof(XLMenuMod.Skater)).Length;
+                var allowsClothing = CustomSkaterAllowsClothing(index);
+
+                if (!isCustom || !allowsClothing) return null;
+
+                if (GetClothingGearFilters(index) == SkaterBase.Male && index[1] == (int)GearModifierTab.CustomMeshes)
+                    return GearManager.Instance.CustomMeshes;
+
+                if (GetClothingGearFilters(index) == SkaterBase.Female && index[1] == (int)GearModifierTab.CustomFemaleMeshes)
+                    return GearManager.Instance.CustomFemaleMeshes;
+
+                return null;
+            }
+
+            /// <summary>
+            /// Checks to see if a custom skater has the <see cref="XLGMSkaterMetadata.AllowClothing"/> checkbox enabled.
+            /// </summary>
+            /// <param name="index">The IndexPath of the custom skater to be evaluated.</param>
+            /// <returns>True if the custom skater allows clothing, false otherwise.</returns>
+            private static bool CustomSkaterAllowsClothing(IndexPath index)
+            {
+                var skater = GearDatabase.Instance.skaters[index[0]];
+
+                if (!GearManager.Instance.CustomSkaters.ContainsKey(skater.customizations.body.type)) return false;
+
+                var customSkater = GearManager.Instance.CustomSkaters[skater.customizations.body.type];
+
+                return customSkater != null && customSkater.SkaterMetadata.AllowClothing;
+            }
+
+            private static SkaterBase GetClothingGearFilters(IndexPath index)
+            {
+                var skater = GearDatabase.Instance.skaters[index[0]];
+
+                if (!GearManager.Instance.CustomSkaters.ContainsKey(skater.customizations.body.type)) return SkaterBase.Male;
+
+                var customSkater = GearManager.Instance.CustomSkaters[skater.customizations.body.type];
+                if (customSkater == null) return SkaterBase.Male;
+
+                return customSkater.SkaterMetadata.ClothingGearFilters;
             }
         }
 
@@ -46,7 +108,14 @@ namespace XLGearModifier.Patches
             static void Postfix(IndexPath index, ref GearInfo __result)
             {
                 if (index.depth < 3) return;
-                if (!GearSelectionControllerPatch.IsOnXLGMTab(index[1])) return;
+                if (!GearSelectionControllerPatch.IsOnXLGMTab(index[1]))
+                {
+                    // Since GetGearListAtIndex is now filtering out custom items from non xlgm tabs,
+                    // we can use it to get each item such that they're labelled properly
+                    var gearList = GearDatabase.Instance.GetGearListAtIndex(index.Up());
+                    __result = gearList.ElementAt(index.LastIndex);
+                    return;
+                }
 
                 var sourceList = GetSourceList(index[1]);
 
@@ -123,8 +192,36 @@ namespace XLGearModifier.Patches
 
                 if (!skater.SkaterMetadata.AllowClothing) return;
 
-                currentSkater.GearFilters = GearDatabase.Instance.skaters[(int)skater.SkaterMetadata.ClothingGearFilters].GearFilters;
+                currentSkater.GearFilters = CreateGearFilters(skater);
                 currentSkater.GearFilters[0].includedTypes = new[] { skater.SkaterMetadata.CharacterBodyTemplate.id };
+            }
+
+            /// <summary>
+            /// A method to create a copy of a base skater's GearFilters.  Doing a simple assignment of the skaters GearFilters to our custom skater,
+            /// a reference was added thus we were inadvertently updating the base skater's GearFilters too.  
+            /// </summary>
+            /// <param name="skater">The current skater we're creating gear filters for.</param>
+            /// <returns>A new TypeFilterList instance based on either male or female.</returns>
+            private static TypeFilterList CreateGearFilters(Skater skater)
+            {
+                var baseGearFilters = GearDatabase.Instance.skaters[(int)skater.SkaterMetadata.ClothingGearFilters].GearFilters;
+
+                var filters = new List<TypeFilter>();
+                foreach (var gearFilter in baseGearFilters)
+                {
+                    var clone = new TypeFilter
+                    {
+                        allowCustomGear = gearFilter.allowCustomGear,
+                        includedTypes = gearFilter.includedTypes,
+                        cameraView = gearFilter.cameraView,
+                        excludedTags = gearFilter.excludedTags,
+                        label = gearFilter.label,
+                        requiredTag = gearFilter.requiredTag
+                    };
+
+                    filters.Add(clone);
+                }
+                return new TypeFilterList(filters);
             }
 
             static void Postfix(GearDatabase __instance)
