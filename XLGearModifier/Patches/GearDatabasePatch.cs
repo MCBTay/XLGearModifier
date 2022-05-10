@@ -28,7 +28,7 @@ namespace XLGearModifier.Patches
                 {
                     var newResult = new List<GearInfo>(__result);
                     // check to see if custom meshes are in list, if so, remove
-                    newResult.RemoveAll(x => GearManager.Instance.CustomGear.ContainsKey(x.type));
+                    newResult.RemoveAll(x => GearManager.Instance.CustomGear.ContainsKey(x.type) && GearManager.Instance.CustomGear[x.type] is ClothingGear);
                     __result = newResult.ToArray();
                     return;
                 }
@@ -192,8 +192,36 @@ namespace XLGearModifier.Patches
 
                 if (!skater.SkaterMetadata.AllowClothing) return;
 
-                currentSkater.GearFilters = GearDatabase.Instance.skaters[(int)skater.SkaterMetadata.ClothingGearFilters].GearFilters;
+                currentSkater.GearFilters = CreateGearFilters(skater);
                 currentSkater.GearFilters[0].includedTypes = new[] { skater.SkaterMetadata.CharacterBodyTemplate.id };
+            }
+
+            /// <summary>
+            /// A method to create a copy of a base skater's GearFilters.  Doing a simple assignment of the skaters GearFilters to our custom skater,
+            /// a reference was added thus we were inadvertently updating the base skater's GearFilters too.  
+            /// </summary>
+            /// <param name="skater">The current skater we're creating gear filters for.</param>
+            /// <returns>A new TypeFilterList instance based on either male or female.</returns>
+            private static TypeFilterList CreateGearFilters(Skater skater)
+            {
+                var baseGearFilters = GearDatabase.Instance.skaters[(int)skater.SkaterMetadata.ClothingGearFilters].GearFilters;
+
+                var filters = new List<TypeFilter>();
+                foreach (var gearFilter in baseGearFilters)
+                {
+                    var clone = new TypeFilter
+                    {
+                        allowCustomGear = gearFilter.allowCustomGear,
+                        includedTypes = gearFilter.includedTypes,
+                        cameraView = gearFilter.cameraView,
+                        excludedTags = gearFilter.excludedTags,
+                        label = gearFilter.label,
+                        requiredTag = gearFilter.requiredTag
+                    };
+
+                    filters.Add(clone);
+                }
+                return new TypeFilterList(filters);
             }
 
             static void Postfix(GearDatabase __instance)
