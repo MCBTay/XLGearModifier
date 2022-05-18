@@ -49,9 +49,9 @@ namespace XLGearModifier.Patches
                     switch (index[1])
                     {
                         case (int)GearModifierTab.CustomMeshes:
-                            return isMale ? GearManager.Instance.CustomMeshes : new List<ICustomInfo>();
+                            return isMale ? ChildrenOrSourceList(GearManager.Instance.CustomMeshes) : new List<ICustomInfo>();
                         case (int)GearModifierTab.CustomFemaleMeshes:
-                            return isFemale ? GearManager.Instance.CustomFemaleMeshes : new List<ICustomInfo>();
+                            return isFemale ? ChildrenOrSourceList(GearManager.Instance.CustomFemaleMeshes) : new List<ICustomInfo>();
                         case (int)GearModifierTab.Eyes:
                             return EyeTextureManager.Instance.Eyes;
                         default:
@@ -65,12 +65,20 @@ namespace XLGearModifier.Patches
                 if (!isCustom || !allowsClothing) return null;
 
                 if (GetClothingGearFilters(index) == SkaterBase.Male && index[1] == (int)GearModifierTab.CustomMeshes)
-                    return GearManager.Instance.CustomMeshes;
+                    return ChildrenOrSourceList(GearManager.Instance.CustomMeshes);
 
                 if (GetClothingGearFilters(index) == SkaterBase.Female && index[1] == (int)GearModifierTab.CustomFemaleMeshes)
-                    return GearManager.Instance.CustomFemaleMeshes;
+                    return ChildrenOrSourceList(GearManager.Instance.CustomFemaleMeshes);
 
                 return null;
+            }
+
+            /// <summary>
+            /// Returns either the CurrentFolder's children or the inputList.
+            /// </summary>
+            private static List<ICustomInfo> ChildrenOrSourceList(List<ICustomInfo> inputList)
+            {
+                return GearManager.Instance.CurrentFolder == null ? inputList : GearManager.Instance.CurrentFolder.Children;
             }
 
             /// <summary>
