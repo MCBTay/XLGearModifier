@@ -121,7 +121,11 @@ namespace XLGearModifier.Patches
                     // Since GetGearListAtIndex is now filtering out custom items from non xlgm tabs,
                     // we can use it to get each item such that they're labelled properly
                     var gearList = GearDatabase.Instance.GetGearListAtIndex(index.Up());
-                    __result = gearList.ElementAt(index.LastIndex);
+                    
+                    if (index.LastIndex >= 0 && index.LastIndex < gearList.Length)
+                    {
+                        __result = gearList.ElementAt(index.LastIndex);
+                    }
                     return;
                 }
 
