@@ -152,8 +152,8 @@ namespace XLGearModifier.CustomGear
                 {
                     allowCustomGear = true,
                     cameraView = GearRoomCameraView.FullSkater,
-                    excludedTags = new string[] { },
-                    includedTypes = new [] { SkaterMetadata.CharacterBodyTemplate.id },
+                    excludedTags = new List<string>(),
+                    includedTypes = new List<string> { SkaterMetadata.CharacterBodyTemplate.id },
                     label = "Skin Tone",
                     requiredTag = ""
                 },
@@ -161,8 +161,8 @@ namespace XLGearModifier.CustomGear
                 {
                     allowCustomGear = true,
                     cameraView = GearRoomCameraView.Deck,
-                    excludedTags = new[] { "ProOnly" },
-                    includedTypes = new[] { "Deck" },
+                    excludedTags = new List<string> { "ProOnly" },
+                    includedTypes = new List<string> { "Deck" },
                     label = "Deck",
                     requiredTag = ""
                 },
@@ -170,8 +170,8 @@ namespace XLGearModifier.CustomGear
                 {
                     allowCustomGear = true,
                     cameraView = GearRoomCameraView.Grip,
-                    excludedTags = new[] { "ProOnly" },
-                    includedTypes = new[] { "GripTape" },
+                    excludedTags = new List<string> { "ProOnly" },
+                    includedTypes = new List<string> { "GripTape" },
                     label = "Griptape",
                     requiredTag = ""
                 },
@@ -179,8 +179,8 @@ namespace XLGearModifier.CustomGear
                 {
                     allowCustomGear = true,
                     cameraView = GearRoomCameraView.Truck,
-                    excludedTags = new[] { "ProOnly" },
-                    includedTypes = new [] { "Trucks", "TrucksIndependent", "TrucksThunder", "TrucksVenture" },
+                    excludedTags = new List<string> { "ProOnly" },
+                    includedTypes = new List<string> { "Trucks", "TrucksIndependent", "TrucksThunder", "TrucksVenture" },
                     label = "Trucks",
                     requiredTag = ""
                 },
@@ -188,8 +188,8 @@ namespace XLGearModifier.CustomGear
                 {
                     allowCustomGear = true,
                     cameraView = GearRoomCameraView.Wheel,
-                    excludedTags = new[] { "ProOnly" },
-                    includedTypes = new [] { "Wheels" },
+                    excludedTags = new List<string> { "ProOnly" },
+                    includedTypes = new List<string> { "Wheels" },
                     label = "Wheels",
                     requiredTag = ""
                 }

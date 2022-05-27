@@ -223,8 +223,7 @@ namespace XLGearModifier.CustomGear
             if (string.IsNullOrEmpty(type)) return;
             if (typeFilter.includedTypes.Contains(type)) return;
 
-            Array.Resize(ref typeFilter.includedTypes, typeFilter.includedTypes.Length + 1);
-            typeFilter.includedTypes[typeFilter.includedTypes.Length - 1] = type;
+            typeFilter.includedTypes.Add(type);
         }
         #endregion
 
