@@ -175,7 +175,14 @@ namespace XLGearModifier.CustomGear
         private void SetShaderOnOriginalMaterial(MaterialController materialController)
         {
             var traverse = Traverse.Create(materialController);
-            traverse.Field("_originalMaterial").GetValue<Material>().shader = GetClothingShader();
+            var material = traverse.Field("_originalMaterial").GetValue<Material>();
+            if (material == null)
+            {
+                Debug.Log("XLGearModifier: _originalMaterial for " + materialController.name + " is null");
+                return;
+            }
+
+            material.shader = GetClothingShader();
         }
 
         /// <summary>
