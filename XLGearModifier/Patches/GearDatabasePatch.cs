@@ -205,7 +205,7 @@ namespace XLGearModifier.Patches
                 if (!skater.SkaterMetadata.AllowClothing) return;
 
                 currentSkater.GearFilters = CreateGearFilters(skater);
-                currentSkater.GearFilters[0].includedTypes = new[] { skater.SkaterMetadata.CharacterBodyTemplate.id };
+                currentSkater.GearFilters[0].includedTypes = new List<string> { skater.SkaterMetadata.CharacterBodyTemplate.id };
             }
 
             /// <summary>
