@@ -72,7 +72,7 @@ namespace XLGearModifier.CustomGear
 
             textures = UpdateTextureDictionaryWithMaterialTextures(originalMaterial, textures);
 
-            if (originalMaterial.HasProperty("_AlphaCutoff"))
+            if (originalMaterial != null && originalMaterial.HasProperty("_AlphaCutoff"))
             {
                 alphaThreshold = originalMaterial.GetFloat("_AlphaCutoff");
             }
