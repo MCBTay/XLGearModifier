@@ -36,7 +36,7 @@ namespace XLGearModifier.Patches
                     return false;
 				}
 
-                if (split.Length < 4) return true;
+                if (split.Length < 4) return false;
 
                 var templateName = split[1];
                 var textureName = split[2];
