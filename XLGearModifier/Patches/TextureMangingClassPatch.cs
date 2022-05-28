@@ -73,7 +73,7 @@ namespace XLGearModifier.Patches
             {
                 if (!GearManager.Instance.CustomGear.ContainsKey(templateName)) return;
 
-                var customClothing = GearManager.Instance.CustomGear[templateName];
+                var customClothing = GearManager.Instance.CustomGear[templateName] as ClothingGear;
                 if (customClothing == null) return;
 
                 var materialController = customClothing.Prefab.GetComponentInChildren<MaterialController>();
@@ -82,16 +82,19 @@ namespace XLGearModifier.Patches
                 var target = materialController.targets.FirstOrDefault();
                 if (target == null) return;
 
+                var isHair = customClothing.ClothingMetadata.Category == Unity.ClothingGearCategory.Hair ||
+                             customClothing.ClothingMetadata.Category == Unity.ClothingGearCategory.FacialHair;
+
                 switch (textureType)
                 {
                     case TextureTypes.Albedo:
-                        __result = Task.FromResult(target.sharedMaterial.GetTexture(MasterShaderClothTextureConstants.ColorTextureName));
+                        __result = Task.FromResult(target.sharedMaterial.GetTexture(isHair ? MasterShaderHairTextureConstants.ColorTextureName : MasterShaderClothTextureConstants.ColorTextureName));
                         break;
                     case TextureTypes.Normal:
-                        __result = Task.FromResult(target.sharedMaterial.GetTexture(MasterShaderClothTextureConstants.NormalTextureName));
+                        __result = Task.FromResult(target.sharedMaterial.GetTexture(isHair ? MasterShaderHairTextureConstants.NormalTextureName : MasterShaderClothTextureConstants.NormalTextureName));
                         break;
                     case TextureTypes.MaskPBR:
-                        __result = Task.FromResult(target.sharedMaterial.GetTexture(MasterShaderClothTextureConstants.RgmtaoTextureName));
+                        __result = Task.FromResult(target.sharedMaterial.GetTexture(isHair ? MasterShaderHairTextureConstants.RgmtaoTextureName : MasterShaderClothTextureConstants.RgmtaoTextureName));
                         break;
                 }
             }
