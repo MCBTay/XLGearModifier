@@ -95,19 +95,19 @@ namespace XLGearModifier.Texturing
 
         private void PopulateOriginalEyeTextureDictionary(SkinnedMeshRenderer eyeRenderer)
         {
-            if (!OriginalEyeTextures.ContainsKey("albedo"))
+            if (!OriginalEyeTextures.ContainsKey(TextureTypes.Albedo))
             {
-                OriginalEyeTextures.Add("albedo", eyeRenderer.material.GetTexture(EyeTextureConstants.ColorTextureName));
+                OriginalEyeTextures.Add(TextureTypes.Albedo, eyeRenderer.material.GetTexture(EyeTextureConstants.ColorTextureName));
             }
 
-            if (!OriginalEyeTextures.ContainsKey("normal"))
+            if (!OriginalEyeTextures.ContainsKey(TextureTypes.Normal))
             {
-                OriginalEyeTextures.Add("normal", eyeRenderer.material.GetTexture(EyeTextureConstants.NormalTextureName));
+                OriginalEyeTextures.Add(TextureTypes.Normal, eyeRenderer.material.GetTexture(EyeTextureConstants.NormalTextureName));
             }
 
-            if (!OriginalEyeTextures.ContainsKey("maskpbr"))
+            if (!OriginalEyeTextures.ContainsKey(TextureTypes.MaskPBR))
             {
-                OriginalEyeTextures.Add("maskpbr", eyeRenderer.material.GetTexture(EyeTextureConstants.RgmtaoTextureName));
+                OriginalEyeTextures.Add(TextureTypes.MaskPBR, eyeRenderer.material.GetTexture(EyeTextureConstants.RgmtaoTextureName));
             }
         }
 
@@ -141,19 +141,19 @@ namespace XLGearModifier.Texturing
 
             foreach (var eyeRenderer in eyeRenderers)
             {
-                if (!OriginalEyeTextures.ContainsKey("albedo"))
+                if (!OriginalEyeTextures.ContainsKey(TextureTypes.Albedo))
                 {
-                    OriginalEyeTextures.Add("albedo", eyeRenderer.material.GetTexture(EyeTextureConstants.ColorTextureName));
+                    OriginalEyeTextures.Add(TextureTypes.Albedo, eyeRenderer.material.GetTexture(EyeTextureConstants.ColorTextureName));
                 }
 
-                if (!OriginalEyeTextures.ContainsKey("normal"))
+                if (!OriginalEyeTextures.ContainsKey(TextureTypes.Normal))
                 {
-                    OriginalEyeTextures.Add("normal", eyeRenderer.material.GetTexture(EyeTextureConstants.NormalTextureName));
+                    OriginalEyeTextures.Add(TextureTypes.Normal, eyeRenderer.material.GetTexture(EyeTextureConstants.NormalTextureName));
                 }
 
-                if (!OriginalEyeTextures.ContainsKey("maskpbr"))
+                if (!OriginalEyeTextures.ContainsKey(TextureTypes.MaskPBR))
                 {
-                    OriginalEyeTextures.Add("maskpbr", eyeRenderer.material.GetTexture(EyeTextureConstants.RgmtaoTextureName));
+                    OriginalEyeTextures.Add(TextureTypes.MaskPBR, eyeRenderer.material.GetTexture(EyeTextureConstants.RgmtaoTextureName));
                 }
 
                 var materialController = eyeRenderer.gameObject.GetComponent<MaterialController>();

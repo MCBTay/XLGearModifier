@@ -52,7 +52,8 @@ namespace XLGearModifier.Patches
         {
             static void Postfix(CharacterCustomizer __instance, GearInfo preview, List<GearInfo> toBeCachedGear)
             {
-                if (preview == null || preview.type != "eyes") return;
+                if (preview == null) return;
+                if (preview.type != "eyes") return;
 
                 if (EyeTextureManager.Instance.EyesGameObjects.ContainsKey(__instance.name))
                 {

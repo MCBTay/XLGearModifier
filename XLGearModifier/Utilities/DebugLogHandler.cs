@@ -31,6 +31,7 @@ namespace XLGearModifier.Utilities
 
         public void LogException(Exception exception, UnityEngine.Object context)
         {
+            if (context == null) return;
             m_DefaultLogHandler.LogException(exception, context);
         }
     }
