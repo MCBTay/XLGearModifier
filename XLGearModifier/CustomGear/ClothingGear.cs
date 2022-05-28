@@ -154,13 +154,13 @@ namespace XLGearModifier.CustomGear
                 return textures;
             }
 
-            var color = originalMaterial.GetTexture("_BaseColorMap");
+            var color = originalMaterial.GetTexture(HDRPLitTextureConstants.ColorTextureName);
             if (color != null) textures["albedo"] = color;
 
-            var normal = originalMaterial.GetTexture("_NormalMap");
+            var normal = originalMaterial.GetTexture(HDRPLitTextureConstants.NormalTextureName);
             if (normal != null) textures["normal"] = normal;
 
-            var mask = originalMaterial.GetTexture("_MaskMap");
+            var mask = originalMaterial.GetTexture(HDRPLitTextureConstants.RgmtaoTextureName);
             if (mask != null) textures["maskpbr"] = mask;
 
             return textures;
