@@ -143,7 +143,7 @@ namespace XLGearModifier.CustomGear
 
         private void AddDefaultEmptyTexture(ClothingGear clothingGear, List<ICustomInfo> destList, ref CustomFolderInfo parent)
         {
-            string texturePath = $"XLGearModifier/{clothingGear.Prefab.name.ToLower()}";
+            string texturePath = $"XLGearModifier/{clothingGear.ClothingMetadata.CharacterGearTemplate.id}";
 
             var textures = clothingGear.CreateDefaultTextureDictionary();
             textures = clothingGear.UpdateTextureDictionaryWithMaterialTextures(clothingGear.Prefab.GetComponentInChildren<SkinnedMeshRenderer>()?.material, textures);
