@@ -14,7 +14,14 @@ namespace XLGearModifier.Patches
 		[HarmonyPatch(typeof(TextureMangingClass), "LoadTextureAsync")]
 		static class LoadTextureAsyncPatch
 		{
-			static bool Prefix(string texturePath, bool linear, ref Task<Texture> __result)
+            /// <summary>
+            /// Patching into LoadTextureAsync to prevent the base game from trying to load textures that it certainly won't be able to find.  Anything starting with XLGearModifier is
+            /// something we're trying to handle internally, so this patch handles that.  If the texturePath does not start with XLGearModifier, we allow execution to flow to the game's method.
+            /// </summary>
+            /// <param name="texturePath">The texture path being evaluated.</param>
+            /// <param name="__result">A Task<Texture> with the appropriate texture, if the texture path contains a known filename.  Else, is not modified.</Texture></param>
+            /// <returns>True when the texturePath doesn't start with XLGearModifier, false otherwise.</returns>
+			static bool Prefix(string texturePath, ref Task<Texture> __result)
 			{
 				if (!texturePath.StartsWith("XLGearModifier")) return true;
 
@@ -33,6 +40,12 @@ namespace XLGearModifier.Patches
                 return false;
 			}
 
+            /// <summary>
+            /// Checks to see if <see cref="texturePath"/> ends with any of the known "empty" texture names, and if so, updates <see cref="__result"/> to use them.
+            /// </summary>
+            /// <param name="texturePath">The texture path being evaluated.</param>
+            /// <param name="__result">A Task<Texture> with the appropriate texture, if the texture path contains a known filename.  Else, is not modified.</Texture></param>
+            /// <returns>True when a texture is found, false otherwise.</returns>
             private static bool IsEmptyTexture(string texturePath, ref Task<Texture> __result)
             {
                 if (texturePath.EndsWith(Path.GetFileNameWithoutExtension(EmptyTextureConstants.EmptyAlbedoFilename)))
@@ -56,6 +69,13 @@ namespace XLGearModifier.Patches
                 return false;
             }
 
+            /// <summary>
+            /// A method to handle textures for custom skaters.
+            /// </summary>
+            /// <param name="templateName">The prefix of the custom skater being evaluated.</param>
+            /// <param name="textureName">The name of the texture being evaluated.</param>
+            /// <param name="textureType">The type of texture being evaluated.</param>
+            /// <param name="__result">Updated to a reference of the texture, if one is found.</param>
             private static void HandleSkaterTexture(string templateName, string textureName, string textureType, ref Task<Texture> __result)
             {
                 if (!GearManager.Instance.CustomSkaters.ContainsKey(templateName)) return;
@@ -69,6 +89,13 @@ namespace XLGearModifier.Patches
                 __result = Task.FromResult(textures[textureType]);
             }
 
+            /// <summary>
+            /// A method to handle textures for custom clothing, which includes hair.
+            /// </summary>
+            /// <param name="templateName">The prefix of the custom clothing being evaluated.</param>
+            /// <param name="textureName">The name of the texture being evaluated.</param>
+            /// <param name="textureType">The type of texture being evaluated.</param>
+            /// <param name="__result">Updated to a reference of the texture, if one is found.</param>
             private static void HandleClothingTexture(string templateName, string textureName, string textureType, ref Task<Texture> __result)
             {
                 if (!GearManager.Instance.CustomGear.ContainsKey(templateName)) return;
