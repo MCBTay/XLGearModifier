@@ -72,7 +72,7 @@ namespace XLGearModifier.CustomGear
 
             textures = UpdateTextureDictionaryWithMaterialTextures(originalMaterial, textures);
 
-            if (originalMaterial.HasProperty("_AlphaCutoff"))
+            if (originalMaterial != null && originalMaterial.HasProperty("_AlphaCutoff"))
             {
                 alphaThreshold = originalMaterial.GetFloat("_AlphaCutoff");
             }
@@ -100,9 +100,9 @@ namespace XLGearModifier.CustomGear
             //TODO: This 3 entries below can likely be removed once we get access to their shaders.
             var propNameSubs = new List<PropertyNameSubstitution>
             {
-                new PropertyNameSubstitution { oldName = "albedo", newName = isHair ? MasterShaderHairTextureConstants.ColorTextureName : MasterShaderClothTextureConstants.ColorTextureName },
-                new PropertyNameSubstitution { oldName = "normal", newName = isHair ? MasterShaderHairTextureConstants.NormalTextureName : MasterShaderClothTextureConstants.NormalTextureName },
-                new PropertyNameSubstitution { oldName = "maskpbr", newName = isHair ? MasterShaderHairTextureConstants.RgmtaoTextureName : MasterShaderClothTextureConstants.RgmtaoTextureName }
+                new PropertyNameSubstitution { oldName = TextureTypes.Albedo, newName = isHair ? MasterShaderHairTextureConstants.ColorTextureName : MasterShaderClothTextureConstants.ColorTextureName },
+                new PropertyNameSubstitution { oldName = TextureTypes.Normal, newName = isHair ? MasterShaderHairTextureConstants.NormalTextureName : MasterShaderClothTextureConstants.NormalTextureName },
+                new PropertyNameSubstitution { oldName = TextureTypes.MaskPBR, newName = isHair ? MasterShaderHairTextureConstants.RgmtaoTextureName : MasterShaderClothTextureConstants.RgmtaoTextureName }
             };
 
             // Because hair/clothing gear are on different shaders, all of Easy Day's hair has this substitution for color.
@@ -141,27 +141,27 @@ namespace XLGearModifier.CustomGear
 
                 var baseTextures = BaseGameTextureManager.Instance.BaseGameTextures[id];
 
-                if (baseTextures.ContainsKey("normal"))
+                if (baseTextures.ContainsKey(TextureTypes.Normal))
                 {
-                    textures["normal"] = baseTextures["normal"];
+                    textures[TextureTypes.Normal] = baseTextures[TextureTypes.Normal];
                 }
 
-                if (baseTextures.ContainsKey("maskpbr"))
+                if (baseTextures.ContainsKey(TextureTypes.MaskPBR))
                 {
-                    textures["maskpbr"] = baseTextures["maskpbr"];
+                    textures[TextureTypes.MaskPBR] = baseTextures[TextureTypes.MaskPBR];
                 }
 
                 return textures;
             }
 
-            var color = originalMaterial.GetTexture("_BaseColorMap");
-            if (color != null) textures["albedo"] = color;
+            var color = originalMaterial.GetTexture(HDRPLitTextureConstants.ColorTextureName);
+            if (color != null) textures[TextureTypes.Albedo] = color;
 
-            var normal = originalMaterial.GetTexture("_NormalMap");
-            if (normal != null) textures["normal"] = normal;
+            var normal = originalMaterial.GetTexture(HDRPLitTextureConstants.NormalTextureName);
+            if (normal != null) textures[TextureTypes.Normal] = normal;
 
-            var mask = originalMaterial.GetTexture("_MaskMap");
-            if (mask != null) textures["maskpbr"] = mask;
+            var mask = originalMaterial.GetTexture(HDRPLitTextureConstants.RgmtaoTextureName);
+            if (mask != null) textures[TextureTypes.MaskPBR] = mask;
 
             return textures;
         }
@@ -175,7 +175,15 @@ namespace XLGearModifier.CustomGear
         private void SetShaderOnOriginalMaterial(MaterialController materialController)
         {
             var traverse = Traverse.Create(materialController);
-            traverse.Field("_originalMaterial").GetValue<Material>().shader = GetClothingShader();
+            var material = traverse.Field("_originalMaterial").GetValue<Material>();
+            if (material == null)
+            {
+                Debug.Log("XLGearModifier: _originalMaterial for " + materialController.name + " is null, attempting to one.");
+                var sharedMaterial = materialController.targets.FirstOrDefault()?.sharedMaterial;
+                material = sharedMaterial == null ? new Material(Shader.Find("HDRP/Lit")) : new Material(sharedMaterial);
+            }
+
+            material.shader = GetClothingShader();
         }
 
         /// <summary>
@@ -185,9 +193,9 @@ namespace XLGearModifier.CustomGear
         {
             var textures = new Dictionary<string, Texture>
             {
-                { "albedo", GearManager.Instance.EmptyAlbedo },
-                { "normal", GearManager.Instance.EmptyNormalMap },
-                { "maskpbr", GearManager.Instance.EmptyMaskPBR }
+                { TextureTypes.Albedo, GearManager.Instance.EmptyAlbedo },
+                { TextureTypes.Normal, GearManager.Instance.EmptyNormalMap },
+                { TextureTypes.MaskPBR, GearManager.Instance.EmptyMaskPBR }
             };
 
             //textures.Add(shaderName == "MasterShaderCloth_v2" ? "_texture2D_maskPBR" : "_texture2D_rgmtao", Metadata.GetMaterialInformation()?.DefaultTexture?.textureMaskPBR ?? AssetBundleHelper.Instance.EmptyMaskPBR);

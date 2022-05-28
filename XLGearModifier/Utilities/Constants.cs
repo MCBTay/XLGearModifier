@@ -63,4 +63,14 @@
         public const string NormalTextureFileName = "Skateshop.normal.png";
         public const string RgmtaoTextureFileName = "Skateshop.rgmtao.png";
     }
+
+    /// <summary>
+    /// Commonly used texture type names throughout the code.
+    /// </summary>
+    public class TextureTypes
+    {
+        public const string Albedo = "albedo";
+        public const string Normal = "normal";
+        public const string MaskPBR = "maskpbr";
+    }
 }
