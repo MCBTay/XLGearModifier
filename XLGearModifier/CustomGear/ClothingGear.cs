@@ -178,8 +178,9 @@ namespace XLGearModifier.CustomGear
             var material = traverse.Field("_originalMaterial").GetValue<Material>();
             if (material == null)
             {
-                Debug.Log("XLGearModifier: _originalMaterial for " + materialController.name + " is null");
-                return;
+                Debug.Log("XLGearModifier: _originalMaterial for " + materialController.name + " is null, attempting to one.");
+                var sharedMaterial = materialController.targets.FirstOrDefault()?.sharedMaterial;
+                material = sharedMaterial == null ? new Material(Shader.Find("HDRP/Lit")) : new Material(sharedMaterial);
             }
 
             material.shader = GetClothingShader();
