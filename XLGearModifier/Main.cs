@@ -50,7 +50,7 @@ namespace XLGearModifier
 
 				XLMenuMod.Utilities.UserInterface.UserInterfaceHelper.Instance.LoadAssets();
 
-				EyeTextureManager.Instance.AddEyeTemplate();
+				//EyeTextureManager.Instance.AddEyeTemplate();
                 AssetBundleHelper.Instance.LoadBundles();
             }
 			else
