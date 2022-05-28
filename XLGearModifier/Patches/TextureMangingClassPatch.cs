@@ -16,23 +16,7 @@ namespace XLGearModifier.Patches
 			{
 				if (!texturePath.StartsWith("XLGearModifier")) return true;
 
-                if (texturePath.EndsWith(Path.GetFileNameWithoutExtension(EmptyTextureConstants.EmptyAlbedoFilename)))
-				{
-					__result = Task.FromResult<Texture>(GearManager.Instance.EmptyAlbedo);
-					return false;
-				}
-
-                if (texturePath.EndsWith(Path.GetFileNameWithoutExtension(EmptyTextureConstants.EmptyNormalFilename)))
-                {
-                    __result = Task.FromResult<Texture>(GearManager.Instance.EmptyNormalMap);
-                    return false;
-				}
-
-                if (texturePath.EndsWith(Path.GetFileNameWithoutExtension(EmptyTextureConstants.EmptyMaskFilename)))
-                {
-                    __result = Task.FromResult<Texture>(GearManager.Instance.EmptyMaskPBR);
-                    return false;
-				}
+                if (IsEmptyTexture(texturePath, ref __result)) return false;
 
                 var split = texturePath.Split('/');
                 if (split.Length < 4) return false;
@@ -55,6 +39,29 @@ namespace XLGearModifier.Patches
 
                 return false;
 			}
+
+            private static bool IsEmptyTexture(string texturePath, ref Task<Texture> __result)
+            {
+                if (texturePath.EndsWith(Path.GetFileNameWithoutExtension(EmptyTextureConstants.EmptyAlbedoFilename)))
+                {
+                    __result = Task.FromResult<Texture>(GearManager.Instance.EmptyAlbedo);
+                    return true;
+                }
+
+                if (texturePath.EndsWith(Path.GetFileNameWithoutExtension(EmptyTextureConstants.EmptyNormalFilename)))
+                {
+                    __result = Task.FromResult<Texture>(GearManager.Instance.EmptyNormalMap);
+                    return true;
+                }
+
+                if (texturePath.EndsWith(Path.GetFileNameWithoutExtension(EmptyTextureConstants.EmptyMaskFilename)))
+                {
+                    __result = Task.FromResult<Texture>(GearManager.Instance.EmptyMaskPBR);
+                    return true;
+                }
+
+                return false;
+            }
         }
 	}
 }
