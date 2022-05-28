@@ -16,9 +16,7 @@ namespace XLGearModifier.Patches
 			{
 				if (!texturePath.StartsWith("XLGearModifier")) return true;
 
-				var split = texturePath.Split('/');
-
-				if (texturePath.EndsWith(Path.GetFileNameWithoutExtension(EmptyTextureConstants.EmptyAlbedoFilename)))
+                if (texturePath.EndsWith(Path.GetFileNameWithoutExtension(EmptyTextureConstants.EmptyAlbedoFilename)))
 				{
 					__result = Task.FromResult<Texture>(GearManager.Instance.EmptyAlbedo);
 					return false;
@@ -36,13 +34,14 @@ namespace XLGearModifier.Patches
                     return false;
 				}
 
+                var split = texturePath.Split('/');
                 if (split.Length < 4) return false;
 
                 var templateName = split[1];
                 var textureName = split[2];
                 var textureType = split[3];
 
-                if (!GearManager.Instance.CustomGear.ContainsKey(templateName)) return true;
+                if (!GearManager.Instance.CustomGear.ContainsKey(templateName)) return false;
 
                 var customGear = GearManager.Instance.CustomGear[templateName];
 
