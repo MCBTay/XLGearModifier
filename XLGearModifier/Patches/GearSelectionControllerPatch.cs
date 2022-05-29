@@ -366,6 +366,8 @@ namespace XLGearModifier.Patches
 						if (gear is CustomBoardGearInfo || gear is BoardGearInfo || gear is CustomCharacterBodyInfo || gear is CharacterBodyInfo) return;
 						Traverse.Create(__instance.previewCustomizer).Method("RemoveGear", gear).GetValue();
 
+						// somehow at this point, need to set some "stateful" flag some where to indicate that the item was unequipped, and as long as that same item is highlighted, it should not be previewed
+
                         if (gear.type == "eyes")
                         {
                             if (EyeTextureManager.Instance.EyesGameObjects.ContainsKey(__instance.previewCustomizer.name))
