@@ -66,7 +66,7 @@ namespace XLGearModifier
 
                 var creatorName = mesh?.ClothingMetadata?.CreatorName ?? "N/A";
 
-				whatsEquipped.AddToList("Prefix: " + clothingGear.type, clothingGear.name, "Creator: " + creatorName, sprite);
+				whatsEquipped.AddToList(clothingGear.type, clothingGear.name, creatorName, sprite);
 			}
 		}
 
