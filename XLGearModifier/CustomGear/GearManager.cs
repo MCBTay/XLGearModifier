@@ -28,6 +28,11 @@ namespace XLGearModifier.CustomGear
         public Texture2D EmptyMaskPBR;
         public Texture2D EmptyNormalMap;
 
+        /// <summary>
+        /// Used to track the item that was just unequipped such that we can prevent it previewing when you just unequipped it.
+        /// </summary>
+        public IndexPath? UnequippedItemIndexPath;
+
         public GearManager()
 		{
 			CustomMeshes = new List<ICustomInfo>();
