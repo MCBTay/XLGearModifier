@@ -433,6 +433,13 @@ namespace XLGearModifier.Patches
 
 				if (!IsOnXLGMTab(index[1])) return;
 
+                if (GearManager.Instance.UnequippedItemIndexPath != null && GearManager.Instance.UnequippedItemIndexPath == index)
+                {
+                    return;
+                }
+
+                GearManager.Instance.UnequippedItemIndexPath = null;
+
 				GearInfo gearAtIndex1 = GearDatabase.Instance.GetGearAtIndex(index);
 				if (gearAtIndex1 == null) return;
 

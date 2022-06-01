@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using XLGearModifier.Unity;
+using XLGearModifier.Utilities;
 using XLMenuMod;
 using XLMenuMod.Utilities;
 using XLMenuMod.Utilities.Gear;
@@ -67,10 +68,7 @@ namespace XLGearModifier.CustomGear
                 var officialCount = AddOfficialTextures(clothingGear, officialTextures, ref parent);
 				var customCount = AddCustomTextures(clothingGear, customTextures, ref parent);
 
-                if (officialCount + customCount == 0)
-                {
-					AddDefaultEmptyTexture(clothingGear, parent.Children, ref parent);
-                }
+                AddDefaultEmptyTexture(clothingGear, parent.Children, officialCount, customCount, ref parent);
             }
 
             CustomMeshes = CustomMeshes.OrderBy(x => Enum.Parse(typeof(ClothingGearCategory), x.GetName().Replace("\\", string.Empty))).ToList();
@@ -146,22 +144,32 @@ namespace XLGearModifier.CustomGear
             return prefixes;
         }
 
-        private void AddDefaultEmptyTexture(ClothingGear clothingGear, List<ICustomInfo> destList, ref CustomFolderInfo parent)
+        private void AddDefaultEmptyTexture(ClothingGear clothingGear, List<ICustomInfo> destList, int officialCount, int customCount, ref CustomFolderInfo parent)
         {
             string texturePath = $"XLGearModifier/{clothingGear.ClothingMetadata.CharacterGearTemplate.id}";
 
             var textures = clothingGear.CreateDefaultTextureDictionary();
             textures = clothingGear.UpdateTextureDictionaryWithMaterialTextures(clothingGear.Prefab.GetComponentInChildren<SkinnedMeshRenderer>()?.material, textures);
 
+            var itemName = clothingGear.ClothingMetadata.DisplayName;
+
             var textureChanges = new List<TextureChange>();
             foreach (var texture in textures)
             {
+                if (texture.Key == TextureTypes.Albedo && texture.Value != EmptyAlbedo)
+                {
+                    itemName = texture.Value.name;
+                }
+
                 textureChanges.Add(new TextureChange(texture.Key, $"{texturePath}/{texture.Value.name}/{texture.Key}"));
             }
 
-            var characterGearInfo = new CustomCharacterGearInfo(clothingGear.ClothingMetadata.CharacterGearTemplate.id, clothingGear.ClothingMetadata.CharacterGearTemplate.id, false, textureChanges.ToArray(), new List<string>().ToArray());
-            AddToList(clothingGear, characterGearInfo, destList, ref parent, false);
-		}
+            if (itemName != clothingGear.ClothingMetadata.DisplayName || (officialCount + customCount == 0))
+            {
+                var characterGearInfo = new CustomCharacterGearInfo(itemName, clothingGear.ClothingMetadata.CharacterGearTemplate.id, false, textureChanges.ToArray(), new List<string>().ToArray());
+                AddToList(clothingGear, characterGearInfo, destList, ref parent, false);
+            }
+        }
 
         private void AddToList(ClothingGear customGearBase, GearInfoSingleMaterial baseTexture, List<ICustomInfo> destList, ref CustomFolderInfo parent, bool isCustom)
 		{
