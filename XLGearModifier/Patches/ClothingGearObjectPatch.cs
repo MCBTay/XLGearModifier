@@ -1,119 +1,79 @@
 ﻿using HarmonyLib;
-using System;
-using System.Linq;
 using XLGearModifier.CustomGear;
-using XLGearModifier.Unity;
 using XLMenuMod.Utilities.Gear;
-using ClothingGearCategory = SkaterXL.Gear.ClothingGearCategory;
 
 namespace XLGearModifier.Patches
 {
-	public static class ClothingGearObjectPatch
+    public static class ClothingGearObjectPatch
 	{
-		[HarmonyPatch(typeof(ClothingGearObjet), nameof(ClothingGearObjet.Blocks))]
+        [HarmonyPatch(typeof(ClothingGearObjet), nameof(ClothingGearObjet.Blocks))]
 		static class BlocksPatch
 		{
-			static bool Prefix(ClothingGearObjet __instance, GearObject other, ref bool __result)
-			{
-				if (other is ClothingGearObjet cgo)
-				{
-					if (__instance.template.category == ClothingGearCategory.Hat && cgo.template.category == ClothingGearCategory.Hat)
-					{
-						if ((__instance.IsLayerable<HairStyles>() && cgo.IsLayerable<HeadwearTypes>()) || 
-						    (__instance.IsLayerable<HeadwearTypes>() && cgo.IsLayerable<HairStyles>()))
-						{
-							__result = false;
-							return false;
-						}
+            static bool Prefix(ClothingGearObjet __instance, GearObject other, ref bool __result)
+            {
+                var otherCGO = other as ClothingGearObjet;
+                if (otherCGO == null) return true;
 
-						if (__instance.IsLayerable(Unity.ClothingGearCategory.FacialHair) || cgo.IsLayerable(Unity.ClothingGearCategory.FacialHair))
-						{
-							__result = false;
-							return false;
-						}
+				// If both clothing items are of the same template ID, they block.
+                if (__instance.template.id == otherCGO.template.id)
+                {
+                    __result = true;
+                    return false;
+                }
 
-						// If both are eyes, eyes block each other (only one should be equipped at a time)
-                        if (__instance.template.id == "eyes" && cgo.template.id == "eyes")
-                        {
-                            __result = true;
-                            return false;
-                        }
+				// If both clothing items are layerable, then they're not blocking and should be able to be applied.
+                if (__instance.IsLayerable() && otherCGO.IsLayerable())
+                {
+                    __result = false;
+                    return false;
+                }
 
-						// If either are eyes, and the other is not (we wouldn't get this far if they both were), it should not block hats/hair/facialhair
-                        if (__instance.template.id == "eyes" || cgo.template.id == "eyes")
-                        {
-                            __result = false;
-                            return false;
-                        }
+				// If either item is "Other" in our metadata script, it shouldn't block any other items
+                if (__instance.IsLayerableOtherCategory() || otherCGO.IsLayerableOtherCategory())
+                {
+                    __result = false;
+                    return false;
+                }
 
-						return true;
-					}
-					else if((__instance.IsLayerable<TopTypes>(ClothingGearCategory.LongSleeve) && cgo.IsLayerable<TopTypes>(ClothingGearCategory.Shirt)) || 
-					        (__instance.IsLayerable<TopTypes>(ClothingGearCategory.Shirt) && cgo.IsLayerable<TopTypes>(ClothingGearCategory.LongSleeve)))
-					{
-						__result = false;
-						return false;
-					}
-					else if ((__instance.IsLayerable<TopTypes>(ClothingGearCategory.Hoodie) && cgo.IsLayerable<TopTypes>(ClothingGearCategory.Shirt)) ||
-					         (__instance.IsLayerable<TopTypes>(ClothingGearCategory.Shirt) && cgo.IsLayerable<TopTypes>(ClothingGearCategory.Hoodie)))
-					{
-						__result = false;
-						return false;
-					}
-					else if (__instance.IsLayerable(Unity.ClothingGearCategory.Other) || cgo.IsLayerable(Unity.ClothingGearCategory.Other))
-					{
-						__result = false;
-						return false;
-					}
-				}
-
-				return true;
+                return true;
 			}
 		}
 
-		static bool IsLayerable<T>(this ClothingGearObjet clothingGear, ClothingGearCategory specificCategory) where T : Enum
-		{
-			if (clothingGear.template.category != specificCategory)
-				return false;
+        /// <summary>
+        /// Determines whether or not <see cref="clothingGearObject"/> is a layerable custom mesh or not.
+        /// </summary>
+        /// <param name="clothingGearObject">The <see cref="ClothingGearObjet"/> to evaluate.</param>
+        /// <returns>True if layerable, false otherwise.</returns>
+        static bool IsLayerable(this ClothingGearObjet clothingGearObject)
+        {
+            var customGearInfo = clothingGearObject.gearInfo as CustomCharacterGearInfo;
+            if (customGearInfo == null) return false;
 
-			return IsLayerable<T>(clothingGear);
-		}
+            return customGearInfo.Info.GetParentObject() is ClothingGear clothingGear && clothingGear.ClothingMetadata.IsLayerable;
+        }
 
-		static bool IsLayerable<T>(this ClothingGearObjet clothingGear) where T : Enum
-		{
-			bool isType = Enum.GetValues(typeof(T)).Cast<T>().Any(style => style.ToString() == clothingGear.template.id);
-			bool isLayerable = false;
+        /// <summary>
+        /// Determines whether or not <see cref="clothingGearObject"/> is a custom mesh in the Other category.
+        /// </summary>
+        /// <param name="clothingGearObject">The <see cref="ClothingGearObjet"/> to evaluate.</param>
+        /// <returns>True if in category Other, false otherwise.</returns>
+        static bool IsOtherCategory(this ClothingGearObjet clothingGearObject)
+        {
+            var customGearInfo = clothingGearObject.gearInfo as CustomCharacterGearInfo;
+            if (customGearInfo == null) return false;
 
-			var customGearInfo = clothingGear.gearInfo as CustomCharacterGearInfo;
-			if (customGearInfo == null) return false;
+            return customGearInfo.Info.GetParentObject() is ClothingGear clothingGear &&
+                   clothingGear.ClothingMetadata.Category == Unity.ClothingGearCategory.Other;
+        }
 
-			if (customGearInfo.Info.GetParentObject() is ClothingGear customGear)
-			{
-				if (!isType)
-				{
-					isType = !customGear.Metadata.BasedOnDefaultGear() || Enum.GetValues(typeof(T)).Cast<T>().Any(style => style.ToString() == customGear.Metadata.GetBaseType());
-				}
-				
-				isLayerable = customGear.ClothingMetadata.IsLayerable;
-			}
-
-			return isType && isLayerable;
-		}
-
-
-		static bool IsLayerable(this ClothingGearObjet clothingGear, Unity.ClothingGearCategory clothingGearCategory)
-		{
-			var customGearInfo = clothingGear.gearInfo as CustomCharacterGearInfo;
-			if (customGearInfo == null) return false;
-
-			bool isLayerable = false;
-
-			if (customGearInfo.Info.GetParentObject() is ClothingGear customGear)
-			{
-				isLayerable = customGear.ClothingMetadata.IsLayerable && customGear.Metadata.GetCategory().StartsWith(clothingGearCategory.ToString());
-			}
-
-			return isLayerable;
-		}
-	}
+        /// <summary>
+        /// Determines whether or not <see cref="clothingGearObject"/> is a custom mesh that is layerable and in the Other category.
+        /// </summary>
+        /// <param name="clothingGearObject">The <see cref="ClothingGearObjet"/> to evaluate.</param>
+        /// <returns>True if layerable and in category Other, false otherwise.</returns>
+        static bool IsLayerableOtherCategory(this ClothingGearObjet clothingGearObject)
+        {
+            return IsLayerable(clothingGearObject) && IsOtherCategory(clothingGearObject);
+        }
+    }
 }
