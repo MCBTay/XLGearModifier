@@ -37,6 +37,8 @@ namespace XLGearModifier
 
 			whatsEquippedUI.SetActive(true);
 			whatsEquipped = whatsEquippedUI.GetComponentInChildren<XLGMWhatsEquippedUserInterface>(true);
+
+			whatsEquipped.VersionLabel.SetText($"v{Settings.ModEntry.Version}");
 		}
 
 		public void DestroyWhatsEquippedUserInterface()
