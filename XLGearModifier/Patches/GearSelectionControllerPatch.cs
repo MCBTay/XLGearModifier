@@ -366,6 +366,9 @@ namespace XLGearModifier.Patches
 						if (gear is CustomBoardGearInfo || gear is BoardGearInfo || gear is CustomCharacterBodyInfo || gear is CharacterBodyInfo) return;
 						Traverse.Create(__instance.previewCustomizer).Method("RemoveGear", gear).GetValue();
 
+						// Set this to prevent previewing this item as long as the index hasn't changed.
+                        GearManager.Instance.UnequippedItemIndexPath = index;
+
                         if (gear.type == "eyes")
                         {
                             if (EyeTextureManager.Instance.EyesGameObjects.ContainsKey(__instance.previewCustomizer.name))
@@ -398,6 +401,22 @@ namespace XLGearModifier.Patches
 		[HarmonyPatch(typeof(GearSelectionController), "ListView_OnItemHighlightedEvent")]
 		public static class ListView_OnItemHighlightedEventPatch
 		{
+			/// <summary>
+			/// Controls whether or not we allow the OnItemHighlighted base method to execute.  If <see cref="GearManager.UnequippedItemIndexPath" />
+			/// has not been set, or is different than the current index we've got highlighted, then allow the preview to proceed as normal.
+			/// If we are still previewing the item that was unequipped, don't allow the preview to proceed.
+			/// </summary>
+			/// <param name="index">The index of the item being previewed.</param>
+			/// <returns>True if <see cref="GearManager.UnequippedItemIndexPath" /> is null or different than the current preview item.  False if the path is the same as the current preview item.</returns>
+            static bool Prefix(IndexPath index)
+            {
+                if (GearManager.Instance.UnequippedItemIndexPath == null) return true;
+                if (GearManager.Instance.UnequippedItemIndexPath == index) return false;
+
+                GearManager.Instance.UnequippedItemIndexPath = null;
+                return true;
+            }
+
 			static void Postfix(GearSelectionController __instance, IndexPath index, CustomizedPlayerDataV2[] ___skaterCustomizations)
 			{
 				if (index.depth == 1)
@@ -413,6 +432,13 @@ namespace XLGearModifier.Patches
 				}
 
 				if (!IsOnXLGMTab(index[1])) return;
+
+                if (GearManager.Instance.UnequippedItemIndexPath != null && GearManager.Instance.UnequippedItemIndexPath == index)
+                {
+                    return;
+                }
+
+                GearManager.Instance.UnequippedItemIndexPath = null;
 
 				GearInfo gearAtIndex1 = GearDatabase.Instance.GetGearAtIndex(index);
 				if (gearAtIndex1 == null) return;

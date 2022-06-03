@@ -34,7 +34,10 @@ namespace XLGearModifier.Patches
         [HarmonyPatch(typeof(CharacterCustomizer), nameof(CharacterCustomizer.EquipCharacterGear), typeof(CharacterGearInfo), typeof(bool))]
         static class EquipCharacterGearPatch
         {
-            static void Postfix(CharacterCustomizer __instance, CharacterGearInfo gear, bool updateMask)
+            /// <summary>
+            /// Handles the equipping of custom eye textures.
+            /// </summary>
+            static void Postfix(CharacterCustomizer __instance, CharacterGearInfo gear)
             {
                 if (gear.type != "eyes") return;
 
@@ -50,6 +53,9 @@ namespace XLGearModifier.Patches
         [HarmonyPatch(typeof(CharacterCustomizer), nameof(CharacterCustomizer.PreviewItem))]
         static class PreviewItemPatch
         {
+            /// <summary>
+            /// Handles the previewing of custom eye textures.
+            /// </summary>
             static void Postfix(CharacterCustomizer __instance, GearInfo preview, List<GearInfo> toBeCachedGear)
             {
                 if (preview == null) return;
