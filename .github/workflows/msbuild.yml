@@ -14,6 +14,8 @@ env:
   # You can convert this to a build matrix if you need coverage of multiple configuration types.
   # https://docs.github.com/actions/learn-github-actions/managing-complex-workflows#using-a-build-matrix
   BUILD_CONFIGURATION: Release
+  
+  package_path: "~/XLGearModifier_SDK.2.0.0.unitypackage"
 
 jobs:
   build:
@@ -84,21 +86,29 @@ jobs:
     #    SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
     #  run: .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
     
-  createunitypackage:
+  create-unity-package:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - run: |
-          echo "./XLGearModifier.Gear/Assets/XLGM_SDK.meta" > metaList
-          find "./XLGearModifier.Gear/Assets/XLGM_SDK/" -name \*.meta >> metaList
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v3
+      - uses: actions/setup-dotnet@v2
     
-      - name: Create Unity Package
-        uses: pCYSl5EDgo/create-unitypackage@v1
+      # Install the packager. We are putting it outside the working directory so we dont include it by mistake
+      - name: Install Unity Packager
+        run: |
+          git clone https://github.com/Lachee/Unity-Package-Exporter.git "../tools/unity-package-exporter"
+          dotnet publish -c Release -o ../tools "../tools/unity-package-exporter/UnityPackageExporter"
+          
+      # Pack the assets
+      - name: Package Project
+        run: |
+          echo "Creating package ${{env.package_path}}"
+          dotnet ../tools/UnityPackageExporter.dll --project ./ --output package.unitypackage --exclude ".*" --exclude "Documentation"
+          
+      # Upload artifact
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v3.0.0
         with:
-          # Output unitypackage file path
-          package-path: ./artifacts/XLGearModifier_SDK.2.0.0.unitypackage
-          # Relative file paths from project-folder. Multi-line string value. Each line should ends with .meta.
-          include-files: metaList
-          # Unity project folder. Default => ./
-          project-folder: ./
+          name: XLGearModifier_SDK.2.0.0.unitypackage
+          path: ${{env.package_path}}   
       
