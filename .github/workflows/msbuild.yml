@@ -90,7 +90,7 @@ jobs:
       - uses: actions/checkout@v2
       - run: |
           echo "Assets/XLGM_SDK.meta" > metaList
-          find "Assets/XLGM_SDK/" -name \*.meta >> metaList
+          find "./Assets/XLGM_SDK/" -name \*.meta >> metaList
     
       - name: Create Unity Package
         uses: pCYSl5EDgo/create-unitypackage@v1
