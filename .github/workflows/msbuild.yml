@@ -87,15 +87,18 @@ jobs:
   createunitypackage:
     runs-on: ubuntu-latest
     steps:
-      - name: Export .unitypackage from Unity Project
-        # You may pin to the exact commit or the version.
-        # uses: FrostBanditTeam/extract-unity-package-action@8aff23ee2b9663391db959e4b8ba3170ae276897
-        uses: FrostBanditTeam/extract-unity-package-action@1
+      - uses: actions/checkout@v2
+      - run: |
+          echo "Assets/XLGM_SDK.meta" > metaList
+          find Assets/XLGM_SDK/ -name \*.meta >> metaList
+    
+      - name: Create Unity Package
+        uses: pCYSl5EDgo/create-unitypackage@v1
         with:
-          # Path to the unity project
-          unityProjectPath: ./XLGearModifier.Gear/
-          # Project relative path to be packaged.
-          packagePath: Assets/XLGM_SDK
-          # Path to the output package
-          outputPackagePath: ./artifacts/XLGearModifier_SDK.2.0.0.unitypackage
+          # Output unitypackage file path
+          package-path: ./artifacts/XLGearModifier_SDK.2.0.0.unitypackage
+          # Relative file paths from project-folder. Multi-line string value. Each line should ends with .meta.
+          include-files: metaList
+          # Unity project folder. Default => ./
+          project-folder: ./XLGearModifier.Gear/
       
