@@ -85,7 +85,7 @@ jobs:
     #  run: .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
     
   createunitypackage:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
     steps:
       - name: Export .unitypackage from Unity Project
         # You may pin to the exact commit or the version.
