@@ -8,7 +8,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using UnityEngine;
 using XLGearModifier.Unity;
-using XLMenuMod;
 using XLMenuMod.Utilities;
 
 namespace XLGearModifier.CustomGear
@@ -56,14 +55,6 @@ namespace XLGearModifier.CustomGear
 			return officialGear.Where(x => x.type.Equals(Metadata.GetBaseType(), StringComparison.InvariantCultureIgnoreCase)).Cast<GearInfoSingleMaterial>().FirstOrDefault();
 		}
 
-        /// <summary>
-        /// Returns the object's Prefix.
-        /// </summary>
-        public virtual string GetTypeName()
-        {
-            return Metadata.Prefix;
-        }
-        
         /// <summary>
         /// Returns the skater index of a default gear item.  Only to be used for items that are based on default gear.
         /// </summary>

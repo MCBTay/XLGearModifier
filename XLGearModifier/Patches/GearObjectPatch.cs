@@ -1,8 +1,8 @@
 ﻿using HarmonyLib;
-using System.Linq;
 using System.Threading.Tasks;
 using UnityEngine;
 using XLGearModifier.CustomGear;
+using XLGearModifier.Texturing;
 
 namespace XLGearModifier.Patches
 {
@@ -15,8 +15,22 @@ namespace XLGearModifier.Patches
 			{
                 if (!path.StartsWith("XLGearModifier")) return true;
 
-				var customGear = GearManager.Instance.CustomGear.FirstOrDefault(x => x.GearInfo != null && x.GearInfo.type == __instance.gearInfo.type);
-				if (customGear == null) return true;
+                if (__instance.gearInfo.type == "eyes")
+                {
+                    var customizer = Traverse.Create(__instance).Field("customizer").GetValue<CharacterCustomizer>();
+
+                    EyeTextureManager.Instance.GetGameObjectReference(customizer);
+
+                    if (EyeTextureManager.Instance.EyesGameObjects.ContainsKey(customizer.name))
+                    {
+                        __result = Task.FromResult(EyeTextureManager.Instance.EyesGameObjects[customizer.name]);
+                    }
+
+                    return false;
+                }
+
+                var customGear = GearManager.Instance.CustomGear[__instance.gearInfo.type];
+                if (customGear == null) return true;
 
 				__result = Task.FromResult(customGear.Prefab);
 				return false;

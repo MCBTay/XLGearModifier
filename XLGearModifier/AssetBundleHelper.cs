@@ -10,6 +10,7 @@ using UnityEngine;
 using XLGearModifier.CustomGear;
 using XLGearModifier.Texturing;
 using XLGearModifier.Unity;
+using XLGearModifier.Utilities;
 using XLGearModifier.Unity.EditAsset;
 using Object = UnityEngine.Object;
 
@@ -24,8 +25,7 @@ namespace XLGearModifier
 
         public async Task LoadBundles()
         {
-            await BaseGameTextureManager.Instance.LoadGameMaterials();
-
+            await BaseGameTextureManager.Instance.LoadGameShaders();
             // We're solely making a call here to ensure that the unity assembly is loaded up prior to loading assets.  else we'll get a bunch of errors about things missing.
             var test = GearModifierTab.CustomMeshes;
 
@@ -77,6 +77,13 @@ namespace XLGearModifier
                 yield break;
             }
 
+            if (assetBundle.name == "easy-day-textures")
+            {
+                yield return BaseGameTextureManager.Instance.LoadEasyDayTextures(assetBundle);
+                assetBundle.Unload(false);
+                yield break;
+            }
+
             yield return LoadPrefabBundle(assetBundle);
 
             assetBundle.Unload(false);
@@ -102,7 +109,7 @@ namespace XLGearModifier
         private IEnumerator LoadUserInterface(AssetBundle bundle)
         {
             yield return LoadAsset<TMP_SpriteAsset>(bundle, "GearModifierUISpriteSheet", value => UserInterfaceHelper.Instance.GearModifierUISpriteSheet = value);
-            yield return LoadAssets<Sprite>(bundle, "GearModifierUISpriteSheet", value => UserInterfaceHelper.Instance.GearModifierUISpriteSheetSprites = value.ToList());
+            yield return LoadAssets<Sprite>(bundle, "", value => UserInterfaceHelper.Instance.GearModifierUISpriteSheetSprites = value.ToList());
 
             var assets = new List<GameObject>();
             yield return LoadAssets<GameObject>(bundle, string.Empty, value => assets = value.ToList());
@@ -129,9 +136,9 @@ namespace XLGearModifier
         /// <param name="bundle"></param>
         private IEnumerator LoadEmptyDefaultTextures(AssetBundle bundle)
         {
-            yield return LoadAsset<Texture2D>(bundle, GearManager.EmptyAlbedoFilename, value => GearManager.Instance.EmptyAlbedo = value);
-            yield return LoadAsset<Texture2D>(bundle, GearManager.EmptyNormalFilename, value => GearManager.Instance.EmptyNormalMap = value);
-            yield return LoadAsset<Texture2D>(bundle, GearManager.EmptyMaskFilename, value => GearManager.Instance.EmptyMaskPBR = value);
+            yield return LoadAsset<Texture2D>(bundle, EmptyTextureConstants.EmptyAlbedoFilename, value => GearManager.Instance.EmptyAlbedo = value);
+            yield return LoadAsset<Texture2D>(bundle, EmptyTextureConstants.EmptyNormalFilename, value => GearManager.Instance.EmptyNormalMap = value);
+            yield return LoadAsset<Texture2D>(bundle, EmptyTextureConstants.EmptyMaskFilename, value => GearManager.Instance.EmptyMaskPBR = value);
         }
 
         /// <summary>
@@ -195,16 +202,17 @@ namespace XLGearModifier
                     {
                         var metadata = asset.GetComponent<XLGMMetadata>();
                         if (metadata == null) continue;
-                        if (string.IsNullOrEmpty(metadata.Prefix)) continue;
-
+                        
                         CustomGearBase customGearBase = null;
 
                         switch (metadata)
                         {
                             case XLGMClothingGearMetadata clothingMetadata:
+                                if (string.IsNullOrEmpty(clothingMetadata.CharacterGearTemplate.id)) continue;
                                 customGearBase = new ClothingGear(clothingMetadata, asset);
                                 break;
                             case XLGMSkaterMetadata skaterMetadata:
+                                if (string.IsNullOrEmpty(skaterMetadata.CharacterBodyTemplate.id)) continue;
                                 customGearBase = new Skater(skaterMetadata, asset);
                                 break;
                             case XLGMBoardGearMetadata boardMetadata:
@@ -215,7 +223,7 @@ namespace XLGearModifier
 
                         customGearBase.Instantiate();
 
-                        GearManager.Instance.CustomGear.Add(customGearBase);
+                        GearManager.Instance.CustomGear.Add(customGearBase.GearInfo.type.ToLower(), customGearBase);
                     }
                     catch (Exception ex)
                     {

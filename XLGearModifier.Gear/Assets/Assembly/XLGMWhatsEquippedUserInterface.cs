@@ -1,4 +1,5 @@
 ﻿using System;
+using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
@@ -12,6 +13,8 @@ namespace XLGearModifier.Unity
 	{
 		public GameObject listContent;
 		public GameObject listItemPrefab;
+        
+        public TMP_Text VersionLabel;
 
 		public void ClearList()
 		{

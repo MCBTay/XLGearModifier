@@ -1,0 +1,2 @@
+easy-day-textures filter=lfs diff=lfs merge=lfs -text
+char[[:space:]]male/shoes filter=lfs diff=lfs merge=lfs -text

@@ -1,6 +1,7 @@
 ﻿using HarmonyLib;
 using SkaterXL.Data;
 using SkaterXL.Gear;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
@@ -42,6 +43,8 @@ namespace XLGearModifier
 
 			whatsEquippedUI.SetActive(true);
 			whatsEquipped = whatsEquippedUI.GetComponentInChildren<XLGMWhatsEquippedUserInterface>(true);
+
+			whatsEquipped.VersionLabel.SetText($"v{Settings.ModEntry.Version}");
 		}
 
 		public void DestroyWhatsEquippedUserInterface()
@@ -59,46 +62,62 @@ namespace XLGearModifier
 
 			var customizations = ___skaterCustomizations[index[0]];
 			foreach (var clothingGear in customizations.clothingGear)
-			{
-				var template = GearDatabase.Instance.CharGearTemplateForID[clothingGear.type];
-				var spriteIndex = GearModifierUISpriteSheet.spriteCharacterTable[GetSpriteIndex(template)].glyphIndex;
-				var sprite = GearModifierUISpriteSheetSprites.FirstOrDefault(x => x.name == "GearModifierUISpriteSheet_" + spriteIndex);
+            {
+                var template = GearDatabase.Instance.CharGearTemplateForID[clothingGear.type];
+				
+				var spriteName = GetSpriteName(template);
+                var sprite = GearModifierUISpriteSheetSprites.FirstOrDefault(x => x.name == spriteName);
 
-				var mesh = GearManager.Instance.CustomGear.FirstOrDefault(x => x.GearInfo != null && x.GearInfo.type == clothingGear.type) as ClothingGear;
+                ClothingGear mesh = GearManager.Instance.CustomGear.ContainsKey(clothingGear.type) ?
+                    GearManager.Instance.CustomGear[clothingGear.type] as ClothingGear :
+                    null;
 
-				var creatorName = mesh?.ClothingMetadata?.CreatorName ?? "N/A";
+                var creatorName = mesh?.ClothingMetadata?.CreatorName ?? "N/A";
 
-				whatsEquipped.AddToList("Prefix: " + clothingGear.type, clothingGear.name, "Creator: " + creatorName, sprite);
-			}
+				var lineItem = whatsEquipped.AddToList(clothingGear.type, clothingGear.name, creatorName, sprite);
+				lineItem.GetComponent<XLGMWhatsEquippedLineItem>().equippedLineClicked.AddListener((type) => EquippedLineClicked(clothingGear.type));
+            }
 		}
 
-        private int GetSpriteIndex(CharacterGearTemplate template)
+        private void EquippedLineClicked(string type)
         {
-            if (GearManager.Instance.CustomGear.FirstOrDefault(x => x.Metadata.Prefix.ToLower() == template.id) is ClothingGear customGear)
+            // TODO: Implement some functionality here when an item is selected
+			// Initial thought is try and jump to this item in the list for easy equip/unequip
+        }
+
+        private string GetSpriteName(CharacterGearTemplate template)
+        {
+			if (GearManager.Instance.CustomGear.ContainsKey(template.id) &&
+                GearManager.Instance.CustomGear[template.id] is ClothingGear customGear)
             {
-                var spriteName = customGear.Metadata.GetSprite();
-                return GearModifierUISpriteSheet.GetSpriteIndexFromName(spriteName);
+                return customGear.Metadata.GetSprite();
             }
 
-            switch (template.category)
+            if (template.id == "eyes")
             {
-                case ClothingGearCategory.Shoes:
-                    return GearModifierUISpriteSheet.GetSpriteIndexFromName("Shoes");
+                return "Eyes";
+			}
+
+			switch (template.category)
+			{
+				case ClothingGearCategory.Shoes:
+                    return "Shoes";
                 case ClothingGearCategory.Hoodie:
-                case ClothingGearCategory.LongSleeve:
-                case ClothingGearCategory.Shirt:
-                case ClothingGearCategory.TankTop:
-                    return GearModifierUISpriteSheet.GetSpriteIndexFromName("Top");
+				case ClothingGearCategory.LongSleeve:
+				case ClothingGearCategory.Shirt:
+				case ClothingGearCategory.TankTop:
+					return "Top";
                 case ClothingGearCategory.Pants:
-                case ClothingGearCategory.PantsRolledUp:
-                case ClothingGearCategory.Shorts:
-                    return GearModifierUISpriteSheet.GetSpriteIndexFromName("Bottom");
+				case ClothingGearCategory.PantsRolledUp:
+				case ClothingGearCategory.Shorts:
+					return "Bottom";
                 case ClothingGearCategory.Socks:
-                    return GearModifierUISpriteSheet.GetSpriteIndexFromName("Socks");
+					return "Socks";
                 case ClothingGearCategory.Hat:
-                    return GearModifierUISpriteSheet.GetSpriteIndexFromName("Headwear");
+                    var hairStyles = Enum.GetNames(typeof(HairStyles)).Select(x => x.ToLower());
+                    return hairStyles.Contains(template.id.ToLower()) ? "Hair" : "Headwear";
                 default:
-                    return GearModifierUISpriteSheet.GetSpriteIndexFromName("Other");
+					return "Other";
             }
         }
         #endregion

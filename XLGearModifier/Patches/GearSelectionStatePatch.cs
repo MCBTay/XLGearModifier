@@ -5,6 +5,9 @@ namespace XLGearModifier.Patches
 {
     public class GearSelectionStatePatch
 	{
+		/// <summary>
+		/// Patching into OnEnter in order to create the What's Equipped UI when we enter GearSelectionState.
+		/// </summary>
 		[HarmonyPatch(typeof(GearSelectionState), nameof(GearSelectionState.OnEnter))]
 		static class OnEnterPatch
 		{
@@ -15,6 +18,9 @@ namespace XLGearModifier.Patches
 			}
 		}
 
+        /// <summary>
+        /// Patching into OnExit in order to destroy the What's Equipped UI when we leave GearSelectionState.
+        /// </summary>
 		[HarmonyPatch(typeof(GearSelectionState), nameof(GearSelectionState.OnExit))]
 		static class OnExitPatch
 		{

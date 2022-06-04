@@ -24,8 +24,7 @@ namespace XLGearModifier.Patches
                 var customizedPlayerDataV2 = CustomizedPlayerDataV2.Default;
 
                 customizedPlayerDataV2.clothingGear = Array.Empty<CharacterGearInfo>();
-                customizedPlayerDataV2.body = GearManager.Instance.CustomGear
-                    .FirstOrDefault(x => x.GearInfo is CharacterBodyInfo cbi && cbi.name == skaterName)?.GearInfo as CharacterBodyInfo;
+                customizedPlayerDataV2.body = GearManager.Instance.CustomGear[skaterName]?.GearInfo as CharacterBodyInfo;
 
                 for (int index = 0; index < customizedPlayerDataV2.boardGear.Length; ++index)
                 {
