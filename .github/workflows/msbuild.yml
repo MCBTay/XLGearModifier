@@ -103,7 +103,7 @@ jobs:
       - name: Package Project
         run: |
           echo "Creating package ${{env.package_path}}"
-          dotnet ../tools/UnityPackageExporter.dll --input ./XLGearModifier.Gear/Aseets/XLGM_SDK/ --output XLGearModifier_SDK.2.0.0.unitypackage
+          dotnet ../tools/UnityPackageExporter.dll --input ./XLGearModifier.Gear/Aseets/XLGM_SDK/ --output ${{env.package_path}}
           
       # Upload artifact
       - name: Upload Artifact
