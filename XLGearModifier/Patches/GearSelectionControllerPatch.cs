@@ -1,12 +1,13 @@
 ﻿using HarmonyLib;
+using SkaterXL.Data;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using SkaterXL.Data;
 using TMPro;
 using UnityEngine.EventSystems;
 using UnityModManagerNet;
 using XLGearModifier.CustomGear;
+using XLGearModifier.Texturing;
 using XLGearModifier.Unity;
 using XLMenuMod;
 using XLMenuMod.Utilities;
@@ -17,7 +18,7 @@ using Skater = XLMenuMod.Skater;
 
 namespace XLGearModifier.Patches
 {
-	public static class GearSelectionControllerPatch
+    public static class GearSelectionControllerPatch
 	{
 		private static void SetItemText(this MVCListItemView item, GearInfo gearAtIndex, CustomGearFolderInfo customGearFolder)
 		{
@@ -54,35 +55,11 @@ namespace XLGearModifier.Patches
 
 				if (index.depth < 2) return;
 
-				List<ICustomInfo> sourceList = null;
-
-				switch (index[1])
-				{
-					case (int)GearModifierTab.CustomMeshes:
-						sourceList = index[0] == (int)Skater.MaleStandard ? GearManager.Instance.CustomMeshes : new List<ICustomInfo>();
-						break;
-                    case (int)GearModifierTab.CustomFemaleMeshes: 
-                        sourceList = index[0] == (int)Skater.FemaleStandard ? GearManager.Instance.CustomFemaleMeshes : new List<ICustomInfo>();
-						break;
-                    case (int)GearModifierTab.Eyes:
-						sourceList = GearManager.Instance.Eyes;
-						break;
-				}
-
-				if (sourceList == null) return;
-
-				if (index.depth == 2)
-				{
-					__result = sourceList.Count;
-				}
-				else if (index.depth >= 3)
-				{
-					__result = GearManager.Instance.CurrentFolder.HasChildren() ? GearManager.Instance.CurrentFolder.Children.Count : sourceList.Count;
-				}
-			}
+                __result = GearDatabase.Instance.GetGearListAtIndex(index).Length;
+            }
 		}
 
-		[HarmonyPatch(typeof(GearSelectionController), nameof(GearSelectionController.ConfigureHeaderView))]
+        [HarmonyPatch(typeof(GearSelectionController), nameof(GearSelectionController.ConfigureHeaderView))]
 		public static class ConfigureHeaderViewPatch
 		{
 			static void Postfix(IndexPath index, MVCListHeaderView itemView)
@@ -98,7 +75,10 @@ namespace XLGearModifier.Patches
                         case (int)GearModifierTab.CustomFemaleMeshes: 
                             itemView.SetText("Custom Meshes"); 
                             break;
-                        case (int)GearModifierTab.Eyes: itemView.SetText("Eyes"); break;
+                        case (int)GearModifierTab.Eyes:
+                            itemView.Label.spriteAsset = UserInterfaceHelper.Instance.GearModifierUISpriteSheet;
+							var newText = "<space=18px><sprite name=\"Eyes\" tint=1>Eyes";
+                            itemView.SetText(newText); break;
 					}
 				}
 				else if (index.depth >= 3)
@@ -279,8 +259,9 @@ namespace XLGearModifier.Patches
 		public static class ListView_OnItemSelectedEventPatch
 		{
 			static bool Prefix(GearSelectionController __instance, IndexPath index, CustomizedPlayerDataV2[] ___skaterCustomizations)
-			{
-				if (index.depth < 3) return true;
+            {
+                if (!__instance.initialized) return true;
+                if (index.depth < 3) return true;
 
 				var gear = GearDatabase.Instance.GetGearAtIndex(index);
 				if (!IsOnXLGMTab(index[1]))
@@ -319,7 +300,7 @@ namespace XLGearModifier.Patches
                                 sourceList = GearManager.Instance.CustomFemaleMeshes;
                                 break;
                             case (int)GearModifierTab.Eyes:
-								sourceList = GearManager.Instance.Eyes;
+								sourceList = EyeTextureManager.Instance.Eyes;
 								break;
 						}
 
@@ -384,7 +365,18 @@ namespace XLGearModifier.Patches
 					{
 						if (gear is CustomBoardGearInfo || gear is BoardGearInfo || gear is CustomCharacterBodyInfo || gear is CharacterBodyInfo) return;
 						Traverse.Create(__instance.previewCustomizer).Method("RemoveGear", gear).GetValue();
-					}
+
+						// Set this to prevent previewing this item as long as the index hasn't changed.
+                        GearManager.Instance.UnequippedItemIndexPath = index;
+
+                        if (gear.type == "eyes")
+                        {
+                            if (EyeTextureManager.Instance.EyesGameObjects.ContainsKey(__instance.previewCustomizer.name))
+                            {
+                                EyeTextureManager.Instance.EyesGameObjects[__instance.previewCustomizer.name].SetActive(true);
+                            }
+                        }
+                    }
 					else
 					{
 						__instance.previewCustomizer.EquipGear(gear);
@@ -409,6 +401,22 @@ namespace XLGearModifier.Patches
 		[HarmonyPatch(typeof(GearSelectionController), "ListView_OnItemHighlightedEvent")]
 		public static class ListView_OnItemHighlightedEventPatch
 		{
+			/// <summary>
+			/// Controls whether or not we allow the OnItemHighlighted base method to execute.  If <see cref="GearManager.UnequippedItemIndexPath" />
+			/// has not been set, or is different than the current index we've got highlighted, then allow the preview to proceed as normal.
+			/// If we are still previewing the item that was unequipped, don't allow the preview to proceed.
+			/// </summary>
+			/// <param name="index">The index of the item being previewed.</param>
+			/// <returns>True if <see cref="GearManager.UnequippedItemIndexPath" /> is null or different than the current preview item.  False if the path is the same as the current preview item.</returns>
+            static bool Prefix(IndexPath index)
+            {
+                if (GearManager.Instance.UnequippedItemIndexPath == null) return true;
+                if (GearManager.Instance.UnequippedItemIndexPath == index) return false;
+
+                GearManager.Instance.UnequippedItemIndexPath = null;
+                return true;
+            }
+
 			static void Postfix(GearSelectionController __instance, IndexPath index, CustomizedPlayerDataV2[] ___skaterCustomizations)
 			{
 				if (index.depth == 1)
@@ -424,6 +432,13 @@ namespace XLGearModifier.Patches
 				}
 
 				if (!IsOnXLGMTab(index[1])) return;
+
+                if (GearManager.Instance.UnequippedItemIndexPath != null && GearManager.Instance.UnequippedItemIndexPath == index)
+                {
+                    return;
+                }
+
+                GearManager.Instance.UnequippedItemIndexPath = null;
 
 				GearInfo gearAtIndex1 = GearDatabase.Instance.GetGearAtIndex(index);
 				if (gearAtIndex1 == null) return;

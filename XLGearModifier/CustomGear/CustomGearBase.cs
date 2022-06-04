@@ -8,7 +8,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using UnityEngine;
 using XLGearModifier.Unity;
-using XLMenuMod;
 using XLMenuMod.Utilities;
 
 namespace XLGearModifier.CustomGear

@@ -1,6 +1,7 @@
 ﻿using System.IO;
 using System.Linq;
 using UnityEngine;
+using XLGearModifier.Utilities;
 
 namespace XLGearModifier.Texturing
 {
@@ -10,25 +11,17 @@ namespace XLGearModifier.Texturing
         public static SkateShopTextureManager Instance => __instance ?? (__instance = new SkateShopTextureManager());
 
         private static Texture2D SkateshopTexture;
-        private const string ColorTextureFilename = "Skateshop.png";
-        private const string ColorTextureName = "Texture2D_694A07B4";
-
         private static Texture2D SkateshopNormal;
-        private const string NormalTextureFilename = "Skateshop.normal.png";
-        private const string NormalTextureName = "Texture2D_BBD4D99B";
-
         private static Texture2D SkateshopRgMtAo;
-        private const string RgmtaoTextureFilename = "Skateshop.rgmtao.png";
-        private const string RgmtaoTextureName = "Texture2D_EDCB0FF8";
 
         /// <summary>
         /// Attempts to find custom textures in the gear folder for color, normal, and rgmtao.
         /// </summary>
         public void LookForSkateshopTextures()
         {
-            LookForSkateshopTexture(ColorTextureFilename);
-            LookForSkateshopTexture(NormalTextureFilename);
-            LookForSkateshopTexture(RgmtaoTextureFilename);
+            LookForSkateshopTexture(SkateShopTextureConstants.ColorTextureFileName);
+            LookForSkateshopTexture(SkateShopTextureConstants.NormalTextureFileName);
+            LookForSkateshopTexture(SkateShopTextureConstants.RgmtaoTextureFileName);
         }
 
         /// <summary>
@@ -43,17 +36,17 @@ namespace XLGearModifier.Texturing
 
             switch (textureFilename)
             {
-                case ColorTextureFilename:
+                case SkateShopTextureConstants.ColorTextureFileName:
                     SkateshopTexture = new Texture2D(2, 2);
                     if (SkateshopTexture.LoadImage(File.ReadAllBytes(texture))) return;
                     SkateshopTexture = null;
                     break;
-                case NormalTextureFilename:
+                case SkateShopTextureConstants.NormalTextureFileName:
                     SkateshopNormal = new Texture2D(2, 2);
                     if (SkateshopNormal.LoadImage(File.ReadAllBytes(texture))) return;
                     SkateshopNormal = null;
                     break;
-                case RgmtaoTextureFilename:
+                case SkateShopTextureConstants.RgmtaoTextureFileName:
                     SkateshopRgMtAo = new Texture2D(2, 2);
                     if (SkateshopRgMtAo.LoadImage(File.ReadAllBytes(texture))) return;
                     SkateshopRgMtAo = null;
@@ -73,17 +66,17 @@ namespace XLGearModifier.Texturing
 
             if (SkateshopTexture != null)
             {
-                renderer.material.SetTexture(ColorTextureName, SkateshopTexture);
+                renderer.material.SetTexture(SkateShopTextureConstants.ColorTextureName, SkateshopTexture);
             }
 
             if (SkateshopNormal != null)
             {
-                renderer.material.SetTexture(NormalTextureName, SkateshopNormal);
+                renderer.material.SetTexture(SkateShopTextureConstants.NormalTextureName, SkateshopNormal);
             }
 
             if (SkateshopRgMtAo != null)
             {
-                renderer.material.SetTexture(RgmtaoTextureName, SkateshopRgMtAo);
+                renderer.material.SetTexture(SkateShopTextureConstants.RgmtaoTextureName, SkateshopRgMtAo);
             }
         }
     }

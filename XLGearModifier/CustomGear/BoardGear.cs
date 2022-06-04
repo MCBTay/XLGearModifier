@@ -65,8 +65,7 @@ namespace XLGearModifier.CustomGear
 
             if (!typeFilter.includedTypes.Contains(BoardMetadata.BoardGearTemplate.id))
             {
-                Array.Resize(ref typeFilter.includedTypes, typeFilter.includedTypes.Length + 1);
-                typeFilter.includedTypes[typeFilter.includedTypes.Length - 1] = BoardMetadata.BoardGearTemplate.id;
+                typeFilter.includedTypes.Add(BoardMetadata.BoardGearTemplate.id);
             }
         }
 

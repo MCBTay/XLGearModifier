@@ -24,6 +24,8 @@ namespace XLGearModifier.Assets.Editor
                     PrefabUtility.SavePrefabAsset(go);
                 }
             }
+
+            Debug.Log("Reserialize All Prefabs completed.");
         }
 
         [MenuItem("Tools/XLGM Tools/Ensure Prefab Meshes Have Material Controllers")]
@@ -59,6 +61,8 @@ namespace XLGearModifier.Assets.Editor
                     PrefabUtility.SavePrefabAsset(go);
                 }
             }
+
+            Debug.Log("Ensure Prefab Meshes Have Material Controllers completed.");
         }
 
         [MenuItem("Tools/XLGM Tools/Ensure Prefab Meshes Have Gear Prefab Controllers")]
@@ -94,25 +98,82 @@ namespace XLGearModifier.Assets.Editor
                     PrefabUtility.SavePrefabAsset(go);
                 }
             }
+
+            Debug.Log("Ensure Prefab Meshes Have Gear Prefabs Controllers completed.");
         }
 
-        private static SkaterXL.Gear.ClothingGearCategory MapCategory(ClothingGearCategory category)
+        [MenuItem("Tools/XLGM Tools/Find Missing or Invalid Material Controllers")]
+        private static void onClick_FindMissingMaterialControllers()
         {
-            switch (category)
+            string[] guids = AssetDatabase.FindAssets("t:Prefab");
+
+            foreach (var guid in guids)
             {
-                case ClothingGearCategory.Hair:
-                case ClothingGearCategory.FacialHair:
-                case ClothingGearCategory.Headwear:
-                    return SkaterXL.Gear.ClothingGearCategory.Hat;
-                case ClothingGearCategory.Shoes:
-                case ClothingGearCategory.Socks:
-                    return SkaterXL.Gear.ClothingGearCategory.Shoes;
-                case ClothingGearCategory.Bottom:
-                    return SkaterXL.Gear.ClothingGearCategory.Pants;
-                default:
-                case ClothingGearCategory.Top:
-                    return SkaterXL.Gear.ClothingGearCategory.Shirt;
+                var path = AssetDatabase.GUIDToAssetPath(guid);
+                GameObject go = AssetDatabase.LoadAssetAtPath<GameObject>(path);
+
+                var metadata = go.GetComponent<XLGMClothingGearMetadata>();
+                if (metadata == null) continue;
+
+                var renderers = go.GetComponentsInChildren<SkinnedMeshRenderer>();
+                if (renderers == null || !renderers.Any()) continue;
+
+                foreach (var renderer in renderers)
+                {
+                    var materialController = renderer.gameObject.GetComponent<MaterialController>();
+
+                    if (materialController == null)
+                    {
+                        Debug.LogWarning($"{go.name} is missing MaterialController on it's mesh(s).");
+                        continue;
+                    }
+
+                    if (materialController.targets == null || !materialController.targets.Any())
+                    {
+                        Debug.LogWarning($"{go.name} has a MaterialController, but it has not had targets found.  Go click Find Targets.");
+                        continue;
+                    }
+                }
             }
+
+            Debug.Log("Find Missing or Invalid Material Controllers completed.");
+        }
+
+        [MenuItem("Tools/XLGM Tools/Find Missing or Invalid Gear Prefab Controllers")]
+        private static void onClick_FindMissingGearPrefabControllers()
+        {
+            string[] guids = AssetDatabase.FindAssets("t:Prefab");
+
+            foreach (var guid in guids)
+            {
+                var path = AssetDatabase.GUIDToAssetPath(guid);
+                GameObject go = AssetDatabase.LoadAssetAtPath<GameObject>(path);
+
+                var metadata = go.GetComponent<XLGMClothingGearMetadata>();
+                if (metadata == null) continue;
+
+                var renderers = go.GetComponentsInChildren<SkinnedMeshRenderer>();
+                if (renderers == null || !renderers.Any()) continue;
+
+                foreach (var renderer in renderers)
+                {
+                    var gearPrefabController = renderer.gameObject.GetComponent<GearPrefabController>();
+
+                    if (gearPrefabController == null)
+                    {
+                        Debug.LogWarning($"{go.name} is missing GearPrefabController on it's mesh(s).");
+                        continue;
+                    }
+
+                    if (string.IsNullOrEmpty(gearPrefabController.rootBoneName) || !gearPrefabController.boneNames.Any())
+                    {
+                        Debug.LogWarning($"{go.name} has a GearPrefabController, but is missing bone information.  Go click Prepare Prefab.");
+                        continue;
+                    }
+                }
+            }
+
+            Debug.Log("Find Missing or Invalid Gear Prefab Controllers completed.");
         }
     }
 }
