@@ -1,0 +1,15 @@
+{
+    "name": "XLGearModifier.Unity.Editor",
+    "references": [
+        "GUID:9e661dfc7ef6be9499bf1eacb2d51644"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
