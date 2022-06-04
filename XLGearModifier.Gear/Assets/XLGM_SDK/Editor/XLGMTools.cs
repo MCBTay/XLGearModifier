@@ -3,7 +3,6 @@ using System.Linq;
 using UnityEditor;
 using UnityEngine;
 using XLGearModifier.Unity;
-using ClothingGearCategory = XLGearModifier.Unity.ClothingGearCategory;
 
 namespace XLGearModifier.Assets.Editor
 {
