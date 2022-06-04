@@ -29,7 +29,14 @@ namespace XLGearModifier.Patches
                 }
 
 				// If either item is "Other" in our metadata script, it shouldn't block any other items
-                if (__instance.IsLayerableOtherCategory() || otherCGO.IsLayerableOtherCategory())
+                if (__instance.IsLayerableCategory(Unity.ClothingGearCategory.Other) || otherCGO.IsLayerableCategory(Unity.ClothingGearCategory.Other))
+                {
+                    __result = false;
+                    return false;
+                }
+
+                // If either item is "Facial Hair" in our metadata script, it shouldn't block any other items
+                if (__instance.IsLayerableCategory(Unity.ClothingGearCategory.FacialHair) || otherCGO.IsLayerableCategory(Unity.ClothingGearCategory.FacialHair))
                 {
                     __result = false;
                     return false;
@@ -53,27 +60,29 @@ namespace XLGearModifier.Patches
         }
 
         /// <summary>
-        /// Determines whether or not <see cref="clothingGearObject"/> is a custom mesh in the Other category.
+        /// Determines whether or not <see cref="clothingGearObject"/> is a custom mesh in the specified category.
         /// </summary>
         /// <param name="clothingGearObject">The <see cref="ClothingGearObjet"/> to evaluate.</param>
+        /// /// <param name="category">The category to evaluate.</param>
         /// <returns>True if in category Other, false otherwise.</returns>
-        static bool IsOtherCategory(this ClothingGearObjet clothingGearObject)
+        static bool IsCategory(this ClothingGearObjet clothingGearObject, Unity.ClothingGearCategory category)
         {
             var customGearInfo = clothingGearObject.gearInfo as CustomCharacterGearInfo;
             if (customGearInfo == null) return false;
 
             return customGearInfo.Info.GetParentObject() is ClothingGear clothingGear &&
-                   clothingGear.ClothingMetadata.Category == Unity.ClothingGearCategory.Other;
+                   clothingGear.ClothingMetadata.Category == category;
         }
 
         /// <summary>
-        /// Determines whether or not <see cref="clothingGearObject"/> is a custom mesh that is layerable and in the Other category.
+        /// Determines whether or not <see cref="clothingGearObject"/> is a custom mesh that is layerable and in the specified category.
         /// </summary>
         /// <param name="clothingGearObject">The <see cref="ClothingGearObjet"/> to evaluate.</param>
+        /// <param name="category">The category to evaluate.</param>
         /// <returns>True if layerable and in category Other, false otherwise.</returns>
-        static bool IsLayerableOtherCategory(this ClothingGearObjet clothingGearObject)
+        static bool IsLayerableCategory(this ClothingGearObjet clothingGearObject, Unity.ClothingGearCategory category)
         {
-            return IsLayerable(clothingGearObject) && IsOtherCategory(clothingGearObject);
+            return IsLayerable(clothingGearObject) && IsCategory(clothingGearObject, category);
         }
     }
 }
