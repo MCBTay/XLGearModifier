@@ -68,11 +68,18 @@ namespace XLGearModifier
 
                 var creatorName = mesh?.ClothingMetadata?.CreatorName ?? "N/A";
 
-				whatsEquipped.AddToList(clothingGear.type, clothingGear.name, creatorName, sprite);
-			}
+				var lineItem = whatsEquipped.AddToList(clothingGear.type, clothingGear.name, creatorName, sprite);
+				lineItem.GetComponent<XLGMWhatsEquippedLineItem>().equippedLineClicked.AddListener((type) => EquippedLineClicked(mesh));
+            }
 		}
 
-		private string GetSpriteName(CharacterGearTemplate template)
+        private void EquippedLineClicked(string type)
+        {
+            // TODO: Implement some functionality here when an item is selected
+			// Initial thought is try and jump to this item in the list for easy equip/unequip
+        }
+
+        private string GetSpriteName(CharacterGearTemplate template)
         {
 			if (GearManager.Instance.CustomGear.ContainsKey(template.id) &&
                 GearManager.Instance.CustomGear[template.id] is ClothingGear customGear)
