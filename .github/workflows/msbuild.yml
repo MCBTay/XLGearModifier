@@ -60,6 +60,8 @@ jobs:
       with:
         fetch-depth: 0
 
+    - name: Unity - Builder
+      uses: game-ci/unity-builder@v2.0.4
         
 
     # - name: Add MSBuild to PATH
