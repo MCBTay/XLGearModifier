@@ -79,7 +79,7 @@ jobs:
         targetPlatform: StandaloneWindows
         projectPath: ./XLGearModifier.Gear/
         buildMethod: Assets.Editor.CIBuildScript.Build
-        customImage: 'unityci/editor:windows-2019.4.8f1-windows-mono-1'
+        customImage: 'unityci/editor:2018.4.8f1-windows-mono-1'
         
 
     # - name: Copy DLLs to Destinations
