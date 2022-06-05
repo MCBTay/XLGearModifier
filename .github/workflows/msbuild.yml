@@ -65,7 +65,7 @@ jobs:
     name: Build XLGearModifier.Unity & XLGearModifier.Unity.Editor
     runs-on: windows-latest
     needs: check-paths-changed
-    if: needs.check-paths-changed.outputs.unity_assemblies_changed == 'true'
+    if: needs.check-paths-changed.outputs.generate_unitypackage == 'true'
     
     steps:
     - uses: actions/checkout@v2
@@ -131,9 +131,9 @@ jobs:
     needs: [build-unity-assemblies, build-asset-bundles]
     if: |
       always() &&
-      (needs.check-paths-changed.outputs.unity_assemblies_changed == 'true' || 
+      (needs.check-paths-changed.outputs.generate_unitypackage == 'true' || 
       needs.check-paths-changed.outputs.build_asset_bundles == 'true' || 
-      needs.check-paths-changed.outputs.mod_changed == 'true')
+      needs.check-paths-changed.outputs.build_mod == 'true')
 
     steps:
     - uses: actions/checkout@v2
