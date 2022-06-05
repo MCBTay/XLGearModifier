@@ -39,8 +39,8 @@ jobs:
         with:
           filters: |
             unity_assemblies_changed:
-              - 'XLGearModifier.Gear/Assets/Scripts/**'
-              - 'XLGearModifier.Gear/Assets/Editor/**'
+              - './XLGearModifier.Gear/Assets/Scripts/**'
+              - './XLGearModifier.Gear/Assets/Editor/**'
 
       - name: Asset Bundle Paths Changed Filter
         id: asset-bundle-changes
@@ -48,9 +48,9 @@ jobs:
         with:
           filters: |
             asset_bundles_changed:
-              - 'XLGearModifier.Gear/Assets/Gear Done/**'
-              - 'XLGearModifier.Gear/Assets/Gear Temp/**'
-              - 'XLGearModifier.Gear/Assets/UserInterface/**'
+              - './XLGearModifier.Gear/Assets/Gear Done/**'
+              - './XLGearModifier.Gear/Assets/Gear Temp/**'
+              - './XLGearModifier.Gear/Assets/UserInterface/**'
 
       - name: Mod Paths Changed Filter
         id: mod-changes
@@ -58,7 +58,7 @@ jobs:
         with:
           filters: |
             mod_changed:
-              - 'XLGearModifier/**'
+              - './XLGearModifier/**'
     
 
   build-unity-assemblies:
