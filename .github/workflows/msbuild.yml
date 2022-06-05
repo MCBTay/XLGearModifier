@@ -76,7 +76,7 @@ jobs:
       uses: game-ci/unity-builder@v2.0.4
       with:
         unityVersion: 2019.4.8f1
-        targetPlatform: StandaloneWindows64
+        targetPlatform: StandaloneWindows
         projectPath: ./XLGearModifier.Gear/
 
     - name: Copy DLLs to Destinations
