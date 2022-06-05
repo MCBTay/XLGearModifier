@@ -78,6 +78,7 @@ jobs:
         unityVersion: 2019.4.8f1
         targetPlatform: StandaloneWindows
         projectPath: ./XLGearModifier.Gear/
+        buildMethod: Assets.Editor.CIBuildScript.Build
 
     - name: Copy DLLs to Destinations
       run: |
