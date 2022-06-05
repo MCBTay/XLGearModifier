@@ -8,6 +8,7 @@ namespace Assets.Editor
     [CanEditMultipleObjects]
     public class MaterialControllerEditor : UnityEditor.Editor
     {
+        //test
         public override void OnInspectorGUI()
         {
             if (GUILayout.Button("Find Targets"))
