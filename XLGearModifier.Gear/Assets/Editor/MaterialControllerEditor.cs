@@ -4,6 +4,7 @@ using UnityEngine;
 
 namespace Assets.Editor
 {
+#if UNITY_EDITOR
     [CustomEditor(typeof(MaterialController), true)]
     [CanEditMultipleObjects]
     public class MaterialControllerEditor : UnityEditor.Editor
@@ -22,4 +23,5 @@ namespace Assets.Editor
             DrawDefaultInspector();
         }
     }
+#endif
 }

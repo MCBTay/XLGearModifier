@@ -2,8 +2,9 @@
 using UnityEditor.SceneManagement;
 using UnityEngine;
 
-namespace XLGearModifier.Unity
+namespace Assets.Editor
 {
+#if UNITY_EDITOR
     [CustomEditor(typeof(XLGMSkaterMetadata))]
     public class XLGMSkaterMetadataEditor : UnityEditor.Editor
     {
@@ -51,4 +52,5 @@ namespace XLGearModifier.Unity
             }
         }
     }
+#endif
 }

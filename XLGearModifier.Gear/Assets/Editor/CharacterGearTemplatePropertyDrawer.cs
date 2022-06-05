@@ -2,8 +2,9 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace XLGearModifier.Unity
+namespace Assets.Editor
 {
+#if UNITY_EDITOR
     [CustomPropertyDrawer(typeof(CharacterGearTemplate))]
     public class CharacterGearTemplatePropertyDrawer : PropertyDrawer
     {
@@ -32,4 +33,5 @@ namespace XLGearModifier.Unity
             EditorGUI.EndProperty();
         }
     }
+#endif
 }

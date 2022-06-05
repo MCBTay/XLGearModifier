@@ -4,8 +4,9 @@ using UnityEngine;
 using XLGearModifier.Unity;
 using ClothingGearCategory = XLGearModifier.Unity.ClothingGearCategory;
 
-namespace XLGearModifier.Assets.Editor
+namespace Assets.Editor
 {
+#if UNITY_EDITOR
     [CustomEditor(typeof(XLGMClothingGearMetadata))]
     public class XLGMClothingGearMetadataEditor : UnityEditor.Editor
     {
@@ -86,4 +87,5 @@ namespace XLGearModifier.Assets.Editor
             }
         }
     }
+#endif
 }
