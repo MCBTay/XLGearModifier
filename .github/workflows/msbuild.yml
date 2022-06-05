@@ -85,6 +85,7 @@ jobs:
     name: Build Asset Bundles
     runs-on: windows-latest
     needs: create-unity-package
+    if: always()
 
     steps:
     - uses: actions/checkout@v2
