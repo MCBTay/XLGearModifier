@@ -25,15 +25,15 @@ jobs:
     runs-on: ubuntu-latest
     
     outputs:
-      generate_unitypackage: ${{ steps.changes.outputs.unity_assemblies_changed }}
-      build_asset_bundles: ${{ steps.changes.outputs.asset_bundles_changed }}
+      generate_unitypackage: ${{ steps.unity-assembly-changes.outputs.unity_assemblies_changed }}
+      build_asset_bundles: ${{ steps.asset-bundle-changes.outputs.asset_bundles_changed }}
 
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
 
       - name: Unity Assembly Paths Changed Filter
-        id: changes
+        id: unity-assembly-changes
         uses: dorny/paths-filter@v2.10.2
         with:
           filters: |
@@ -42,7 +42,7 @@ jobs:
               - 'XLGearModifier.Gear/Assets/Editor/**'
 
       - name: Asset Bundle Paths Changed Filter
-        id: changes
+        id: asset-bundle-changes
         uses: dorny/paths-filter@v2.10.2
         with:
           filters: |
