@@ -10,7 +10,7 @@ env:
   # Path to the solution file relative to the root of the project.
   SOLUTION_FILE_PATH: .
 
-  UNITY_SOLUTION_FILE_PATH: ./XLGearModifier.Gear/XLGearModifier.Gear.sln
+  UNITY_SOLUTION_FILE_PATH: ../XLGearModifier.Gear/XLGearModifier.Gear.sln
 
   # Configuration type to build.
   # You can convert this to a build matrix if you need coverage of multiple configuration types.
