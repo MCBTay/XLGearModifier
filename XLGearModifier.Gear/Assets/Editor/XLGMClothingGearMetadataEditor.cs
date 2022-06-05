@@ -1,5 +1,4 @@
-﻿using SkaterXL.Gear;
-using UnityEditor;
+﻿using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
 using XLGearModifier.Unity;
