@@ -10,6 +10,8 @@ env:
   # Path to the solution file relative to the root of the project.
   SOLUTION_FILE_PATH: .
 
+  UNITY_SOLUTION_FILE_PATH: ./XLGearModifier.Gear/
+
   # Configuration type to build.
   # You can convert this to a build matrix if you need coverage of multiple configuration types.
   # https://docs.github.com/actions/learn-github-actions/managing-complex-workflows#using-a-build-matrix
@@ -26,6 +28,29 @@ jobs:
     - uses: actions/checkout@v2
       with:
         fetch-depth: 0
+
+    - name: Paths Changes Filter
+      id: changes
+      uses: dorny/paths-filter@v2.10.2
+      with:
+        # GitHub Access Token
+        token: # optional, default is ${{ github.token }}
+        # Relative path under $GITHUB_WORKSPACE where the repository was checked out.
+        working-directory: # optional
+
+        # Path to the configuration file or YAML string with filters definition
+        filters: |
+          src:
+            - 'XLGearModifier.Gear/Assets/Scripts/**'
+            - 'XLGearModifier.Gear/Assets/Editor/**'
+
+    - name: Build 
+      if: steps.changes.outputs.src == 'true'
+      working-directory: ${{env.GITHUB_WORKSPACE}}
+      shell: powershell
+      run: |
+        msbuild /m /p:Configuration=${{env.BUILD_CONFIGURATION}} ${{env.UNITY_SOLUTION_FILE_PATH}}
+
 
   create-unity-package:
     name: Create Unity Package
@@ -69,7 +94,7 @@ jobs:
   build:
     name: Build & Analyze Mod
     runs-on: windows-latest
-    needs: build-asset-bundles
+    needs: [build-unity-assemblies, build-asset-bundles]
 
     steps:
     - uses: actions/checkout@v2
