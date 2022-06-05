@@ -14,20 +14,38 @@ env:
   # You can convert this to a build matrix if you need coverage of multiple configuration types.
   # https://docs.github.com/actions/learn-github-actions/managing-complex-workflows#using-a-build-matrix
   BUILD_CONFIGURATION: Release
+  
+  package_path: "~/XLGearModifier_SDK.2.0.0.unitypackage"
 
 jobs:
-  build:
+  build-unity-assemblies:
+    name: Build XLGearModifier.Unity & XLGearModifier.Unity.Editor
+    runs-on: windows-latest
+    
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+        
+  build-asset-bundles:
+    name: Build Asset Bundles
     runs-on: windows-latest
 
     steps:
     - uses: actions/checkout@v2
       with:
-        fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
-        
-    - name: Setup .NET Core SDK
-      uses: actions/setup-dotnet@v1.8.2
+        fetch-depth: 0
+    
+
+  build:
+    name: Build & Analyze Mod
+    runs-on: windows-latest
+    needs: [build-unity-assemblies, build-asset-bundles]
+
+    steps:
+    - uses: actions/checkout@v2
       with:
-        dotnet-version: 5.0.x
+        fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
         
     - name: Add MSBuild to PATH
       uses: microsoft/setup-msbuild@v1
@@ -83,3 +101,31 @@ jobs:
     #    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
     #    SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
     #  run: .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
+    
+  create-unity-package:
+    name: Create Unity Package
+    runs-on: ubuntu-latest
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v3
+      - uses: actions/setup-dotnet@v2
+    
+      # Install the packager. We are putting it outside the working directory so we dont include it by mistake
+      - name: Install Unity Packager
+        run: |
+          git clone https://github.com/Lachee/Unity-Package-Exporter.git "../tools/unity-package-exporter"
+          dotnet publish -c Release -o ../tools "../tools/unity-package-exporter/UnityPackageExporter"
+          
+      # Pack the assets
+      - name: Package Project
+        run: |
+          echo "Creating package ${{env.package_path}}"
+          dotnet ../tools/UnityPackageExporter.dll --input ./XLGearModifier.Gear/Aseets/XLGM_SDK/ --output ${{env.package_path}}
+          
+      # Upload artifact
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v3.0.0
+        with:
+          name: XLGearModifier_SDK.2.0.0.unitypackage
+          path: ${{env.package_path}}   
+      
