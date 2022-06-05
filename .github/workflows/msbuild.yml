@@ -62,6 +62,7 @@ jobs:
 
     - name: Unity - Builder
       uses: game-ci/unity-builder@v2.0.4
+      projectPath: ./XLGearModifier.Gear/
         
 
     # - name: Add MSBuild to PATH
