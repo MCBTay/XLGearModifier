@@ -73,7 +73,8 @@ jobs:
       uses: game-ci/unity-builder@v2.0.4
       with:
         unityVersion: 2019.4.8f1
-        targetPlatform: StandaloneWindows64  
+        targetPlatform: StandaloneWindows64
+        projectPath: ./XLGearModifier.Gear/  
 
     # - name: Add MSBuild to PATH
     #   uses: microsoft/setup-msbuild@v1
