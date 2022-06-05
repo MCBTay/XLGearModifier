@@ -60,11 +60,22 @@ jobs:
         fetch-depth: 0
 
     - name: Build 
-      if: steps.changes.outputs.files_changed == 'true'
       working-directory: ${{env.GITHUB_WORKSPACE}}
       shell: powershell
       run: |
         msbuild /m /p:Configuration=${{env.BUILD_CONFIGURATION}} ${{env.UNITY_SOLUTION_FILE_PATH}}
+
+    - name: Copy DLLs to Destinations
+      run: |
+        Copy-Item "XLGearModifier.Gear/Temp/bin/${{env.BUILD_CONFIGURATION}}/XLGearModifier.Unity.dll" -Destination "XLGearModifier/References/XLGearModifier.Unity.dll"
+        Copy-Item "XLGearModifier.Gear/Temp/bin/${{env.BUILD_CONFIGURATION}}/XLGearModifier.Unity.dll" -Destination "XLGearModifier.Gear/Assets/XLGM_SDK/XLGearModifier.Unity.dll"
+        Copy-Item "XLGearModifier.Gear/Temp/bin/${{env.BUILD_CONFIGURATION}}/XLGearModifier.Unity.Editor.dll" -Destination "XLGearModifier.Gear/Assets/XLGM_SDK/XLGearModifier.Unity.Editor.dll"
+
+    - name: Commit New DLLs
+      run: |
+        git config user.name "GitHub Actions"
+        git config user.email "<>"
+        git commit -m "Updating Unity assemblies" ./XLGearModifier/References/XLGearModifier.Unity.dll ./XLGearModifier.Gear/Assets/XLGM_SDK/XLGearModifier.Unity.dll ./XLGearModifier.Gear/Assets/XLGM_SDK/XLGearModifier.Unity.Editor.dll 
 
     # Copy DLL(s) into References folder and into Unity proj
     # Commit them?
