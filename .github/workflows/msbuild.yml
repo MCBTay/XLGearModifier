@@ -58,12 +58,19 @@ jobs:
     steps:
     - uses: actions/checkout@v2
       with:
+        lfs: true
         fetch-depth: 0
+
+    # Cache
+    - uses: actions/cache@v2
+      with:
+        path: Library
+        key: Library
 
     - name: Unity - Builder
       uses: game-ci/unity-builder@v2.0.4
-      projectPath: ./XLGearModifier.Gear/
-        
+      with:
+        unityVersion: 2019.4.8f1        
 
     # - name: Add MSBuild to PATH
     #   uses: microsoft/setup-msbuild@v1
