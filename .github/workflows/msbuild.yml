@@ -60,26 +60,28 @@ jobs:
       with:
         fetch-depth: 0
 
-    - name: Add MSBuild to PATH
-      uses: microsoft/setup-msbuild@v1
+        
 
-    - name: Build 
-      working-directory: ${{env.GITHUB_WORKSPACE}}
-      shell: powershell
-      run: |
-        msbuild /m /p:Configuration=${{env.BUILD_CONFIGURATION}} ${{env.UNITY_SOLUTION_FILE_PATH}}
+    # - name: Add MSBuild to PATH
+    #   uses: microsoft/setup-msbuild@v1
 
-    - name: Copy DLLs to Destinations
-      run: |
-        Copy-Item "XLGearModifier.Gear/Temp/bin/${{env.BUILD_CONFIGURATION}}/XLGearModifier.Unity.dll" -Destination "XLGearModifier/References/XLGearModifier.Unity.dll"
-        Copy-Item "XLGearModifier.Gear/Temp/bin/${{env.BUILD_CONFIGURATION}}/XLGearModifier.Unity.dll" -Destination "XLGearModifier.Gear/Assets/XLGM_SDK/XLGearModifier.Unity.dll"
-        Copy-Item "XLGearModifier.Gear/Temp/bin/${{env.BUILD_CONFIGURATION}}/XLGearModifier.Unity.Editor.dll" -Destination "XLGearModifier.Gear/Assets/XLGM_SDK/XLGearModifier.Unity.Editor.dll"
+    # - name: Build 
+    #   working-directory: ${{env.GITHUB_WORKSPACE}}
+    #   shell: powershell
+    #   run: |
+    #     msbuild /m /p:Configuration=${{env.BUILD_CONFIGURATION}} ${{env.UNITY_SOLUTION_FILE_PATH}}
 
-    - name: Commit New DLLs
-      run: |
-        git config user.name "GitHub Actions"
-        git config user.email "<>"
-        git commit -m "Updating Unity assemblies" ./XLGearModifier/References/XLGearModifier.Unity.dll ./XLGearModifier.Gear/Assets/XLGM_SDK/XLGearModifier.Unity.dll ./XLGearModifier.Gear/Assets/XLGM_SDK/XLGearModifier.Unity.Editor.dll 
+    # - name: Copy DLLs to Destinations
+    #   run: |
+    #     Copy-Item "XLGearModifier.Gear/Temp/bin/${{env.BUILD_CONFIGURATION}}/XLGearModifier.Unity.dll" -Destination "XLGearModifier/References/XLGearModifier.Unity.dll"
+    #     Copy-Item "XLGearModifier.Gear/Temp/bin/${{env.BUILD_CONFIGURATION}}/XLGearModifier.Unity.dll" -Destination "XLGearModifier.Gear/Assets/XLGM_SDK/XLGearModifier.Unity.dll"
+    #     Copy-Item "XLGearModifier.Gear/Temp/bin/${{env.BUILD_CONFIGURATION}}/XLGearModifier.Unity.Editor.dll" -Destination "XLGearModifier.Gear/Assets/XLGM_SDK/XLGearModifier.Unity.Editor.dll"
+
+    # - name: Commit New DLLs
+    #   run: |
+    #     git config user.name "GitHub Actions"
+    #     git config user.email "<>"
+    #     git commit -m "Updating Unity assemblies" ./XLGearModifier/References/XLGearModifier.Unity.dll ./XLGearModifier.Gear/Assets/XLGM_SDK/XLGearModifier.Unity.dll ./XLGearModifier.Gear/Assets/XLGM_SDK/XLGearModifier.Unity.Editor.dll 
 
     # Copy DLL(s) into References folder and into Unity proj
     # Commit them?
@@ -127,63 +129,7 @@ jobs:
 
     - name: Unity - Builder
       uses: game-ci/unity-builder@v2.0.4
-      with:
-        # Platform that the build should target.
-        targetPlatform: # default is 
-        # Version of unity to use for building the project. Use "auto" to get from your ProjectSettings/ProjectVersion.txt
-        unityVersion: # optional, default is auto
-        # Specific docker image that should be used for building the project
-        customImage: # optional, default is 
-        # Relative path to the project to be built.
-        projectPath: # optional, default is 
-        # Name of the build.
-        buildName: # optional, default is 
-        # Path where the builds should be stored.
-        buildsPath: # optional, default is 
-        # Path to a Namespace.Class.StaticMethod to run to perform the build.
-        buildMethod: # optional, default is 
-        # Custom parameters to configure the build.
-        customParameters: # optional, default is 
-        # The versioning scheme to use when building the project
-        versioning: # optional, default is Semantic
-        # The version, when used with the "Custom" versioning scheme
-        version: # optional, default is 
-        # Github private token to pull from github
-        gitPrivateToken: # optional, default is 
-        # User and optionally group (user or user:group or uid:gid) to give ownership of the resulting build artifacts
-        chownFilesTo: # optional, default is 
-        # Allows the branch of the build to be dirty, and still generate the build.
-        allowDirtyBuild: # optional, default is 
-        # run a post build job in yaml format with the keys image, secrets (name, value object array), command string
-        postBuildSteps: # optional, default is 
-        # Run a pre build job after the repository setup but before the build job (in yaml format with the keys image, secrets (name, value object array), command line string)
-        preBuildSteps: # optional, default is 
-        # Specify custom commands and trigger hooks (injects commands into jobs)
-        customJobHooks: # optional, default is 
-        # Run a custom job instead of the standard build automation for cloud runner (in yaml format with the keys image, secrets (name, value object array), command line string)
-        customJob: # optional, default is 
-        # The Cloud Formation stack name that must be setup before using this option.
-        awsBaseStackName: # optional, default is game-ci
-        # Either local, k8s or aws can be used to run builds on a remote cluster. Additional parameters must be configured.
-        cloudRunnerCluster: # optional, default is local
-        # Amount of CPU time to assign the remote build container
-        cloudRunnerCpu: # optional, default is 
-        # Amount of memory to assign the remote build container
-        cloudRunnerMemory: # optional, default is 
-        # A command run every time a file is pushed to cache, formatted with input file path and remote cache path
-        cachePushOverrideCommand: # optional, default is 
-        # A command run every time before a file is being pulled from cache, formatted with request cache file and destination path
-        cachePullOverrideCommand: # optional, default is 
-        # Comma separated list of input value names to read from "input override command"
-        readInputFromOverrideList: # optional, default is 
-        # Extend game ci by specifying a command to execute to pull input from external source e.g cloud provider secret managers
-        readInputOverrideCommand: # optional, default is 
-        # Cache key to indicate bucket for cache
-        cacheKey: # optional, default is 
-        # Use to specify a way to check depdency services health to enable resilient self-starting jobs
-        checkDependencyHealthOverride: # optional, default is 
-        # Use to specify a way to start depdency services health to enable resilient self-starting jobs
-        startDependenciesOverride: # optional, default is 
+      
 
     # copy asset bundles to mod folder, commit them
     
