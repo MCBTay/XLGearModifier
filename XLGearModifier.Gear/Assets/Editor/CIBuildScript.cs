@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using UnityEditor;
 using UnityEditor.Build.Reporting;
 
@@ -92,8 +90,7 @@ namespace Assets.Editor
                 // Parse optional value
                 bool flagHasValue = next < args.Length && !args[next].StartsWith("-");
                 string value = flagHasValue ? args[next].TrimStart('-') : "";
-                bool secret = Secrets.Contains(flag);
-                string displayValue = secret ? "*HIDDEN*" : "\"" + value + "\"";
+                string displayValue = "\"" + value + "\"";
 
                 // Assign
                 Console.WriteLine($"Found flag \"{flag}\" with value {displayValue}.");
@@ -103,8 +100,7 @@ namespace Assets.Editor
 
         private static void Build(BuildTarget buildTarget, string filePath)
         {
-            BuildPipeline.BuildAssetBundles(filePath, BuildAssetBundleOptions.ChunkBasedCompression, BuildTarget.StandaloneWindows);
-
+            var manifest = BuildPipeline.BuildAssetBundles(filePath, BuildAssetBundleOptions.ChunkBasedCompression, buildTarget);
             //string[] scenes = EditorBuildSettings.scenes.Where(scene => scene.enabled).Select(s => s.path).ToArray();
             //var buildPlayerOptions = new BuildPlayerOptions
             //{
