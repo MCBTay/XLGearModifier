@@ -20,26 +20,38 @@ env:
   package_path: "~/XLGearModifier_SDK.2.0.0.unitypackage"
 
 jobs:
+  check-paths-changed:
+    name: Check Paths Changed
+    runs-on: ubuntu-latest
+
+  - name: Paths Changed Filter
+      id: changes
+      uses: dorny/paths-filter@v2.10.2
+
+      outputs:
+        generate_unitypackage: ${{ steps.changes.outputs.unity_assemblies_changed }}
+        build_asset_bundles: ${{ steps.changes.outputs.asset_bundles_changed }}
+
+      with:
+        filters: |
+          unity_assemblies_changed:
+            - 'XLGearModifier.Gear/Assets/Scripts/**'
+            - 'XLGearModifier.Gear/Assets/Editor/**'
+          asset_bundles_changed:
+            - 'XLGearModifier.Gear/Assets/Gear Done/**'
+            - 'XLGearModifier.Gear/Assets/Gear Temp/**'
+            - 'XLGearModifier.Gear/Assets/UserInterface/**'
+
   build-unity-assemblies:
     name: Build XLGearModifier.Unity & XLGearModifier.Unity.Editor
     runs-on: windows-latest
-
-    outputs:
-      generate_unitypackage: ${{ steps.changes.outputs.files_changed }}
+    needs: check-paths-changed
+    if: needs.check-paths-changed.outputs.unity_assemblies_changed == 'true'
     
     steps:
     - uses: actions/checkout@v2
       with:
         fetch-depth: 0
-
-    - name: Paths Changes Filter
-      id: changes
-      uses: dorny/paths-filter@v2.10.2
-      with:
-        filters: |
-          files_changed:
-            - 'XLGearModifier.Gear/Assets/Scripts/**'
-            - 'XLGearModifier.Gear/Assets/Editor/**'
 
     - name: Build 
       if: steps.changes.outputs.files_changed == 'true'
@@ -52,10 +64,10 @@ jobs:
     # Commit them?
 
   create-unity-package:
-    name: Create Unity Package
+    name: Create SDK Unity Package
     runs-on: ubuntu-latest
     needs: build-unity-assemblies
-    if: needs.build-unity-assemblies.outputs.generate_unitypackage == 'true'
+    if: needs.check-paths-changed.outputs.unity_assemblies_changed == 'true'
 
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
@@ -84,12 +96,15 @@ jobs:
   build-asset-bundles:
     name: Build Asset Bundles
     runs-on: windows-latest
-    needs: build-unity-assemblies
+    needs: check-paths-changed
+    if: needs.check-paths-changed.outputs.build_asset_bundles == 'true'
 
     steps:
     - uses: actions/checkout@v2
       with:
         fetch-depth: 0
+
+    # copy asset bundles to mod folder, commit them
     
   build:
     name: Build & Analyze Mod
