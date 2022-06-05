@@ -27,11 +27,6 @@ jobs:
   - name: Paths Changed Filter
       id: changes
       uses: dorny/paths-filter@v2.10.2
-
-      outputs:
-        generate_unitypackage: ${{ steps.changes.outputs.unity_assemblies_changed }}
-        build_asset_bundles: ${{ steps.changes.outputs.asset_bundles_changed }}
-
       with:
         filters: |
           unity_assemblies_changed:
@@ -41,7 +36,10 @@ jobs:
             - 'XLGearModifier.Gear/Assets/Gear Done/**'
             - 'XLGearModifier.Gear/Assets/Gear Temp/**'
             - 'XLGearModifier.Gear/Assets/UserInterface/**'
-
+      outputs:
+        generate_unitypackage: ${{ steps.changes.outputs.unity_assemblies_changed }}
+        build_asset_bundles: ${{ steps.changes.outputs.asset_bundles_changed }}
+        
   build-unity-assemblies:
     name: Build XLGearModifier.Unity & XLGearModifier.Unity.Editor
     runs-on: windows-latest
