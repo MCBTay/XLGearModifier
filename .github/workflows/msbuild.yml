@@ -59,7 +59,7 @@ jobs:
   build-asset-bundles:
     name: Build Asset Bundles
     runs-on: windows-latest
-    needs: create-unity-packages
+    needs: create-unity-package
 
     steps:
     - uses: actions/checkout@v2
