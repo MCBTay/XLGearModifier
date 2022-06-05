@@ -51,11 +51,13 @@ jobs:
             mod_changed:
               - './XLGearModifier/**'
 
-  build-unity-assemblies:
-    name: Build XLGearModifier.Unity & XLGearModifier.Unity.Editor
+  build-unity-project:
+    name: Build Unity Project
     runs-on: ubuntu-latest
     needs: check-paths-changed
-    if: needs.check-paths-changed.outputs.generate_unitypackage == 'true'
+    if: |
+      needs.check-paths-changed.outputs.generate_unitypackage == 'true' ||
+      needs.check-paths-changed.outputs.build_asset_bundles == 'true'
     
     steps:
     - uses: actions/checkout@v2
@@ -65,6 +67,7 @@ jobs:
 
     # Cache
     - uses: actions/cache@v2
+      name: Cache Library
       with:
         path: XLGearModifier.Gear/Library
         key: Library
@@ -74,22 +77,13 @@ jobs:
       with:
         unityVersion: 2019.4.8f1
         targetPlatform: StandaloneWindows64
-        projectPath: ./XLGearModifier.Gear/  
+        projectPath: ./XLGearModifier.Gear/
 
-    # - name: Add MSBuild to PATH
-    #   uses: microsoft/setup-msbuild@v1
-
-    # - name: Build 
-    #   working-directory: ${{env.GITHUB_WORKSPACE}}
-    #   shell: powershell
-    #   run: |
-    #     msbuild /m /p:Configuration=${{env.BUILD_CONFIGURATION}} ${{env.UNITY_SOLUTION_FILE_PATH}}
-
-    # - name: Copy DLLs to Destinations
-    #   run: |
-    #     Copy-Item "XLGearModifier.Gear/Temp/bin/${{env.BUILD_CONFIGURATION}}/XLGearModifier.Unity.dll" -Destination "XLGearModifier/References/XLGearModifier.Unity.dll"
-    #     Copy-Item "XLGearModifier.Gear/Temp/bin/${{env.BUILD_CONFIGURATION}}/XLGearModifier.Unity.dll" -Destination "XLGearModifier.Gear/Assets/XLGM_SDK/XLGearModifier.Unity.dll"
-    #     Copy-Item "XLGearModifier.Gear/Temp/bin/${{env.BUILD_CONFIGURATION}}/XLGearModifier.Unity.Editor.dll" -Destination "XLGearModifier.Gear/Assets/XLGM_SDK/XLGearModifier.Unity.Editor.dll"
+    - name: Copy DLLs to Destinations
+      run: |
+        Copy-Item "XLGearModifier.Gear/Temp/bin/${{env.BUILD_CONFIGURATION}}/XLGearModifier.Unity.dll" -Destination "XLGearModifier/References/XLGearModifier.Unity.dll"
+        Copy-Item "XLGearModifier.Gear/Temp/bin/${{env.BUILD_CONFIGURATION}}/XLGearModifier.Unity.dll" -Destination "XLGearModifier.Gear/Assets/XLGM_SDK/XLGearModifier.Unity.dll"
+        Copy-Item "XLGearModifier.Gear/Temp/bin/${{env.BUILD_CONFIGURATION}}/XLGearModifier.Unity.Editor.dll" -Destination "XLGearModifier.Gear/Assets/XLGM_SDK/XLGearModifier.Unity.Editor.dll"
 
     # - name: Commit New DLLs
     #   run: |
@@ -129,28 +123,11 @@ jobs:
         with:
           name: XLGearModifier_SDK.2.0.0.unitypackage
           path: ${{env.package_path}}   
-        
-  build-asset-bundles:
-    name: Build Asset Bundles
-    runs-on: ubuntu-latest
-    needs: build-unity-assemblies
-    if: needs.check-paths-changed.outputs.build_asset_bundles == 'true'
-
-    steps:
-    - uses: actions/checkout@v2
-      with:
-        fetch-depth: 0
-
-    - name: Unity - Builder
-      uses: game-ci/unity-builder@v2.0.4
-      
-
-    # copy asset bundles to mod folder, commit them
     
   build:
     name: Build & Analyze Mod
     runs-on: windows-latest
-    needs: [build-unity-assemblies, build-asset-bundles]
+    needs: build-unity-project
     if: |
       always() &&
       (needs.check-paths-changed.outputs.generate_unitypackage == 'true' || 
