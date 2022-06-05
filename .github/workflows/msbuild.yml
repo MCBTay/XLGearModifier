@@ -106,7 +106,7 @@ jobs:
   build-asset-bundles:
     name: Build Asset Bundles
     runs-on: windows-latest
-    needs: check-paths-changed
+    needs: build-unity-assemblies
     if: needs.check-paths-changed.outputs.build_asset_bundles == 'true'
 
     steps:
