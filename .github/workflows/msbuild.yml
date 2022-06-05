@@ -16,6 +16,7 @@ env:
   # You can convert this to a build matrix if you need coverage of multiple configuration types.
   # https://docs.github.com/actions/learn-github-actions/managing-complex-workflows#using-a-build-matrix
   BUILD_CONFIGURATION: Release
+  UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
   
   package_path: "~/XLGearModifier_SDK.2.0.0.unitypackage"
 
@@ -115,7 +116,7 @@ jobs:
         
   build-asset-bundles:
     name: Build Asset Bundles
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
     needs: build-unity-assemblies
     if: needs.check-paths-changed.outputs.build_asset_bundles == 'true'
 
@@ -123,6 +124,66 @@ jobs:
     - uses: actions/checkout@v2
       with:
         fetch-depth: 0
+
+    - name: Unity - Builder
+      uses: game-ci/unity-builder@v2.0.4
+      with:
+        # Platform that the build should target.
+        targetPlatform: # default is 
+        # Version of unity to use for building the project. Use "auto" to get from your ProjectSettings/ProjectVersion.txt
+        unityVersion: # optional, default is auto
+        # Specific docker image that should be used for building the project
+        customImage: # optional, default is 
+        # Relative path to the project to be built.
+        projectPath: # optional, default is 
+        # Name of the build.
+        buildName: # optional, default is 
+        # Path where the builds should be stored.
+        buildsPath: # optional, default is 
+        # Path to a Namespace.Class.StaticMethod to run to perform the build.
+        buildMethod: # optional, default is 
+        # Custom parameters to configure the build.
+        customParameters: # optional, default is 
+        # The versioning scheme to use when building the project
+        versioning: # optional, default is Semantic
+        # The version, when used with the "Custom" versioning scheme
+        version: # optional, default is 
+        # Github private token to pull from github
+        gitPrivateToken: # optional, default is 
+        # User and optionally group (user or user:group or uid:gid) to give ownership of the resulting build artifacts
+        chownFilesTo: # optional, default is 
+        # Allows the branch of the build to be dirty, and still generate the build.
+        allowDirtyBuild: # optional, default is 
+        # run a post build job in yaml format with the keys image, secrets (name, value object array), command string
+        postBuildSteps: # optional, default is 
+        # Run a pre build job after the repository setup but before the build job (in yaml format with the keys image, secrets (name, value object array), command line string)
+        preBuildSteps: # optional, default is 
+        # Specify custom commands and trigger hooks (injects commands into jobs)
+        customJobHooks: # optional, default is 
+        # Run a custom job instead of the standard build automation for cloud runner (in yaml format with the keys image, secrets (name, value object array), command line string)
+        customJob: # optional, default is 
+        # The Cloud Formation stack name that must be setup before using this option.
+        awsBaseStackName: # optional, default is game-ci
+        # Either local, k8s or aws can be used to run builds on a remote cluster. Additional parameters must be configured.
+        cloudRunnerCluster: # optional, default is local
+        # Amount of CPU time to assign the remote build container
+        cloudRunnerCpu: # optional, default is 
+        # Amount of memory to assign the remote build container
+        cloudRunnerMemory: # optional, default is 
+        # A command run every time a file is pushed to cache, formatted with input file path and remote cache path
+        cachePushOverrideCommand: # optional, default is 
+        # A command run every time before a file is being pulled from cache, formatted with request cache file and destination path
+        cachePullOverrideCommand: # optional, default is 
+        # Comma separated list of input value names to read from "input override command"
+        readInputFromOverrideList: # optional, default is 
+        # Extend game ci by specifying a command to execute to pull input from external source e.g cloud provider secret managers
+        readInputOverrideCommand: # optional, default is 
+        # Cache key to indicate bucket for cache
+        cacheKey: # optional, default is 
+        # Use to specify a way to check depdency services health to enable resilient self-starting jobs
+        checkDependencyHealthOverride: # optional, default is 
+        # Use to specify a way to start depdency services health to enable resilient self-starting jobs
+        startDependenciesOverride: # optional, default is 
 
     # copy asset bundles to mod folder, commit them
     
