@@ -100,7 +100,15 @@ namespace Assets.Editor
 
         private static void Build(BuildTarget buildTarget, string filePath)
         {
+            Console.WriteLine($"Building asset bundles in {filePath}{Eol}");
+
             var manifest = BuildPipeline.BuildAssetBundles(filePath, BuildAssetBundleOptions.ChunkBasedCompression, buildTarget);
+            
+            Console.WriteLine($"Built {manifest.GetAllAssetBundles().Length} asset bundles:{Eol}");
+            foreach (var bundle in manifest.GetAllAssetBundles())
+            {
+                Console.WriteLine(bundle + Eol);
+            }
             //string[] scenes = EditorBuildSettings.scenes.Where(scene => scene.enabled).Select(s => s.path).ToArray();
             //var buildPlayerOptions = new BuildPlayerOptions
             //{

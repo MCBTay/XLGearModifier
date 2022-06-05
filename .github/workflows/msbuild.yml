@@ -53,7 +53,7 @@ jobs:
 
   build-unity-project:
     name: Build Unity Project
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     needs: check-paths-changed
     if: |
       needs.check-paths-changed.outputs.generate_unitypackage == 'true' ||
@@ -80,11 +80,11 @@ jobs:
         projectPath: ./XLGearModifier.Gear/
         buildMethod: Assets.Editor.CIBuildScript.Build
 
-    - name: Copy DLLs to Destinations
-      run: |
-        Copy-Item "XLGearModifier.Gear/Temp/bin/${{env.BUILD_CONFIGURATION}}/XLGearModifier.Unity.dll" -Destination "XLGearModifier/References/XLGearModifier.Unity.dll"
-        Copy-Item "XLGearModifier.Gear/Temp/bin/${{env.BUILD_CONFIGURATION}}/XLGearModifier.Unity.dll" -Destination "XLGearModifier.Gear/Assets/XLGM_SDK/XLGearModifier.Unity.dll"
-        Copy-Item "XLGearModifier.Gear/Temp/bin/${{env.BUILD_CONFIGURATION}}/XLGearModifier.Unity.Editor.dll" -Destination "XLGearModifier.Gear/Assets/XLGM_SDK/XLGearModifier.Unity.Editor.dll"
+    # - name: Copy DLLs to Destinations
+    #   run: |
+    #     Copy-Item "XLGearModifier.Gear/Temp/bin/${{env.BUILD_CONFIGURATION}}/XLGearModifier.Unity.dll" -Destination "XLGearModifier/References/XLGearModifier.Unity.dll"
+    #     Copy-Item "XLGearModifier.Gear/Temp/bin/${{env.BUILD_CONFIGURATION}}/XLGearModifier.Unity.dll" -Destination "XLGearModifier.Gear/Assets/XLGM_SDK/XLGearModifier.Unity.dll"
+    #     Copy-Item "XLGearModifier.Gear/Temp/bin/${{env.BUILD_CONFIGURATION}}/XLGearModifier.Unity.Editor.dll" -Destination "XLGearModifier.Gear/Assets/XLGM_SDK/XLGearModifier.Unity.Editor.dll"
 
     # - name: Commit New DLLs
     #   run: |
