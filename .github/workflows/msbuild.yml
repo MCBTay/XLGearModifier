@@ -129,7 +129,11 @@ jobs:
     name: Build & Analyze Mod
     runs-on: windows-latest
     needs: [build-unity-assemblies, build-asset-bundles]
-    if: needs.check-paths-changed.outputs.unity_assemblies_changed == 'true' || needs.check-paths-changed.outputs.build_asset_bundles == 'true' || needs.check-paths-changed.outputs.mod_changed == 'true'
+    if: |
+      always() &&
+      (needs.check-paths-changed.outputs.unity_assemblies_changed == 'true' || 
+      needs.check-paths-changed.outputs.build_asset_bundles == 'true' || 
+      needs.check-paths-changed.outputs.mod_changed == 'true')
 
     steps:
     - uses: actions/checkout@v2
