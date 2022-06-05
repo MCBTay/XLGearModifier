@@ -27,6 +27,7 @@ jobs:
     outputs:
       generate_unitypackage: ${{ steps.unity-assembly-changes.outputs.unity_assemblies_changed }}
       build_asset_bundles: ${{ steps.asset-bundle-changes.outputs.asset_bundles_changed }}
+      build_mod: ${{ steps.mod-changes.outputs.mod_changed }}
 
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
@@ -50,6 +51,14 @@ jobs:
               - 'XLGearModifier.Gear/Assets/Gear Done/**'
               - 'XLGearModifier.Gear/Assets/Gear Temp/**'
               - 'XLGearModifier.Gear/Assets/UserInterface/**'
+
+      - name: Mod Paths Changed Filter
+        id: mod-changes
+        uses: dorny/paths-filter@v2.10.2
+        with:
+          filters: |
+            mod_changed:
+              - 'XLGearModifier/**'
     
 
   build-unity-assemblies:
@@ -120,7 +129,7 @@ jobs:
     name: Build & Analyze Mod
     runs-on: windows-latest
     needs: [build-unity-assemblies, build-asset-bundles]
-    if: always()
+    if: needs.check-paths-changed.outputs.unity_assemblies_changed == 'true' || needs.check-paths-changed.outputs.build_asset_bundles == 'true' || needs.check-paths-changed.outputs.mod_changed == 'true'
 
     steps:
     - uses: actions/checkout@v2
