@@ -118,7 +118,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssetBundleHelper.cs" />
-    <Compile Include="CustomGear\BoardGear.cs" />
     <Compile Include="CustomGear\ClothingGear.cs" />
     <Compile Include="CustomGear\CustomGearBase.cs" />
     <Compile Include="CustomGear\Skater.cs" />
@@ -160,7 +159,7 @@
     <EmbeddedResource Include="Assets\char female\female-hats" />
     <EmbeddedResource Include="Assets\char female\female-shoes" />
     <EmbeddedResource Include="Assets\char female\female-tops" />
-	<EmbeddedResource Include="Assets\char female\female-other" />
+    <EmbeddedResource Include="Assets\char female\female-other" />
     <EmbeddedResource Include="Assets\characters" />
     <None Include="Info.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

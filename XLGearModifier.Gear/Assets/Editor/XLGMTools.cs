@@ -3,13 +3,12 @@ using System.Linq;
 using UnityEditor;
 using UnityEngine;
 using XLGearModifier.Unity;
-using ClothingGearCategory = XLGearModifier.Unity.ClothingGearCategory;
 
 namespace XLGearModifier.Assets.Editor
 {
     public class XLGMTools : EditorWindow
     {
-        [MenuItem("Tools/XLGM Tools/Reserialize All Prefabs")]
+        [MenuItem("XLGM/Reserialize All Prefabs", false, 10)]
         private static void onClick_ReserializeAllPrefabs()
         {
             string[] guids = AssetDatabase.FindAssets("t:Prefab");
@@ -28,7 +27,7 @@ namespace XLGearModifier.Assets.Editor
             Debug.Log("Reserialize All Prefabs completed.");
         }
 
-        [MenuItem("Tools/XLGM Tools/Ensure Prefab Meshes Have Material Controllers")]
+        [MenuItem("XLGM/Ensure Prefab Meshes Have Material Controllers", false, 10)]
         private static void onClick_UpdateMaterialControllers()
         {
             string[] guids = AssetDatabase.FindAssets("t:Prefab");
@@ -65,7 +64,7 @@ namespace XLGearModifier.Assets.Editor
             Debug.Log("Ensure Prefab Meshes Have Material Controllers completed.");
         }
 
-        [MenuItem("Tools/XLGM Tools/Ensure Prefab Meshes Have Gear Prefab Controllers")]
+        [MenuItem("XLGM/Ensure Prefab Meshes Have Gear Prefab Controllers", false, 10)]
         private static void onClick_UpdateGearPrefabControllers()
         {
             string[] guids = AssetDatabase.FindAssets("t:Prefab");
@@ -102,7 +101,7 @@ namespace XLGearModifier.Assets.Editor
             Debug.Log("Ensure Prefab Meshes Have Gear Prefabs Controllers completed.");
         }
 
-        [MenuItem("Tools/XLGM Tools/Find Missing or Invalid Material Controllers")]
+        [MenuItem("XLGM/Find Missing or Invalid Material Controllers", false, 10)]
         private static void onClick_FindMissingMaterialControllers()
         {
             string[] guids = AssetDatabase.FindAssets("t:Prefab");
@@ -139,7 +138,7 @@ namespace XLGearModifier.Assets.Editor
             Debug.Log("Find Missing or Invalid Material Controllers completed.");
         }
 
-        [MenuItem("Tools/XLGM Tools/Find Missing or Invalid Gear Prefab Controllers")]
+        [MenuItem("XLGM/Find Missing or Invalid Gear Prefab Controllers", false, 10)]
         private static void onClick_FindMissingGearPrefabControllers()
         {
             string[] guids = AssetDatabase.FindAssets("t:Prefab");
