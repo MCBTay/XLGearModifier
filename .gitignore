@@ -21,3 +21,5 @@
 /packages
 /XLGearModifier.Unity.Editor/obj/Debug
 /XLGearModifier.Unity.Editor/bin/Debug
+/XLGearModifier.Unity.Editor/bin/Release
+/XLGearModifier.Unity.Editor/obj/Release
