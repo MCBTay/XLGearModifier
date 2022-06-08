@@ -19,3 +19,5 @@
 /packages/Newtonsoft.Json.13.0.1
 /XLGearModifier.Gear/AssetBundles/StandaloneWindows
 /packages
+/XLGearModifier.Unity.Editor/obj/Debug
+/XLGearModifier.Unity.Editor/bin/Debug
