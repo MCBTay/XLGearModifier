@@ -79,4 +79,9 @@
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>if "$(ConfigurationName)" == "Debug" ( 
+    copy /Y "$(TargetDir)XLGearModifier.Unity.Editor.dll" "$(SolutionDir)\XLGearModifier.Gear\Assets\XLGM_SDK\XLGearModifier.Unity.Editor.dll"
+)</PostBuildEvent>
+  </PropertyGroup>
 </Project>
