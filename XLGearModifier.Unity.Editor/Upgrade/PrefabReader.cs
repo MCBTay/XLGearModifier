@@ -13,7 +13,7 @@ namespace XLGearModifier.Unity.Editor.Upgrade
     {
         private static readonly Regex ScriptFileIdRegex = new Regex(@"\{fileID: (?<fileId>[\-0-9]+), guid: [a-z0-9]+, type: 3", RegexOptions.Compiled | RegexOptions.IgnoreCase);
         private static readonly Regex ScriptGuidRegex = new Regex(@"\{fileID: [\-0-9]+, guid: (?<guid>[a-z0-9]+), type: 3", RegexOptions.Compiled | RegexOptions.IgnoreCase);
-        private static readonly Regex ScriptPrefixRegex = new Regex(@"\'Prefix: (?<prefix>[a-z0-9]+)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+        private static readonly Regex ScriptPrefixRegex = new Regex(@"Prefix: (?<prefix>[a-zA-Z0-9]+)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
         private readonly ScriptMetadataService m_scriptMetadataService;
 
