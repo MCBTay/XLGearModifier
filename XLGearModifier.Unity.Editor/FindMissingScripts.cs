@@ -17,6 +17,7 @@ public class FindMissingScriptsEditor : EditorWindow
         EditorUtility.DisplayCancelableProgressBar("Searching Prefabs", "Found " + files.Length + " prefabs", 0.0f);
 
         var newGuid = AssetDatabase.AssetPathToGUID("Assets/XLGM_SDK/XLGearModifier.Unity.dll");
+        var newFileId = FileIdUtil.FromType(typeof(XLGMClothingGearMetadata));
 
         PrefabReader reader = new PrefabReader();
 
@@ -30,6 +31,7 @@ public class FindMissingScriptsEditor : EditorWindow
             if (prefabPath.Contains("EffectExamples")) continue;
             if (prefabPath.Contains("ExampleAssets")) continue;
             if (prefabPath.Contains("Assets//Shared")) continue;
+            if (prefabPath.Contains("TextMesh Pro")) continue;
 
             var metadata = reader.Read(prefabPath);
             metadata.Path = prefabPath;
@@ -40,7 +42,7 @@ public class FindMissingScriptsEditor : EditorWindow
             {
                 if (!string.IsNullOrEmpty(monoBehaviour.Script.FullName) && !monoBehaviour.Script.FullName.StartsWith("XLGearModifier")) continue;
 
-                ReplaceGuid(monoBehaviour.Script, newGuid, prefabPath);
+                ReplaceGuid(monoBehaviour.Script, newGuid, newFileId, prefabPath);
                 ReplacePrefix(monoBehaviour.Script, prefabPath);
             }
         }
@@ -59,9 +61,13 @@ public class FindMissingScriptsEditor : EditorWindow
         EditorUtility.ClearProgressBar();
     }
 
-    private static void ReplaceGuid(ScriptMetadata script, string newGuid, string fileName)
+    private static void ReplaceGuid(ScriptMetadata script, string newGuid, int newFileId, string fileName)
     {
-        Debug.Log($"Replacing guid from '{script.Guid}' to '{newGuid}' on file '{fileName}'...");
+        var log = $"On file {fileName}{Environment.NewLine}";
+        log += $"Replacing guid from '{script.Guid}' to '{newGuid}'{Environment.NewLine}";
+        log += $"Replacing fileId from '{script.FileId}' to '{newFileId}'{Environment.NewLine}";
+
+        Debug.Log(log);
 
         var content = File.ReadAllText(fileName);
         var regex = new Regex($@"(\{{fileID: {script.FileId}, guid: )({script.Guid})(, type: 3)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
@@ -78,11 +84,16 @@ public class FindMissingScriptsEditor : EditorWindow
         var prefab = PrefabUtility.LoadPrefabContents(prefabPath);
         var clothingMetadata = prefab?.GetComponentInChildren<XLGMClothingGearMetadata>();
 
-        if (clothingMetadata == null) return;
+        if (clothingMetadata == null)
+        {
+            PrefabUtility.UnloadPrefabContents(prefab);
+            return;
+        }
 
         clothingMetadata.CharacterGearTemplate.id = script.Prefix;
         clothingMetadata.Prepare();
 
         PrefabUtility.SaveAsPrefabAsset(prefab, prefabPath);
+        PrefabUtility.UnloadPrefabContents(prefab);
     }
 }
