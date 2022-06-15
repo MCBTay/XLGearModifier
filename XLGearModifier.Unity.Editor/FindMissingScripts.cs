@@ -48,7 +48,7 @@ public class FindMissingScriptsEditor : EditorWindow
         EditorUtility.ClearProgressBar();
     }
 
-    [MenuItem("XLGM/Upgrade From 1.5/Clear Progressbar")]
+    [MenuItem("XLGM/Upgrade From 1.5/Clear Progress Bar")]
     public static void ClearProgressbar()
     {
         EditorUtility.ClearProgressBar();
