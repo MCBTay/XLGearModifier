@@ -93,6 +93,7 @@ namespace XLGearModifier.Unity
         public void OnValidate()
         {
             if (CharacterGearTemplate == null) return;
+            if (string.IsNullOrEmpty(CharacterGearTemplate.id)) return;
 
             #region CharacterGearTemplate
             CharacterGearTemplate.id = CharacterGearTemplate.id.ToLower();
