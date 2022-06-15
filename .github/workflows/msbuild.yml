@@ -28,9 +28,10 @@ jobs:
     runs-on: ubuntu-latest
     
     outputs:
-      generate_unitypackage: ${{ steps.changes.outputs.unity_assemblies_changed }}
       build_asset_bundles: ${{ steps.changes.outputs.asset_bundles_changed }}
       build_mod: ${{ steps.changes.outputs.mod_changed }}
+      build_unity: ${{ steps.changes.outputs.unity_changed }}
+      build_unity_editor: ${{ steps.changes.outputs.unity_editor_changed }}
 
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
