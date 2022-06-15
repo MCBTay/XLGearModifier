@@ -2,9 +2,8 @@
 using System.IO;
 using System.Text.RegularExpressions;
 using UnityEditor;
-using UnityEditor.SceneManagement;
 using UnityEngine;
-using UnityEngine.SceneManagement;
+using XLGearModifier.Unity;
 using XLGearModifier.Unity.Editor.Upgrade;
 
 public class FindMissingScriptsEditor : EditorWindow
@@ -16,10 +15,6 @@ public class FindMissingScriptsEditor : EditorWindow
 
         string[] files = Directory.GetFiles(Application.dataPath, "*.prefab", SearchOption.AllDirectories);
         EditorUtility.DisplayCancelableProgressBar("Searching Prefabs", "Found " + files.Length + " prefabs", 0.0f);
-
-        Scene currentScene = SceneManager.GetActiveScene();
-        string scenePath = currentScene.path;
-        EditorSceneManager.NewScene(NewSceneSetup.EmptyScene);
 
         var newGuid = AssetDatabase.AssetPathToGUID("Assets/XLGM_SDK/XLGearModifier.Unity.dll");
 
@@ -38,19 +33,14 @@ public class FindMissingScriptsEditor : EditorWindow
 
             foreach (var monoBehaviour in missingMonoBehaviours)
             {
-                Debug.Log($"Prefab {prefabPath} has an empty script attached.  Attempting to add new XLGMClothingGearMetadata");
+                if (!string.IsNullOrEmpty(monoBehaviour.Script.FullName) && !monoBehaviour.Script.FullName.StartsWith("XLGearModifier")) continue;
 
                 ReplaceGuid(monoBehaviour.Script, newGuid, prefabPath);
+                ReplacePrefix(monoBehaviour.Script, prefabPath);
             }
-
-            EditorUtility.UnloadUnusedAssetsImmediate(true);
         }
 
         EditorUtility.DisplayProgressBar("Cleanup", "Cleaning up", 1.0f);
-        if (!string.IsNullOrEmpty(scenePath))
-        {
-            EditorSceneManager.OpenScene(scenePath, OpenSceneMode.Single);
-        }
 
         EditorUtility.UnloadUnusedAssetsImmediate(true);
         GC.Collect();
@@ -74,5 +64,20 @@ public class FindMissingScriptsEditor : EditorWindow
         content = regex.Replace(content, m => $"{m.Groups[1].Value}{newGuid}{m.Groups[3].Value}");
 
         File.WriteAllText(fileName, content);
+    }
+
+    private static void ReplacePrefix(ScriptMetadata script, string prefabPath)
+    {
+        if (string.IsNullOrEmpty(script.Prefix)) return;
+
+        var prefab = PrefabUtility.LoadPrefabContents(prefabPath);
+        var clothingMetadata = prefab?.GetComponentInChildren<XLGMClothingGearMetadata>();
+
+        if (clothingMetadata == null) return;
+
+        clothingMetadata.CharacterGearTemplate.id = script.Prefix;
+        clothingMetadata.Prepare();
+
+        PrefabUtility.SaveAsPrefabAsset(prefab, prefabPath);
     }
 }
