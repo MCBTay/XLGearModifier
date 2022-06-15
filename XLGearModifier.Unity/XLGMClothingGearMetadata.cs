@@ -138,5 +138,20 @@ namespace XLGearModifier.Unity
                     return SkaterXL.Gear.ClothingGearCategory.Shirt;
             }
         }
-	}
+
+        public void Prepare()
+        {
+            Debug.Log("Preparing XLGM Clothing " + CharacterGearTemplate.id);
+
+            var renderers = gameObject.GetComponentsInChildren<SkinnedMeshRenderer>(true);
+
+            foreach (var renderer in renderers)
+            {
+                AddMaterialController(renderer);
+                AddGearPrefabController(renderer);
+            }
+
+            Debug.Log("Successfully prepared XLGM Clothing " + CharacterGearTemplate.id);
+        }
+    }
 }
