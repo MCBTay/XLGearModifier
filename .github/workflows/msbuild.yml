@@ -75,7 +75,7 @@ jobs:
     needs: check-paths-changed
     if: |
       needs.check-paths-changed.outputs.build_unity == 'true' ||
-      needs.check-paths-changed.outputs.build_unity_editor = 'true'
+      needs.check-paths-changed.outputs.build_unity_editor == 'true'
 
     steps:
     - uses: actions/checkout@v3
