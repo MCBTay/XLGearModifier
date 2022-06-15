@@ -41,15 +41,16 @@ jobs:
         uses: dorny/paths-filter@v2.10.2
         with:
           filters: |
-            unity_assemblies_changed:
-              - './XLGearModifier.Gear/Assets/Scripts/**'
-              - './XLGearModifier.Gear/Assets/Editor/**'
             asset_bundles_changed:
               - './XLGearModifier.Gear/Assets/Gear Done/**'
               - './XLGearModifier.Gear/Assets/Gear Temp/**'
               - './XLGearModifier.Gear/Assets/UserInterface/**'
             mod_changed:
               - './XLGearModifier/**'
+            unity_changed:
+              - './XLGearModifier.Unity/**'
+            unity_editor_changed:
+              - './XLGearModifier.Unity.Editor/**'
 
   build-unity-project:
     name: Build Unity Project
