@@ -48,7 +48,7 @@ namespace XLGearModifier.Unity.Editor.Upgrade
 
                 script.FullName = m_scriptMetadataService.GetFullNameByFileId(script.FileId);
 
-                if (String.IsNullOrEmpty(script.FullName))
+                if (string.IsNullOrEmpty(script.FullName))
                 {
                     script.FullName = MetaFileService.GetFileNameByGuid(script.Guid);
                 }
