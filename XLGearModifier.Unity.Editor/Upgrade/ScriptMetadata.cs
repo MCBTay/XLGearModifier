@@ -27,5 +27,10 @@ namespace XLGearModifier.Unity.Editor.Upgrade
         }
 
         public string Guid { get; set; }
+
+        /// <summary>
+        /// XLGM specific, attempting to read in the prefix such that we can "retain" it during upgrade.
+        /// </summary>
+        public string Prefix { get; set; }
     }
 }
