@@ -70,9 +70,9 @@ public class FindMissingScriptsEditor : EditorWindow
         Debug.Log(log);
 
         var content = File.ReadAllText(fileName);
-        var regex = new Regex($@"(\{{fileID: {script.FileId}, guid: )({script.Guid})(, type: 3)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+        var regex = new Regex($@"(\{{fileID: )({script.FileId})(, guid: )({script.Guid})(, type: 3)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
-        content = regex.Replace(content, m => $"{m.Groups[1].Value}{newGuid}{m.Groups[3].Value}");
+        content = regex.Replace(content, m => $"{m.Groups[1].Value}{newFileId}{m.Groups[3].Value}{newGuid}{m.Groups[5].Value}");
 
         File.WriteAllText(fileName, content);
     }
@@ -91,7 +91,15 @@ public class FindMissingScriptsEditor : EditorWindow
         }
 
         clothingMetadata.CharacterGearTemplate.id = script.Prefix;
-        clothingMetadata.Prepare();
+
+        try
+        {
+            clothingMetadata.Prepare();
+        }
+        catch
+        {
+            Debug.LogError("Unable to prepare prefab!", prefab);
+        }
 
         PrefabUtility.SaveAsPrefabAsset(prefab, prefabPath);
         PrefabUtility.UnloadPrefabContents(prefab);
