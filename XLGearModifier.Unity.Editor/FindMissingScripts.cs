@@ -27,6 +27,9 @@ public class FindMissingScriptsEditor : EditorWindow
                 break;
 
             if (prefabPath.Contains("HDRPDefaultResources")) continue;
+            if (prefabPath.Contains("EffectExamples")) continue;
+            if (prefabPath.Contains("ExampleAssets")) continue;
+            if (prefabPath.Contains("Assets//Shared")) continue;
 
             var metadata = reader.Read(prefabPath);
             metadata.Path = prefabPath;
