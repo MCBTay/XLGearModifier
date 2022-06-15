@@ -55,7 +55,7 @@ jobs:
 
   build-unity-assembly:
     name: Build XLGearModifier.Unity.dll
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     needs: check-paths-changed
     if: |
       needs.check-paths-changed.outputs.build_unity == 'true'
@@ -71,7 +71,7 @@ jobs:
 
   build-unity-editor-assembly:
     name: Build XLGearModifier.Unity.Editor.dll
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     needs: check-paths-changed
     if: |
       needs.check-paths-changed.outputs.build_unity == 'true' ||
