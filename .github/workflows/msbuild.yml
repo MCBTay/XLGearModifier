@@ -53,12 +53,42 @@ jobs:
             unity_editor_changed:
               - './XLGearModifier.Unity.Editor/**'
 
+  build-unity-assembly:
+    name: Build XLGearModifier.Unity.dll
+    runs-on: ubuntu-latest
+    needs: check-paths-changed
+    if: |
+      needs.check-paths-changed.outputs.build_unity == 'true'
+    
+    - uses: actions/checkout@v3
+
+    - name: Add msbuild to PATH
+      uses: microsoft/setup-msbuild@v1.1
+
+    - name: Build app for release
+      run: msbuild './XLGearModifier.Unity/XLGearModifier.Unity.csproj' -t:rebuild -verbosity:diag -property:Configuration=Release
+
+  build-unity-editor-assembly:
+    name: Build XLGearModifier.Unity.Editor.dll
+    runs-on: ubuntu-latest
+    needs: check-paths-changed
+    if: |
+      needs.check-paths-changed.outputs.build_unity == 'true' ||
+      needs.check-paths-changed.outputs.build_unity_editor = 'true'
+
+    - uses: actions/checkout@v3
+
+    - name: Add msbuild to PATH
+      uses: microsoft/setup-msbuild@v1.1
+
+    - name: Build app for release
+      run: msbuild './XLGearModifier.Unity.Editor/XLGearModifier.Unity.Editor.csproj' -t:rebuild -verbosity:diag -property:Configuration=Release
+
   build-unity-project:
     name: Build Unity Project
     runs-on: ubuntu-latest
     needs: check-paths-changed
     if: |
-      needs.check-paths-changed.outputs.generate_unitypackage == 'true' ||
       needs.check-paths-changed.outputs.build_asset_bundles == 'true'
     
     steps:
