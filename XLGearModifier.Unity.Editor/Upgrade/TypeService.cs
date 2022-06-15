@@ -23,9 +23,9 @@ namespace XLGearModifier.Unity.Editor.Upgrade
             {
                 s_types = new List<Type>(Assembly.GetExecutingAssembly().GetTypes());
                 s_types.AddRange(typeof(UnityEngine.MonoBehaviour).Assembly.GetTypes());
-                var xlgmDlls = Directory.GetFiles("Assets", "XLGearModifier.Unity.dll", SearchOption.AllDirectories);
-                var skaterXLDlls = Directory.GetFiles("Assets", "SkaterXL*.dll", SearchOption.AllDirectories);
-                var externalDlls = xlgmDlls.Concat(skaterXLDlls);
+                s_types.AddRange(typeof(XLGMClothingGearMetadata).Assembly.GetTypes());
+                
+                var externalDlls = Directory.GetFiles("Assets", "SkaterXL*.dll", SearchOption.AllDirectories);
 
                 foreach (var dll in externalDlls)
                 {
