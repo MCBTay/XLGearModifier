@@ -208,9 +208,6 @@ namespace XLGearModifier
                                 if (string.IsNullOrEmpty(skaterMetadata.CharacterBodyTemplate.id)) continue;
                                 customGearBase = new Skater(skaterMetadata, asset);
                                 break;
-                            case XLGMBoardGearMetadata boardMetadata:
-                                customGearBase = new BoardGear(boardMetadata, asset);
-                                break;
                         }
                         if (customGearBase == null) continue;
 
