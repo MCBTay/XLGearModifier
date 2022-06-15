@@ -26,6 +26,8 @@ public class FindMissingScriptsEditor : EditorWindow
             if (EditorUtility.DisplayCancelableProgressBar("Processing Prefabs " + i + "/" + files.Length, prefabPath, i / (float)files.Length))
                 break;
 
+            if (prefabPath.Contains("HDRPDefaultResources")) continue;
+
             var metadata = reader.Read(prefabPath);
             metadata.Path = prefabPath;
 
