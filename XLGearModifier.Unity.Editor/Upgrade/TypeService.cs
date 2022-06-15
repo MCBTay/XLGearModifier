@@ -9,6 +9,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
+using UnityEngine;
 
 namespace XLGearModifier.Unity.Editor.Upgrade
 {
@@ -23,9 +24,8 @@ namespace XLGearModifier.Unity.Editor.Upgrade
             {
                 s_types = new List<Type>(Assembly.GetExecutingAssembly().GetTypes());
                 s_types.AddRange(typeof(UnityEngine.MonoBehaviour).Assembly.GetTypes());
-                s_types.AddRange(typeof(XLGMClothingGearMetadata).Assembly.GetTypes());
-                
-                var externalDlls = Directory.GetFiles("Assets", "SkaterXL*.dll", SearchOption.AllDirectories);
+
+                var externalDlls = Directory.GetFiles("Assets", "*.dll", SearchOption.AllDirectories);
 
                 foreach (var dll in externalDlls)
                 {
@@ -33,6 +33,10 @@ namespace XLGearModifier.Unity.Editor.Upgrade
                     {
                         var assembly = Assembly.LoadFrom(Path.GetFullPath(dll));
                         s_types.AddRange(assembly.GetTypes());
+                    }
+                    catch (BadImageFormatException bife)
+                    {
+
                     }
                     catch (ReflectionTypeLoadException ex)
                     {
@@ -44,7 +48,7 @@ namespace XLGearModifier.Unity.Editor.Upgrade
                             loaderMsg.AppendLine();
                         }
 
-                        throw new InvalidOperationException($"Error trying to load assembly '{dll}':{ex.Message}. LoaderExceptions: {loaderMsg}", ex);
+                        Debug.LogWarning($"Error trying to load assembly '{dll}':{ex.Message}. LoaderExceptions: {loaderMsg}");
                     }
                 }
             }
@@ -62,25 +66,6 @@ namespace XLGearModifier.Unity.Editor.Upgrade
             }
 
             return type;
-        }
-
-        public string GetGuid(Type type)
-        {
-            var metaFile = Directory.GetFiles($"{type.Name}.cs.meta").FirstOrDefault();
-
-            if (metaFile == null)
-            {
-                var assemblyName = Path.GetFileNameWithoutExtension(type.Assembly.CodeBase);
-                metaFile = Directory.GetFiles($"{assemblyName}.dll.meta").FirstOrDefault();
-
-                if (metaFile == null)
-                {
-                    throw new InvalidOperationException($"Could not find .meta file of type '{type.Name}'.");
-                }
-            }
-
-            var content = File.ReadAllText(metaFile);
-            return s_guidRegex.Match(content).Groups[1].Value;
         }
     }
 }
