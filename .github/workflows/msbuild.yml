@@ -60,6 +60,7 @@ jobs:
     if: |
       needs.check-paths-changed.outputs.build_unity == 'true'
     
+    steps:
     - uses: actions/checkout@v3
 
     - name: Add msbuild to PATH
@@ -76,6 +77,7 @@ jobs:
       needs.check-paths-changed.outputs.build_unity == 'true' ||
       needs.check-paths-changed.outputs.build_unity_editor = 'true'
 
+    steps:
     - uses: actions/checkout@v3
 
     - name: Add msbuild to PATH
