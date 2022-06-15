@@ -31,6 +31,12 @@ namespace XLGearModifier.Unity.Editor.Upgrade
 
             foreach (var m in MonoBehaviours)
             {
+                if (string.IsNullOrEmpty(m.Script.FullName))
+                {
+                    result.Add(m);
+                    continue;
+                }
+
                 var type = m_TypeService.GetTypeByName(m.Script.FullName);
 
                 if (prefabInstance.GetComponentInChildren(type) == null)
