@@ -67,9 +67,20 @@
   <ItemGroup>
     <Compile Include="CharacterBodyTemplatePropertyDrawer.cs" />
     <Compile Include="CharacterGearTemplatePropertyDrawer.cs" />
+    <Compile Include="FindMissingScripts.cs" />
     <Compile Include="GearPrefabControllerEditor.cs" />
     <Compile Include="MaterialControllerEditor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Upgrade\FileIdUtil.cs" />
+    <Compile Include="Upgrade\MD4.cs" />
+    <Compile Include="Upgrade\MetaFileInfo.cs" />
+    <Compile Include="Upgrade\MetaFileService.cs" />
+    <Compile Include="Upgrade\MonoBehaviourMetadata.cs" />
+    <Compile Include="Upgrade\PrefabMetadata.cs" />
+    <Compile Include="Upgrade\PrefabReader.cs" />
+    <Compile Include="Upgrade\ScriptMetadata.cs" />
+    <Compile Include="Upgrade\ScriptMetadataService.cs" />
+    <Compile Include="Upgrade\TypeService.cs" />
     <Compile Include="XLGMAboutModal.cs" />
     <Compile Include="XLGMClothingGearMetadataEditor.cs" />
     <Compile Include="XLGMSkaterMetadataEditor.cs" />
@@ -81,5 +92,11 @@
       <Name>XLGearModifier.Unity</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>if "$(ConfigurationName)" == "Debug" ( 
+    xcopy /D /Y "$(TargetDir)XLGearModifier.Unity.Editor.dll" "$(SolutionDir)\XLGearModifier.Gear\Assets\XLGM_SDK\XLGearModifier.Unity.Editor.dll"
+)</PostBuildEvent>
+  </PropertyGroup>
 </Project>

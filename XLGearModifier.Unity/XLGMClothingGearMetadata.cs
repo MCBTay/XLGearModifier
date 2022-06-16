@@ -93,6 +93,7 @@ namespace XLGearModifier.Unity
         public void OnValidate()
         {
             if (CharacterGearTemplate == null) return;
+            if (string.IsNullOrEmpty(CharacterGearTemplate.id)) return;
 
             #region CharacterGearTemplate
             CharacterGearTemplate.id = CharacterGearTemplate.id.ToLower();
@@ -138,5 +139,20 @@ namespace XLGearModifier.Unity
                     return SkaterXL.Gear.ClothingGearCategory.Shirt;
             }
         }
-	}
+
+        public void Prepare()
+        {
+            Debug.Log("Preparing XLGM Clothing " + CharacterGearTemplate.id);
+
+            var renderers = gameObject.GetComponentsInChildren<SkinnedMeshRenderer>(true);
+
+            foreach (var renderer in renderers)
+            {
+                AddMaterialController(renderer);
+                AddGearPrefabController(renderer);
+            }
+
+            Debug.Log("Successfully prepared XLGM Clothing " + CharacterGearTemplate.id);
+        }
+    }
 }
