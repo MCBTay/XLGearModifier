@@ -117,9 +117,8 @@ jobs:
         targetPlatform: StandaloneWindows
         projectPath: ./XLGearModifier.Gear/
         buildMethod: Assets.Editor.CIBuildScript.Build
-        customImage: 'unityci/editor:2018.4.8f1-windows-mono-1'
+        customImage: 'unityci/editor:ubuntu-2019.4.8f1-windows-mono-1.0.1'
         
-
     # - name: Copy DLLs to Destinations
     #   run: |
     #     Copy-Item "XLGearModifier.Gear/Temp/bin/${{env.BUILD_CONFIGURATION}}/XLGearModifier.Unity.dll" -Destination "XLGearModifier/References/XLGearModifier.Unity.dll"
