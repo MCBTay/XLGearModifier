@@ -1,7 +1,7 @@
-name: Build (Main)
+name: Build (Pull Request)
 
 on:
-  push:
+  pull_request:
     branches: [ main ]
 
 env:
