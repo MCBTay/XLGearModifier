@@ -99,7 +99,7 @@ jobs:
 
     - name: Copy DLL
       run: |
-        Copy-Item "./XLGearModifier.Unity.Editor/bin/${{env.BUILD_CONFIGURATION}}/XLGearModifier.Unity.Editor.dll" -Destination "XLGearModifier.Gear/Assets/XLGM_SDK/XLGearModifier.Unity.dll"
+        Copy-Item "./XLGearModifier.Unity.Editor/bin/${{env.BUILD_CONFIGURATION}}/XLGearModifier.Unity.Editor.dll" -Destination "XLGearModifier.Gear/Assets/XLGM_SDK/XLGearModifier.Unity.Editor.dll"
 
     - name: Commit DLL
       run: |
