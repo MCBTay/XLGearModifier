@@ -422,5 +422,23 @@ namespace XLGearModifier.Patches
                 return false;
             }
         }
+
+        /// <summary>
+        /// This patch exists solely because validating gear items with isCustom leaves them in EasyDay's type instead of XLGM/XLMM's type.  This down the line causes
+        /// layerables to break, because the mod doesn't realize the mesh is one of our custom ones, and assumes that it must not be layerable.
+        /// </summary>
+        [HarmonyPatch(typeof(GearDatabase), nameof(GearDatabase.ValidateCustomization), typeof(CustomizedPlayerDataV2), typeof(CustomizedPlayerDataV2), typeof(GearValidationContext))]
+        public static class ValidateCustomizationPatch
+        {
+            static void Prefix(GearDatabase __instance, ref CustomizedPlayerDataV2 data)
+            {
+                data.clothingGear = data.clothingGear
+                    .Select(x => new CustomCharacterGearInfo(x.name, x.type, x.isCustom, x.textureChanges, x.tags))
+                    .Cast<CharacterGearInfo>()
+                    .ToArray();
+
+                data.body = new CustomCharacterBodyInfo(data.body.name, data.body.type, data.body.isCustom, data.body.materialChanges, data.body.tags);
+            }
+        }
     }
 }
