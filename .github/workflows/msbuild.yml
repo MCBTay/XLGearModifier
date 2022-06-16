@@ -66,8 +66,18 @@ jobs:
     - name: Add msbuild to PATH
       uses: microsoft/setup-msbuild@v1.1
 
-    - name: Build app for release
+    - name: Build
       run: msbuild './XLGearModifier.Unity/XLGearModifier.Unity.csproj' -t:rebuild -verbosity:diag -property:Configuration=Release
+
+    - name: Copy DLL
+      run: |
+        Copy-Item "./XLGearModifier.Unity/bin/${{env.BUILD_CONFIGURATION}}/XLGearModifier.Unity.dll" -Destination "XLGearModifier.Gear/Assets/XLGM_SDK/XLGearModifier.Unity.dll"
+
+    - name: Commit DLL
+      run: |
+        git config user.name "GitHub Actions"
+        git config user.email "<>"
+        git commit -m "Updating XLGearModifier.Unity.dll" ./XLGearModifier.Gear/Assets/XLGM_SDK/XLGearModifier.Unity.dll 
 
   build-unity-editor-assembly:
     name: Build XLGearModifier.Unity.Editor.dll
@@ -84,8 +94,18 @@ jobs:
     - name: Add msbuild to PATH
       uses: microsoft/setup-msbuild@v1.1
 
-    - name: Build app for release
+    - name: Build
       run: msbuild './XLGearModifier.Unity.Editor/XLGearModifier.Unity.Editor.csproj' -t:rebuild -verbosity:diag -property:Configuration=Release
+
+    - name: Copy DLL
+      run: |
+        Copy-Item "./XLGearModifier.Unity.Editor/bin/${{env.BUILD_CONFIGURATION}}/XLGearModifier.Unity.Editor.dll" -Destination "XLGearModifier.Gear/Assets/XLGM_SDK/XLGearModifier.Unity.dll"
+
+    - name: Commit DLL
+      run: |
+        git config user.name "GitHub Actions"
+        git config user.email "<>"
+        git commit -m "Updating XLGearModifier.Unity.Editor.dll" ./XLGearModifier.Gear/Assets/XLGM_SDK/XLGearModifier.Unity.Editor.dll 
 
   build-unity-project:
     name: Build Unity Project
@@ -118,6 +138,7 @@ jobs:
         projectPath: ./XLGearModifier.Gear/
         buildMethod: Assets.Editor.CIBuildScript.Build
         customImage: 'unityci/editor:ubuntu-2019.4.8f1-windows-mono-1.0.1'
+        customBuildPath: ./XLGearModifier.Gear/AssetBundles/StandaloneWindows/
         
     # - name: Copy DLLs to Destinations
     #   run: |
