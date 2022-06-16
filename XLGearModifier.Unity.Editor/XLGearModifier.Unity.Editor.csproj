@@ -62,8 +62,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AssetBundleUtility.cs" />
     <Compile Include="CharacterBodyTemplatePropertyDrawer.cs" />
     <Compile Include="CharacterGearTemplatePropertyDrawer.cs" />
+    <Compile Include="CIBuildScript.cs" />
     <Compile Include="GearPrefabControllerEditor.cs" />
     <Compile Include="MaterialControllerEditor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
