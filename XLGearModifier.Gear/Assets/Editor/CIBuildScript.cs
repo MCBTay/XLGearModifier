@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using UnityEditor;
-using UnityEditor.Build.Reporting;
 
 namespace Assets.Editor
 {
@@ -101,7 +100,7 @@ namespace Assets.Editor
 
         private static void Build(BuildTarget buildTarget, string filePath)
         {
-            Console.WriteLine($"Building asset bundles in {filePath}{Eol}");
+            Console.WriteLine($"Building asset bundles in {filePath}");
             var manifest = BuildPipeline.BuildAssetBundles(filePath, BuildAssetBundleOptions.ChunkBasedCompression, buildTarget);
             Console.WriteLine($"Built {manifest.GetAllAssetBundles().Length} asset bundles:");
             foreach (var bundle in manifest.GetAllAssetBundles())
@@ -109,50 +108,9 @@ namespace Assets.Editor
                 Console.WriteLine(bundle);
             }
 
-            
             var unityPackageFiles = Directory.GetFiles("Assets/XLGM_SDK", "*.dll", SearchOption.AllDirectories);
             Console.WriteLine($"Exporting unity package with {unityPackageFiles.Length} files");
             AssetDatabase.ExportPackage(unityPackageFiles, "XLGearModifier_SDK.unitypackage", ExportPackageOptions.Default);
-        }
-
-        private static void ReportSummary(BuildSummary summary)
-        {
-            Console.WriteLine(
-                $"{Eol}" +
-                $"###########################{Eol}" +
-                $"#      Build results      #{Eol}" +
-                $"###########################{Eol}" +
-                $"{Eol}" +
-                $"Duration: {summary.totalTime}{Eol}" +
-                $"Warnings: {summary.totalWarnings}{Eol}" +
-                $"Errors: {summary.totalErrors}{Eol}" +
-                $"Size: {summary.totalSize} bytes{Eol}" +
-                $"{Eol}"
-            );
-        }
-
-        private static void ExitWithResult(BuildResult result)
-        {
-            switch (result)
-            {
-                case BuildResult.Succeeded:
-                    Console.WriteLine("Build succeeded!");
-                    EditorApplication.Exit(0);
-                    break;
-                case BuildResult.Failed:
-                    Console.WriteLine("Build failed!");
-                    EditorApplication.Exit(101);
-                    break;
-                case BuildResult.Cancelled:
-                    Console.WriteLine("Build cancelled!");
-                    EditorApplication.Exit(102);
-                    break;
-                case BuildResult.Unknown:
-                default:
-                    Console.WriteLine("Build result is unknown!");
-                    EditorApplication.Exit(103);
-                    break;
-            }
         }
     }
 }
