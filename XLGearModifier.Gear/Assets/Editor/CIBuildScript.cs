@@ -21,7 +21,7 @@ namespace Assets.Editor
             var buildTarget = (BuildTarget)Enum.Parse(typeof(BuildTarget), options["buildTarget"]);
 
             // Custom build
-            Build(buildTarget, options["customBuildPath"]);
+            Build(buildTarget, "AssetBundles/StandaloneWindows/");
         }
 
         private static Dictionary<string, string> GetValidatedOptions()
@@ -102,7 +102,7 @@ namespace Assets.Editor
         {
             Console.WriteLine($"Building asset bundles in {filePath}{Eol}");
 
-            var manifest = BuildPipeline.BuildAssetBundles(filePath, BuildAssetBundleOptions.ChunkBasedCompression, buildTarget);
+            var manifest = BuildPipeline.BuildAssetBundles("filePath", BuildAssetBundleOptions.ChunkBasedCompression, buildTarget);
             
             Console.WriteLine($"Built {manifest.GetAllAssetBundles().Length} asset bundles:{Eol}");
             foreach (var bundle in manifest.GetAllAssetBundles())
