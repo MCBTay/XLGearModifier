@@ -172,40 +172,40 @@ jobs:
         git commit -m "Updating asset bundles" ./XLGearModifier/Assets/*
         git push --set-upstream origin ${{ github.head_ref }}
 
-  create-unity-package:
-    name: Create SDK Unity Package
-    runs-on: ubuntu-latest
-    needs: build-unity-project
-    if: |
-      needs.check-paths-changed.outputs.build_unity == 'true' ||
-      needs.check-paths-changed.outputs.build_unity_editor == 'true'
+  # create-unity-package:
+  #   name: Create SDK Unity Package
+  #   runs-on: ubuntu-latest
+  #   needs: build-unity-project
+  #   if: |
+  #     needs.check-paths-changed.outputs.build_unity == 'true' ||
+  #     needs.check-paths-changed.outputs.build_unity_editor == 'true'
 
-    steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v3
-      - uses: actions/setup-dotnet@v2
+  #   steps:
+  #     # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+  #     - uses: actions/checkout@v3
+  #     - uses: actions/setup-dotnet@v2
     
-      # Install the packager. We are putting it outside the working directory so we dont include it by mistake
-      - name: Install Unity Packager
-        run: |
-          git clone https://github.com/Lachee/Unity-Package-Exporter.git "../tools/unity-package-exporter"
-          dotnet publish -c Release -o ../tools "../tools/unity-package-exporter/UnityPackageExporter"
+  #     # Install the packager. We are putting it outside the working directory so we dont include it by mistake
+  #     - name: Install Unity Packager
+  #       run: |
+  #         git clone https://github.com/Lachee/Unity-Package-Exporter.git "../tools/unity-package-exporter"
+  #         dotnet publish -c Release -o ../tools "../tools/unity-package-exporter/UnityPackageExporter"
           
-      # Pack the assets
-      - name: Package Project
-        run: |
-          echo "Creating package ${{env.package_path}}"
-          dotnet ../tools/UnityPackageExporter.dll --input ./XLGearModifier.Gear/Aseets/XLGM_SDK/ --output ${{env.package_path}}
+  #     # Pack the assets
+  #     - name: Package Project
+  #       run: |
+  #         echo "Creating package ${{env.package_path}}"
+  #         dotnet ../tools/UnityPackageExporter.dll --input ./XLGearModifier.Gear/Aseets/XLGM_SDK/ --output ${{env.package_path}}
           
-      # Upload artifact
-      - name: Upload Artifact
-        uses: actions/upload-artifact@v3.0.0
-        with:
-          name: XLGearModifier_SDK.2.0.0.unitypackage
-          path: ${{env.package_path}}   
+  #     # Upload artifact
+  #     - name: Upload Artifact
+  #       uses: actions/upload-artifact@v3.0.0
+  #       with:
+  #         name: XLGearModifier_SDK.2.0.0.unitypackage
+  #         path: ${{env.package_path}}   
     
   build:
-    name: Build & Analyze Mod
+    name: Build XLGearModifier.dll
     runs-on: windows-latest
     needs: build-unity-project
     if: |
