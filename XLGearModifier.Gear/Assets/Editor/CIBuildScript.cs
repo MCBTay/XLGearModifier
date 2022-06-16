@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using UnityEditor;
 using UnityEditor.Build.Reporting;
 
@@ -101,27 +102,17 @@ namespace Assets.Editor
         private static void Build(BuildTarget buildTarget, string filePath)
         {
             Console.WriteLine($"Building asset bundles in {filePath}{Eol}");
-
             var manifest = BuildPipeline.BuildAssetBundles(filePath, BuildAssetBundleOptions.ChunkBasedCompression, buildTarget);
-            
-            Console.WriteLine($"Built {manifest.GetAllAssetBundles().Length} asset bundles:{Eol}");
+            Console.WriteLine($"Built {manifest.GetAllAssetBundles().Length} asset bundles:");
             foreach (var bundle in manifest.GetAllAssetBundles())
             {
-                Console.WriteLine(bundle + Eol);
+                Console.WriteLine(bundle);
             }
-            //string[] scenes = EditorBuildSettings.scenes.Where(scene => scene.enabled).Select(s => s.path).ToArray();
-            //var buildPlayerOptions = new BuildPlayerOptions
-            //{
-            //    scenes = scenes,
-            //    target = buildTarget,
-            //    //                targetGroup = BuildPipeline.GetBuildTargetGroup(buildTarget),
-            //    locationPathName = filePath,
-            //    //                options = UnityEditor.BuildOptions.Development
-            //};
 
-            //BuildSummary buildSummary = BuildPipeline.BuildPlayer(buildPlayerOptions).summary;
-            //ReportSummary(buildSummary);
-            //ExitWithResult(buildSummary.result);
+            
+            var unityPackageFiles = Directory.GetFiles("Assets/XLGM_SDK", "*.dll", SearchOption.AllDirectories);
+            Console.WriteLine($"Exporting unity package with {unityPackageFiles.Length} files");
+            AssetDatabase.ExportPackage(unityPackageFiles, "XLGearModifier_SDK.unitypackage", ExportPackageOptions.Default);
         }
 
         private static void ReportSummary(BuildSummary summary)
