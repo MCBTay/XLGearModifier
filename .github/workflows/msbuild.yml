@@ -108,7 +108,7 @@ jobs:
         git config user.name "GitHub Actions"
         git config user.email "github.actions@noreply.github.com"
         git switch -c ${{ github.head_ref }}
-        git pull
+        git pull origin ${{ github.head_ref }}
         git commit -m "Updating XLGearModifier.Unity.Editor.dll" ./XLGearModifier.Gear/Assets/XLGM_SDK/XLGearModifier.Unity.Editor.dll
         git push
 
