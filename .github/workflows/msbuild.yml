@@ -142,7 +142,7 @@ jobs:
         projectPath: ./XLGearModifier.Gear/
         buildMethod: Assets.Editor.CIBuildScript.Build
         customImage: 'unityci/editor:ubuntu-2019.4.8f1-windows-mono-1.0.1'
-        customBuildPath: ./XLGearModifier.Gear/AssetBundles/StandaloneWindows/
+        buildsPath: ./XLGearModifier.Gear/AssetBundles/StandaloneWindows/
         
     # - name: Copy DLLs to Destinations
     #   run: |
