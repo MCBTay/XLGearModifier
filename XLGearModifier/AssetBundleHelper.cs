@@ -45,7 +45,7 @@ namespace XLGearModifier
                 yield return LoadBuiltInBundle(assembly, assetBundle);
             }
 
-            MessageSystem.QueueMessage(MessageDisplayData.Type.Success, $"Loaded built in bundles.", 3f);
+            MessageSystem.QueueMessage(MessageDisplayData.Type.Info, $"Loaded built in bundles.", 3f);
 
             PlayerController.Instance.characterCustomizer.LoadLastPlayer();
             GearDatabase.Instance.FetchCustomGear();
@@ -249,7 +249,7 @@ namespace XLGearModifier
 			}
 
             if (assetBundleFiles.Any())
-                MessageSystem.QueueMessage(MessageDisplayData.Type.Success, $"Loaded {assetBundleFiles.Count()} user bundles.", 3f);
+                MessageSystem.QueueMessage(MessageDisplayData.Type.Info, $"Loaded {assetBundleFiles.Count()} user bundles.", 3f);
 
             PlayerController.Instance.characterCustomizer.LoadLastPlayer();
             GearDatabase.Instance.FetchCustomGear();
