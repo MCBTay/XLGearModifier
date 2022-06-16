@@ -77,9 +77,9 @@ jobs:
       run: |
         git config user.name "GitHub Actions"
         git config user.email "<>"
-        git switch -c ${GITHUB_REF##*/}
+        git switch -c ${{ github.ref_name }}
         git commit -m "Updating XLGearModifier.Unity.dll" ./XLGearModifier.Gear/Assets/XLGM_SDK/XLGearModifier.Unity.dll 
-        git push --set-upstream origin ${GITHUB_REF##*/}
+        git push --set-upstream origin ${{ github.ref_name }}
 
   build-unity-editor-assembly:
     name: Build XLGearModifier.Unity.Editor.dll
@@ -143,21 +143,6 @@ jobs:
         buildMethod: Assets.Editor.CIBuildScript.Build
         customImage: 'unityci/editor:ubuntu-2019.4.8f1-windows-mono-1.0.1'
         buildsPath: ./XLGearModifier.Gear/AssetBundles/StandaloneWindows/
-        
-    # - name: Copy DLLs to Destinations
-    #   run: |
-    #     Copy-Item "XLGearModifier.Gear/Temp/bin/${{env.BUILD_CONFIGURATION}}/XLGearModifier.Unity.dll" -Destination "XLGearModifier/References/XLGearModifier.Unity.dll"
-    #     Copy-Item "XLGearModifier.Gear/Temp/bin/${{env.BUILD_CONFIGURATION}}/XLGearModifier.Unity.dll" -Destination "XLGearModifier.Gear/Assets/XLGM_SDK/XLGearModifier.Unity.dll"
-    #     Copy-Item "XLGearModifier.Gear/Temp/bin/${{env.BUILD_CONFIGURATION}}/XLGearModifier.Unity.Editor.dll" -Destination "XLGearModifier.Gear/Assets/XLGM_SDK/XLGearModifier.Unity.Editor.dll"
-
-    # - name: Commit New DLLs
-    #   run: |
-    #     git config user.name "GitHub Actions"
-    #     git config user.email "<>"
-    #     git commit -m "Updating Unity assemblies" ./XLGearModifier/References/XLGearModifier.Unity.dll ./XLGearModifier.Gear/Assets/XLGM_SDK/XLGearModifier.Unity.dll ./XLGearModifier.Gear/Assets/XLGM_SDK/XLGearModifier.Unity.Editor.dll 
-
-    # Copy DLL(s) into References folder and into Unity proj
-    # Commit them?
 
   create-unity-package:
     name: Create SDK Unity Package
