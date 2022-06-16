@@ -102,11 +102,7 @@ namespace Assets.Editor
         {
             Console.WriteLine($"Building asset bundles in {filePath}");
             var manifest = BuildPipeline.BuildAssetBundles(filePath, BuildAssetBundleOptions.ChunkBasedCompression, buildTarget);
-            Console.WriteLine($"Built {manifest.GetAllAssetBundles().Length} asset bundles:");
-            foreach (var bundle in manifest.GetAllAssetBundles())
-            {
-                Console.WriteLine(bundle);
-            }
+            Console.WriteLine($"Built {manifest.GetAllAssetBundles().Length} asset bundles.");
 
             var unityPackageFiles = Directory.GetFiles("Assets/XLGM_SDK", "*.dll", SearchOption.AllDirectories);
             Console.WriteLine($"Exporting unity package with {unityPackageFiles.Length} files");
