@@ -147,7 +147,7 @@ jobs:
 
     - name: Copy Asset Bundles
       run: |
-        cp "./XLGearModifier.Gear/AssetBundles/StandaloneWindows/char female/female-bottoms" "XLGearModifier/Assets/char female/female-bottoms"
+        cp "AssetBundles/StandaloneWindows/char female/female-bottoms" "XLGearModifier/Assets/char female/female-bottoms"
         cp "./XLGearModifier.Gear/AssetBundles/StandaloneWindows/char female/female-hair" "XLGearModifier/Assets/char female/female-hair"
         cp "./XLGearModifier.Gear/AssetBundles/StandaloneWindows/char female/female-hats" "XLGearModifier/Assets/char female/female-hats"
         cp "./XLGearModifier.Gear/AssetBundles/StandaloneWindows/char female/female-other" "XLGearModifier/Assets/char female/female-other"
