@@ -144,6 +144,34 @@ jobs:
         customImage: 'unityci/editor:ubuntu-2019.4.8f1-windows-mono-1.0.1'
         buildsPath: ./XLGearModifier.Gear/AssetBundles/StandaloneWindows/
 
+    - name: Copy Asset Bundles
+      run: |
+        Copy-Item "./XLGearModifier.Gear/AssetBundles/StandaloneWindows/char female/female-bottoms" -Destination "XLGearModifier/Assets/char female/female-bottoms"
+        Copy-Item "./XLGearModifier.Gear/AssetBundles/StandaloneWindows/char female/female-hair" -Destination "XLGearModifier/Assets/char female/female-hair"
+        Copy-Item "./XLGearModifier.Gear/AssetBundles/StandaloneWindows/char female/female-hats" -Destination "XLGearModifier/Assets/char female/female-hats"
+        Copy-Item "./XLGearModifier.Gear/AssetBundles/StandaloneWindows/char female/female-other" -Destination "XLGearModifier/Assets/char female/female-other"
+        Copy-Item "./XLGearModifier.Gear/AssetBundles/StandaloneWindows/char female/female-shoes" -Destination "XLGearModifier/Assets/char female/female-shoes"
+        Copy-Item "./XLGearModifier.Gear/AssetBundles/StandaloneWindows/char female/female-tops" -Destination "XLGearModifier/Assets/char female/female-tops"
+        Copy-Item "./XLGearModifier.Gear/AssetBundles/StandaloneWindows/char male/male-facialhair" -Destination "XLGearModifier/Assets/char male/male-facialhair"
+        Copy-Item "./XLGearModifier.Gear/AssetBundles/StandaloneWindows/char male/male-hair" -Destination "XLGearModifier/Assets/char male/male-hair"
+        Copy-Item "./XLGearModifier.Gear/AssetBundles/StandaloneWindows/char male/male-hats" -Destination "XLGearModifier/Assets/char male/male-hats"
+        Copy-Item "./XLGearModifier.Gear/AssetBundles/StandaloneWindows/char male/male-other" -Destination "XLGearModifier/Assets/char male/male-other"
+        Copy-Item "./XLGearModifier.Gear/AssetBundles/StandaloneWindows/char male/male-pants" -Destination "XLGearModifier/Assets/char male/male-pants"
+        Copy-Item "./XLGearModifier.Gear/AssetBundles/StandaloneWindows/char male/male-shoes" -Destination "XLGearModifier/Assets/char male/male-shoes"
+        Copy-Item "./XLGearModifier.Gear/AssetBundles/StandaloneWindows/char male/male-tops" -Destination "XLGearModifier/Assets/char male/male-tops"
+        Copy-Item "./XLGearModifier.Gear/AssetBundles/StandaloneWindows/characters" -Destination "XLGearModifier/Assets/characters"
+        Copy-Item "./XLGearModifier.Gear/AssetBundles/StandaloneWindows/default-empty-textures" -Destination "XLGearModifier/Assets/default-empty-textures"
+        Copy-Item "./XLGearModifier.Gear/AssetBundles/StandaloneWindows/easy-day-textures" -Destination "XLGearModifier/Assets/easy-day-textures"
+        Copy-Item "./XLGearModifier.Gear/AssetBundles/StandaloneWindows/user-interface" -Destination "XLGearModifier/Assets/user-interface"
+    
+    - name: Commit Asset Bundles
+      run: |
+        git config user.name "GitHub Actions"
+        git config user.email "<>"
+        git switch -c ${{ github.head_ref }}
+        git commit -m "Updating asset bundles" ./XLGearModifier/Assets/*
+        git push --set-upstream origin ${{ github.head_ref }}
+
   create-unity-package:
     name: Create SDK Unity Package
     runs-on: ubuntu-latest
