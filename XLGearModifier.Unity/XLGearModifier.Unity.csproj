@@ -68,4 +68,9 @@
     <Compile Include="XLGMWhatsEquippedUserInterface.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>if "$(ConfigurationName)" == "Debug" ( 
+    copy /Y "$(TargetDir)XLGearModifier.Unity.dll" "$(SolutionDir)\XLGearModifier.Gear\Assets\XLGM_SDK\XLGearModifier.Unity.dll"
+)</PostBuildEvent>
+  </PropertyGroup>
 </Project>
