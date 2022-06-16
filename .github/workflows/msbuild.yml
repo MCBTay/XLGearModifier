@@ -77,9 +77,9 @@ jobs:
       run: |
         git config user.name "GitHub Actions"
         git config user.email "<>"
-        git switch -c ${{ github.ref_name }}
+        git switch -c ${{ github.head_ref }}
         git commit -m "Updating XLGearModifier.Unity.dll" ./XLGearModifier.Gear/Assets/XLGM_SDK/XLGearModifier.Unity.dll 
-        git push --set-upstream origin ${{ github.ref_name }}
+        git push --set-upstream origin ${{ github.head_ref }}
 
   build-unity-editor-assembly:
     name: Build XLGearModifier.Unity.Editor.dll
@@ -107,9 +107,9 @@ jobs:
       run: |
         git config user.name "GitHub Actions"
         git config user.email "<>"
-        git switch -c ${{ github.ref_name }}
+        git switch -c ${{ github.head_ref }}
         git commit -m "Updating XLGearModifier.Unity.Editor.dll" ./XLGearModifier.Gear/Assets/XLGM_SDK/XLGearModifier.Unity.Editor.dll
-        git push --set-upstream origin ${{ github.ref_name }}
+        git push --set-upstream origin ${{ github.head_ref }}
 
   build-unity-project:
     name: Build Unity Project
