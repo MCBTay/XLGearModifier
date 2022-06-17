@@ -433,6 +433,8 @@ namespace XLGearModifier.Patches
         {
             static void Prefix(GearDatabase __instance, ref CustomizedPlayerDataV2 data)
             {
+                if (data?.clothingGear == null) return;
+
                 for (var i = 0; i < data.clothingGear.Length; i++)
                 {
                     var item = data.clothingGear[i];
