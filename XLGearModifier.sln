@@ -5,6 +5,10 @@ VisualStudioVersion = 17.0.32014.148
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XLGearModifier", "XLGearModifier\XLGearModifier.csproj", "{FFCCCAAF-B1C5-4F87-903F-472C582DB9E8}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XLGearModifier.Unity", "XLGearModifier.Unity\XLGearModifier.Unity.csproj", "{DAD72BCD-2193-4158-A3FF-340A64298F68}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XLGearModifier.Unity.Editor", "XLGearModifier.Unity.Editor\XLGearModifier.Unity.Editor.csproj", "{2A96A2E4-E491-4DFF-A4AE-A4D9304EBE6F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +19,14 @@ Global
 		{FFCCCAAF-B1C5-4F87-903F-472C582DB9E8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FFCCCAAF-B1C5-4F87-903F-472C582DB9E8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FFCCCAAF-B1C5-4F87-903F-472C582DB9E8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DAD72BCD-2193-4158-A3FF-340A64298F68}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DAD72BCD-2193-4158-A3FF-340A64298F68}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DAD72BCD-2193-4158-A3FF-340A64298F68}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DAD72BCD-2193-4158-A3FF-340A64298F68}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2A96A2E4-E491-4DFF-A4AE-A4D9304EBE6F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2A96A2E4-E491-4DFF-A4AE-A4D9304EBE6F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2A96A2E4-E491-4DFF-A4AE-A4D9304EBE6F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2A96A2E4-E491-4DFF-A4AE-A4D9304EBE6F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

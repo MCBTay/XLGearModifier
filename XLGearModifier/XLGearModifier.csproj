@@ -44,6 +44,9 @@
     <Reference Include="BFSUtilities">
       <HintPath>References\BFSUtilities.dll</HintPath>
     </Reference>
+    <Reference Include="modio.UnityPlugin">
+      <HintPath>References\modio.UnityPlugin.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.13.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
@@ -107,10 +110,6 @@
     <Reference Include="UnityModManager">
       <HintPath>References\UnityModManager.dll</HintPath>
     </Reference>
-    <Reference Include="XLGearModifier.Unity, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>References\XLGearModifier.Unity.dll</HintPath>
-    </Reference>
     <Reference Include="XLMenuMod.Utilities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>References\XLMenuMod.Utilities.dll</HintPath>
@@ -118,7 +117,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssetBundleHelper.cs" />
-    <Compile Include="CustomGear\BoardGear.cs" />
     <Compile Include="CustomGear\ClothingGear.cs" />
     <Compile Include="CustomGear\CustomGearBase.cs" />
     <Compile Include="CustomGear\Skater.cs" />
@@ -162,14 +160,19 @@
     <EmbeddedResource Include="Assets\char female\female-hats" />
     <EmbeddedResource Include="Assets\char female\female-shoes" />
     <EmbeddedResource Include="Assets\char female\female-tops" />
-	<EmbeddedResource Include="Assets\char female\female-other" />
+    <EmbeddedResource Include="Assets\char female\female-other" />
     <EmbeddedResource Include="Assets\characters" />
     <None Include="Info.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\XLGearModifier.Unity\XLGearModifier.Unity.csproj">
+      <Project>{dad72bcd-2193-4158-a3ff-340a64298f68}</Project>
+      <Name>XLGearModifier.Unity</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>SET SkaterXLPath=%25SXL_PATH%25

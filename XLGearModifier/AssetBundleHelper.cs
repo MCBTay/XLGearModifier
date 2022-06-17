@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ModIO.UI;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -30,19 +31,22 @@ namespace XLGearModifier
             var test = GearModifierTab.CustomMeshes;
 
             await PlayerController.Instance.StartCoroutine(LoadBuiltInBundles());
-            PlayerController.Instance.StartCoroutine(LoadUserBundles());
+            await PlayerController.Instance.StartCoroutine(LoadUserBundles());
         }
 
         private IEnumerator LoadBuiltInBundles()
         {
             var assembly = Assembly.GetExecutingAssembly();
-
             var assetBundles = assembly.GetManifestResourceNames();
+
+            MessageSystem.QueueMessage(MessageDisplayData.Type.Info, $"Loading built in bundles...", 1f);
 
             foreach (var assetBundle in assetBundles)
             {
                 yield return LoadBuiltInBundle(assembly, assetBundle);
             }
+
+            MessageSystem.QueueMessage(MessageDisplayData.Type.Info, $"Loaded built in bundles.", 3f);
 
             PlayerController.Instance.characterCustomizer.LoadLastPlayer();
             GearDatabase.Instance.FetchCustomGear();
@@ -215,9 +219,6 @@ namespace XLGearModifier
                                 if (string.IsNullOrEmpty(skaterMetadata.CharacterBodyTemplate.id)) continue;
                                 customGearBase = new Skater(skaterMetadata, asset);
                                 break;
-                            case XLGMBoardGearMetadata boardMetadata:
-                                customGearBase = new BoardGear(boardMetadata, asset);
-                                break;
                         }
                         if (customGearBase == null) continue;
 
@@ -244,12 +245,18 @@ namespace XLGearModifier
 				Directory.CreateDirectory(AssetPacksPath);
 			}
 
-			foreach (var assetPack in Directory.GetFiles(AssetPacksPath, "*", SearchOption.AllDirectories))
-			{
-				if (Path.HasExtension(assetPack)) continue;
+            var assetBundleFiles = Directory.GetFiles(AssetPacksPath, "*", SearchOption.AllDirectories).Where(x => !Path.HasExtension(x)).ToList();
 
-				yield return PlayerController.Instance.StartCoroutine(LoadPrefabBundleFromDisk(assetPack));
+            if (assetBundleFiles.Any())
+                MessageSystem.QueueMessage(MessageDisplayData.Type.Info, $"Loading user bundles...", 1f);
+
+            foreach (var assetPack in assetBundleFiles)
+			{
+                yield return PlayerController.Instance.StartCoroutine(LoadPrefabBundleFromDisk(assetPack));
 			}
+
+            if (assetBundleFiles.Any())
+                MessageSystem.QueueMessage(MessageDisplayData.Type.Info, $"Loaded {assetBundleFiles.Count()} user bundles.", 3f);
 
             PlayerController.Instance.characterCustomizer.LoadLastPlayer();
             GearDatabase.Instance.FetchCustomGear();
