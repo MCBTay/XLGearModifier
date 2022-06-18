@@ -369,7 +369,7 @@ namespace XLGearModifier.Patches
 
                         if (gear.type == "eyes")
                         {
-                            EyeTextureManager.Instance.RedisplayDefaultEyeTexture(__instance.previewCustomizer);
+                            EyeTextureManager.Instance.ToggleDefaultEyeTextureVisibility(__instance.previewCustomizer, true);
                         }
                     }
 					else

@@ -224,11 +224,11 @@ namespace XLGearModifier.Texturing
             }
         }
 
-        public void RedisplayDefaultEyeTexture(CharacterCustomizer customizer)
+        public void ToggleDefaultEyeTextureVisibility(CharacterCustomizer customizer, bool visible)
         {
             if (!EyesGameObjects.ContainsKey(customizer.name)) return;
 
-            EyesGameObjects[customizer.name].SetActive(true);
+            EyesGameObjects[customizer.name].SetActive(visible);
         }
     }
 }

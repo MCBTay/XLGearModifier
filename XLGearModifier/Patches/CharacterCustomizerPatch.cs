@@ -41,11 +41,7 @@ namespace XLGearModifier.Patches
                 if (gear.type != "eyes") return;
 
                 EyeTextureManager.Instance.GetGameObjectReference(__instance);
-
-                if (EyeTextureManager.Instance.EyesGameObjects.ContainsKey(__instance.name))
-                {
-                    EyeTextureManager.Instance.EyesGameObjects[__instance.name].SetActive(false);
-                }
+                EyeTextureManager.Instance.ToggleDefaultEyeTextureVisibility(__instance, false);
             }
         }
 
@@ -64,15 +60,12 @@ namespace XLGearModifier.Patches
                     if (equippedGear != null && equippedGear.All(x => x.gearInfo.type != "eyes"))
                     {
                         // not previewing eyes, and no eyes equipped, ensure default eyes are visible
-                        EyeTextureManager.Instance.RedisplayDefaultEyeTexture(__instance);
+                        EyeTextureManager.Instance.ToggleDefaultEyeTextureVisibility(__instance, true);
                     }
                     return;
                 }
-                
-                if (EyeTextureManager.Instance.EyesGameObjects.ContainsKey(__instance.name))
-                {
-                    EyeTextureManager.Instance.EyesGameObjects[__instance.name].SetActive(false);
-                }
+
+                EyeTextureManager.Instance.ToggleDefaultEyeTextureVisibility(__instance, false);
             }
         }
     }
