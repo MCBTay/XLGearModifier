@@ -15,14 +15,14 @@ namespace XLGearModifier.Patches
                 if (otherCGO == null) return true;
 
                 // If both clothing items are of the same template ID, they block.
-                if (__instance.template.id == otherCGO.template.id)
+                if (__instance.gearInfo.type == otherCGO.gearInfo.type)
                 {
                     __result = true;
                     return false;
                 }
 
                 // If either item are Eyes, it shouldn't block any other items (except other eyes, which would be covered by the template id check above)
-                if (__instance.template.id == "eyes" || otherCGO.template.id == "eyes")
+                if (__instance.gearInfo.type == "eyes" || otherCGO.gearInfo.type == "eyes")
                 {
                     __result = false;
                     return false;
