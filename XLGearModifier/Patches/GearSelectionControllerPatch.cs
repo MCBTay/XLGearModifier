@@ -378,7 +378,7 @@ namespace XLGearModifier.Patches
 					}
 
 					__instance.previewCustomizer.OnlyShowEquippedGear();
-					Traverse.Create(__instance).Field("didChangeGear").SetValue(true);
+                    Traverse.Create(__instance).Field<bool>("didChangeGear").Value = true;
 
 				}
 				catch (Exception ex)
