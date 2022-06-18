@@ -223,5 +223,12 @@ namespace XLGearModifier.Texturing
                 materialController.SetMaterial(materialController.GenerateMaterialWithChanges(OriginalEyeTextures));
             }
         }
+
+        public void RedisplayDefaultEyeTexture(CharacterCustomizer customizer)
+        {
+            if (!EyesGameObjects.ContainsKey(customizer.name)) return;
+
+            EyesGameObjects[customizer.name].SetActive(true);
+        }
     }
 }
