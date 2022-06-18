@@ -428,17 +428,23 @@ namespace XLGearModifier.Patches
 
 				if (!IsOnXLGMTab(index[1])) return;
 
-                if (GearManager.Instance.UnequippedItemIndexPath != null && GearManager.Instance.UnequippedItemIndexPath == index)
+                GearInfo gearAtIndex1 = GearDatabase.Instance.GetGearAtIndex(index);
+                if (gearAtIndex1 == null) return;
+
+				if (GearManager.Instance.UnequippedItemIndexPath != null && GearManager.Instance.UnequippedItemIndexPath == index)
                 {
+                    if (gearAtIndex1.type == "eyes")
+                    {
+						// We're hiding item because it's been unequipped, so in the case of eyes, we need to ensure default eyes are set back visible.
+						EyeTextureManager.Instance.ToggleDefaultEyeTextureVisibility(__instance.previewCustomizer, true);
+                    }
+
                     return;
                 }
 
                 GearManager.Instance.UnequippedItemIndexPath = null;
 
-				GearInfo gearAtIndex1 = GearDatabase.Instance.GetGearAtIndex(index);
-				if (gearAtIndex1 == null) return;
-
-				List<GearInfo> toBeCachedGear = new List<GearInfo>();
+                List<GearInfo> toBeCachedGear = new List<GearInfo>();
 				for (int steps = -__instance.preloadedItemsPerSide; steps <= __instance.preloadedItemsPerSide; ++steps)
 				{
 					GearInfo gearAtIndex2 = GearDatabase.Instance.GetGearAtIndex(index.Horizontal(steps));
