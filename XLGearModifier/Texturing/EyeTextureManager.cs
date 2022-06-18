@@ -130,49 +130,6 @@ namespace XLGearModifier.Texturing
             }
         }
 
-        private List<MaterialController> SetupMaterialControllers(CharacterCustomizer customizer)
-        {
-            var materialControllers = new List<MaterialController>();
-
-            var traverse = Traverse.Create(customizer);
-            var currentBody = traverse.Field("currentBody").GetValue<CharacterBodyObject>();
-
-            var eyeRenderers = currentBody.gameObject.GetComponentsInChildren<SkinnedMeshRenderer>(true).Where(x => x.name.Contains("eye_mesh"));
-
-            foreach (var eyeRenderer in eyeRenderers)
-            {
-                if (!OriginalEyeTextures.ContainsKey(TextureTypes.Albedo))
-                {
-                    OriginalEyeTextures.Add(TextureTypes.Albedo, eyeRenderer.material.GetTexture(EyeTextureConstants.ColorTextureName));
-                }
-
-                if (!OriginalEyeTextures.ContainsKey(TextureTypes.Normal))
-                {
-                    OriginalEyeTextures.Add(TextureTypes.Normal, eyeRenderer.material.GetTexture(EyeTextureConstants.NormalTextureName));
-                }
-
-                if (!OriginalEyeTextures.ContainsKey(TextureTypes.MaskPBR))
-                {
-                    OriginalEyeTextures.Add(TextureTypes.MaskPBR, eyeRenderer.material.GetTexture(EyeTextureConstants.RgmtaoTextureName));
-                }
-
-                var materialController = eyeRenderer.gameObject.GetComponent<MaterialController>();
-                if (materialController == null)
-                {
-                    materialController = eyeRenderer.gameObject.AddComponent<MaterialController>();
-                }
-
-                materialController.alphaMasks = Array.Empty<AlphaMaskTextureInfo>();
-
-                SetPropertyNameSubstitutions(materialController);
-
-                materialController.FindTargets();
-                materialControllers.Add(materialController);
-            }
-
-            return materialControllers;
-        }
-
         private void SetPropertyNameSubstitutions(MaterialController materialController)
         {
             var propNameSubsTraverse = Traverse.Create(materialController).Field("m_propertyNameSubstitutions");
@@ -184,44 +141,6 @@ namespace XLGearModifier.Texturing
             propNameSubs.Add(new PropertyNameSubstitution { oldName = MasterShaderClothTextureConstants.ColorTextureName, newName = EyeTextureConstants.ColorTextureName });
             propNameSubs.Add(new PropertyNameSubstitution { oldName = MasterShaderClothTextureConstants.NormalTextureName, newName = EyeTextureConstants.NormalTextureName });
             propNameSubs.Add(new PropertyNameSubstitution { oldName = MasterShaderClothTextureConstants.RgmtaoTextureName, newName = EyeTextureConstants.RgmtaoTextureName });
-        }
-
-
-        /// <summary>
-        /// Applies textures passed in via gearInfo to the passed in MeshRenderer.
-        /// </summary>
-        /// <param name="renderer">The renderer to apply the textures to.</param>
-        public void SetEyeTextures(CharacterCustomizer customizer, CharacterGearInfo characterGearInfo)
-        {
-            var materialControllers = SetupMaterialControllers(customizer);
-
-            var dict = new Dictionary<string, Texture>();
-
-            foreach (var textureChange in characterGearInfo.textureChanges)
-            {
-                var texture = new Texture2D(2, 2);
-                if (!texture.LoadImage(File.ReadAllBytes(textureChange.texturePath))) continue;
-
-                dict.Add(textureChange.textureID, texture);
-            }
-
-            foreach (var materialController in materialControllers)
-            {
-                materialController.SetMaterial(materialController.GenerateMaterialWithChanges(dict));
-            }
-        }
-
-        public void SetEyeTexturesBackToDefault(CharacterCustomizer customizer)
-        {
-            if (OriginalEyeTextures == null) return;
-            if (!OriginalEyeTextures.Any()) return;
-
-            var materialControllers = SetupMaterialControllers(customizer);
-
-            foreach (var materialController in materialControllers)
-            {
-                materialController.SetMaterial(materialController.GenerateMaterialWithChanges(OriginalEyeTextures));
-            }
         }
 
         public void ToggleDefaultEyeTextureVisibility(CharacterCustomizer customizer, bool visible)
