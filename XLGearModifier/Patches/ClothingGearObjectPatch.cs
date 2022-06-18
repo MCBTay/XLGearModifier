@@ -21,6 +21,13 @@ namespace XLGearModifier.Patches
                     return false;
                 }
 
+                // If either item are Eyes, it shouldn't block any other items (except other eyes, which would be covered by the template id check above)
+                if (__instance.template.id == "eyes" || otherCGO.template.id == "eyes")
+                {
+                    __result = false;
+                    return false;
+                }
+
                 // If both clothing items are layerable, then they're not blocking and should be able to be applied.
                 if (__instance.IsLayerable() && otherCGO.IsLayerable())
                 {
@@ -28,14 +35,14 @@ namespace XLGearModifier.Patches
                     return false;
                 }
 
-                // If either item is "Other" in our metadata script, it shouldn't block any other items
+                // If either item is "Other" and layerable in our metadata script, it shouldn't block any other items
                 if (__instance.IsLayerableCategory(Unity.ClothingGearCategory.Other) || otherCGO.IsLayerableCategory(Unity.ClothingGearCategory.Other))
                 {
                     __result = false;
                     return false;
                 }
 
-                // If either item is "Facial Hair" in our metadata script, it shouldn't block any other items
+                // If either item is "Facial Hair" and layerable in our metadata script, it shouldn't block any other items
                 if (__instance.IsLayerableCategory(Unity.ClothingGearCategory.FacialHair) || otherCGO.IsLayerableCategory(Unity.ClothingGearCategory.FacialHair))
                 {
                     __result = false;
