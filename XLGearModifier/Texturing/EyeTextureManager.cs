@@ -113,7 +113,7 @@ namespace XLGearModifier.Texturing
 
         public void LookForEyeTextures()
         {
-            var eyeTextures = Directory.GetFiles(SaveManager.Instance.CustomGearDir, "Eyes_*.png", SearchOption.AllDirectories).ToList();
+            var eyeTextures = Directory.GetFiles(SaveManager.Instance.CustomGearDir, "Eyes_*.(jpg|jpeg|png|tga)", SearchOption.AllDirectories).ToList();
             if (!eyeTextures.Any()) return;
 
             Eyes.Clear();
