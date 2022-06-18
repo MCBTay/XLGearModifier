@@ -10,11 +10,9 @@ using XLGearModifier.CustomGear;
 using XLGearModifier.Texturing;
 using XLGearModifier.Unity;
 using XLMenuMod;
-using XLMenuMod.Utilities;
 using XLMenuMod.Utilities.Gear;
 using XLMenuMod.Utilities.Interfaces;
 using XLMenuMod.Utilities.UserInterface;
-using Skater = XLMenuMod.Skater;
 
 namespace XLGearModifier.Patches
 {
@@ -371,10 +369,7 @@ namespace XLGearModifier.Patches
 
                         if (gear.type == "eyes")
                         {
-                            if (EyeTextureManager.Instance.EyesGameObjects.ContainsKey(__instance.previewCustomizer.name))
-                            {
-                                EyeTextureManager.Instance.EyesGameObjects[__instance.previewCustomizer.name].SetActive(true);
-                            }
+                            EyeTextureManager.Instance.RedisplayDefaultEyeTexture(__instance.previewCustomizer);
                         }
                     }
 					else
@@ -383,7 +378,7 @@ namespace XLGearModifier.Patches
 					}
 
 					__instance.previewCustomizer.OnlyShowEquippedGear();
-					Traverse.Create(__instance).Field<bool>("didChangeGear").Value = true;
+					Traverse.Create(__instance).Field("didChangeGear").SetValue(true);
 
 				}
 				catch (Exception ex)
@@ -447,9 +442,9 @@ namespace XLGearModifier.Patches
 				for (int steps = -__instance.preloadedItemsPerSide; steps <= __instance.preloadedItemsPerSide; ++steps)
 				{
 					GearInfo gearAtIndex2 = GearDatabase.Instance.GetGearAtIndex(index.Horizontal(steps));
-					if (gearAtIndex2 != null)
-						toBeCachedGear.Add(gearAtIndex2);
-				}
+                    if (gearAtIndex2 != null)
+                        toBeCachedGear.Add(gearAtIndex2);
+                }
 
 				if (index.depth == 3 && gearAtIndex1 is CustomGearFolderInfo)
 				{
