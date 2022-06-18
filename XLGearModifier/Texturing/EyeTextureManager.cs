@@ -25,6 +25,8 @@ namespace XLGearModifier.Texturing
 
         public Dictionary<string, GameObject> EyesGameObjects;
 
+        public CharacterGearInfo LookupAfterBodyMeshLoads;
+
         public EyeTextureManager()
         {
             OriginalEyeTextures = new Dictionary<string, Texture>();
@@ -47,19 +49,22 @@ namespace XLGearModifier.Texturing
             GearDatabase.Instance.CharGearTemplateForID.Add(EyeGearTemplate.id, EyeGearTemplate);
         }
 
-        public void GetGameObjectReference(CharacterCustomizer customizer)
+        public void GetGameObjectReference(CharacterCustomizer customizer, GearInfo gear)
         {
             if (EyesGameObjects.ContainsKey(customizer.name)) return;
 
             var traverse = Traverse.Create(customizer);
 
-            var currentBodyGO = traverse.Field("currentBody").GetValue<CharacterBodyObject>()?.gameObject;
+            var characterBodyObject = traverse.Field("currentBody").GetValue<CharacterBodyObject>();
+            if (characterBodyObject == null) return;
 
-            if (customizer.name == "Playback Skater Root")
+            if (characterBodyObject.State != GearObject.GearObjectState.Finished && gear is CharacterGearInfo cgi)
             {
-                // reset current body go
+                LookupAfterBodyMeshLoads = cgi;
             }
-            
+
+            var currentBodyGO = characterBodyObject?.gameObject;
+
             var eyeRenderers = currentBodyGO?
                 .GetComponentsInChildren<SkinnedMeshRenderer>(true)
                 .Where(x => x.name.Contains("eye_mesh"));
@@ -148,6 +153,7 @@ namespace XLGearModifier.Texturing
             if (!EyesGameObjects.ContainsKey(customizer.name)) return;
 
             EyesGameObjects[customizer.name].SetActive(visible);
+            customizer.gearChanged = true;
         }
     }
 }
