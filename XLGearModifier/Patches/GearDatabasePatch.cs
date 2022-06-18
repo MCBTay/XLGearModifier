@@ -442,7 +442,17 @@ namespace XLGearModifier.Patches
 
                     var other = GearDatabase.Instance.clothingGear.FirstOrDefault(x => string.Equals(x.type, item.type, StringComparison.CurrentCultureIgnoreCase) && string.Equals(x.name, item.name, StringComparison.InvariantCultureIgnoreCase));
 
-                    if (other != null && !item.EqualPaths(other))
+                    if (other == null)
+                    {
+                        if (item.type != "eyes") continue;
+
+                        var eyeInfo = EyeTextureManager.Instance.Eyes.FirstOrDefault(x => x.ParentObject is CustomCharacterGearInfo ccgi && ccgi.name == item.name);
+                        if (eyeInfo != null)
+                        {
+                            data.clothingGear[i] = eyeInfo.ParentObject as CustomCharacterGearInfo;
+                        }
+                    }
+                    else if (!item.EqualPaths(other))
                     {
                         data.clothingGear[i] = other;
                     }
