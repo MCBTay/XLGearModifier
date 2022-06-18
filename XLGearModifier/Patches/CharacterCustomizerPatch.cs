@@ -1,8 +1,7 @@
-﻿using System;
+﻿using HarmonyLib;
+using SkaterXL.Data;
 using System.Collections.Generic;
 using System.Linq;
-using HarmonyLib;
-using SkaterXL.Data;
 using XLGearModifier.CustomGear;
 using XLGearModifier.Texturing;
 using XLMenuMod.Utilities;
@@ -59,8 +58,17 @@ namespace XLGearModifier.Patches
             static void Postfix(CharacterCustomizer __instance, GearInfo preview, List<GearInfo> toBeCachedGear)
             {
                 if (preview == null) return;
-                if (preview.type != "eyes") return;
-
+                if (preview.type != "eyes")
+                {
+                    var equippedGear = Traverse.Create(__instance).Field("equippedGear").GetValue<List<ClothingGearObjet>>();
+                    if (equippedGear != null && equippedGear.All(x => x.gearInfo.type != "eyes"))
+                    {
+                        // not previewing eyes, and no eyes equipped, ensure default eyes are visible
+                        EyeTextureManager.Instance.RedisplayDefaultEyeTexture(__instance);
+                    }
+                    return;
+                }
+                
                 if (EyeTextureManager.Instance.EyesGameObjects.ContainsKey(__instance.name))
                 {
                     EyeTextureManager.Instance.EyesGameObjects[__instance.name].SetActive(false);
