@@ -11,20 +11,6 @@
     }
 
     /// <summary>
-    /// Shader property names for the shader the skateshop is using as well as the filenames the mod is looking for.
-    /// </summary>
-    public class SkateShopTextureConstants
-    {
-        public const string ColorTextureName = "Texture2D_694A07B4";
-        public const string NormalTextureName = "Texture2D_BBD4D99B";
-        public const string RgmtaoTextureName = "Texture2D_EDCB0FF8";
-
-        public const string ColorTextureFileName = "Skateshop.png";
-        public const string NormalTextureFileName = "Skateshop.normal.png";
-        public const string RgmtaoTextureFileName = "Skateshop.rgmtao.png";
-    }
-
-    /// <summary>
     /// Commonly used texture type names throughout the code.
     /// </summary>
     public class TextureTypes

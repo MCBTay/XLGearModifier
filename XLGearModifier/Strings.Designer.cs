@@ -167,5 +167,59 @@ namespace XLGearModifier {
                 return ResourceManager.GetString("HDRPLitRgmtaoPropertyName", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Skateshop.png.
+        /// </summary>
+        internal static string SkateShopAlbedoFilename {
+            get {
+                return ResourceManager.GetString("SkateShopAlbedoFilename", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Texture2D_694A07B4.
+        /// </summary>
+        internal static string SkateShopAlbedoPropertyName {
+            get {
+                return ResourceManager.GetString("SkateShopAlbedoPropertyName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Skateshop.normal.png.
+        /// </summary>
+        internal static string SkateShopNormalFilename {
+            get {
+                return ResourceManager.GetString("SkateShopNormalFilename", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Texture2D_BBD4D99B.
+        /// </summary>
+        internal static string SkateShopNormalPropertyName {
+            get {
+                return ResourceManager.GetString("SkateShopNormalPropertyName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Skateshop.rgmtao.png.
+        /// </summary>
+        internal static string SkateShopRgmtaoFilename {
+            get {
+                return ResourceManager.GetString("SkateShopRgmtaoFilename", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Texture2D_EDCB0FF8.
+        /// </summary>
+        internal static string SkateShopRgmtaoPropertyName {
+            get {
+                return ResourceManager.GetString("SkateShopRgmtaoPropertyName", resourceCulture);
+            }
+        }
     }
 }

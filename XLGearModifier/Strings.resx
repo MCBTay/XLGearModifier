@@ -153,4 +153,22 @@
   <data name="HDRPLitRgmtaoPropertyName" xml:space="preserve">
     <value>_MaskMap</value>
   </data>
+  <data name="SkateShopAlbedoFilename" xml:space="preserve">
+    <value>Skateshop.png</value>
+  </data>
+  <data name="SkateShopAlbedoPropertyName" xml:space="preserve">
+    <value>Texture2D_694A07B4</value>
+  </data>
+  <data name="SkateShopNormalFilename" xml:space="preserve">
+    <value>Skateshop.normal.png</value>
+  </data>
+  <data name="SkateShopNormalPropertyName" xml:space="preserve">
+    <value>Texture2D_BBD4D99B</value>
+  </data>
+  <data name="SkateShopRgmtaoFilename" xml:space="preserve">
+    <value>Skateshop.rgmtao.png</value>
+  </data>
+  <data name="SkateShopRgmtaoPropertyName" xml:space="preserve">
+    <value>Texture2D_EDCB0FF8</value>
+  </data>
 </root>
