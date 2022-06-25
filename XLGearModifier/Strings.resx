@@ -117,6 +117,15 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="ClothAlbedoPropertyName" xml:space="preserve">
+    <value>_texture2D_color</value>
+  </data>
+  <data name="ClothNormalPropertyName" xml:space="preserve">
+    <value>_texture2D_normal</value>
+  </data>
+  <data name="ClothRgmtaoPropertyName" xml:space="preserve">
+    <value>_texture2D_maskpbr</value>
+  </data>
   <data name="EmptyAlbedoFilename" xml:space="preserve">
     <value>Empty_Albedo.png</value>
   </data>

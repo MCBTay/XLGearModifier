@@ -115,13 +115,13 @@ namespace XLGearModifier.Patches
                 switch (textureType)
                 {
                     case TextureTypes.Albedo:
-                        __result = Task.FromResult(target.sharedMaterial.GetTexture(isHair ? Strings.HairAlbedoPropertyName : MasterShaderClothTextureConstants.ColorTextureName));
+                        __result = Task.FromResult(target.sharedMaterial.GetTexture(isHair ? Strings.HairAlbedoPropertyName : Strings.ClothAlbedoPropertyName));
                         break;
                     case TextureTypes.Normal:
-                        __result = Task.FromResult(target.sharedMaterial.GetTexture(isHair ? Strings.HairNormalPropertyName : MasterShaderClothTextureConstants.NormalTextureName));
+                        __result = Task.FromResult(target.sharedMaterial.GetTexture(isHair ? Strings.HairNormalPropertyName : Strings.ClothNormalPropertyName));
                         break;
                     case TextureTypes.MaskPBR:
-                        __result = Task.FromResult(target.sharedMaterial.GetTexture(isHair ? Strings.HairRgmtaoPropertyName : MasterShaderClothTextureConstants.RgmtaoTextureName));
+                        __result = Task.FromResult(target.sharedMaterial.GetTexture(isHair ? Strings.HairRgmtaoPropertyName : Strings.ClothRgmtaoPropertyName));
                         break;
                 }
             }

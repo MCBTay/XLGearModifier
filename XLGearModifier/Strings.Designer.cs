@@ -61,6 +61,33 @@ namespace XLGearModifier {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to _texture2D_color.
+        /// </summary>
+        internal static string ClothAlbedoPropertyName {
+            get {
+                return ResourceManager.GetString("ClothAlbedoPropertyName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to _texture2D_normal.
+        /// </summary>
+        internal static string ClothNormalPropertyName {
+            get {
+                return ResourceManager.GetString("ClothNormalPropertyName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to _texture2D_maskpbr.
+        /// </summary>
+        internal static string ClothRgmtaoPropertyName {
+            get {
+                return ResourceManager.GetString("ClothRgmtaoPropertyName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Empty_Albedo.png.
         /// </summary>
         internal static string EmptyAlbedoFilename {
