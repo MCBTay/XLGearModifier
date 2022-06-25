@@ -205,6 +205,20 @@ namespace XLGearModifier {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to 
+        ///    ___                    _              __   __                                   _____             _      _     
+        ///   | __|  _  _     __     | |__     o O O \ \ / /   ___    _  _      _       o O O |_   _|  __ _     (_)    | |_   
+        ///   | _|  | +| |   / _|    | / /    o       \ V /   / _ \  | +| |    ( )     o        | |   / _` |    | |    |  _|  
+        ///  _|_|_   \_,_|   \__|_   |_\_\   TS__[O]  _|_|_   \___/   \_,_|   _|/__   TS__[O]  _|_|_  \__,_|   _|_|_   _\__|  
+        ///_| &quot;&quot;&quot; |_|&quot;&quot;&quot;&quot;&quot;|_|&quot;&quot;&quot;&quot;&quot;|_|&quot;&quot;&quot;&quot;&quot;| {======|_ [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string hehe {
+            get {
+                return ResourceManager.GetString("hehe", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to maskpbr.
         /// </summary>
         internal static string MaskPBR {
