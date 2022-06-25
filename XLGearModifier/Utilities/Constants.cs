@@ -11,16 +11,6 @@
     }
 
     /// <summary>
-    /// Shader property names for MasterShaderHair_AlphaTest_v1.
-    /// </summary>
-    public class MasterShaderHairTextureConstants
-    {
-        public const string ColorTextureName = "_texture_color";
-        public const string NormalTextureName = "_texture_normal";
-        public const string RgmtaoTextureName = "_texture_maskpbr";
-    }
-
-    /// <summary>
     /// Shader property names for the shader the skateshop is using as well as the filenames the mod is looking for.
     /// </summary>
     public class SkateShopTextureConstants

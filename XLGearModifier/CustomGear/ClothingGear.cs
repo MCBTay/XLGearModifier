@@ -100,18 +100,18 @@ namespace XLGearModifier.CustomGear
             //TODO: This 3 entries below can likely be removed once we get access to their shaders.
             var propNameSubs = new List<PropertyNameSubstitution>
             {
-                new PropertyNameSubstitution { oldName = TextureTypes.Albedo, newName = isHair ? MasterShaderHairTextureConstants.ColorTextureName : MasterShaderClothTextureConstants.ColorTextureName },
-                new PropertyNameSubstitution { oldName = TextureTypes.Normal, newName = isHair ? MasterShaderHairTextureConstants.NormalTextureName : MasterShaderClothTextureConstants.NormalTextureName },
-                new PropertyNameSubstitution { oldName = TextureTypes.MaskPBR, newName = isHair ? MasterShaderHairTextureConstants.RgmtaoTextureName : MasterShaderClothTextureConstants.RgmtaoTextureName }
+                new PropertyNameSubstitution { oldName = TextureTypes.Albedo, newName = isHair ? Strings.HairAlbedoPropertyName : MasterShaderClothTextureConstants.ColorTextureName },
+                new PropertyNameSubstitution { oldName = TextureTypes.Normal, newName = isHair ? Strings.HairNormalPropertyName : MasterShaderClothTextureConstants.NormalTextureName },
+                new PropertyNameSubstitution { oldName = TextureTypes.MaskPBR, newName = isHair ? Strings.HairRgmtaoPropertyName : MasterShaderClothTextureConstants.RgmtaoTextureName }
             };
 
             // Because hair/clothing gear are on different shaders, all of Easy Day's hair has this substitution for color.
             // We're just doing it here in code to avoid every hair in editor needing to add it.
             if (isHair)
             {
-                propNameSubs.Add(new PropertyNameSubstitution { oldName = MasterShaderClothTextureConstants.ColorTextureName, newName = MasterShaderHairTextureConstants.ColorTextureName });
-                propNameSubs.Add(new PropertyNameSubstitution { oldName = MasterShaderClothTextureConstants.NormalTextureName, newName = MasterShaderHairTextureConstants.NormalTextureName });
-                propNameSubs.Add(new PropertyNameSubstitution { oldName = MasterShaderClothTextureConstants.RgmtaoTextureName, newName = MasterShaderHairTextureConstants.RgmtaoTextureName });
+                propNameSubs.Add(new PropertyNameSubstitution { oldName = MasterShaderClothTextureConstants.ColorTextureName, newName = Strings.HairAlbedoPropertyName });
+                propNameSubs.Add(new PropertyNameSubstitution { oldName = MasterShaderClothTextureConstants.NormalTextureName, newName = Strings.HairNormalPropertyName });
+                propNameSubs.Add(new PropertyNameSubstitution { oldName = MasterShaderClothTextureConstants.RgmtaoTextureName, newName = Strings.HairRgmtaoPropertyName });
             }
 
             var traverse = Traverse.Create(materialController);

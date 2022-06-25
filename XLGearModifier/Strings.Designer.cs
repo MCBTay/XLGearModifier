@@ -115,6 +115,33 @@ namespace XLGearModifier {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to _texture_color.
+        /// </summary>
+        internal static string HairAlbedoPropertyName {
+            get {
+                return ResourceManager.GetString("HairAlbedoPropertyName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to _texture_normal.
+        /// </summary>
+        internal static string HairNormalPropertyName {
+            get {
+                return ResourceManager.GetString("HairNormalPropertyName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to _texture_maskpbr.
+        /// </summary>
+        internal static string HairRgmtaoPropertyName {
+            get {
+                return ResourceManager.GetString("HairRgmtaoPropertyName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to _BaseColorMap.
         /// </summary>
         internal static string HDRPLitAlbedoPropertyName {

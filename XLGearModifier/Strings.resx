@@ -135,6 +135,15 @@
   <data name="EyesRgmtaoPropertyName" xml:space="preserve">
     <value>Texture2D_B56F9766</value>
   </data>
+  <data name="HairAlbedoPropertyName" xml:space="preserve">
+    <value>_texture_color</value>
+  </data>
+  <data name="HairNormalPropertyName" xml:space="preserve">
+    <value>_texture_normal</value>
+  </data>
+  <data name="HairRgmtaoPropertyName" xml:space="preserve">
+    <value>_texture_maskpbr</value>
+  </data>
   <data name="HDRPLitAlbedoPropertyName" xml:space="preserve">
     <value>_BaseColorMap</value>
   </data>
