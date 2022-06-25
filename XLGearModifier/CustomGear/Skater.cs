@@ -113,9 +113,9 @@ namespace XLGearModifier.CustomGear
             //TODO: This 3 entries below can likely be removed once we get access to their shaders.
             var propNameSubs = new List<PropertyNameSubstitution>
             {
-                new PropertyNameSubstitution { oldName = MasterShaderClothTextureConstants.ColorTextureName, newName = Strings.HDRPLitAlbedoPropertyName },
-                new PropertyNameSubstitution { oldName = MasterShaderClothTextureConstants.NormalTextureName, newName = Strings.HDRPLitNormalPropertyName },
-                new PropertyNameSubstitution { oldName = MasterShaderClothTextureConstants.RgmtaoTextureName, newName = Strings.HDRPLitRgmtaoPropertyName }
+                new PropertyNameSubstitution { oldName = Strings.ClothAlbedoPropertyName, newName = Strings.HDRPLitAlbedoPropertyName },
+                new PropertyNameSubstitution { oldName = Strings.ClothNormalPropertyName, newName = Strings.HDRPLitNormalPropertyName },
+                new PropertyNameSubstitution { oldName = Strings.ClothRgmtaoPropertyName, newName = Strings.HDRPLitRgmtaoPropertyName }
             };
 
             var traverse = Traverse.Create(materialController);

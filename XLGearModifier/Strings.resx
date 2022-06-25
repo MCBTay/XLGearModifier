@@ -117,6 +117,9 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="Albedo" xml:space="preserve">
+    <value>albedo</value>
+  </data>
   <data name="ClothAlbedoPropertyName" xml:space="preserve">
     <value>_texture2D_color</value>
   </data>
@@ -161,6 +164,12 @@
   </data>
   <data name="HDRPLitRgmtaoPropertyName" xml:space="preserve">
     <value>_MaskMap</value>
+  </data>
+  <data name="MaskPBR" xml:space="preserve">
+    <value>maskpbr</value>
+  </data>
+  <data name="Normal" xml:space="preserve">
+    <value>normal</value>
   </data>
   <data name="SkateShopAlbedoFilename" xml:space="preserve">
     <value>Skateshop.png</value>

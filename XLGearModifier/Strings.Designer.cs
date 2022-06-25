@@ -61,6 +61,15 @@ namespace XLGearModifier {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to albedo.
+        /// </summary>
+        internal static string Albedo {
+            get {
+                return ResourceManager.GetString("Albedo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to _texture2D_color.
         /// </summary>
         internal static string ClothAlbedoPropertyName {
@@ -192,6 +201,24 @@ namespace XLGearModifier {
         internal static string HDRPLitRgmtaoPropertyName {
             get {
                 return ResourceManager.GetString("HDRPLitRgmtaoPropertyName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to maskpbr.
+        /// </summary>
+        internal static string MaskPBR {
+            get {
+                return ResourceManager.GetString("MaskPBR", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to normal.
+        /// </summary>
+        internal static string Normal {
+            get {
+                return ResourceManager.GetString("Normal", resourceCulture);
             }
         }
         

@@ -112,17 +112,17 @@ namespace XLGearModifier.Patches
                 var isHair = customClothing.ClothingMetadata.Category == Unity.ClothingGearCategory.Hair ||
                              customClothing.ClothingMetadata.Category == Unity.ClothingGearCategory.FacialHair;
 
-                switch (textureType)
+                if (textureType == Strings.Albedo)
                 {
-                    case TextureTypes.Albedo:
-                        __result = Task.FromResult(target.sharedMaterial.GetTexture(isHair ? Strings.HairAlbedoPropertyName : Strings.ClothAlbedoPropertyName));
-                        break;
-                    case TextureTypes.Normal:
-                        __result = Task.FromResult(target.sharedMaterial.GetTexture(isHair ? Strings.HairNormalPropertyName : Strings.ClothNormalPropertyName));
-                        break;
-                    case TextureTypes.MaskPBR:
-                        __result = Task.FromResult(target.sharedMaterial.GetTexture(isHair ? Strings.HairRgmtaoPropertyName : Strings.ClothRgmtaoPropertyName));
-                        break;
+                    __result = Task.FromResult(target.sharedMaterial.GetTexture(isHair ? Strings.HairAlbedoPropertyName : Strings.ClothAlbedoPropertyName));
+                }
+                else if (textureType == Strings.Normal)
+                {
+                    __result = Task.FromResult(target.sharedMaterial.GetTexture(isHair ? Strings.HairNormalPropertyName : Strings.ClothNormalPropertyName));
+                }
+                else if (textureType == Strings.MaskPBR)
+                {
+                    __result = Task.FromResult(target.sharedMaterial.GetTexture(isHair ? Strings.HairRgmtaoPropertyName : Strings.ClothRgmtaoPropertyName));
                 }
             }
         }

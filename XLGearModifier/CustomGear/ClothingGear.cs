@@ -100,9 +100,9 @@ namespace XLGearModifier.CustomGear
             //TODO: This 3 entries below can likely be removed once we get access to their shaders.
             var propNameSubs = new List<PropertyNameSubstitution>
             {
-                new PropertyNameSubstitution { oldName = TextureTypes.Albedo, newName = isHair ? Strings.HairAlbedoPropertyName : Strings.ClothAlbedoPropertyName},
-                new PropertyNameSubstitution { oldName = TextureTypes.Normal, newName = isHair ? Strings.HairNormalPropertyName : Strings.ClothNormalPropertyName },
-                new PropertyNameSubstitution { oldName = TextureTypes.MaskPBR, newName = isHair ? Strings.HairRgmtaoPropertyName : Strings.ClothRgmtaoPropertyName }
+                new PropertyNameSubstitution { oldName = Strings.Albedo, newName = isHair ? Strings.HairAlbedoPropertyName : Strings.ClothAlbedoPropertyName},
+                new PropertyNameSubstitution { oldName = Strings.Normal, newName = isHair ? Strings.HairNormalPropertyName : Strings.ClothNormalPropertyName },
+                new PropertyNameSubstitution { oldName = Strings.MaskPBR, newName = isHair ? Strings.HairRgmtaoPropertyName : Strings.ClothRgmtaoPropertyName }
             };
 
             // Because hair/clothing gear are on different shaders, all of Easy Day's hair has this substitution for color.
@@ -141,27 +141,27 @@ namespace XLGearModifier.CustomGear
 
                 var baseTextures = BaseGameTextureManager.Instance.BaseGameTextures[id];
 
-                if (baseTextures.ContainsKey(TextureTypes.Normal))
+                if (baseTextures.ContainsKey(Strings.Normal))
                 {
-                    textures[TextureTypes.Normal] = baseTextures[TextureTypes.Normal];
+                    textures[Strings.Normal] = baseTextures[Strings.Normal];
                 }
 
-                if (baseTextures.ContainsKey(TextureTypes.MaskPBR))
+                if (baseTextures.ContainsKey(Strings.MaskPBR))
                 {
-                    textures[TextureTypes.MaskPBR] = baseTextures[TextureTypes.MaskPBR];
+                    textures[Strings.MaskPBR] = baseTextures[Strings.MaskPBR];
                 }
 
                 return textures;
             }
 
             var color = originalMaterial.GetTexture(Strings.HDRPLitAlbedoPropertyName);
-            if (color != null) textures[TextureTypes.Albedo] = color;
+            if (color != null) textures[Strings.Albedo] = color;
 
             var normal = originalMaterial.GetTexture(Strings.HDRPLitNormalPropertyName);
-            if (normal != null) textures[TextureTypes.Normal] = normal;
+            if (normal != null) textures[Strings.Normal] = normal;
 
             var mask = originalMaterial.GetTexture(Strings.HDRPLitRgmtaoPropertyName);
-            if (mask != null) textures[TextureTypes.MaskPBR] = mask;
+            if (mask != null) textures[Strings.MaskPBR] = mask;
 
             return textures;
         }
@@ -193,9 +193,9 @@ namespace XLGearModifier.CustomGear
         {
             var textures = new Dictionary<string, Texture>
             {
-                { TextureTypes.Albedo, GearManager.Instance.EmptyAlbedo },
-                { TextureTypes.Normal, GearManager.Instance.EmptyNormalMap },
-                { TextureTypes.MaskPBR, GearManager.Instance.EmptyMaskPBR }
+                { Strings.Albedo, GearManager.Instance.EmptyAlbedo },
+                { Strings.Normal, GearManager.Instance.EmptyNormalMap },
+                { Strings.MaskPBR, GearManager.Instance.EmptyMaskPBR }
             };
 
             //textures.Add(shaderName == "MasterShaderCloth_v2" ? "_texture2D_maskPBR" : "_texture2D_rgmtao", Metadata.GetMaterialInformation()?.DefaultTexture?.textureMaskPBR ?? AssetBundleHelper.Instance.EmptyMaskPBR);
