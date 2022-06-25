@@ -21,16 +21,6 @@
     }
 
     /// <summary>
-    /// Shader property names for HDRP/Lit.
-    /// </summary>
-    public class HDRPLitTextureConstants
-    {
-        public const string ColorTextureName = "_BaseColorMap";
-        public const string NormalTextureName = "_NormalMap";
-        public const string RgmtaoTextureName = "_MaskMap";
-    }
-
-    /// <summary>
     /// Shader property names for the shader the skateshop is using as well as the filenames the mod is looking for.
     /// </summary>
     public class SkateShopTextureConstants

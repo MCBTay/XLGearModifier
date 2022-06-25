@@ -113,5 +113,32 @@ namespace XLGearModifier {
                 return ResourceManager.GetString("EyesRgmtaoPropertyName", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to _BaseColorMap.
+        /// </summary>
+        internal static string HDRPLitAlbedoPropertyName {
+            get {
+                return ResourceManager.GetString("HDRPLitAlbedoPropertyName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to _NormalMap.
+        /// </summary>
+        internal static string HDRPLitNormalPropertyName {
+            get {
+                return ResourceManager.GetString("HDRPLitNormalPropertyName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to _MaskMap.
+        /// </summary>
+        internal static string HDRPLitRgmtaoPropertyName {
+            get {
+                return ResourceManager.GetString("HDRPLitRgmtaoPropertyName", resourceCulture);
+            }
+        }
     }
 }

@@ -135,4 +135,13 @@
   <data name="EyesRgmtaoPropertyName" xml:space="preserve">
     <value>Texture2D_B56F9766</value>
   </data>
+  <data name="HDRPLitAlbedoPropertyName" xml:space="preserve">
+    <value>_BaseColorMap</value>
+  </data>
+  <data name="HDRPLitNormalPropertyName" xml:space="preserve">
+    <value>_NormalMap</value>
+  </data>
+  <data name="HDRPLitRgmtaoPropertyName" xml:space="preserve">
+    <value>_MaskMap</value>
+  </data>
 </root>
