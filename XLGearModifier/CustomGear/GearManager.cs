@@ -156,7 +156,7 @@ namespace XLGearModifier.CustomGear
             var textureChanges = new List<TextureChange>();
             foreach (var texture in textures)
             {
-                if (texture.Key == TextureTypes.Albedo && texture.Value != EmptyAlbedo)
+                if (texture.Key == Strings.Albedo && texture.Value != EmptyAlbedo)
                 {
                     itemName = texture.Value.name;
                 }
