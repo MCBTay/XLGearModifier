@@ -48,19 +48,19 @@ namespace XLGearModifier.Patches
             /// <returns>True when a texture is found, false otherwise.</returns>
             private static bool IsEmptyTexture(string texturePath, ref Task<Texture> __result)
             {
-                if (texturePath.EndsWith(Path.GetFileNameWithoutExtension(EmptyTextureConstants.EmptyAlbedoFilename)))
+                if (texturePath.EndsWith(Path.GetFileNameWithoutExtension(Strings.EmptyAlbedoFilename)))
                 {
                     __result = Task.FromResult<Texture>(GearManager.Instance.EmptyAlbedo);
                     return true;
                 }
 
-                if (texturePath.EndsWith(Path.GetFileNameWithoutExtension(EmptyTextureConstants.EmptyNormalFilename)))
+                if (texturePath.EndsWith(Path.GetFileNameWithoutExtension(Strings.EmptyNormalFilename)))
                 {
                     __result = Task.FromResult<Texture>(GearManager.Instance.EmptyNormalMap);
                     return true;
                 }
 
-                if (texturePath.EndsWith(Path.GetFileNameWithoutExtension(EmptyTextureConstants.EmptyMaskFilename)))
+                if (texturePath.EndsWith(Path.GetFileNameWithoutExtension(Strings.EmptyMaskFilename)))
                 {
                     __result = Task.FromResult<Texture>(GearManager.Instance.EmptyMaskPBR);
                     return true;

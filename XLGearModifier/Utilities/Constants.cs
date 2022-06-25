@@ -1,26 +1,6 @@
 ﻿namespace XLGearModifier.Utilities
 {
     /// <summary>
-    /// Filenames for our built-in default, empty textures.
-    /// </summary>
-    public class EmptyTextureConstants
-    {
-        public const string EmptyAlbedoFilename = "Empty_Albedo.png";
-        public const string EmptyNormalFilename = "Empty_Normal_Map.png";
-        public const string EmptyMaskFilename = "Empty_Maskpbr_Map.png";
-    }
-
-    /// <summary>
-    /// Shader property names for the shader the eyes are using.
-    /// </summary>
-    public class EyeTextureConstants
-    {
-        public const string ColorTextureName = "Texture2D_4128E5C7";
-        public const string NormalTextureName = "Texture2D_BEC07F52";
-        public const string RgmtaoTextureName = "Texture2D_B56F9766";
-    }
-
-    /// <summary>
     /// Shader property names for MasterShaderCloth_v2.
     /// </summary>
     public class MasterShaderClothTextureConstants
