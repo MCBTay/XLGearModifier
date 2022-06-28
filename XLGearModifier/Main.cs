@@ -52,6 +52,8 @@ namespace XLGearModifier
 
 				//EyeTextureManager.Instance.AddEyeTemplate();
                 AssetBundleHelper.Instance.LoadBundles();
+
+				UnityModManager.Logger.Log(Strings.hehe);
             }
 			else
 			{

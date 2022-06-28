@@ -140,9 +140,9 @@ namespace XLGearModifier
         /// <param name="bundle"></param>
         private IEnumerator LoadEmptyDefaultTextures(AssetBundle bundle)
         {
-            yield return LoadAsset<Texture2D>(bundle, EmptyTextureConstants.EmptyAlbedoFilename, value => GearManager.Instance.EmptyAlbedo = value);
-            yield return LoadAsset<Texture2D>(bundle, EmptyTextureConstants.EmptyNormalFilename, value => GearManager.Instance.EmptyNormalMap = value);
-            yield return LoadAsset<Texture2D>(bundle, EmptyTextureConstants.EmptyMaskFilename, value => GearManager.Instance.EmptyMaskPBR = value);
+            yield return LoadAsset<Texture2D>(bundle, Strings.EmptyAlbedoFilename, value => GearManager.Instance.EmptyAlbedo = value);
+            yield return LoadAsset<Texture2D>(bundle, Strings.EmptyNormalFilename, value => GearManager.Instance.EmptyNormalMap = value);
+            yield return LoadAsset<Texture2D>(bundle, Strings.EmptyMaskFilename, value => GearManager.Instance.EmptyMaskPBR = value);
         }
 
         /// <summary>

@@ -95,19 +95,19 @@ namespace XLGearModifier.Texturing
 
         private void PopulateOriginalEyeTextureDictionary(SkinnedMeshRenderer eyeRenderer)
         {
-            if (!OriginalEyeTextures.ContainsKey(TextureTypes.Albedo))
+            if (!OriginalEyeTextures.ContainsKey(Strings.Albedo))
             {
-                OriginalEyeTextures.Add(TextureTypes.Albedo, eyeRenderer.material.GetTexture(EyeTextureConstants.ColorTextureName));
+                OriginalEyeTextures.Add(Strings.Albedo, eyeRenderer.material.GetTexture(Strings.EyesAlbedoPropertyName));
             }
 
-            if (!OriginalEyeTextures.ContainsKey(TextureTypes.Normal))
+            if (!OriginalEyeTextures.ContainsKey(Strings.Normal))
             {
-                OriginalEyeTextures.Add(TextureTypes.Normal, eyeRenderer.material.GetTexture(EyeTextureConstants.NormalTextureName));
+                OriginalEyeTextures.Add(Strings.Normal, eyeRenderer.material.GetTexture(Strings.EyesNormalPropertyName));
             }
 
-            if (!OriginalEyeTextures.ContainsKey(TextureTypes.MaskPBR))
+            if (!OriginalEyeTextures.ContainsKey(Strings.MaskPBR))
             {
-                OriginalEyeTextures.Add(TextureTypes.MaskPBR, eyeRenderer.material.GetTexture(EyeTextureConstants.RgmtaoTextureName));
+                OriginalEyeTextures.Add(Strings.MaskPBR, eyeRenderer.material.GetTexture(Strings.EyesRgmtaoPropertyName));
             }
         }
 
@@ -141,19 +141,19 @@ namespace XLGearModifier.Texturing
 
             foreach (var eyeRenderer in eyeRenderers)
             {
-                if (!OriginalEyeTextures.ContainsKey(TextureTypes.Albedo))
+                if (!OriginalEyeTextures.ContainsKey(Strings.Albedo))
                 {
-                    OriginalEyeTextures.Add(TextureTypes.Albedo, eyeRenderer.material.GetTexture(EyeTextureConstants.ColorTextureName));
+                    OriginalEyeTextures.Add(Strings.Albedo, eyeRenderer.material.GetTexture(Strings.EyesAlbedoPropertyName));
                 }
 
-                if (!OriginalEyeTextures.ContainsKey(TextureTypes.Normal))
+                if (!OriginalEyeTextures.ContainsKey(Strings.Normal))
                 {
-                    OriginalEyeTextures.Add(TextureTypes.Normal, eyeRenderer.material.GetTexture(EyeTextureConstants.NormalTextureName));
+                    OriginalEyeTextures.Add(Strings.Normal, eyeRenderer.material.GetTexture(Strings.EyesNormalPropertyName));
                 }
 
-                if (!OriginalEyeTextures.ContainsKey(TextureTypes.MaskPBR))
+                if (!OriginalEyeTextures.ContainsKey(Strings.MaskPBR))
                 {
-                    OriginalEyeTextures.Add(TextureTypes.MaskPBR, eyeRenderer.material.GetTexture(EyeTextureConstants.RgmtaoTextureName));
+                    OriginalEyeTextures.Add(Strings.MaskPBR, eyeRenderer.material.GetTexture(Strings.EyesRgmtaoPropertyName));
                 }
 
                 var materialController = eyeRenderer.gameObject.GetComponent<MaterialController>();
@@ -181,9 +181,9 @@ namespace XLGearModifier.Texturing
             
             var propNameSubs = propNameSubsTraverse.GetValue<List<PropertyNameSubstitution>>();
 
-            propNameSubs.Add(new PropertyNameSubstitution { oldName = MasterShaderClothTextureConstants.ColorTextureName, newName = EyeTextureConstants.ColorTextureName });
-            propNameSubs.Add(new PropertyNameSubstitution { oldName = MasterShaderClothTextureConstants.NormalTextureName, newName = EyeTextureConstants.NormalTextureName });
-            propNameSubs.Add(new PropertyNameSubstitution { oldName = MasterShaderClothTextureConstants.RgmtaoTextureName, newName = EyeTextureConstants.RgmtaoTextureName });
+            propNameSubs.Add(new PropertyNameSubstitution { oldName = Strings.ClothAlbedoPropertyName, newName = Strings.EyesAlbedoPropertyName });
+            propNameSubs.Add(new PropertyNameSubstitution { oldName = Strings.ClothNormalPropertyName, newName = Strings.EyesNormalPropertyName });
+            propNameSubs.Add(new PropertyNameSubstitution { oldName = Strings.ClothRgmtaoPropertyName, newName = Strings.EyesRgmtaoPropertyName });
         }
 
 
