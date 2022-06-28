@@ -48,19 +48,19 @@ namespace XLGearModifier.Patches
             /// <returns>True when a texture is found, false otherwise.</returns>
             private static bool IsEmptyTexture(string texturePath, ref Task<Texture> __result)
             {
-                if (texturePath.EndsWith(Path.GetFileNameWithoutExtension(EmptyTextureConstants.EmptyAlbedoFilename)))
+                if (texturePath.EndsWith(Path.GetFileNameWithoutExtension(Strings.EmptyAlbedoFilename)))
                 {
                     __result = Task.FromResult<Texture>(GearManager.Instance.EmptyAlbedo);
                     return true;
                 }
 
-                if (texturePath.EndsWith(Path.GetFileNameWithoutExtension(EmptyTextureConstants.EmptyNormalFilename)))
+                if (texturePath.EndsWith(Path.GetFileNameWithoutExtension(Strings.EmptyNormalFilename)))
                 {
                     __result = Task.FromResult<Texture>(GearManager.Instance.EmptyNormalMap);
                     return true;
                 }
 
-                if (texturePath.EndsWith(Path.GetFileNameWithoutExtension(EmptyTextureConstants.EmptyMaskFilename)))
+                if (texturePath.EndsWith(Path.GetFileNameWithoutExtension(Strings.EmptyMaskFilename)))
                 {
                     __result = Task.FromResult<Texture>(GearManager.Instance.EmptyMaskPBR);
                     return true;
@@ -112,17 +112,17 @@ namespace XLGearModifier.Patches
                 var isHair = customClothing.ClothingMetadata.Category == Unity.ClothingGearCategory.Hair ||
                              customClothing.ClothingMetadata.Category == Unity.ClothingGearCategory.FacialHair;
 
-                switch (textureType)
+                if (textureType == Strings.Albedo)
                 {
-                    case TextureTypes.Albedo:
-                        __result = Task.FromResult(target.sharedMaterial.GetTexture(isHair ? MasterShaderHairTextureConstants.ColorTextureName : MasterShaderClothTextureConstants.ColorTextureName));
-                        break;
-                    case TextureTypes.Normal:
-                        __result = Task.FromResult(target.sharedMaterial.GetTexture(isHair ? MasterShaderHairTextureConstants.NormalTextureName : MasterShaderClothTextureConstants.NormalTextureName));
-                        break;
-                    case TextureTypes.MaskPBR:
-                        __result = Task.FromResult(target.sharedMaterial.GetTexture(isHair ? MasterShaderHairTextureConstants.RgmtaoTextureName : MasterShaderClothTextureConstants.RgmtaoTextureName));
-                        break;
+                    __result = Task.FromResult(target.sharedMaterial.GetTexture(isHair ? Strings.HairAlbedoPropertyName : Strings.ClothAlbedoPropertyName));
+                }
+                else if (textureType == Strings.Normal)
+                {
+                    __result = Task.FromResult(target.sharedMaterial.GetTexture(isHair ? Strings.HairNormalPropertyName : Strings.ClothNormalPropertyName));
+                }
+                else if (textureType == Strings.MaskPBR)
+                {
+                    __result = Task.FromResult(target.sharedMaterial.GetTexture(isHair ? Strings.HairRgmtaoPropertyName : Strings.ClothRgmtaoPropertyName));
                 }
             }
         }
