@@ -2,11 +2,11 @@
   "Id": "XLGearModifier",
   "DisplayName": "XL Gear Modifier",
   "Author": "mcbtay & Redgouf",
-  "Version": "1.6.1.4",
+  "Version": "2.0.0",
   "ManagerVersion": "0.22.5.0",
   "Requirements": [],
   "AssemblyName": "XLGearModifier.dll",
   "EntryMethod": "XLGearModifier.Main.Load",
   "HomePage": "https://github.com/MCBTay/XLGearModifier",
-  "Repository": ""
+  "Repository": "https://raw.githubusercontent.com/MCBTay/XLGearModifier/master/repository.json"
 }
