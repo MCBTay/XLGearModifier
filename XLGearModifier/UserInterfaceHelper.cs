@@ -66,9 +66,12 @@ namespace XLGearModifier
                     GearManager.Instance.CustomGear[clothingGear.type] as ClothingGear :
                     null;
 
-                var creatorName = mesh?.ClothingMetadata?.CreatorName ?? "N/A";
-
-				var lineItem = whatsEquipped.AddToList(clothingGear.type, clothingGear.name, creatorName, sprite);
+                var lineItem = whatsEquipped.AddToList(
+                    clothingGear.type, 
+                    clothingGear.name, 
+                    mesh?.ClothingMetadata?.CreatorName, 
+					mesh?.ClothingMetadata?.PrefixAlias,
+                    sprite);
 				lineItem.GetComponent<XLGMWhatsEquippedLineItem>().equippedLineClicked.AddListener((type) => EquippedLineClicked(clothingGear.type));
             }
 		}

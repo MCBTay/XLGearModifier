@@ -27,8 +27,15 @@ namespace XLGearModifier.Patches
                 if (!GearSelectionControllerPatch.IsOnXLGMTab(index[1]))
                 {
                     var newResult = new List<GearInfo>(__result);
-                    // check to see if custom meshes are in list, if so, remove
-                    newResult.RemoveAll(x => GearManager.Instance.CustomGear.ContainsKey(x.type) && GearManager.Instance.CustomGear[x.type] is ClothingGear);
+
+                    // if the texture is for a known prefix, filter it out
+                    newResult.RemoveAll(x => 
+                        GearManager.Instance.CustomGear.ContainsKey(x.type) && GearManager.Instance.CustomGear[x.type] is ClothingGear);
+
+                    // if the texture is for a known alias, filter it out
+                    newResult.RemoveAll(x => GearManager.Instance.CustomGear.Any(y => 
+                        y.Value is ClothingGear clothing && clothing.ClothingMetadata.AliasCharacterGearTemplate?.id == x.type));
+
                     __result = newResult.ToArray();
                     return;
                 }
@@ -433,6 +440,8 @@ namespace XLGearModifier.Patches
         {
             static void Prefix(GearDatabase __instance, ref CustomizedPlayerDataV2 data)
             {
+                if (data?.clothingGear == null) return;
+
                 for (var i = 0; i < data.clothingGear.Length; i++)
                 {
                     var item = data.clothingGear[i];

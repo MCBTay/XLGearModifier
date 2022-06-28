@@ -42,6 +42,13 @@ namespace XLGearModifier.Patches
                     return false;
                 }
 
+                // If either item is "Socks" in our metadata script, it shouldn't block any other items.
+                if (__instance.IsLayerableCategory(Unity.ClothingGearCategory.Socks) || otherCGO.IsLayerableCategory(Unity.ClothingGearCategory.Socks))
+                {
+                    __result = false;
+                    return false;
+                }
+
                 return true;
 			}
 		}

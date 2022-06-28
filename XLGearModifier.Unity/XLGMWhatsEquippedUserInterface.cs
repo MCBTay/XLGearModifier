@@ -2,13 +2,10 @@
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
-using UnityEngine.EventSystems;
-using UnityEngine.UI;
-using Object = UnityEngine.Object;
 
 namespace XLGearModifier.Unity
 {
-	[Serializable]
+    [Serializable]
 	public class XLGMWhatsEquippedUserInterface : MonoBehaviour
 	{
 		public GameObject listContent;
@@ -23,16 +20,18 @@ namespace XLGearModifier.Unity
 				var objectA = listContent.transform.GetChild(i);
 				objectA.transform.SetParent(null, false);
 
-				//objectA.gameObject.GetComponent<Button>().onClick.RemoveAllListeners();
-				//objectA.gameObject.GetComponent<ObjectSelectionListItem>().onSelect.RemoveAllListeners();
-
-				Destroy(objectA.gameObject);
+                Destroy(objectA.gameObject);
 			}
+        }
 
-			//EventSystem.current.SetSelectedGameObject(null);
-		}
-
-		public GameObject AddToList(string meshName, string textureName, string creatorName, Sprite sprite, UnityAction objectClicked = null, UnityAction objectSelected = null)
+		public GameObject AddToList(
+            string meshName, 
+            string textureName, 
+            string creatorName,
+			string aliasName,
+            Sprite sprite, 
+            UnityAction objectClicked = null, 
+            UnityAction objectSelected = null)
 		{
 			var listItem = Instantiate(listItemPrefab, listContent.transform);
 
@@ -42,32 +41,17 @@ namespace XLGearModifier.Unity
 				whatsEquipped.image.sprite = sprite;
 				whatsEquipped.meshName.SetText(meshName);
 				whatsEquipped.textureName.SetText(textureName);
-				whatsEquipped.creatorName.SetText(creatorName);
-			}
-			//if (objectClicked != null)
-			//{
-			//	listItem.GetComponent<Button>().onClick.AddListener(objectClicked);
-			//}
 
-			//if (objectSelected != null)
-			//{
-			//	listItem.GetComponent<ObjectSelectionListItem>().onSelect.AddListener(objectSelected);
-			//}
+                whatsEquipped.creatorLine.SetActive(!string.IsNullOrEmpty(creatorName));
+				whatsEquipped.creatorName.SetText(creatorName ?? string.Empty);
+
+                whatsEquipped.aliasLine.SetActive(!string.IsNullOrEmpty(aliasName));
+				whatsEquipped.aliasName.SetText(aliasName ?? string.Empty);
+            }
+
 			listItem.SetActive(true);
 
 			return listItem;
 		}
-
-		public void RemoveFromList(string type)
-		{
-			foreach (Transform child in listContent.transform)
-			{
-				//if (child.GetComponent<XLGMWhatsEquippedLineItem>().meshName.text.ToLower() == type.ToLower())
-				//{
-				//	DestroyImmediate(child);
-				//	break;
-				//}
-			}
-		}
-	}
+    }
 }
