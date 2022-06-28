@@ -26,15 +26,21 @@ namespace XLGearModifier.Patches
 
                 if (!GearSelectionControllerPatch.IsOnXLGMTab(index[1]))
                 {
-                    var newResult = new List<GearInfo>(__result);
+                    var newResult = new List<GearInfo>();
 
-                    // if the texture is for a known prefix, filter it out
-                    newResult.RemoveAll(x => 
-                        GearManager.Instance.CustomGear.ContainsKey(x.type) && GearManager.Instance.CustomGear[x.type] is ClothingGear);
+                    foreach (var item in __result)
+                    {
+                        // if the texture is for a known prefix, filter it out
+                        if (GearManager.Instance.CustomGear.ContainsKey(item.type) && GearManager.Instance.CustomGear[item.type] is ClothingGear) continue;
+                        
+                        // if the texture is for a known alias, filter it out
+                        if (GearManager.Instance.CustomGear.Any(x => x.Value is ClothingGear clothing && clothing.ClothingMetadata.AliasCharacterGearTemplate?.id == item.type)) continue;
 
-                    // if the texture is for a known alias, filter it out
-                    newResult.RemoveAll(x => GearManager.Instance.CustomGear.Any(y => 
-                        y.Value is ClothingGear clothing && clothing.ClothingMetadata.AliasCharacterGearTemplate?.id == x.type));
+                        var childItem = FindGearInfoChild(item);
+                        if (childItem != null) continue;
+
+                        newResult.Add(item);
+                    }
 
                     __result = newResult.ToArray();
                     return;
@@ -114,6 +120,35 @@ namespace XLGearModifier.Patches
                 if (customSkater == null) return SkaterBase.Male;
 
                 return customSkater.SkaterMetadata.ClothingGearFilters;
+            }
+
+            private static GearInfo FindGearInfoChild(GearInfo gearInfo)
+            {
+                var folder = gearInfo as CustomGearFolderInfo;
+                if (folder == null) return null;
+
+                if (folder.FolderInfo.Children.Count <= 1) return null;
+
+                foreach (var child in folder.FolderInfo.Children)
+                {
+                    if (!child.IsFolder)
+                    {
+                        var charGear = child.ParentObject as CharacterGearInfo;
+                        if (charGear == null) continue;
+
+                        // if the texture is for a known prefix, filter it out
+                        if (GearManager.Instance.CustomGear.ContainsKey(charGear.type) && GearManager.Instance.CustomGear[charGear.type] is ClothingGear) return charGear;
+
+                        // if the texture is for a known alias, filter it out
+                        if (GearManager.Instance.CustomGear.Any(x => x.Value is ClothingGear clothing && clothing.ClothingMetadata.AliasCharacterGearTemplate?.id == charGear.type)) return charGear;
+                    }
+                    else if (!child.Name.StartsWith("..\\"))
+                    {
+                        return FindGearInfoChild(child.ParentObject as GearInfo);
+                    }
+                }
+
+                return null;
             }
         }
 
