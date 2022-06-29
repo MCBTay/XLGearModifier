@@ -65,7 +65,7 @@ namespace XLGearModifier.Patches
 			static void Postfix(IndexPath index, MVCListHeaderView itemView)
 			{
 				if (index.depth < 2) return;
-				if (!IsOnXLGMTab(index[1])) return;
+				if (!IsOnXLGMTab(index)) return;
 
 				if (index.depth == 2)
 				{
@@ -186,7 +186,7 @@ namespace XLGearModifier.Patches
 			static void Postfix(GearSelectionController __instance, IndexPath index, ref MVCListItemView itemView)
 			{
 				if (index.depth < 3) return;
-				if (!IsOnXLGMTab(index[1])) return;
+				if (!IsOnXLGMTab(index)) return;
 
 				itemView.Label.richText = true;
 
@@ -264,7 +264,7 @@ namespace XLGearModifier.Patches
                 if (index.depth < 3) return true;
 
 				var gear = GearDatabase.Instance.GetGearAtIndex(index);
-				if (!IsOnXLGMTab(index[1]))
+				if (!IsOnXLGMTab(index))
 				{
 					if (!(gear is CustomGearFolderInfo))
 					{
@@ -431,7 +431,7 @@ namespace XLGearModifier.Patches
 					__instance.previewCustomizer.PreviewItem(GearDatabase.Instance.GetGearAtIndex(index), null);
 				}
 
-				if (!IsOnXLGMTab(index[1])) return;
+				if (!IsOnXLGMTab(index)) return;
 
                 if (GearManager.Instance.UnequippedItemIndexPath != null && GearManager.Instance.UnequippedItemIndexPath == index)
                 {
@@ -489,7 +489,7 @@ namespace XLGearModifier.Patches
 			static bool Prefix(GearSelectionController __instance)
 			{
 				if (__instance.listView.currentIndexPath.depth < 3) return true;
-				if (!IsOnXLGMTab(__instance.listView.currentIndexPath[1])) return true;
+				if (!IsOnXLGMTab(__instance.listView.currentIndexPath)) return true;
 
 				if (GearManager.Instance.CurrentFolder == null) return true;
 				if (!PlayerController.Instance.inputController.player.GetButtonDown("B")) return true;
@@ -506,11 +506,12 @@ namespace XLGearModifier.Patches
 			}
 		}
 
-		public static bool IsOnXLGMTab(int tabIndex)
+		public static bool IsOnXLGMTab(IndexPath index)
 		{
-			return tabIndex == (int) GearModifierTab.CustomMeshes ||
-                   tabIndex == (int) GearModifierTab.CustomFemaleMeshes ||
-                   tabIndex == (int) GearModifierTab.Eyes;
+			return index[0] > 5 ||
+                   index[1] == (int) GearModifierTab.CustomMeshes ||
+                   index[1] == (int) GearModifierTab.CustomFemaleMeshes ||
+                   index[1] == (int) GearModifierTab.Eyes;
 		}
 	}
 }
