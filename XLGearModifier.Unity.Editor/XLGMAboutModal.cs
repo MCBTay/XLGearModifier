@@ -32,7 +32,7 @@ public class XLGMAboutModal : EditorWindow
         GUILayout.FlexibleSpace();
 
         GUILayout.Label("This version of the XLGM SDK is built to be used for:", centeredStyle);
-        GUILayout.Label("XLGearModifier <b>2.0.0</b>", centeredStyle);
+        GUILayout.Label("XLGearModifier <b>2.0.1</b>", centeredStyle);
         GUILayout.Label("SkaterXL <b>1.2.5.5</b>", centeredStyle);
 
         GUILayout.FlexibleSpace();
