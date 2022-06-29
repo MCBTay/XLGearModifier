@@ -85,7 +85,7 @@ namespace XLGearModifier.Unity
 		public override string GetCategory() => Category.ToString();
 		public override bool BasedOnDefaultGear() => BaseOnDefaultGear;
         public override string GetTemplateId() => CharacterGearTemplate.id.ToLower();
-
+        
         /// <summary>
         /// An editor only function that gets called when this changes in inspector.  This allows us
         /// to hide path/category name from the user while ensuring they get populated as we expect.
@@ -120,7 +120,7 @@ namespace XLGearModifier.Unity
             }
             #endregion
         }
-
+        
         public SkaterXL.Gear.ClothingGearCategory MapCategory(ClothingGearCategory category)
         {
             switch (category)
@@ -153,6 +153,24 @@ namespace XLGearModifier.Unity
             }
 
             Debug.Log("Successfully prepared XLGM Clothing " + CharacterGearTemplate.id);
+        }
+
+        /// <summary>
+        /// Used to determine if the template id that's been entered in the editor is the known prefix of a default game mesh.
+        /// </summary>
+        /// <returns>False if the template id is a known template id, true otherwise.</returns>
+        public bool ValidTemplateId()
+        {
+            var isBoard = Enum.TryParse(CharacterGearTemplate.id, true, out BoardGearCategory _);
+            var isHairStyle = Enum.TryParse(CharacterGearTemplate.id, true, out HairStyles _);
+            var isHeadwear = Enum.TryParse(CharacterGearTemplate.id, true, out HeadwearTypes _);
+            var isShoe = Enum.TryParse(CharacterGearTemplate.id, true, out ShoeTypes _);
+            var isTop = Enum.TryParse(CharacterGearTemplate.id, true, out TopTypes _);
+            var isBottom = Enum.TryParse(CharacterGearTemplate.id, true, out BottomTypes _);
+            var isTruck = Enum.TryParse(CharacterGearTemplate.id, true, out TruckTypes _);
+            var isDlcItem = Enum.TryParse(CharacterGearTemplate.id, true, out TampaDLCItem _);
+
+            return !isBoard && !isHairStyle && !isHeadwear && !isShoe && !isTop && !isBottom && !isTruck && !isDlcItem;
         }
     }
 }
