@@ -24,7 +24,7 @@ namespace XLGearModifier.Patches
             {
                 if (index.depth < 2) return;
 
-                if (!GearSelectionControllerPatch.IsOnXLGMTab(index[1])) return;
+                if (!GearSelectionControllerPatch.IsOnXLGMTab(index)) return;
 
                 var sourceList = GetSourceList(index);
                 if (sourceList == null) return;
@@ -109,7 +109,7 @@ namespace XLGearModifier.Patches
             static void Postfix(IndexPath index, ref GearInfo __result)
             {
                 if (index.depth < 3) return;
-                if (!GearSelectionControllerPatch.IsOnXLGMTab(index[1]))
+                if (!GearSelectionControllerPatch.IsOnXLGMTab(index))
                 {
                     // Since GetGearListAtIndex is now filtering out custom items from non xlgm tabs,
                     // we can use it to get each item such that they're labelled properly
