@@ -12,9 +12,16 @@ namespace Assets.Editor
     {
         public override void OnInspectorGUI()
         {
-            base.OnInspectorGUI();
-
             var item = target as XLGMClothingGearMetadata;
+
+            if (!item.ValidTemplateId())
+            {
+                var errorString = $"{item.CharacterGearTemplate?.id} is a known prefix for a default mesh.  Please change the name to something unique.";
+                Debug.LogError(errorString);
+                EditorGUILayout.HelpBox(errorString, MessageType.Error);
+            }
+
+            base.OnInspectorGUI();
 
             EditorGUILayout.Space(10);
             EditorGUILayout.LabelField("Texturing", EditorStyles.boldLabel);

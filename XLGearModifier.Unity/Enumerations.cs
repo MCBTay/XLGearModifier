@@ -150,4 +150,12 @@
 		Male = 0,
 		Female = 1,
 	}
+
+    public enum TampaDLCItem
+    {
+		MHatBucket,
+		MJacketCoach,
+		MJeanBaggy,
+		MTankTop
+    }
 }

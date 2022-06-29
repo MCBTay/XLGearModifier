@@ -11,7 +11,6 @@ using UnityEngine;
 using XLGearModifier.CustomGear;
 using XLGearModifier.Texturing;
 using XLGearModifier.Unity;
-using XLGearModifier.Utilities;
 using Object = UnityEngine.Object;
 
 namespace XLGearModifier
@@ -206,6 +205,8 @@ namespace XLGearModifier
                         {
                             case XLGMClothingGearMetadata clothingMetadata:
                                 if (string.IsNullOrEmpty(clothingMetadata.CharacterGearTemplate.id)) continue;
+                                if (!clothingMetadata.ValidTemplateId()) continue;
+
                                 customGearBase = new ClothingGear(clothingMetadata, asset);
                                 break;
                             case XLGMSkaterMetadata skaterMetadata:
