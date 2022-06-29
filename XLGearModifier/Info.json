@@ -5,7 +5,6 @@
   "Version": "2.0.0",
   "ManagerVersion": "0.22.5.0",
   "Requirements": [],
-  "LoadAfter": ["XLMenuMod"],
   "AssemblyName": "XLGearModifier.dll",
   "EntryMethod": "XLGearModifier.Main.Load",
   "HomePage": "https://github.com/MCBTay/XLGearModifier",
