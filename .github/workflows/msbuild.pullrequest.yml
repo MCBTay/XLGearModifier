@@ -65,7 +65,7 @@ jobs:
       uses: actions/setup-java@v1
       with:
         java-version: 1.11
-        
+
     - name: Add msbuild to PATH
       uses: microsoft/setup-msbuild@v1.1
 
@@ -229,7 +229,7 @@ jobs:
 
     - name: Copy Asset Bundles
       run: |
-        cp ${{ env.GITHUB_WORKSPACE }}"/AssetBundles/StandaloneWindows/char female/female-bottoms" "XLGearModifier/Assets/char female/female-bottoms"
+        cp "./XLGearModifier.Gear/AssetBundles/StandaloneWindows/female-bottoms" "XLGearModifier/Assets/char female/female-bottoms"
         cp "./XLGearModifier.Gear/AssetBundles/StandaloneWindows/char female/female-hair" "XLGearModifier/Assets/char female/female-hair"
         cp "./XLGearModifier.Gear/AssetBundles/StandaloneWindows/char female/female-hats" "XLGearModifier/Assets/char female/female-hats"
         cp "./XLGearModifier.Gear/AssetBundles/StandaloneWindows/char female/female-other" "XLGearModifier/Assets/char female/female-other"
@@ -255,7 +255,6 @@ jobs:
         git commit -m "Updating asset bundles" ./XLGearModifier/Assets/*
         git push --set-upstream origin ${{ github.head_ref }}
 
-    
   build:
     name: Build XLGearModifier.dll
     runs-on: windows-latest
