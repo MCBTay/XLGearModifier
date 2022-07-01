@@ -29,7 +29,7 @@ namespace XLGearModifier
             var test = GearModifierTab.CustomMeshes;
 
             await PlayerController.Instance.StartCoroutine(LoadBuiltInBundles());
-            await PlayerController.Instance.StartCoroutine(LoadUserBundles());
+            //await PlayerController.Instance.StartCoroutine(LoadUserBundles());
         }
 
         private IEnumerator LoadBuiltInBundles()
@@ -37,14 +37,14 @@ namespace XLGearModifier
             var assembly = Assembly.GetExecutingAssembly();
             var assetBundles = assembly.GetManifestResourceNames();
 
-            MessageSystem.QueueMessage(MessageDisplayData.Type.Info, $"Loading built in bundles...", 1f);
+            //MessageSystem.QueueMessage(MessageDisplayData.Type.Info, $"Loading built in bundles...", 1f);
 
             foreach (var assetBundle in assetBundles)
             {
                 yield return LoadBuiltInBundle(assembly, assetBundle);
             }
 
-            MessageSystem.QueueMessage(MessageDisplayData.Type.Info, $"Loaded built in bundles.", 3f);
+            //MessageSystem.QueueMessage(MessageDisplayData.Type.Info, $"Loaded built in bundles.", 3f);
 
             PlayerController.Instance.characterCustomizer.LoadLastPlayer();
             GearDatabase.Instance.FetchCustomGear();
@@ -52,6 +52,8 @@ namespace XLGearModifier
 
 		private IEnumerator LoadBuiltInBundle(Assembly assembly, string bundleName)
 		{
+            if (bundleName == "XLGearModifier.Strings.resources") yield break;
+
             Debug.Log("XLGearModifier: Loading " + bundleName);
 
             var bytes = ExtractResource(assembly, bundleName);
