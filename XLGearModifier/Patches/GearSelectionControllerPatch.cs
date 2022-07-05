@@ -1,4 +1,5 @@
 ﻿using HarmonyLib;
+using Rewired;
 using SkaterXL.Data;
 using System;
 using System.Collections.Generic;
@@ -10,11 +11,9 @@ using XLGearModifier.CustomGear;
 using XLGearModifier.Texturing;
 using XLGearModifier.Unity;
 using XLMenuMod;
-using XLMenuMod.Utilities;
 using XLMenuMod.Utilities.Gear;
 using XLMenuMod.Utilities.Interfaces;
 using XLMenuMod.Utilities.UserInterface;
-using Skater = XLMenuMod.Skater;
 
 namespace XLGearModifier.Patches
 {
@@ -504,6 +503,20 @@ namespace XLGearModifier.Patches
 
 				return false;
 			}
+
+			/// <summary>
+			/// After update runs, see if L3 was clicked, if so toggle whether or not the what's equipped menu is active.
+			/// </summary>
+            static void Postfix(GearSelectionController __instance)
+            {
+                var player = Traverse.Create(__instance).Field("player").GetValue<Player>();
+                
+                if (!player.GetButtonDown("Left Stick Button")) return;
+                if (UserInterfaceHelper.Instance.whatsEquippedUI == null) return;
+                
+                UISounds.Instance?.PlayOneShotSelectionChange();
+                UserInterfaceHelper.Instance.whatsEquippedUI.SetActive(!UserInterfaceHelper.Instance.whatsEquippedUI.activeInHierarchy);
+            }
 		}
 
 		public static bool IsOnXLGMTab(IndexPath index)
