@@ -1,8 +1,7 @@
-﻿using System;
+﻿using HarmonyLib;
+using SkaterXL.Data;
 using System.Collections.Generic;
 using System.Linq;
-using HarmonyLib;
-using SkaterXL.Data;
 using XLGearModifier.CustomGear;
 using XLGearModifier.Texturing;
 using XLMenuMod.Utilities;
@@ -13,6 +12,18 @@ namespace XLGearModifier.Patches
 {
     public class CharacterCustomizerPatch
 	{
+        [HarmonyPatch(typeof(CharacterCustomizer), "UpdateMasksFrom")]
+        static class UpdateMasksFromPatch
+        {
+            /// <summary>
+            /// Filters out any gear where template is null, which was an issue when trying to load the character. 
+            /// </summary>
+            static void Prefix(CharacterCustomizer __instance, ref IEnumerable<ClothingGearObjet> gearForMask)
+            {
+                gearForMask = gearForMask?.Where(x => x?.template != null);
+            }
+        }
+
 		[HarmonyPatch(typeof(CharacterCustomizer), nameof(CharacterCustomizer.HasEquipped), typeof(ICharacterCustomizationItem))]
 		static class HasEquippedPatch
 		{
