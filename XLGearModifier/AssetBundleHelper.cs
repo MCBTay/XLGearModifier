@@ -31,7 +31,7 @@ namespace XLGearModifier
             await PlayerController.Instance.StartCoroutine(LoadBuiltInBundles());
             await PlayerController.Instance.StartCoroutine(LoadUserBundles());
 
-            await PlayerController.Instance.characterCustomizer.LoadLastPlayer();
+            PlayerController.Instance.characterCustomizer.LoadLastPlayer();
             GearDatabase.Instance.FetchCustomGear();
         }
 
