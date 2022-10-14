@@ -1,14 +1,9 @@
 fileFormatVersion: 2
-guid: f88addf3cbc633d4192080624fa591ad
+guid: b0fef894e1a848246a54881da6c928fe
 ModelImporter:
   serializedVersion: 19301
   internalIDToNameTable: []
-  externalObjects:
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: Crocs2
-    second: {fileID: 2100000, guid: bb25da6024bab7f45a8e64f29b8c8ff3, type: 2}
+  externalObjects: {}
   materials:
     materialImportMode: 1
     materialName: 0
