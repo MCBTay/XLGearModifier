@@ -1,14 +1,9 @@
 fileFormatVersion: 2
-guid: 898409130a3e9a84ea41e5e5698309f4
+guid: 75b4c37f72bb506449d48ad853bc2abd
 ModelImporter:
   serializedVersion: 19301
   internalIDToNameTable: []
-  externalObjects:
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: Boogie_Ripped_Vans_Model_3_u0_v0.001
-    second: {fileID: 2100000, guid: 65a0f1a8370b7cf45b11132ac1e9568f, type: 2}
+  externalObjects: {}
   materials:
     materialImportMode: 1
     materialName: 0
