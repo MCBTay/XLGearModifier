@@ -109,20 +109,17 @@ namespace XLGearModifier.Patches
                 var target = materialController.targets.FirstOrDefault();
                 if (target == null) return;
 
-                var isHair = customClothing.ClothingMetadata.Category == Unity.ClothingGearCategory.Hair ||
-                             customClothing.ClothingMetadata.Category == Unity.ClothingGearCategory.FacialHair;
-
                 if (textureType == Strings.Albedo)
                 {
-                    __result = Task.FromResult(target.sharedMaterial.GetTexture(isHair ? Strings.HairAlbedoPropertyName : Strings.ClothAlbedoPropertyName));
+                    __result = Task.FromResult(target.sharedMaterial.GetTexture(customClothing.GetAlbedoShaderPropertyName()));
                 }
                 else if (textureType == Strings.Normal)
                 {
-                    __result = Task.FromResult(target.sharedMaterial.GetTexture(isHair ? Strings.HairNormalPropertyName : Strings.ClothNormalPropertyName));
+                    __result = Task.FromResult(target.sharedMaterial.GetTexture(customClothing.GetNormalShaderPropertyName()));
                 }
                 else if (textureType == Strings.MaskPBR)
                 {
-                    __result = Task.FromResult(target.sharedMaterial.GetTexture(isHair ? Strings.HairRgmtaoPropertyName : Strings.ClothRgmtaoPropertyName));
+                    __result = Task.FromResult(target.sharedMaterial.GetTexture(customClothing.GetRgmtaoShaderPropertyName()));
                 }
             }
         }

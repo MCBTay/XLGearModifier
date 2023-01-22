@@ -9,7 +9,6 @@ using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
 using XLGearModifier.Texturing;
 using XLGearModifier.Unity;
-using XLGearModifier.Utilities;
 using XLMenuMod;
 using XLMenuMod.Utilities.Gear;
 
@@ -18,6 +17,9 @@ namespace XLGearModifier.CustomGear
     public class ClothingGear : CustomGearBase
     {
         public XLGMClothingGearMetadata ClothingMetadata => Metadata as XLGMClothingGearMetadata;
+
+        public bool IsHairCategory => ClothingMetadata.Category == Unity.ClothingGearCategory.Hair || ClothingMetadata.Category == Unity.ClothingGearCategory.FacialHair;
+        public bool IsOtherCategory => ClothingMetadata.Category == Unity.ClothingGearCategory.Other;
 
         public ClothingGear(XLGMClothingGearMetadata metadata, GameObject prefab) : base(metadata, prefab)
         {
@@ -86,6 +88,7 @@ namespace XLGearModifier.CustomGear
             materialController.SetMaterial(material);
         }
 
+        #region Property name substitution methods
         /// <summary>
         /// Sets property name substitutions to handle all of our assets coming from HDRP/Lit to go to Easy Day shaders.  Most of this code
         /// can hopefully get removed once we get native access to their shaders.  Also adds property name substitutions for hair, to mimic what
@@ -94,29 +97,67 @@ namespace XLGearModifier.CustomGear
         /// <param name="materialController">The material controller to operate on</param>
         private void SetPropertyNameSubstitutions(MaterialController materialController)
         {
-            var isHair = ClothingMetadata.Category == Unity.ClothingGearCategory.Hair ||
-                         ClothingMetadata.Category == Unity.ClothingGearCategory.FacialHair;
-
             //TODO: This 3 entries below can likely be removed once we get access to their shaders.
             var propNameSubs = new List<PropertyNameSubstitution>
             {
-                new PropertyNameSubstitution { oldName = Strings.Albedo, newName = isHair ? Strings.HairAlbedoPropertyName : Strings.ClothAlbedoPropertyName},
-                new PropertyNameSubstitution { oldName = Strings.Normal, newName = isHair ? Strings.HairNormalPropertyName : Strings.ClothNormalPropertyName },
-                new PropertyNameSubstitution { oldName = Strings.MaskPBR, newName = isHair ? Strings.HairRgmtaoPropertyName : Strings.ClothRgmtaoPropertyName }
+                new PropertyNameSubstitution { oldName = Strings.Albedo, newName = GetAlbedoShaderPropertyName() },
+                new PropertyNameSubstitution { oldName = Strings.Normal, newName = GetNormalShaderPropertyName() },
+                new PropertyNameSubstitution { oldName = Strings.MaskPBR, newName = GetRgmtaoShaderPropertyName() }
             };
 
             // Because hair/clothing gear are on different shaders, all of Easy Day's hair has this substitution for color.
             // We're just doing it here in code to avoid every hair in editor needing to add it.
-            if (isHair)
+            if (IsHairCategory)
             {
                 propNameSubs.Add(new PropertyNameSubstitution { oldName = Strings.ClothAlbedoPropertyName, newName = Strings.HairAlbedoPropertyName });
                 propNameSubs.Add(new PropertyNameSubstitution { oldName = Strings.ClothNormalPropertyName, newName = Strings.HairNormalPropertyName });
                 propNameSubs.Add(new PropertyNameSubstitution { oldName = Strings.ClothRgmtaoPropertyName, newName = Strings.HairRgmtaoPropertyName });
             }
 
+            if (IsOtherCategory)
+            {
+                propNameSubs.Add(new PropertyNameSubstitution { oldName = Strings.ClothAlbedoPropertyName, newName = Strings.HDRPLitAlbedoPropertyName });
+                propNameSubs.Add(new PropertyNameSubstitution { oldName = Strings.ClothNormalPropertyName, newName = Strings.HDRPLitNormalPropertyName });
+                propNameSubs.Add(new PropertyNameSubstitution { oldName = Strings.ClothRgmtaoPropertyName, newName = Strings.HDRPLitRgmtaoPropertyName });
+            }
+
             var traverse = Traverse.Create(materialController);
             traverse.Field("m_propertyNameSubstitutions").SetValue(propNameSubs);
         }
+
+        /// <summary>
+        /// Based on <see cref="IsHairCategory"/> and <see cref="IsOtherCategory"/>, returns the appropriate shader property name for albedo.
+        /// </summary>
+        /// <returns>The albedo property name to be used.</returns>
+        public string GetAlbedoShaderPropertyName()
+        {
+            if (IsHairCategory) return Strings.HairAlbedoPropertyName;
+            if (IsOtherCategory) return Strings.HDRPLitAlbedoPropertyName;
+            return Strings.ClothAlbedoPropertyName;
+        }
+
+        /// <summary>
+        /// Based on <see cref="IsHairCategory"/> and <see cref="IsOtherCategory"/>, returns the appropriate shader property name for normal.
+        /// </summary>
+        /// <returns>The normal property name to be used.</returns>
+        public string GetNormalShaderPropertyName()
+        {
+            if (IsHairCategory) return Strings.HairNormalPropertyName;
+            if (IsOtherCategory) return Strings.HDRPLitNormalPropertyName;
+            return Strings.ClothNormalPropertyName;
+        }
+
+        /// <summary>
+        /// Based on <see cref="IsHairCategory"/> and <see cref="IsOtherCategory"/>, returns the appropriate shader property name for rgmtao.
+        /// </summary>
+        /// <returns>The rgmtao property name to be used.</returns>
+        public string GetRgmtaoShaderPropertyName()
+        {
+            if (IsHairCategory) return Strings.HairRgmtaoPropertyName;
+            if (IsOtherCategory) return Strings.HDRPLitRgmtaoPropertyName;
+            return Strings.ClothRgmtaoPropertyName;
+        }
+        #endregion
 
         /// <summary>
         /// Pulls _BaseColorMap, _NormalMap, and _MaskMap off of the original material (assuming the material is using HDRP/Lit shader), and updates the textures dictionary passed in
@@ -204,13 +245,18 @@ namespace XLGearModifier.CustomGear
         }
 
         /// <summary>
-        /// Gets reference to MasterShaderCloth_v2 unless the metadata category is Hair or Facial Hair, then returns a reference to MasterShaderHair_AlphaTest_v1.
+        /// If <see cref="IsHairCategory"/>, returns a reference to MasterShaderCloth_v2.  If <see cref="IsOtherCategory"/>, returns a reference to HDRP/Lit.  Else returns a reference to MasterShaderCloth_v2.
         /// </summary>
         private Shader GetClothingShader()
         {
-            if (ClothingMetadata.Category == Unity.ClothingGearCategory.Hair || ClothingMetadata.Category == Unity.ClothingGearCategory.FacialHair)
+            if (IsHairCategory)
             {
                 return BaseGameTextureManager.Instance.MasterShaderHair_AlphaTest_v1;
+            }
+
+            if (IsOtherCategory)
+            {
+                return Shader.Find("HDRP/Lit");
             }
 
             return BaseGameTextureManager.Instance.MasterShaderCloth_v2;
