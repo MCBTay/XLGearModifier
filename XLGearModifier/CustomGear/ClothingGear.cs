@@ -100,9 +100,9 @@ namespace XLGearModifier.CustomGear
             //TODO: This 3 entries below can likely be removed once we get access to their shaders.
             var propNameSubs = new List<PropertyNameSubstitution>
             {
-                new PropertyNameSubstitution { oldName = Strings.Albedo, newName = GetPropertyNameSubstitutionAlbedoNewName() },
-                new PropertyNameSubstitution { oldName = Strings.Normal, newName = GetPropertyNameSubstitutionNormalNewName() },
-                new PropertyNameSubstitution { oldName = Strings.MaskPBR, newName = GetPropertyNameSubstitutionMaskNewName() }
+                new PropertyNameSubstitution { oldName = Strings.Albedo, newName = GetAlbedoShaderPropertyName() },
+                new PropertyNameSubstitution { oldName = Strings.Normal, newName = GetNormalShaderPropertyName() },
+                new PropertyNameSubstitution { oldName = Strings.MaskPBR, newName = GetRgmtaoShaderPropertyName() }
             };
 
             // Because hair/clothing gear are on different shaders, all of Easy Day's hair has this substitution for color.
@@ -129,7 +129,7 @@ namespace XLGearModifier.CustomGear
         /// Based on <see cref="IsHairCategory"/> and <see cref="IsOtherCategory"/>, returns the appropriate shader property name for albedo.
         /// </summary>
         /// <returns>The albedo property name to be used.</returns>
-        private string GetPropertyNameSubstitutionAlbedoNewName()
+        public string GetAlbedoShaderPropertyName()
         {
             if (IsHairCategory) return Strings.HairAlbedoPropertyName;
             if (IsOtherCategory) return Strings.HDRPLitAlbedoPropertyName;
@@ -140,7 +140,7 @@ namespace XLGearModifier.CustomGear
         /// Based on <see cref="IsHairCategory"/> and <see cref="IsOtherCategory"/>, returns the appropriate shader property name for normal.
         /// </summary>
         /// <returns>The normal property name to be used.</returns>
-        private string GetPropertyNameSubstitutionNormalNewName()
+        public string GetNormalShaderPropertyName()
         {
             if (IsHairCategory) return Strings.HairNormalPropertyName;
             if (IsOtherCategory) return Strings.HDRPLitNormalPropertyName;
@@ -151,7 +151,7 @@ namespace XLGearModifier.CustomGear
         /// Based on <see cref="IsHairCategory"/> and <see cref="IsOtherCategory"/>, returns the appropriate shader property name for rgmtao.
         /// </summary>
         /// <returns>The rgmtao property name to be used.</returns>
-        private string GetPropertyNameSubstitutionMaskNewName()
+        public string GetRgmtaoShaderPropertyName()
         {
             if (IsHairCategory) return Strings.HairRgmtaoPropertyName;
             if (IsOtherCategory) return Strings.HDRPLitRgmtaoPropertyName;
