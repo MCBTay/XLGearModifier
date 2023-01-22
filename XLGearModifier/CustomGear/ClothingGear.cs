@@ -94,20 +94,21 @@ namespace XLGearModifier.CustomGear
         /// <param name="materialController">The material controller to operate on</param>
         private void SetPropertyNameSubstitutions(MaterialController materialController)
         {
-            var isHair = ClothingMetadata.Category == Unity.ClothingGearCategory.Hair ||
-                         ClothingMetadata.Category == Unity.ClothingGearCategory.FacialHair;
+            var isHairOrOther = ClothingMetadata.Category == Unity.ClothingGearCategory.Hair ||
+                                ClothingMetadata.Category == Unity.ClothingGearCategory.FacialHair ||
+                                ClothingMetadata.Category == Unity.ClothingGearCategory.Other;
 
             //TODO: This 3 entries below can likely be removed once we get access to their shaders.
             var propNameSubs = new List<PropertyNameSubstitution>
             {
-                new PropertyNameSubstitution { oldName = Strings.Albedo, newName = isHair ? Strings.HairAlbedoPropertyName : Strings.ClothAlbedoPropertyName},
-                new PropertyNameSubstitution { oldName = Strings.Normal, newName = isHair ? Strings.HairNormalPropertyName : Strings.ClothNormalPropertyName },
-                new PropertyNameSubstitution { oldName = Strings.MaskPBR, newName = isHair ? Strings.HairRgmtaoPropertyName : Strings.ClothRgmtaoPropertyName }
+                new PropertyNameSubstitution { oldName = Strings.Albedo, newName = isHairOrOther ? Strings.HairAlbedoPropertyName : Strings.ClothAlbedoPropertyName},
+                new PropertyNameSubstitution { oldName = Strings.Normal, newName = isHairOrOther ? Strings.HairNormalPropertyName : Strings.ClothNormalPropertyName },
+                new PropertyNameSubstitution { oldName = Strings.MaskPBR, newName = isHairOrOther ? Strings.HairRgmtaoPropertyName : Strings.ClothRgmtaoPropertyName }
             };
 
             // Because hair/clothing gear are on different shaders, all of Easy Day's hair has this substitution for color.
             // We're just doing it here in code to avoid every hair in editor needing to add it.
-            if (isHair)
+            if (isHairOrOther)
             {
                 propNameSubs.Add(new PropertyNameSubstitution { oldName = Strings.ClothAlbedoPropertyName, newName = Strings.HairAlbedoPropertyName });
                 propNameSubs.Add(new PropertyNameSubstitution { oldName = Strings.ClothNormalPropertyName, newName = Strings.HairNormalPropertyName });
