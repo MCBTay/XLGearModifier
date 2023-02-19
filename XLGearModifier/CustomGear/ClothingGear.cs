@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
+using UnityEngine.Rendering;
 using UnityEngine.ResourceManagement.AsyncOperations;
 using XLGearModifier.Texturing;
 using XLGearModifier.Unity;
@@ -114,12 +115,12 @@ namespace XLGearModifier.CustomGear
                 propNameSubs.Add(new PropertyNameSubstitution { oldName = Strings.ClothRgmtaoPropertyName, newName = Strings.HairRgmtaoPropertyName });
             }
 
-            if (IsOtherCategory)
-            {
-                propNameSubs.Add(new PropertyNameSubstitution { oldName = Strings.ClothAlbedoPropertyName, newName = Strings.HDRPLitAlbedoPropertyName });
-                propNameSubs.Add(new PropertyNameSubstitution { oldName = Strings.ClothNormalPropertyName, newName = Strings.HDRPLitNormalPropertyName });
-                propNameSubs.Add(new PropertyNameSubstitution { oldName = Strings.ClothRgmtaoPropertyName, newName = Strings.HDRPLitRgmtaoPropertyName });
-            }
+            //if (IsOtherCategory)
+            //{
+            //    propNameSubs.Add(new PropertyNameSubstitution { oldName = Strings.ClothAlbedoPropertyName, newName = Strings.HDRPLitAlbedoPropertyName });
+            //    propNameSubs.Add(new PropertyNameSubstitution { oldName = Strings.ClothNormalPropertyName, newName = Strings.HDRPLitNormalPropertyName });
+            //    propNameSubs.Add(new PropertyNameSubstitution { oldName = Strings.ClothRgmtaoPropertyName, newName = Strings.HDRPLitRgmtaoPropertyName });
+            //}
 
             var traverse = Traverse.Create(materialController);
             traverse.Field("m_propertyNameSubstitutions").SetValue(propNameSubs);
@@ -224,7 +225,11 @@ namespace XLGearModifier.CustomGear
                 material = sharedMaterial == null ? new Material(Shader.Find("HDRP/Lit")) : new Material(sharedMaterial);
             }
 
-            material.shader = GetClothingShader();
+            var shader = GetClothingShader();
+            if (material.shader.name != shader.name)
+            {
+                material.shader = shader;
+            }
         }
 
         /// <summary>
