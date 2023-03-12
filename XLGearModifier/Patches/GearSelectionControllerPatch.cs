@@ -491,7 +491,7 @@ namespace XLGearModifier.Patches
 				if (!IsOnXLGMTab(__instance.listView.currentIndexPath)) return true;
 
 				if (GearManager.Instance.CurrentFolder == null) return true;
-				if (!PlayerController.Instance.inputController.player.GetButtonDown("B")) return true;
+				if (!PlayerController.Main.input.GetButtonDown("B")) return true;
 
 				UISounds.Instance?.PlayOneShotSelectMajor();
 
