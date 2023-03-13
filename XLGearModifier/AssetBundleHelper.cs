@@ -28,10 +28,10 @@ namespace XLGearModifier
             // We're solely making a call here to ensure that the unity assembly is loaded up prior to loading assets.  else we'll get a bunch of errors about things missing.
             var test = GearModifierTab.CustomMeshes;
 
-            await PlayerController.Instance.StartCoroutine(LoadBuiltInBundles());
-            await PlayerController.Instance.StartCoroutine(LoadUserBundles());
+            await PlayerController.Main.StartCoroutine(LoadBuiltInBundles());
+            await PlayerController.Main.StartCoroutine(LoadUserBundles());
 
-            PlayerController.Instance.characterCustomizer.LoadLastPlayer();
+            PlayerController.Main.characterCustomizer.LoadLastPlayer();
             GearDatabase.Instance.FetchCustomGear();
         }
 
@@ -248,7 +248,7 @@ namespace XLGearModifier
 
             foreach (var assetPack in assetBundleFiles)
 			{
-                yield return PlayerController.Instance.StartCoroutine(LoadPrefabBundleFromDisk(assetPack));
+                yield return PlayerController.Main.StartCoroutine(LoadPrefabBundleFromDisk(assetPack));
 			}
 
             if (assetBundleFiles.Any())
