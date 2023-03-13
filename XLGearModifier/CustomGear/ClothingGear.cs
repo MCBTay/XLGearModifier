@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
+using UnityEngine.Rendering;
 using UnityEngine.ResourceManagement.AsyncOperations;
 using XLGearModifier.Texturing;
 using XLGearModifier.Unity;
@@ -224,7 +225,11 @@ namespace XLGearModifier.CustomGear
                 material = sharedMaterial == null ? new Material(Shader.Find("HDRP/Lit")) : new Material(sharedMaterial);
             }
 
-            material.shader = GetClothingShader();
+            var shader = GetClothingShader();
+            if (material.shader.name != shader.name)
+            {
+                material.shader = shader;
+            }
         }
 
         /// <summary>
