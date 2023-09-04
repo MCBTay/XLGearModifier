@@ -4,8 +4,9 @@ using UnityEditor;
 using UnityEngine;
 using XLGearModifier.Unity;
 
-namespace XLGearModifier.Assets.Editor
+namespace Assets.Editor
 {
+#if UNITY_EDITOR
     public class XLGMTools : EditorWindow
     {
         [MenuItem("XLGM/Reserialize All Prefabs", false, 10)]
@@ -175,4 +176,5 @@ namespace XLGearModifier.Assets.Editor
             Debug.Log("Find Missing or Invalid Gear Prefab Controllers completed.");
         }
     }
+#endif
 }

@@ -51,6 +51,9 @@
     <Reference Include="UnityEngine">
       <HintPath>..\XLGearModifier\References\UnityEngine.dll</HintPath>
     </Reference>
+    <Reference Include="UnityEngine.AssetBundleModule">
+      <HintPath>..\XLGearModifier\References\UnityEngine.AssetBundleModule.dll</HintPath>
+    </Reference>
     <Reference Include="UnityEngine.CoreModule">
       <HintPath>..\XLGearModifier\References\UnityEngine.CoreModule.dll</HintPath>
     </Reference>

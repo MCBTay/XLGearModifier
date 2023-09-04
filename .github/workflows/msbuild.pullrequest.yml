@@ -1,7 +1,7 @@
-name: Build (Main)
+name: Build (Pull Request)
 
 on:
-  push:
+  pull_request:
     branches: [ main ]
 
 env:
@@ -21,18 +21,90 @@ env:
   package_path: "~/XLGearModifier_SDK.unitypackage"
 
 jobs:
+  check-paths-changed:
+    name: Check Paths Changed
+    runs-on: ubuntu-latest
+    
+    outputs:
+      build_asset_bundles: ${{ steps.changes.outputs.asset_bundles_changed }}
+      build_mod: ${{ steps.changes.outputs.mod_changed }}
+      build_unity: ${{ steps.changes.outputs.unity_changed }}
+      build_unity_editor: ${{ steps.changes.outputs.unity_editor_changed }}
+
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v3
+
+      - name: Paths Changed Filter
+        id: changes
+        uses: dorny/paths-filter@v2.10.2
+        with:
+          filters: |
+            asset_bundles_changed:
+              - './XLGearModifier.Gear/Assets/Gear Done/**'
+              - './XLGearModifier.Gear/Assets/Gear Temp/**'
+              - './XLGearModifier.Gear/Assets/UserInterface/**'
+            mod_changed:
+              - './XLGearModifier/**'
+            unity_changed:
+              - './XLGearModifier.Unity/**'
+            unity_editor_changed:
+              - './XLGearModifier.Unity.Editor/**'
+
   build-unity-assembly:
     name: Build XLGearModifier.Unity.dll
     runs-on: windows-latest
+    needs: check-paths-changed
+    if: |
+      needs.check-paths-changed.outputs.build_unity == 'true'
     
     steps:
     - uses: actions/checkout@v3
 
+    - name: Set up JDK 11
+      uses: actions/setup-java@v1
+      with:
+        java-version: 1.11
+
     - name: Add msbuild to PATH
       uses: microsoft/setup-msbuild@v1.1
 
+    - name: Cache SonarCloud packages
+      uses: actions/cache@v1
+      with:
+        path: ~\sonar\cache
+        key: ${{ runner.os }}-sonar
+        restore-keys: ${{ runner.os }}-sonar
+        
+    - name: Cache SonarCloud scanner
+      id: cache-sonar-scanner
+      uses: actions/cache@v1
+      with:
+        path: .\.sonar\scanner
+        key: ${{ runner.os }}-sonar-scanner
+        restore-keys: ${{ runner.os }}-sonar-scanner
+        
+    - name: Install SonarCloud scanner
+      if: steps.cache-sonar-scanner.outputs.cache-hit != 'true'
+      shell: powershell
+      run: |
+        New-Item -Path .\.sonar\scanner -ItemType Directory
+        dotnet tool update dotnet-sonarscanner --tool-path .\.sonar\scanner
+
+    - name: Start SonarCloud Analysis
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
+        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      run: .\.sonar\scanner\dotnet-sonarscanner begin /k:"MCBTay_XLGearModifier" /o:"mcbtay" /d:sonar.login="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.cs.vstest.reportsPaths="**/*.trx" /d:sonar.cs.opencover.reportsPaths="**/coverage.opencover.xml"
+
     - name: Build
       run: msbuild './XLGearModifier.Unity/XLGearModifier.Unity.csproj' -t:rebuild -verbosity:diag -property:Configuration=Release
+
+    - name: Stop SonarScanner Analysis
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
+        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      run: .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
 
     - name: Copy DLL
       run: |
@@ -42,23 +114,66 @@ jobs:
       run: |
         git config user.name "GitHub Actions"
         git config user.email "<>"
-        git switch -c ${{ github.head_ref }} origin/${{ github.head_ref }}
+        git switch -c ${{ github.head_ref }} --track origin/${{ github.head_ref }}
         git commit -m "Updating XLGearModifier.Unity.dll" ./XLGearModifier.Gear/Assets/XLGM_SDK/XLGearModifier.Unity.dll 
         git push --set-upstream origin ${{ github.head_ref }}
 
   build-unity-editor-assembly:
     name: Build XLGearModifier.Unity.Editor.dll
     runs-on: windows-latest
-    needs: build-unity-assembly
+    needs: [check-paths-changed, build-unity-assembly]
+    if: |
+      always() &&
+      (needs.check-paths-changed.outputs.build_unity == 'true' ||
+      needs.check-paths-changed.outputs.build_unity_editor == 'true')
 
     steps:
     - uses: actions/checkout@v3
+    
+    - name: Set up JDK 11
+      uses: actions/setup-java@v1
+      with:
+        java-version: 1.11
 
     - name: Add msbuild to PATH
       uses: microsoft/setup-msbuild@v1.1
 
+    - name: Cache SonarCloud packages
+      uses: actions/cache@v1
+      with:
+        path: ~\sonar\cache
+        key: ${{ runner.os }}-sonar
+        restore-keys: ${{ runner.os }}-sonar
+        
+    - name: Cache SonarCloud scanner
+      id: cache-sonar-scanner
+      uses: actions/cache@v1
+      with:
+        path: .\.sonar\scanner
+        key: ${{ runner.os }}-sonar-scanner
+        restore-keys: ${{ runner.os }}-sonar-scanner
+        
+    - name: Install SonarCloud scanner
+      if: steps.cache-sonar-scanner.outputs.cache-hit != 'true'
+      shell: powershell
+      run: |
+        New-Item -Path .\.sonar\scanner -ItemType Directory
+        dotnet tool update dotnet-sonarscanner --tool-path .\.sonar\scanner
+
+    - name: Start SonarCloud Analysis
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
+        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      run: .\.sonar\scanner\dotnet-sonarscanner begin /k:"MCBTay_XLGearModifier" /o:"mcbtay" /d:sonar.login="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.cs.vstest.reportsPaths="**/*.trx" /d:sonar.cs.opencover.reportsPaths="**/coverage.opencover.xml"
+
     - name: Build
       run: msbuild './XLGearModifier.Unity.Editor/XLGearModifier.Unity.Editor.csproj' -t:rebuild -verbosity:diag -property:Configuration=Release
+
+    - name: Stop SonarScanner Analysis
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
+        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      run: .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
 
     - name: Copy DLL
       run: |
@@ -69,14 +184,18 @@ jobs:
         git config user.name "GitHub Actions"
         git config user.email "github.actions@noreply.github.com"
         git switch -c ${{ github.head_ref }}
-        git pull origin ${{ github.head_ref }}
         git commit -m "Updating XLGearModifier.Unity.Editor.dll" ./XLGearModifier.Gear/Assets/XLGM_SDK/XLGearModifier.Unity.Editor.dll
-        git push
+        git push --set-upstream origin ${{ github.head_ref }}
 
   build-unity-project:
     name: Build Unity Project
     runs-on: ubuntu-latest
-    needs: build-unity-editor-assembly
+    needs: [check-paths-changed, build-unity-editor-assembly]
+    if: |
+      always() && 
+      (needs.check-paths-changed.outputs.build_unity == 'true' ||
+      needs.check-paths-changed.outputs.build_unity_editor == 'true' ||
+      needs.check-paths-changed.outputs.build_asset_bundles == 'true')
     
     steps:
     - uses: actions/checkout@v2
@@ -110,7 +229,7 @@ jobs:
 
     - name: Copy Asset Bundles
       run: |
-        cp "${{ env.GITHUB_WORKSPACE }}/AssetBundles/StandaloneWindows/char female/female-bottoms" "XLGearModifier/Assets/char female/female-bottoms"
+        cp "./XLGearModifier.Gear/AssetBundles/StandaloneWindows/female-bottoms" "XLGearModifier/Assets/char female/female-bottoms"
         cp "./XLGearModifier.Gear/AssetBundles/StandaloneWindows/char female/female-hair" "XLGearModifier/Assets/char female/female-hair"
         cp "./XLGearModifier.Gear/AssetBundles/StandaloneWindows/char female/female-hats" "XLGearModifier/Assets/char female/female-hats"
         cp "./XLGearModifier.Gear/AssetBundles/StandaloneWindows/char female/female-other" "XLGearModifier/Assets/char female/female-other"
@@ -136,11 +255,15 @@ jobs:
         git commit -m "Updating asset bundles" ./XLGearModifier/Assets/*
         git push --set-upstream origin ${{ github.head_ref }}
 
-    
   build:
     name: Build XLGearModifier.dll
     runs-on: windows-latest
     needs: build-unity-project
+    if: |
+      always() &&
+      (needs.check-paths-changed.outputs.generate_unitypackage == 'true' || 
+      needs.check-paths-changed.outputs.build_asset_bundles == 'true' || 
+      needs.check-paths-changed.outputs.build_mod == 'true')
 
     steps:
     - uses: actions/checkout@v2
@@ -184,11 +307,11 @@ jobs:
       working-directory: ${{env.GITHUB_WORKSPACE}}
       run: nuget restore ${{env.SOLUTION_FILE_PATH}}
       
-    #- name: Start SonarCloud Analysis
-    #  env:
-    #    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
-    #    SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-    #  run: .\.sonar\scanner\dotnet-sonarscanner begin /k:"MCBTay_XLGearModifier" /o:"mcbtay" /d:sonar.login="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.cs.vstest.reportsPaths="**/*.trx" /d:sonar.cs.opencover.reportsPaths="**/coverage.opencover.xml"
+    - name: Start SonarCloud Analysis
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
+        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      run: .\.sonar\scanner\dotnet-sonarscanner begin /k:"MCBTay_XLGearModifier" /o:"mcbtay" /d:sonar.login="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.cs.vstest.reportsPaths="**/*.trx" /d:sonar.cs.opencover.reportsPaths="**/coverage.opencover.xml"
         
     - name: MSBuild
       working-directory: ${{env.GITHUB_WORKSPACE}}
@@ -196,9 +319,9 @@ jobs:
       run: |
         msbuild /m /p:Configuration=${{env.BUILD_CONFIGURATION}} ${{env.SOLUTION_FILE_PATH}}
         
-    #- name: Stop SonarScanner Analysis
-    #  env:
-    #    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
-    #    SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-    #  run: .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
+    - name: Stop SonarScanner Analysis
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
+        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      run: .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
       

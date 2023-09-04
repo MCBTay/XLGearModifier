@@ -4,10 +4,12 @@ using UnityEngine;
 
 namespace Assets.Editor
 {
+#if UNITY_EDITOR
     [CustomEditor(typeof(MaterialController), true)]
     [CanEditMultipleObjects]
     public class MaterialControllerEditor : UnityEditor.Editor
     {
+        //test
         public override void OnInspectorGUI()
         {
             if (GUILayout.Button("Find Targets"))
@@ -21,4 +23,5 @@ namespace Assets.Editor
             DrawDefaultInspector();
         }
     }
+#endif
 }

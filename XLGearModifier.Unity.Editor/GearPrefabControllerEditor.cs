@@ -5,6 +5,7 @@ using UnityEngine;
 
 namespace Assets.Editor
 {
+#if UNITY_EDITOR
     [CustomEditor(typeof(GearPrefabController), true)]
     [CanEditMultipleObjects]
     public class GearPrefabControllerEditor : UnityEditor.Editor
@@ -23,4 +24,5 @@ namespace Assets.Editor
             DrawDefaultInspector();
         }
     }
+#endif
 }
